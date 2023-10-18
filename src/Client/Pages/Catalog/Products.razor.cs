@@ -181,7 +181,8 @@ public partial class Products
         {
             CloseButton = true, MaxWidth = MaxWidth.Small, FullWidth = true, DisableBackdropClick = true
         };
-        IDialogReference dialog = await DialogService.ShowAsync<DeleteConfirmation>(Localizer["Delete"], parameters, options);
+        IDialogReference dialog =
+            await DialogService.ShowAsync<DeleteConfirmation>(Localizer["Delete"], parameters, options);
         DialogResult result = await dialog.Result;
         if (!result.Canceled)
         {

@@ -28,27 +28,6 @@ public abstract partial class ExtendedAttributesBase<TId, TEntityId, TEntity, TE
     where TExtendedAttribute : AuditableEntityExtendedAttribute<TId, TEntityId, TEntity>, IEntity<TId>
     where TId : IEquatable<TId>
 {
-    private int _activeGroupIndex;
-    private bool _bordered;
-    private bool _canCreateExtendedAttributes;
-    private bool _canDeleteExtendedAttributes;
-    private bool _canEditExtendedAttributes;
-    private bool _canExportExtendedAttributes;
-    private bool _canSearchExtendedAttributes;
-    private bool _canViewExtendedAttributes;
-
-    private ClaimsPrincipal _currentUser;
-    private bool _dense;
-    private GetAllExtendedAttributesByEntityIdResponse<TId, TEntityId> _extendedAttributes = new();
-    private bool _includeEntity;
-    private bool _loaded;
-    private List<GetAllExtendedAttributesByEntityIdResponse<TId, TEntityId>> _model;
-    private MudTabs _mudTabs;
-    private bool _onlyCurrentGroup;
-    private string _searchString = "";
-    private GetAllExtendedAttributesByEntityIdResponse<TId, TEntityId> _selectedItem = new();
-    private bool _striped = true;
-
     private readonly Func<GetAllExtendedAttributesByEntityIdResponse<TId, TEntityId>, object> _sortByDescription =
         response => response.Description;
 
@@ -79,6 +58,27 @@ public abstract partial class ExtendedAttributesBase<TId, TEntityId, TEntity, TE
             EntityExtendedAttributeType.Json => response.Json,
             _ => response.Text
         };
+
+    private int _activeGroupIndex;
+    private bool _bordered;
+    private bool _canCreateExtendedAttributes;
+    private bool _canDeleteExtendedAttributes;
+    private bool _canEditExtendedAttributes;
+    private bool _canExportExtendedAttributes;
+    private bool _canSearchExtendedAttributes;
+    private bool _canViewExtendedAttributes;
+
+    private ClaimsPrincipal _currentUser;
+    private bool _dense;
+    private GetAllExtendedAttributesByEntityIdResponse<TId, TEntityId> _extendedAttributes = new();
+    private bool _includeEntity;
+    private bool _loaded;
+    private List<GetAllExtendedAttributesByEntityIdResponse<TId, TEntityId>> _model;
+    private MudTabs _mudTabs;
+    private bool _onlyCurrentGroup;
+    private string _searchString = "";
+    private GetAllExtendedAttributesByEntityIdResponse<TId, TEntityId> _selectedItem = new();
+    private bool _striped = true;
 
     [Inject]
     private IExtendedAttributeManager<TId, TEntityId, TEntity, TExtendedAttribute> ExtendedAttributeManager
@@ -166,7 +166,8 @@ public abstract partial class ExtendedAttributesBase<TId, TEntityId, TEntity, TE
             {
                 if (!string.IsNullOrWhiteSpace(extendedAttribute.Group))
                 {
-                    if (GroupedExtendedAttributes.TryGetValue(extendedAttribute.Group, out List<GetAllExtendedAttributesByEntityIdResponse<TId, TEntityId>> attribute))
+                    if (GroupedExtendedAttributes.TryGetValue(extendedAttribute.Group,
+                            out List<GetAllExtendedAttributesByEntityIdResponse<TId, TEntityId>> attribute))
                     {
                         attribute.Add(extendedAttribute);
                     }
@@ -215,7 +216,7 @@ public abstract partial class ExtendedAttributesBase<TId, TEntityId, TEntity, TE
                     MimeType = ApplicationConstants.MimeTypes.OpenXml
                 });
             SnackBar.Add(string.IsNullOrWhiteSpace(request.SearchString) && !request.IncludeEntity &&
-                          !request.OnlyCurrentGroup
+                         !request.OnlyCurrentGroup
                     ? Localizer["Extended Attributes exported"]
                     : Localizer["Filtered Extended Attributes exported"],
                 Severity.Success);
@@ -297,7 +298,8 @@ public abstract partial class ExtendedAttributesBase<TId, TEntityId, TEntity, TE
         {
             CloseButton = true, MaxWidth = MaxWidth.Small, FullWidth = true, DisableBackdropClick = true
         };
-        IDialogReference dialog = await DialogService.ShowAsync<DeleteConfirmation>(Localizer["Delete"], parameters, options);
+        IDialogReference dialog =
+            await DialogService.ShowAsync<DeleteConfirmation>(Localizer["Delete"], parameters, options);
         DialogResult result = await dialog.Result;
         if (!result.Canceled)
         {

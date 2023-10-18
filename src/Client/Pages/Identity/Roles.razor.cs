@@ -84,7 +84,8 @@ public partial class Roles
         {
             CloseButton = true, MaxWidth = MaxWidth.Small, FullWidth = true, DisableBackdropClick = true
         };
-        IDialogReference dialog = await DialogService.ShowAsync<DeleteConfirmation>(Localizer["Delete"], parameters, options);
+        IDialogReference dialog =
+            await DialogService.ShowAsync<DeleteConfirmation>(Localizer["Delete"], parameters, options);
         DialogResult result = await dialog.Result;
         if (!result.Canceled)
         {
@@ -123,7 +124,8 @@ public partial class Roles
         {
             CloseButton = true, MaxWidth = MaxWidth.Small, FullWidth = true, DisableBackdropClick = true
         };
-        IDialogReference dialog = await DialogService.ShowAsync<RoleModal>(id == null ? Localizer["Create"] : Localizer["Edit"],
+        IDialogReference dialog = await DialogService.ShowAsync<RoleModal>(
+            id == null ? Localizer["Create"] : Localizer["Edit"],
             parameters,
             options);
         DialogResult result = await dialog.Result;

@@ -10,9 +10,8 @@ public static class HubExtensions
     public static HubConnection TryInitialize(
         this HubConnection hubConnection,
         NavigationManager navigationManager,
-        ILocalStorageService localStorage)
-    {
-        return hubConnection ?? new HubConnectionBuilder()
+        ILocalStorageService localStorage) =>
+        hubConnection ?? new HubConnectionBuilder()
             .WithUrl(navigationManager.ToAbsoluteUri(ApplicationConstants.SignalR.HubUrl),
                 options =>
                 {
@@ -20,12 +19,9 @@ public static class HubExtensions
                 })
             .WithAutomaticReconnect()
             .Build();
-    }
 
-    public static HubConnection TryInitialize(this HubConnection hubConnection, NavigationManager navigationManager)
-    {
-        return hubConnection ?? new HubConnectionBuilder()
+    public static HubConnection TryInitialize(this HubConnection hubConnection, NavigationManager navigationManager) =>
+        hubConnection ?? new HubConnectionBuilder()
             .WithUrl(navigationManager.ToAbsoluteUri(ApplicationConstants.SignalR.HubUrl))
             .Build();
-    }
 }

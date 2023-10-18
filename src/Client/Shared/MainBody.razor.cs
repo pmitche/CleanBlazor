@@ -119,7 +119,8 @@ public partial class MainBody
                                     Localizer[
                                         "You are logged out because the Permissions of one of your Roles have been updated."],
                                     Severity.Error);
-                                await _hubConnection.SendAsync(ApplicationConstants.SignalR.OnDisconnect, CurrentUserId);
+                                await _hubConnection.SendAsync(ApplicationConstants.SignalR.OnDisconnect,
+                                    CurrentUserId);
                                 await AuthenticationManager.Logout();
                                 NavigationManager.NavigateTo("/login");
                             }
