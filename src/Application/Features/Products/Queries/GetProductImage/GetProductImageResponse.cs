@@ -1,7 +1,6 @@
-﻿namespace BlazorHero.CleanArchitecture.Application.Features.Products.Queries.GetProductImage
+﻿namespace BlazorHero.CleanArchitecture.Application.Features.Products.Queries.GetProductImage;
+
+public class GetProductImageResponse
 {
-    public class GetProductImageResponse
-    {
-        public string ImageDataURL { get; set; }
-    }
+    public string ImageDataUrl { get; set; }
 }

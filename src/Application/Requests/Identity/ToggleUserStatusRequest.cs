@@ -1,8 +1,7 @@
-﻿namespace BlazorHero.CleanArchitecture.Application.Requests.Identity
+﻿namespace BlazorHero.CleanArchitecture.Application.Requests.Identity;
+
+public class ToggleUserStatusRequest
 {
-    public class ToggleUserStatusRequest
-    {
-        public bool ActivateUser { get; set; }
-        public string UserId { get; set; }
-    }
+    public bool ActivateUser { get; set; }
+    public string UserId { get; set; }
 }

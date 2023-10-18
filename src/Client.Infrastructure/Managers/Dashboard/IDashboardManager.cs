@@ -1,11 +1,9 @@
-﻿using BlazorHero.CleanArchitecture.Shared.Wrapper;
-using System.Threading.Tasks;
-using BlazorHero.CleanArchitecture.Application.Features.Dashboards.Queries.GetData;
+﻿using BlazorHero.CleanArchitecture.Application.Features.Dashboards.Queries.GetData;
+using BlazorHero.CleanArchitecture.Shared.Wrapper;
 
-namespace BlazorHero.CleanArchitecture.Client.Infrastructure.Managers.Dashboard
+namespace BlazorHero.CleanArchitecture.Client.Infrastructure.Managers.Dashboard;
+
+public interface IDashboardManager : IManager
 {
-    public interface IDashboardManager : IManager
-    {
-        Task<IResult<DashboardDataResponse>> GetDataAsync();
-    }
+    Task<IResult<DashboardDataResponse>> GetDataAsync();
 }

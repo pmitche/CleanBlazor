@@ -1,8 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using MediatR;
-using Microsoft.Extensions.DependencyInjection;
-using System.Reflection;
+﻿using System.Reflection;
 using BlazorHero.CleanArchitecture.Application.Features.ExtendedAttributes.Commands.AddEdit;
 using BlazorHero.CleanArchitecture.Application.Features.ExtendedAttributes.Commands.Delete;
 using BlazorHero.CleanArchitecture.Application.Features.ExtendedAttributes.Queries.Export;
@@ -11,104 +7,124 @@ using BlazorHero.CleanArchitecture.Application.Features.ExtendedAttributes.Queri
 using BlazorHero.CleanArchitecture.Application.Features.ExtendedAttributes.Queries.GetById;
 using BlazorHero.CleanArchitecture.Domain.Contracts;
 using BlazorHero.CleanArchitecture.Shared.Wrapper;
+using MediatR;
+using Microsoft.Extensions.DependencyInjection;
 
-namespace BlazorHero.CleanArchitecture.Application.Extensions
+namespace BlazorHero.CleanArchitecture.Application.Extensions;
+
+public static class ServiceCollectionExtensions
 {
-    public static class ServiceCollectionExtensions
+    public static void AddApplicationLayer(this IServiceCollection services)
     {
-        public static void AddApplicationLayer(this IServiceCollection services)
+        services.AddAutoMapper(Assembly.GetExecutingAssembly());
+        //services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
+        services.AddMediatR(config => config.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
+        //services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+    }
+
+    public static void AddExtendedAttributesHandlers(this IServiceCollection services)
+    {
+        var extendedAttributeTypes = typeof(IEntity)
+            .Assembly
+            .GetExportedTypes()
+            .Where(t => t.IsClass && !t.IsAbstract && t.BaseType?.IsGenericType == true)
+            .Select(t => new { BaseGenericType = t.BaseType, CurrentType = t })
+            .Where(t => t.BaseGenericType?.GetGenericTypeDefinition() == typeof(AuditableEntityExtendedAttribute<,,>))
+            .ToList();
+
+        foreach (var extendedAttributeType in extendedAttributeTypes)
         {
-            services.AddAutoMapper(Assembly.GetExecutingAssembly());
-            //services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
-            services.AddMediatR(config => config.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
-            //services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
-        }
+            List<Type> extendedAttributeTypeGenericArguments =
+                extendedAttributeType.BaseGenericType.GetGenericArguments().ToList();
+            extendedAttributeTypeGenericArguments.Add(extendedAttributeType.CurrentType);
 
-        public static void AddExtendedAttributesHandlers(this IServiceCollection services)
-        {
-            var extendedAttributeTypes = typeof(IEntity)
-                .Assembly
-                .GetExportedTypes()
-                .Where(t => t.IsClass && !t.IsAbstract && t.BaseType?.IsGenericType == true)
-                .Select(t => new
-                {
-                    BaseGenericType = t.BaseType,
-                    CurrentType = t
-                })
-                .Where(t => t.BaseGenericType?.GetGenericTypeDefinition() == typeof(AuditableEntityExtendedAttribute<,,>))
-                .ToList();
+            #region AddEditExtendedAttributeCommandHandler
 
-            foreach (var extendedAttributeType in extendedAttributeTypes)
-            {
-                var extendedAttributeTypeGenericArguments = extendedAttributeType.BaseGenericType.GetGenericArguments().ToList();
-                extendedAttributeTypeGenericArguments.Add(extendedAttributeType.CurrentType);
+            Type tRequest =
+                typeof(AddEditExtendedAttributeCommand<,,,>).MakeGenericType(extendedAttributeTypeGenericArguments
+                    .ToArray());
+            Type tResponse = typeof(Result<>).MakeGenericType(extendedAttributeTypeGenericArguments.First());
+            Type serviceType = typeof(IRequestHandler<,>).MakeGenericType(tRequest, tResponse);
+            Type implementationType =
+                typeof(AddEditExtendedAttributeCommandHandler<,,,>).MakeGenericType(
+                    extendedAttributeTypeGenericArguments.ToArray());
+            services.AddScoped(serviceType, implementationType);
 
-                #region AddEditExtendedAttributeCommandHandler
+            #endregion AddEditExtendedAttributeCommandHandler
 
-                var tRequest = typeof(AddEditExtendedAttributeCommand<,,,>).MakeGenericType(extendedAttributeTypeGenericArguments.ToArray());
-                var tResponse = typeof(Result<>).MakeGenericType(extendedAttributeTypeGenericArguments.First());
-                var serviceType = typeof(IRequestHandler<,>).MakeGenericType(tRequest, tResponse);
-                var implementationType = typeof(AddEditExtendedAttributeCommandHandler<,,,>).MakeGenericType(extendedAttributeTypeGenericArguments.ToArray());
-                services.AddScoped(serviceType, implementationType);
+            #region DeleteExtendedAttributeCommandHandler
 
-                #endregion AddEditExtendedAttributeCommandHandler
+            tRequest = typeof(DeleteExtendedAttributeCommand<,,,>).MakeGenericType(extendedAttributeTypeGenericArguments
+                .ToArray());
+            tResponse = typeof(Result<>).MakeGenericType(extendedAttributeTypeGenericArguments.First());
+            serviceType = typeof(IRequestHandler<,>).MakeGenericType(tRequest, tResponse);
+            implementationType =
+                typeof(DeleteExtendedAttributeCommandHandler<,,,>).MakeGenericType(extendedAttributeTypeGenericArguments
+                    .ToArray());
+            services.AddScoped(serviceType, implementationType);
 
-                #region DeleteExtendedAttributeCommandHandler
+            #endregion DeleteExtendedAttributeCommandHandler
 
-                tRequest = typeof(DeleteExtendedAttributeCommand<,,,>).MakeGenericType(extendedAttributeTypeGenericArguments.ToArray());
-                tResponse = typeof(Result<>).MakeGenericType(extendedAttributeTypeGenericArguments.First());
-                serviceType = typeof(IRequestHandler<,>).MakeGenericType(tRequest, tResponse);
-                implementationType = typeof(DeleteExtendedAttributeCommandHandler<,,,>).MakeGenericType(extendedAttributeTypeGenericArguments.ToArray());
-                services.AddScoped(serviceType, implementationType);
+            #region GetAllExtendedAttributesByEntityIdQueryHandler
 
-                #endregion DeleteExtendedAttributeCommandHandler
+            tRequest = typeof(GetAllExtendedAttributesByEntityIdQuery<,,,>).MakeGenericType(
+                extendedAttributeTypeGenericArguments.ToArray());
+            tResponse = typeof(Result<>).MakeGenericType(typeof(List<>).MakeGenericType(
+                typeof(GetAllExtendedAttributesByEntityIdResponse<,>).MakeGenericType(
+                    extendedAttributeTypeGenericArguments[0],
+                    extendedAttributeTypeGenericArguments[1])));
+            serviceType = typeof(IRequestHandler<,>).MakeGenericType(tRequest, tResponse);
+            implementationType =
+                typeof(GetAllExtendedAttributesByEntityIdQueryHandler<,,,>).MakeGenericType(
+                    extendedAttributeTypeGenericArguments.ToArray());
+            services.AddScoped(serviceType, implementationType);
 
-                #region GetAllExtendedAttributesByEntityIdQueryHandler
+            #endregion GetAllExtendedAttributesByEntityIdQueryHandler
 
-                tRequest = typeof(GetAllExtendedAttributesByEntityIdQuery<,,,>).MakeGenericType(extendedAttributeTypeGenericArguments.ToArray());
-                tResponse = typeof(Result<>).MakeGenericType(typeof(List<>).MakeGenericType(
-                    typeof(GetAllExtendedAttributesByEntityIdResponse<,>).MakeGenericType(
-                        extendedAttributeTypeGenericArguments[0], extendedAttributeTypeGenericArguments[1])));
-                serviceType = typeof(IRequestHandler<,>).MakeGenericType(tRequest, tResponse);
-                implementationType = typeof(GetAllExtendedAttributesByEntityIdQueryHandler<,,,>).MakeGenericType(extendedAttributeTypeGenericArguments.ToArray());
-                services.AddScoped(serviceType, implementationType);
+            #region GetExtendedAttributeByIdQueryHandler
 
-                #endregion GetAllExtendedAttributesByEntityIdQueryHandler
+            tRequest = typeof(GetExtendedAttributeByIdQuery<,,,>).MakeGenericType(extendedAttributeTypeGenericArguments
+                .ToArray());
+            tResponse = typeof(Result<>).MakeGenericType(
+                typeof(GetExtendedAttributeByIdResponse<,>).MakeGenericType(
+                    extendedAttributeTypeGenericArguments[0],
+                    extendedAttributeTypeGenericArguments[1]));
+            serviceType = typeof(IRequestHandler<,>).MakeGenericType(tRequest, tResponse);
+            implementationType =
+                typeof(GetExtendedAttributeByIdQueryHandler<,,,>).MakeGenericType(extendedAttributeTypeGenericArguments
+                    .ToArray());
+            services.AddScoped(serviceType, implementationType);
 
-                #region GetExtendedAttributeByIdQueryHandler
+            #endregion GetExtendedAttributeByIdQueryHandler
 
-                tRequest = typeof(GetExtendedAttributeByIdQuery<,,,>).MakeGenericType(extendedAttributeTypeGenericArguments.ToArray());
-                tResponse = typeof(Result<>).MakeGenericType(
-                    typeof(GetExtendedAttributeByIdResponse<,>).MakeGenericType(
-                        extendedAttributeTypeGenericArguments[0], extendedAttributeTypeGenericArguments[1]));
-                serviceType = typeof(IRequestHandler<,>).MakeGenericType(tRequest, tResponse);
-                implementationType = typeof(GetExtendedAttributeByIdQueryHandler<,,,>).MakeGenericType(extendedAttributeTypeGenericArguments.ToArray());
-                services.AddScoped(serviceType, implementationType);
+            #region GetAllExtendedAttributesQueryHandler
 
-                #endregion GetExtendedAttributeByIdQueryHandler
+            tRequest = typeof(GetAllExtendedAttributesQuery<,,,>).MakeGenericType(extendedAttributeTypeGenericArguments
+                .ToArray());
+            tResponse = typeof(Result<>).MakeGenericType(typeof(List<>).MakeGenericType(
+                typeof(GetAllExtendedAttributesResponse<,>).MakeGenericType(
+                    extendedAttributeTypeGenericArguments[0],
+                    extendedAttributeTypeGenericArguments[1])));
+            serviceType = typeof(IRequestHandler<,>).MakeGenericType(tRequest, tResponse);
+            implementationType =
+                typeof(GetAllExtendedAttributesQueryHandler<,,,>).MakeGenericType(extendedAttributeTypeGenericArguments
+                    .ToArray());
+            services.AddScoped(serviceType, implementationType);
 
-                #region GetAllExtendedAttributesQueryHandler
+            #endregion GetAllExtendedAttributesQueryHandler
 
-                tRequest = typeof(GetAllExtendedAttributesQuery<,,,>).MakeGenericType(extendedAttributeTypeGenericArguments.ToArray());
-                tResponse = typeof(Result<>).MakeGenericType(typeof(List<>).MakeGenericType(
-                    typeof(GetAllExtendedAttributesResponse<,>).MakeGenericType(
-                        extendedAttributeTypeGenericArguments[0], extendedAttributeTypeGenericArguments[1])));
-                serviceType = typeof(IRequestHandler<,>).MakeGenericType(tRequest, tResponse);
-                implementationType = typeof(GetAllExtendedAttributesQueryHandler<,,,>).MakeGenericType(extendedAttributeTypeGenericArguments.ToArray());
-                services.AddScoped(serviceType, implementationType);
+            #region ExportExtendedAttributesQueryHandler
 
-                #endregion GetAllExtendedAttributesQueryHandler
+            tRequest = typeof(ExportExtendedAttributesQuery<,,,>).MakeGenericType(extendedAttributeTypeGenericArguments
+                .ToArray());
+            tResponse = typeof(Result<>).MakeGenericType(typeof(string));
+            serviceType = typeof(IRequestHandler<,>).MakeGenericType(tRequest, tResponse);
+            implementationType =
+                typeof(ExportExtendedAttributesQueryHandler<,,,>).MakeGenericType(extendedAttributeTypeGenericArguments
+                    .ToArray());
+            services.AddScoped(serviceType, implementationType);
 
-                #region ExportExtendedAttributesQueryHandler
-
-                tRequest = typeof(ExportExtendedAttributesQuery<,,,>).MakeGenericType(extendedAttributeTypeGenericArguments.ToArray());
-                tResponse = typeof(Result<>).MakeGenericType(typeof(string));
-                serviceType = typeof(IRequestHandler<,>).MakeGenericType(tRequest, tResponse);
-                implementationType = typeof(ExportExtendedAttributesQueryHandler<,,,>).MakeGenericType(extendedAttributeTypeGenericArguments.ToArray());
-                services.AddScoped(serviceType, implementationType);
-
-                #endregion ExportExtendedAttributesQueryHandler
-            }
+            #endregion ExportExtendedAttributesQueryHandler
         }
     }
 }

@@ -1,100 +1,95 @@
-﻿using System.Collections.Generic;
-using Blazored.LocalStorage;
+﻿using Blazored.LocalStorage;
 using BlazorHero.CleanArchitecture.Client.Infrastructure.Settings;
-using MudBlazor;
-using System.Threading.Tasks;
 using BlazorHero.CleanArchitecture.Shared.Constants.Storage;
 using BlazorHero.CleanArchitecture.Shared.Settings;
 using BlazorHero.CleanArchitecture.Shared.Wrapper;
 using Microsoft.Extensions.Localization;
+using MudBlazor;
 
-namespace BlazorHero.CleanArchitecture.Client.Infrastructure.Managers.Preferences
+namespace BlazorHero.CleanArchitecture.Client.Infrastructure.Managers.Preferences;
+
+public class ClientPreferenceManager : IClientPreferenceManager
 {
-    public class ClientPreferenceManager : IClientPreferenceManager
+    private readonly IStringLocalizer<ClientPreferenceManager> _localizer;
+    private readonly ILocalStorageService _localStorageService;
+
+    public ClientPreferenceManager(
+        ILocalStorageService localStorageService,
+        IStringLocalizer<ClientPreferenceManager> localizer)
     {
-        private readonly ILocalStorageService _localStorageService;
-        private readonly IStringLocalizer<ClientPreferenceManager> _localizer;
+        _localStorageService = localStorageService;
+        _localizer = localizer;
+    }
 
-        public ClientPreferenceManager(
-            ILocalStorageService localStorageService,
-            IStringLocalizer<ClientPreferenceManager> localizer)
+    public async Task<bool> ToggleDarkModeAsync()
+    {
+        if (await GetPreference() is not ClientPreference preference)
         {
-            _localStorageService = localStorageService;
-            _localizer = localizer;
-        }
-
-        public async Task<bool> ToggleDarkModeAsync()
-        {
-            var preference = await GetPreference() as ClientPreference;
-            if (preference != null)
-            {
-                preference.IsDarkMode = !preference.IsDarkMode;
-                await SetPreference(preference);
-                return !preference.IsDarkMode;
-            }
-
-            return false;
-        }
-        public async Task<bool> ToggleLayoutDirection()
-        {
-            var preference = await GetPreference() as ClientPreference;
-            if (preference != null)
-            {
-                preference.IsRTL = !preference.IsRTL;
-                await SetPreference(preference);
-                return preference.IsRTL;
-            }
             return false;
         }
 
-        public async Task<IResult> ChangeLanguageAsync(string languageCode)
-        {
-            var preference = await GetPreference() as ClientPreference;
-            if (preference != null)
-            {
-                preference.LanguageCode = languageCode;
-                await SetPreference(preference);
-                return new Result
-                {
-                    Succeeded = true,
-                    Messages = new List<string> { _localizer["Client Language has been changed"] }
-                };
-            }
+        preference.IsDarkMode = !preference.IsDarkMode;
+        await SetPreference(preference);
+        return !preference.IsDarkMode;
+    }
 
+    public async Task<IResult> ChangeLanguageAsync(string languageCode)
+    {
+        if (await GetPreference() is not ClientPreference preference)
+        {
             return new Result
             {
-                Succeeded = false,
-                Messages = new List<string> { _localizer["Failed to get client preferences"] }
+                Succeeded = false, Messages = new List<string> { _localizer["Failed to get client preferences"] }
             };
         }
 
-        public async Task<MudTheme> GetCurrentThemeAsync()
+        preference.LanguageCode = languageCode;
+        await SetPreference(preference);
+        return new Result
         {
-            var preference = await GetPreference() as ClientPreference;
-            if (preference != null)
-            {
-                if (preference.IsDarkMode == true) return BlazorHeroTheme.DarkTheme;
-            }
+            Succeeded = true, Messages = new List<string> { _localizer["Client Language has been changed"] }
+        };
+
+    }
+
+    public async Task<MudTheme> GetCurrentThemeAsync()
+    {
+        if (await GetPreference() is not ClientPreference preference)
+        {
             return BlazorHeroTheme.DefaultTheme;
         }
-        public async Task<bool> IsRTL()
+
+        return preference.IsDarkMode ? BlazorHeroTheme.DarkTheme : BlazorHeroTheme.DefaultTheme;
+    }
+
+    public async Task<IPreference> GetPreference() =>
+        await _localStorageService.GetItemAsync<ClientPreference>(StorageConstants.Local.Preference) ??
+        new ClientPreference();
+
+    public async Task SetPreference(IPreference preference) =>
+        await _localStorageService.SetItemAsync(StorageConstants.Local.Preference, preference as ClientPreference);
+
+    public async Task<bool> ToggleLayoutDirection()
+    {
+        if (await GetPreference() is not ClientPreference preference)
         {
-            var preference = await GetPreference() as ClientPreference;
-            if (preference != null)
-            {
-                if (preference.IsDarkMode == true) return false;
-            }
-            return preference.IsRTL;
+            return false;
         }
 
-        public async Task<IPreference> GetPreference()
+        preference.IsRtl = !preference.IsRtl;
+        await SetPreference(preference);
+        return preference.IsRtl;
+
+    }
+
+    public async Task<bool> IsRtl()
+    {
+        var preference = await GetPreference() as ClientPreference;
+        if (preference is { IsDarkMode: true })
         {
-            return await _localStorageService.GetItemAsync<ClientPreference>(StorageConstants.Local.Preference) ?? new ClientPreference();
+            return false;
         }
 
-        public async Task SetPreference(IPreference preference)
-        {
-            await _localStorageService.SetItemAsync(StorageConstants.Local.Preference, preference as ClientPreference);
-        }
+        return preference.IsRtl;
     }
 }

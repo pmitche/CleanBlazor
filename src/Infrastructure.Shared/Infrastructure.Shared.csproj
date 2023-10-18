@@ -6,10 +6,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Application\Application.csproj" />
+    <ProjectReference Include="..\Application\Application.csproj"/>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="MailKit" />
-    <PackageReference Include="MimeKit" />
+    <PackageReference Include="MailKit"/>
+    <PackageReference Include="MimeKit"/>
   </ItemGroup>
 </Project>

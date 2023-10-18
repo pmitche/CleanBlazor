@@ -1,9 +1,6 @@
-﻿using System.Collections.Generic;
+﻿namespace BlazorHero.CleanArchitecture.Application.Responses.Identity;
 
-namespace BlazorHero.CleanArchitecture.Application.Responses.Identity
+public class GetAllRolesResponse
 {
-    public class GetAllRolesResponse
-    {
-        public IEnumerable<RoleResponse> Roles { get; set; }
-    }
+    public IEnumerable<RoleResponse> Roles { get; set; }
 }

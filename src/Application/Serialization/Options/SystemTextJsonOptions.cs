@@ -1,10 +1,9 @@
 ﻿using System.Text.Json;
 using BlazorHero.CleanArchitecture.Application.Interfaces.Serialization.Options;
 
-namespace BlazorHero.CleanArchitecture.Application.Serialization.Options
+namespace BlazorHero.CleanArchitecture.Application.Serialization.Options;
+
+public class SystemTextJsonOptions : IJsonSerializerOptions
 {
-    public class SystemTextJsonOptions : IJsonSerializerOptions
-    {
-        public JsonSerializerOptions JsonSerializerOptions { get; } = new();
-    }
+    public JsonSerializerOptions JsonSerializerOptions { get; } = new();
 }

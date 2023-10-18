@@ -79,7 +79,7 @@ namespace BlazorHero.CleanArchitecture.Client.Pages.Misc
                 var extension = Path.GetExtension(_file.Name);
                 var format = "application/octet-stream";
                 await _file.OpenReadStream(_file.Size).ReadAsync(buffer);
-                AddEditDocumentModel.URL = $"data:{format};base64,{Convert.ToBase64String(buffer)}";
+                AddEditDocumentModel.Url = $"data:{format};base64,{Convert.ToBase64String(buffer)}";
                 AddEditDocumentModel.UploadRequest = new UploadRequest { Data = buffer, UploadType = Application.Enums.UploadType.Document, Extension = extension };
             }
         }

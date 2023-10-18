@@ -1,12 +1,11 @@
 ﻿using Newtonsoft.Json;
 
-namespace BlazorHero.CleanArchitecture.Application.Interfaces.Serialization.Settings
+namespace BlazorHero.CleanArchitecture.Application.Interfaces.Serialization.Settings;
+
+public interface IJsonSerializerSettings
 {
-    public interface IJsonSerializerSettings
-    {
-        /// <summary>
-        /// Settings for <see cref="Newtonsoft.Json"/>.
-        /// </summary>
-        public JsonSerializerSettings JsonSerializerSettings { get; }
-    }
+    /// <summary>
+    ///     Settings for <see cref="Newtonsoft.Json" />.
+    /// </summary>
+    public JsonSerializerSettings JsonSerializerSettings { get; }
 }

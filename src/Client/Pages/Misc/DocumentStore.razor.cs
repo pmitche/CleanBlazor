@@ -144,7 +144,7 @@ namespace BlazorHero.CleanArchitecture.Client.Pages.Misc
                         Id = doc.Id,
                         Title = doc.Title,
                         Description = doc.Description,
-                        URL = doc.URL,
+                        Url = doc.Url,
                         IsPublic = doc.IsPublic,
                         DocumentTypeId = doc.DocumentTypeId
                     });

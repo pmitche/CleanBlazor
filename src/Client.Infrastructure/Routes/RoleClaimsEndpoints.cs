@@ -1,9 +1,8 @@
-﻿namespace BlazorHero.CleanArchitecture.Client.Infrastructure.Routes
+﻿namespace BlazorHero.CleanArchitecture.Client.Infrastructure.Routes;
+
+public static class RoleClaimsEndpoints
 {
-    class RoleClaimsEndpoints
-    {
-        public static string Delete = "api/identity/roleClaim";
-        public static string GetAll = "api/identity/roleClaim";
-        public static string Save = "api/identity/roleClaim";
-    }
+    public const string Delete = "api/identity/roleClaim";
+    public const string GetAll = "api/identity/roleClaim";
+    public const string Save = "api/identity/roleClaim";
 }

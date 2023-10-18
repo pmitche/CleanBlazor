@@ -1,6 +1,5 @@
-﻿namespace BlazorHero.CleanArchitecture.Application.Interfaces.Common
+﻿namespace BlazorHero.CleanArchitecture.Application.Interfaces.Common;
+
+public interface IService
 {
-    public interface IService
-    {
-    }
 }

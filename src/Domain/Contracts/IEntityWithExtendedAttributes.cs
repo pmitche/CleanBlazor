@@ -1,9 +1,6 @@
-﻿using System.Collections.Generic;
+﻿namespace BlazorHero.CleanArchitecture.Domain.Contracts;
 
-namespace BlazorHero.CleanArchitecture.Domain.Contracts
+public interface IEntityWithExtendedAttributes<TExtendedAttribute>
 {
-    public interface IEntityWithExtendedAttributes<TExtendedAttribute>
-    {
-        public ICollection<TExtendedAttribute> ExtendedAttributes { get; set; }
-    }
+    public ICollection<TExtendedAttribute> ExtendedAttributes { get; set; }
 }

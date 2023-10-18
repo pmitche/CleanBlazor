@@ -4,111 +4,114 @@ using BlazorHero.CleanArchitecture.Infrastructure.Models.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
-namespace BlazorHero.CleanArchitecture.Infrastructure.Contexts
+namespace BlazorHero.CleanArchitecture.Infrastructure.Contexts;
+
+public abstract class AuditableContext : IdentityDbContext<BlazorHeroUser, BlazorHeroRole, string,
+    IdentityUserClaim<string>, IdentityUserRole<string>, IdentityUserLogin<string>, BlazorHeroRoleClaim,
+    IdentityUserToken<string>>
 {
-    public abstract class AuditableContext : IdentityDbContext<BlazorHeroUser, BlazorHeroRole, string, IdentityUserClaim<string>, IdentityUserRole<string>, IdentityUserLogin<string>, BlazorHeroRoleClaim, IdentityUserToken<string>>
+    protected AuditableContext(DbContextOptions options) : base(options)
     {
-        protected AuditableContext(DbContextOptions options) : base(options)
-        {
-        }
+    }
 
-        public DbSet<Audit> AuditTrails { get; set; }
+    public DbSet<Audit> AuditTrails { get; set; }
 
-        public virtual async Task<int> SaveChangesAsync(string userId = null, CancellationToken cancellationToken = new())
-        {
-            var auditEntries = OnBeforeSaveChanges(userId);
-            var result = await base.SaveChangesAsync(cancellationToken);
-            await OnAfterSaveChanges(auditEntries, cancellationToken);
-            return result;
-        }
+    public virtual async Task<int> SaveChangesAsync(string userId = null, CancellationToken cancellationToken = new())
+    {
+        List<AuditEntry> auditEntries = OnBeforeSaveChanges(userId);
+        var result = await base.SaveChangesAsync(cancellationToken);
+        await OnAfterSaveChanges(auditEntries, cancellationToken);
+        return result;
+    }
 
-        private List<AuditEntry> OnBeforeSaveChanges(string userId)
+    private List<AuditEntry> OnBeforeSaveChanges(string userId)
+    {
+        ChangeTracker.DetectChanges();
+        var auditEntries = new List<AuditEntry>();
+        foreach (EntityEntry entry in ChangeTracker.Entries())
         {
-            ChangeTracker.DetectChanges();
-            var auditEntries = new List<AuditEntry>();
-            foreach (var entry in ChangeTracker.Entries())
+            if (entry.Entity is Audit || entry.State == EntityState.Detached || entry.State == EntityState.Unchanged)
             {
-                if (entry.Entity is Audit || entry.State == EntityState.Detached || entry.State == EntityState.Unchanged)
+                continue;
+            }
+
+            var auditEntry = new AuditEntry(entry) { TableName = entry.Entity.GetType().Name, UserId = userId };
+            auditEntries.Add(auditEntry);
+            foreach (PropertyEntry property in entry.Properties)
+            {
+                if (property.IsTemporary)
+                {
+                    auditEntry.TemporaryProperties.Add(property);
                     continue;
+                }
 
-                var auditEntry = new AuditEntry(entry)
+                var propertyName = property.Metadata.Name;
+                if (property.Metadata.IsPrimaryKey())
                 {
-                    TableName = entry.Entity.GetType().Name,
-                    UserId = userId
-                };
-                auditEntries.Add(auditEntry);
-                foreach (var property in entry.Properties)
+                    auditEntry.KeyValues[propertyName] = property.CurrentValue;
+                    continue;
+                }
+
+                switch (entry.State)
                 {
-                    if (property.IsTemporary)
-                    {
-                        auditEntry.TemporaryProperties.Add(property);
-                        continue;
-                    }
+                    case EntityState.Added:
+                        auditEntry.AuditType = AuditType.Create;
+                        auditEntry.NewValues[propertyName] = property.CurrentValue;
+                        break;
 
-                    string propertyName = property.Metadata.Name;
-                    if (property.Metadata.IsPrimaryKey())
-                    {
-                        auditEntry.KeyValues[propertyName] = property.CurrentValue;
-                        continue;
-                    }
+                    case EntityState.Deleted:
+                        auditEntry.AuditType = AuditType.Delete;
+                        auditEntry.OldValues[propertyName] = property.OriginalValue;
+                        break;
 
-                    switch (entry.State)
-                    {
-                        case EntityState.Added:
-                            auditEntry.AuditType = AuditType.Create;
-                            auditEntry.NewValues[propertyName] = property.CurrentValue;
-                            break;
-
-                        case EntityState.Deleted:
-                            auditEntry.AuditType = AuditType.Delete;
+                    case EntityState.Modified:
+                        if (property.IsModified && property.OriginalValue?.Equals(property.CurrentValue) == false)
+                        {
+                            auditEntry.ChangedColumns.Add(propertyName);
+                            auditEntry.AuditType = AuditType.Update;
                             auditEntry.OldValues[propertyName] = property.OriginalValue;
-                            break;
+                            auditEntry.NewValues[propertyName] = property.CurrentValue;
+                        }
 
-                        case EntityState.Modified:
-                            if (property.IsModified && property.OriginalValue?.Equals(property.CurrentValue) == false)
-                            {
-                                auditEntry.ChangedColumns.Add(propertyName);
-                                auditEntry.AuditType = AuditType.Update;
-                                auditEntry.OldValues[propertyName] = property.OriginalValue;
-                                auditEntry.NewValues[propertyName] = property.CurrentValue;
-                            }
-                            break;
-                    }
+                        break;
                 }
             }
-            foreach (var auditEntry in auditEntries.Where(_ => !_.HasTemporaryProperties))
-            {
-                AuditTrails.Add(auditEntry.ToAudit());
-            }
-            return auditEntries.Where(_ => _.HasTemporaryProperties).ToList();
         }
 
-        private Task OnAfterSaveChanges(List<AuditEntry> auditEntries, CancellationToken cancellationToken = new())
+        foreach (AuditEntry auditEntry in auditEntries.Where(e => !e.HasTemporaryProperties))
         {
-            if (auditEntries == null || auditEntries.Count == 0)
-                return Task.CompletedTask;
-
-            foreach (var auditEntry in auditEntries)
-            {
-                foreach (var prop in auditEntry.TemporaryProperties)
-                {
-                    if (prop.Metadata.IsPrimaryKey())
-                    {
-                        auditEntry.KeyValues[prop.Metadata.Name] = prop.CurrentValue;
-                    }
-                    else
-                    {
-                        auditEntry.NewValues[prop.Metadata.Name] = prop.CurrentValue;
-                    }
-                }
-                AuditTrails.Add(auditEntry.ToAudit());
-            }
-            return SaveChangesAsync(cancellationToken);
+            AuditTrails.Add(auditEntry.ToAudit());
         }
+
+        return auditEntries.Where(e => e.HasTemporaryProperties).ToList();
+    }
+
+    private Task OnAfterSaveChanges(List<AuditEntry> auditEntries, CancellationToken cancellationToken = new())
+    {
+        if (auditEntries == null || auditEntries.Count == 0)
+        {
+            return Task.CompletedTask;
+        }
+
+        foreach (AuditEntry auditEntry in auditEntries)
+        {
+            foreach (PropertyEntry prop in auditEntry.TemporaryProperties)
+            {
+                if (prop.Metadata.IsPrimaryKey())
+                {
+                    auditEntry.KeyValues[prop.Metadata.Name] = prop.CurrentValue;
+                }
+                else
+                {
+                    auditEntry.NewValues[prop.Metadata.Name] = prop.CurrentValue;
+                }
+            }
+
+            AuditTrails.Add(auditEntry.ToAudit());
+        }
+
+        return SaveChangesAsync(cancellationToken);
     }
 }

@@ -1,6 +1,5 @@
-﻿namespace BlazorHero.CleanArchitecture.Client.Infrastructure.Managers
+﻿namespace BlazorHero.CleanArchitecture.Client.Infrastructure.Managers;
+
+public interface IManager
 {
-    public interface IManager
-    {
-    }
 }

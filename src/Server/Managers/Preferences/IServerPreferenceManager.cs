@@ -1,8 +1,7 @@
 ﻿using BlazorHero.CleanArchitecture.Shared.Managers;
 
-namespace BlazorHero.CleanArchitecture.Server.Managers.Preferences
+namespace BlazorHero.CleanArchitecture.Server.Managers.Preferences;
+
+public interface IServerPreferenceManager : IPreferenceManager
 {
-    public interface IServerPreferenceManager : IPreferenceManager
-    {
-    }
 }

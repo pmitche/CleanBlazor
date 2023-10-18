@@ -1,9 +1,8 @@
 ﻿using BlazorHero.CleanArchitecture.Application.Requests;
 
-namespace BlazorHero.CleanArchitecture.Application.Interfaces.Services
+namespace BlazorHero.CleanArchitecture.Application.Interfaces.Services;
+
+public interface IUploadService
 {
-    public interface IUploadService
-    {
-        string UploadAsync(UploadRequest request);
-    }
+    string UploadAsync(UploadRequest request);
 }

@@ -1,10 +1,9 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 
-namespace BlazorHero.CleanArchitecture.Application.Interfaces.Services.Storage
+namespace BlazorHero.CleanArchitecture.Application.Interfaces.Services.Storage;
+
+[ExcludeFromCodeCoverage]
+public class ChangingEventArgs : ChangedEventArgs
 {
-    [ExcludeFromCodeCoverage]
-    public class ChangingEventArgs : ChangedEventArgs
-    {
-        public bool Cancel { get; set; }
-    }
+    public bool Cancel { get; set; }
 }

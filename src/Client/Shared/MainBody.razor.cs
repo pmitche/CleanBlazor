@@ -49,7 +49,7 @@ namespace BlazorHero.CleanArchitecture.Client.Shared
 
         protected override async Task OnInitializedAsync()
         {
-            _rightToLeft = await _clientPreferenceManager.IsRTL();
+            _rightToLeft = await _clientPreferenceManager.IsRtl();
             _interceptor.RegisterEvent();
             hubConnection = hubConnection.TryInitialize(_navigationManager, _localStorage);
             await hubConnection.StartAsync();

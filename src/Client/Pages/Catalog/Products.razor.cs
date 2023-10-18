@@ -76,7 +76,7 @@ namespace BlazorHero.CleanArchitecture.Client.Pages.Catalog
                 orderings = state.SortDirection != SortDirection.None ? new[] {$"{state.SortLabel} {state.SortDirection}"} : new[] {$"{state.SortLabel}"};
             }
 
-            var request = new GetAllPagedProductsRequest { PageSize = pageSize, PageNumber = pageNumber + 1, SearchString = _searchString, Orderby = orderings };
+            var request = new GetAllPagedProductsRequest { PageSize = pageSize, PageNumber = pageNumber + 1, SearchString = _searchString, OrderBy = orderings };
             var response = await ProductManager.GetProductsAsync(request);
             if (response.Succeeded)
             {

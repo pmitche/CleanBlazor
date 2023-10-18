@@ -1,15 +1,13 @@
 ﻿using BlazorHero.CleanArchitecture.Shared.Settings;
-using System.Threading.Tasks;
 using BlazorHero.CleanArchitecture.Shared.Wrapper;
 
-namespace BlazorHero.CleanArchitecture.Shared.Managers
+namespace BlazorHero.CleanArchitecture.Shared.Managers;
+
+public interface IPreferenceManager
 {
-    public interface IPreferenceManager
-    {
-        Task SetPreference(IPreference preference);
+    Task SetPreference(IPreference preference);
 
-        Task<IPreference> GetPreference();
+    Task<IPreference> GetPreference();
 
-        Task<IResult> ChangeLanguageAsync(string languageCode);
-    }
+    Task<IResult> ChangeLanguageAsync(string languageCode);
 }

@@ -29,13 +29,13 @@
             {
                 <div class="d-flex flex-row my-4">
                     <div class="mr-4">
-                        @if (string.IsNullOrEmpty(message.FromUserImageURL))
+                        @if (string.IsNullOrEmpty(message.FromUserImageUrl))
                         {
                             <MudAvatar Color="Color.Secondary" Style="height:50px; width:50px;">@message.FromUserFullName.ToUpper().FirstOrDefault()</MudAvatar>
                         }
                         else
                         {
-                            <MudAvatar Image="@message.FromUserImageURL" Style="height:50px; width:50px;"> </MudAvatar>
+                            <MudAvatar Image="@message.FromUserImageUrl" Style="height:50px; width:50px;"> </MudAvatar>
                         }
                     </div>
                     <div>

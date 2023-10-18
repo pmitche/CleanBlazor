@@ -1,89 +1,84 @@
-﻿using BlazorHero.CleanArchitecture.Application.Interfaces.Repositories;
+﻿using System.Collections;
+using BlazorHero.CleanArchitecture.Application.Interfaces.Repositories;
 using BlazorHero.CleanArchitecture.Application.Interfaces.Services;
 using BlazorHero.CleanArchitecture.Domain.Contracts;
 using BlazorHero.CleanArchitecture.Infrastructure.Contexts;
 using LazyCache;
-using System;
-using System.Collections;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 
-namespace BlazorHero.CleanArchitecture.Infrastructure.Repositories
+namespace BlazorHero.CleanArchitecture.Infrastructure.Repositories;
+
+public class UnitOfWork<TId> : IUnitOfWork<TId>
 {
-    public class UnitOfWork<TId> : IUnitOfWork<TId>
+    private readonly IAppCache _cache;
+    private readonly ICurrentUserService _currentUserService;
+    private readonly BlazorHeroContext _dbContext;
+    private Hashtable _repositories;
+    private bool _disposed;
+
+    public UnitOfWork(BlazorHeroContext dbContext, ICurrentUserService currentUserService, IAppCache cache)
     {
-        private readonly ICurrentUserService _currentUserService;
-        private readonly BlazorHeroContext _dbContext;
-        private bool disposed;
-        private Hashtable _repositories;
-        private readonly IAppCache _cache;
+        _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
+        _currentUserService = currentUserService;
+        _cache = cache;
+    }
 
-        public UnitOfWork(BlazorHeroContext dbContext, ICurrentUserService currentUserService, IAppCache cache)
+    public IRepositoryAsync<TEntity, TId> Repository<TEntity>() where TEntity : AuditableEntity<TId>
+    {
+        _repositories ??= new Hashtable();
+
+        var type = typeof(TEntity).Name;
+
+        if (!_repositories.ContainsKey(type))
         {
-            _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
-            _currentUserService = currentUserService;
-            _cache = cache;
+            Type repositoryType = typeof(RepositoryAsync<,>);
+
+            var repositoryInstance =
+                Activator.CreateInstance(repositoryType.MakeGenericType(typeof(TEntity), typeof(TId)), _dbContext);
+
+            _repositories.Add(type, repositoryInstance);
         }
 
-        public IRepositoryAsync<TEntity, TId> Repository<TEntity>() where TEntity : AuditableEntity<TId>
+        return (IRepositoryAsync<TEntity, TId>)_repositories[type];
+    }
+
+    public async Task<int> Commit(CancellationToken cancellationToken) =>
+        await _dbContext.SaveChangesAsync(cancellationToken);
+
+    public async Task<int> CommitAndRemoveCache(CancellationToken cancellationToken, params string[] cacheKeys)
+    {
+        var result = await _dbContext.SaveChangesAsync(cancellationToken);
+        foreach (var cacheKey in cacheKeys)
         {
-            if (_repositories == null)
-                _repositories = new Hashtable();
+            _cache.Remove(cacheKey);
+        }
 
-            var type = typeof(TEntity).Name;
+        return result;
+    }
 
-            if (!_repositories.ContainsKey(type))
+    public Task Rollback()
+    {
+        _dbContext.ChangeTracker.Entries().ToList().ForEach(x => x.Reload());
+        return Task.CompletedTask;
+    }
+
+    public void Dispose()
+    {
+        Dispose(true);
+        GC.SuppressFinalize(this);
+    }
+
+    protected virtual void Dispose(bool disposing)
+    {
+        if (!_disposed)
+        {
+            if (disposing)
             {
-                var repositoryType = typeof(RepositoryAsync<,>);
-
-                var repositoryInstance = Activator.CreateInstance(repositoryType.MakeGenericType(typeof(TEntity), typeof(TId)), _dbContext);
-
-                _repositories.Add(type, repositoryInstance);
+                //dispose managed resources
+                _dbContext.Dispose();
             }
-
-            return (IRepositoryAsync<TEntity, TId>)_repositories[type];
         }
 
-        public async Task<int> Commit(CancellationToken cancellationToken)
-        {
-            return await _dbContext.SaveChangesAsync(cancellationToken);
-        }
-
-        public async Task<int> CommitAndRemoveCache(CancellationToken cancellationToken, params string[] cacheKeys)
-        {
-            var result =  await _dbContext.SaveChangesAsync(cancellationToken);
-            foreach (var cacheKey in cacheKeys)
-            {
-                _cache.Remove(cacheKey);
-            }
-            return result;
-        }
-
-        public Task Rollback()
-        {
-            _dbContext.ChangeTracker.Entries().ToList().ForEach(x => x.Reload());
-            return Task.CompletedTask;
-        }
-
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!disposed)
-            {
-                if (disposing)
-                {
-                    //dispose managed resources
-                    _dbContext.Dispose();
-                }
-            }
-            //dispose unmanaged resources
-            disposed = true;
-        }
+        //dispose unmanaged resources
+        _disposed = true;
     }
 }

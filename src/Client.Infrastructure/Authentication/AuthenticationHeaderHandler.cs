@@ -1,34 +1,31 @@
-﻿using Blazored.LocalStorage;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using System.Net.Http.Headers;
+using Blazored.LocalStorage;
 using BlazorHero.CleanArchitecture.Shared.Constants.Storage;
 
-namespace BlazorHero.CleanArchitecture.Client.Infrastructure.Authentication
+namespace BlazorHero.CleanArchitecture.Client.Infrastructure.Authentication;
+
+public class AuthenticationHeaderHandler : DelegatingHandler
 {
-    public class AuthenticationHeaderHandler : DelegatingHandler
+    private readonly ILocalStorageService _localStorage;
+
+    public AuthenticationHeaderHandler(ILocalStorageService localStorage)
+        => _localStorage = localStorage;
+
+    protected override async Task<HttpResponseMessage> SendAsync(
+        HttpRequestMessage request,
+        CancellationToken cancellationToken)
     {
-        private readonly ILocalStorageService localStorage;
-
-        public AuthenticationHeaderHandler(ILocalStorageService localStorage)
-            => this.localStorage = localStorage;
-
-        protected override async Task<HttpResponseMessage> SendAsync(
-            HttpRequestMessage request,
-            CancellationToken cancellationToken)
+        if (request.Headers.Authorization?.Scheme != "Bearer")
         {
-            if (request.Headers.Authorization?.Scheme != "Bearer")
+            var savedToken =
+                await _localStorage.GetItemAsync<string>(StorageConstants.Local.AuthToken, cancellationToken);
+
+            if (!string.IsNullOrWhiteSpace(savedToken))
             {
-                var savedToken = await this.localStorage.GetItemAsync<string>(StorageConstants.Local.AuthToken);
-
-                if (!string.IsNullOrWhiteSpace(savedToken))
-                {
-                    request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", savedToken);
-                }
+                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", savedToken);
             }
-
-            return await base.SendAsync(request, cancellationToken);
         }
+
+        return await base.SendAsync(request, cancellationToken);
     }
 }

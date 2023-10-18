@@ -1,9 +1,6 @@
-﻿using System;
+﻿namespace BlazorHero.CleanArchitecture.Application.Interfaces.Services;
 
-namespace BlazorHero.CleanArchitecture.Application.Interfaces.Services
+public interface IDateTimeService
 {
-    public interface IDateTimeService
-    {
-        DateTime NowUtc { get; }
-    }
+    DateTime NowUtc { get; }
 }

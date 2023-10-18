@@ -19,7 +19,7 @@ namespace BlazorHero.CleanArchitecture.Client.Shared
         {
             _currentTheme = BlazorHeroTheme.DefaultTheme;
             _currentTheme = await _clientPreferenceManager.GetCurrentThemeAsync();
-            _rightToLeft = await _clientPreferenceManager.IsRTL();
+            _rightToLeft = await _clientPreferenceManager.IsRtl();
             _interceptor.RegisterEvent();
         }
 

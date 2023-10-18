@@ -4,15 +4,14 @@ using BlazorHero.CleanArchitecture.Application.Features.Brands.Queries.GetAll;
 using BlazorHero.CleanArchitecture.Application.Features.Brands.Queries.GetById;
 using BlazorHero.CleanArchitecture.Domain.Entities.Catalog;
 
-namespace BlazorHero.CleanArchitecture.Application.Mappings
+namespace BlazorHero.CleanArchitecture.Application.Mappings;
+
+public class BrandProfile : Profile
 {
-    public class BrandProfile : Profile
+    public BrandProfile()
     {
-        public BrandProfile()
-        {
-            CreateMap<AddEditBrandCommand, Brand>().ReverseMap();
-            CreateMap<GetBrandByIdResponse, Brand>().ReverseMap();
-            CreateMap<GetAllBrandsResponse, Brand>().ReverseMap();
-        }
+        CreateMap<AddEditBrandCommand, Brand>().ReverseMap();
+        CreateMap<GetBrandByIdResponse, Brand>().ReverseMap();
+        CreateMap<GetAllBrandsResponse, Brand>().ReverseMap();
     }
 }

@@ -3,14 +3,13 @@ using BlazorHero.CleanArchitecture.Application.Features.Documents.Commands.AddEd
 using BlazorHero.CleanArchitecture.Application.Features.Documents.Queries.GetById;
 using BlazorHero.CleanArchitecture.Domain.Entities.Misc;
 
-namespace BlazorHero.CleanArchitecture.Application.Mappings
+namespace BlazorHero.CleanArchitecture.Application.Mappings;
+
+public class DocumentProfile : Profile
 {
-    public class DocumentProfile : Profile
+    public DocumentProfile()
     {
-        public DocumentProfile()
-        {
-            CreateMap<AddEditDocumentCommand, Document>().ReverseMap();
-            CreateMap<GetDocumentByIdResponse, Document>().ReverseMap();
-        }
+        CreateMap<AddEditDocumentCommand, Document>().ReverseMap();
+        CreateMap<GetDocumentByIdResponse, Document>().ReverseMap();
     }
 }

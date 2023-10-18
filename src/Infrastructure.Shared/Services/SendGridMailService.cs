@@ -1,6 +1,5 @@
-﻿namespace BlazorHero.CleanArchitecture.Infrastructure.Shared.Services
+﻿namespace BlazorHero.CleanArchitecture.Infrastructure.Shared.Services;
+
+internal class SendGridMailService
 {
-    internal class SendGridMailService
-    {
-    }
 }

@@ -1,6 +1,5 @@
-﻿namespace BlazorHero.CleanArchitecture.Application.Requests.Identity
+﻿namespace BlazorHero.CleanArchitecture.Application.Requests.Identity;
+
+public class UpdateProfilePictureRequest : UploadRequest
 {
-    public class UpdateProfilePictureRequest : UploadRequest
-    {
-    }
 }

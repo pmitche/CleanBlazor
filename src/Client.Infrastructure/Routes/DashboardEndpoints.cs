@@ -1,7 +1,6 @@
-﻿namespace BlazorHero.CleanArchitecture.Client.Infrastructure.Routes
+﻿namespace BlazorHero.CleanArchitecture.Client.Infrastructure.Routes;
+
+public static class DashboardEndpoints
 {
-    public class DashboardEndpoints
-    {
-        public static string GetData = "api/v1/dashboard";
-    }
+    public const string GetData = "api/v1/dashboard";
 }

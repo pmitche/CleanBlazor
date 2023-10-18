@@ -83,7 +83,7 @@ namespace BlazorHero.CleanArchitecture.Client.Pages.Identity
                 var result = await _accountManager.UpdateProfilePictureAsync(request, UserId);
                 if (result.Succeeded)
                 {
-                    await _localStorage.SetItemAsync(StorageConstants.Local.UserImageURL, result.Data);
+                    await _localStorage.SetItemAsync(StorageConstants.Local.UserImageUrl, result.Data);
                     _snackBar.Add(_localizer["Profile picture added."], Severity.Success);
                     _navigationManager.NavigateTo("/account", true);
                 }
@@ -112,7 +112,7 @@ namespace BlazorHero.CleanArchitecture.Client.Pages.Identity
                 var data = await _accountManager.UpdateProfilePictureAsync(request, UserId);
                 if (data.Succeeded)
                 {
-                    await _localStorage.RemoveItemAsync(StorageConstants.Local.UserImageURL);
+                    await _localStorage.RemoveItemAsync(StorageConstants.Local.UserImageUrl);
                     ImageDataUrl = string.Empty;
                     _snackBar.Add(_localizer["Profile picture deleted."], Severity.Success);
                     _navigationManager.NavigateTo("/account", true);

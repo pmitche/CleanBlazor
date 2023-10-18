@@ -1,18 +1,15 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
-using BlazorHero.CleanArchitecture.Domain.Contracts;
+﻿using BlazorHero.CleanArchitecture.Domain.Contracts;
 
-namespace BlazorHero.CleanArchitecture.Application.Interfaces.Repositories
+namespace BlazorHero.CleanArchitecture.Application.Interfaces.Repositories;
+
+public interface IExtendedAttributeUnitOfWork<TId, TEntityId, TEntity> : IDisposable
+    where TEntity : AuditableEntity<TEntityId>
 {
-    public interface IExtendedAttributeUnitOfWork<TId, TEntityId, TEntity> : IDisposable where TEntity : AuditableEntity<TEntityId>
-    {
-        IRepositoryAsync<T, TId> Repository<T>() where T : AuditableEntityExtendedAttribute<TId, TEntityId, TEntity>;
+    IRepositoryAsync<T, TId> Repository<T>() where T : AuditableEntityExtendedAttribute<TId, TEntityId, TEntity>;
 
-        Task<int> Commit(CancellationToken cancellationToken);
+    Task<int> Commit(CancellationToken cancellationToken);
 
-        Task<int> CommitAndRemoveCache(CancellationToken cancellationToken, params string[] cacheKeys);
+    Task<int> CommitAndRemoveCache(CancellationToken cancellationToken, params string[] cacheKeys);
 
-        Task Rollback();
-    }
+    Task Rollback();
 }

@@ -1,19 +1,12 @@
-﻿namespace BlazorHero.CleanArchitecture.Client.Infrastructure.Routes
+﻿namespace BlazorHero.CleanArchitecture.Client.Infrastructure.Routes;
+
+public static class AccountEndpoints
 {
-    public static class AccountEndpoints
-    {
-        public static string Register = "api/identity/account/register";
-        public static string ChangePassword = "api/identity/account/changepassword";
-        public static string UpdateProfile = "api/identity/account/updateprofile";
+    public const string Register = "api/identity/account/register";
+    public const string ChangePassword = "api/identity/account/changepassword";
+    public const string UpdateProfile = "api/identity/account/updateprofile";
 
-        public static string GetProfilePicture(string userId)
-        {
-            return $"api/identity/account/profile-picture/{userId}";
-        }
+    public static string GetProfilePicture(string userId) => $"api/identity/account/profile-picture/{userId}";
 
-        public static string UpdateProfilePicture(string userId)
-        {
-            return $"api/identity/account/profile-picture/{userId}";
-        }
-    }
+    public static string UpdateProfilePicture(string userId) => $"api/identity/account/profile-picture/{userId}";
 }

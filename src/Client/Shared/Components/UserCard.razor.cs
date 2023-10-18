@@ -37,7 +37,7 @@ namespace BlazorHero.CleanArchitecture.Client.Shared.Components
                 FirstLetterOfName = FirstName[0];
             }
             var UserId = user.GetUserId();
-            var imageResponse = await _localStorage.GetItemAsync<string>(StorageConstants.Local.UserImageURL);
+            var imageResponse = await _localStorage.GetItemAsync<string>(StorageConstants.Local.UserImageUrl);
             if (!string.IsNullOrEmpty(imageResponse))
             {
                 ImageDataUrl = imageResponse;

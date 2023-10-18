@@ -2,14 +2,13 @@
 using BlazorHero.CleanArchitecture.Application.Requests.Identity;
 using BlazorHero.CleanArchitecture.Application.Responses.Identity;
 
-namespace BlazorHero.CleanArchitecture.Client.Infrastructure.Mappings
+namespace BlazorHero.CleanArchitecture.Client.Infrastructure.Mappings;
+
+public class RoleProfile : Profile
 {
-    public class RoleProfile : Profile
+    public RoleProfile()
     {
-        public RoleProfile()
-        {
-            CreateMap<PermissionResponse, PermissionRequest>().ReverseMap();
-            CreateMap<RoleClaimResponse, RoleClaimRequest>().ReverseMap();
-        }
+        CreateMap<PermissionResponse, PermissionRequest>().ReverseMap();
+        CreateMap<RoleClaimResponse, RoleClaimRequest>().ReverseMap();
     }
 }
