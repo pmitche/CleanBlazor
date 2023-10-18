@@ -14,10 +14,7 @@ using Microsoft.Extensions.Localization;
 
 namespace BlazorHero.CleanArchitecture.Application.Features.Brands.Commands.Import;
 
-public class ImportBrandsCommand : IRequest<Result<int>>
-{
-    public UploadRequest UploadRequest { get; set; }
-}
+public record ImportBrandsCommand(UploadRequest UploadRequest) : IRequest<Result<int>>;
 
 internal class ImportBrandsCommandHandler : IRequestHandler<ImportBrandsCommand, Result<int>>
 {

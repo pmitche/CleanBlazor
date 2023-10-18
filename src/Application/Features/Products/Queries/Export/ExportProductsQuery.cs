@@ -10,12 +10,7 @@ using Microsoft.Extensions.Localization;
 
 namespace BlazorHero.CleanArchitecture.Application.Features.Products.Queries.Export;
 
-public class ExportProductsQuery : IRequest<Result<string>>
-{
-    public ExportProductsQuery(string searchString = "") => SearchString = searchString;
-
-    public string SearchString { get; set; }
-}
+public record ExportProductsQuery(string SearchString = "") : IRequest<Result<string>>;
 
 internal class ExportProductsQueryHandler : IRequestHandler<ExportProductsQuery, Result<string>>
 {

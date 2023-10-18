@@ -6,12 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BlazorHero.CleanArchitecture.Application.Features.Products.Queries.GetProductImage;
 
-public class GetProductImageQuery : IRequest<Result<string>>
-{
-    public GetProductImageQuery(int productId) => Id = productId;
-
-    public int Id { get; set; }
-}
+public record GetProductImageQuery(int Id) : IRequest<Result<string>>;
 
 internal class GetProductImageQueryHandler : IRequestHandler<GetProductImageQuery, Result<string>>
 {

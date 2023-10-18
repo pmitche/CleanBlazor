@@ -10,9 +10,7 @@ using Microsoft.Extensions.Localization;
 
 namespace BlazorHero.CleanArchitecture.Application.Features.Dashboards.Queries.GetData;
 
-public class GetDashboardDataQuery : IRequest<Result<DashboardDataResponse>>
-{
-}
+public record GetDashboardDataQuery : IRequest<Result<DashboardDataResponse>>;
 
 internal class GetDashboardDataQueryHandler : IRequestHandler<GetDashboardDataQuery, Result<DashboardDataResponse>>
 {

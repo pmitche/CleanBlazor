@@ -7,10 +7,7 @@ using Microsoft.Extensions.Localization;
 
 namespace BlazorHero.CleanArchitecture.Application.Features.Brands.Commands.Delete;
 
-public class DeleteBrandCommand : IRequest<Result<int>>
-{
-    public int Id { get; set; }
-}
+public record DeleteBrandCommand(int Id) : IRequest<Result<int>>;
 
 internal class DeleteBrandCommandHandler : IRequestHandler<DeleteBrandCommand, Result<int>>
 {

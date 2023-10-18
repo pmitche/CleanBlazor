@@ -8,9 +8,7 @@ using MediatR;
 
 namespace BlazorHero.CleanArchitecture.Application.Features.DocumentTypes.Queries.GetAll;
 
-public class GetAllDocumentTypesQuery : IRequest<Result<List<GetAllDocumentTypesResponse>>>
-{
-}
+public record GetAllDocumentTypesQuery : IRequest<Result<List<GetAllDocumentTypesResponse>>>;
 
 internal class
     GetAllDocumentTypesQueryHandler : IRequestHandler<GetAllDocumentTypesQuery,

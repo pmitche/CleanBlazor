@@ -163,8 +163,7 @@ public partial class Brands
 
     private async Task<IResult<int>> ImportExcel(UploadRequest uploadFile)
     {
-        var request = new ImportBrandsCommand { UploadRequest = uploadFile };
-        IResult<int> result = await BrandManager.ImportAsync(request);
+        IResult<int> result = await BrandManager.ImportAsync(new ImportBrandsCommand(uploadFile));
         return result;
     }
 

@@ -6,10 +6,7 @@ using MediatR;
 
 namespace BlazorHero.CleanArchitecture.Application.Features.Brands.Queries.GetById;
 
-public class GetBrandByIdQuery : IRequest<Result<GetBrandByIdResponse>>
-{
-    public int Id { get; set; }
-}
+public record GetBrandByIdQuery(int Id) : IRequest<Result<GetBrandByIdResponse>>;
 
 internal class GetProductByIdQueryHandler : IRequestHandler<GetBrandByIdQuery, Result<GetBrandByIdResponse>>
 {

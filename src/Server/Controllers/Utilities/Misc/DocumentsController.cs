@@ -38,7 +38,7 @@ public class DocumentsController : BaseApiController<DocumentsController>
     [HttpGet("{id:int}")]
     public async Task<IActionResult> GetById(int id)
     {
-        Result<GetDocumentByIdResponse> document = await Mediator.Send(new GetDocumentByIdQuery { Id = id });
+        Result<GetDocumentByIdResponse> document = await Mediator.Send(new GetDocumentByIdQuery(id));
         return Ok(document);
     }
 
@@ -58,5 +58,5 @@ public class DocumentsController : BaseApiController<DocumentsController>
     /// <returns>Status 200 OK</returns>
     [Authorize(Policy = Permissions.Documents.Delete)]
     [HttpDelete("{id:int}")]
-    public async Task<IActionResult> Delete(int id) => Ok(await Mediator.Send(new DeleteDocumentCommand { Id = id }));
+    public async Task<IActionResult> Delete(int id) => Ok(await Mediator.Send(new DeleteDocumentCommand(id)));
 }

@@ -6,10 +6,7 @@ using MediatR;
 
 namespace BlazorHero.CleanArchitecture.Application.Features.DocumentTypes.Queries.GetById;
 
-public class GetDocumentTypeByIdQuery : IRequest<Result<GetDocumentTypeByIdResponse>>
-{
-    public int Id { get; set; }
-}
+public record GetDocumentTypeByIdQuery(int Id) : IRequest<Result<GetDocumentTypeByIdResponse>>;
 
 internal class
     GetDocumentTypeByIdQueryHandler : IRequestHandler<GetDocumentTypeByIdQuery, Result<GetDocumentTypeByIdResponse>>

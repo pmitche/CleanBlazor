@@ -8,9 +8,7 @@ using MediatR;
 
 namespace BlazorHero.CleanArchitecture.Application.Features.Brands.Queries.GetAll;
 
-public class GetAllBrandsQuery : IRequest<Result<List<GetAllBrandsResponse>>>
-{
-}
+public record GetAllBrandsQuery : IRequest<Result<List<GetAllBrandsResponse>>>;
 
 internal class GetAllBrandsCachedQueryHandler : IRequestHandler<GetAllBrandsQuery, Result<List<GetAllBrandsResponse>>>
 {

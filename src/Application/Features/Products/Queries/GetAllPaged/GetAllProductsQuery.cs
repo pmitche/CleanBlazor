@@ -9,28 +9,15 @@ using MediatR;
 
 namespace BlazorHero.CleanArchitecture.Application.Features.Products.Queries.GetAllPaged;
 
-public class GetAllProductsQuery : IRequest<PaginatedResult<GetAllPagedProductsResponse>>
+public record GetAllProductsQuery(int PageNumber, int PageSize, string SearchString, string OrderByInput)
+    : IRequest<PaginatedResult<GetAllPagedProductsResponse>>
 {
-    public GetAllProductsQuery(int pageNumber, int pageSize, string searchString, string orderBy)
-    {
-        PageNumber = pageNumber;
-        PageSize = pageSize;
-        SearchString = searchString;
-        if (!string.IsNullOrWhiteSpace(orderBy))
-        {
-            OrderBy = orderBy.Split(',');
-        }
-    }
-
-    public int PageNumber { get; set; }
-    public int PageSize { get; set; }
-    public string SearchString { get; set; }
-
-    public string[] OrderBy { get; set; }
+    public string[] OrderBy =>
+        string.IsNullOrWhiteSpace(OrderByInput) ? Array.Empty<string>() : OrderByInput.Split(',');
 }
 
-internal class
-    GetAllProductsQueryHandler : IRequestHandler<GetAllProductsQuery, PaginatedResult<GetAllPagedProductsResponse>>
+internal class GetAllProductsQueryHandler
+    : IRequestHandler<GetAllProductsQuery, PaginatedResult<GetAllPagedProductsResponse>>
 {
     private readonly IUnitOfWork<int> _unitOfWork;
 

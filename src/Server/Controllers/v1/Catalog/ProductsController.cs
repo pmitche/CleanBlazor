@@ -58,7 +58,7 @@ public class ProductsController : BaseApiController<ProductsController>
     /// <returns>Status 200 OK response</returns>
     [Authorize(Policy = Permissions.Products.Delete)]
     [HttpDelete("{id:int}")]
-    public async Task<IActionResult> Delete(int id) => Ok(await Mediator.Send(new DeleteProductCommand { Id = id }));
+    public async Task<IActionResult> Delete(int id) => Ok(await Mediator.Send(new DeleteProductCommand(id)));
 
     /// <summary>
     ///     Search Products and Export to Excel

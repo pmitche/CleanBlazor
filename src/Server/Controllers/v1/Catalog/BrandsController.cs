@@ -34,7 +34,7 @@ public class BrandsController : BaseApiController<BrandsController>
     [HttpGet("{id:int}")]
     public async Task<IActionResult> GetById(int id)
     {
-        Result<GetBrandByIdResponse> brand = await Mediator.Send(new GetBrandByIdQuery { Id = id });
+        Result<GetBrandByIdResponse> brand = await Mediator.Send(new GetBrandByIdQuery(id));
         return Ok(brand);
     }
 
@@ -54,7 +54,7 @@ public class BrandsController : BaseApiController<BrandsController>
     /// <returns>Status 200 OK</returns>
     [Authorize(Policy = Permissions.Brands.Delete)]
     [HttpDelete("{id:int}")]
-    public async Task<IActionResult> Delete(int id) => Ok(await Mediator.Send(new DeleteBrandCommand { Id = id }));
+    public async Task<IActionResult> Delete(int id) => Ok(await Mediator.Send(new DeleteBrandCommand(id)));
 
     /// <summary>
     ///     Search Brands and Export to Excel

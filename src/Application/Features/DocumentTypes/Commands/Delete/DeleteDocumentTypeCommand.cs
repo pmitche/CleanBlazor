@@ -7,10 +7,7 @@ using Microsoft.Extensions.Localization;
 
 namespace BlazorHero.CleanArchitecture.Application.Features.DocumentTypes.Commands.Delete;
 
-public class DeleteDocumentTypeCommand : IRequest<Result<int>>
-{
-    public int Id { get; set; }
-}
+public record DeleteDocumentTypeCommand(int Id) : IRequest<Result<int>>;
 
 internal class DeleteDocumentTypeCommandHandler : IRequestHandler<DeleteDocumentTypeCommand, Result<int>>
 {

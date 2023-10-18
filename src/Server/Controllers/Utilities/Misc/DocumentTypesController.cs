@@ -35,8 +35,7 @@ public class DocumentTypesController : BaseApiController<DocumentTypesController
     [HttpGet("{id:int}")]
     public async Task<IActionResult> GetById(int id)
     {
-        Result<GetDocumentTypeByIdResponse> documentType =
-            await Mediator.Send(new GetDocumentTypeByIdQuery { Id = id });
+        Result<GetDocumentTypeByIdResponse> documentType = await Mediator.Send(new GetDocumentTypeByIdQuery(id));
         return Ok(documentType);
     }
 
@@ -57,7 +56,7 @@ public class DocumentTypesController : BaseApiController<DocumentTypesController
     [Authorize(Policy = Permissions.DocumentTypes.Delete)]
     [HttpDelete("{id:int}")]
     public async Task<IActionResult> Delete(int id) =>
-        Ok(await Mediator.Send(new DeleteDocumentTypeCommand { Id = id }));
+        Ok(await Mediator.Send(new DeleteDocumentTypeCommand(id)));
 
     /// <summary>
     ///     Search Document Types and Export to Excel

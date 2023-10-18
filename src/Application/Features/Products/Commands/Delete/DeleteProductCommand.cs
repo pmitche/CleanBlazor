@@ -6,10 +6,7 @@ using Microsoft.Extensions.Localization;
 
 namespace BlazorHero.CleanArchitecture.Application.Features.Products.Commands.Delete;
 
-public class DeleteProductCommand : IRequest<Result<int>>
-{
-    public int Id { get; set; }
-}
+public record DeleteProductCommand(int Id) : IRequest<Result<int>>;
 
 internal class DeleteProductCommandHandler : IRequestHandler<DeleteProductCommand, Result<int>>
 {
