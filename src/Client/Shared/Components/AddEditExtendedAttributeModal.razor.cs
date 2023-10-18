@@ -1,103 +1,108 @@
-﻿using System;
-using System.Threading.Tasks;
-using Blazored.FluentValidation;
+﻿using Blazored.FluentValidation;
 using BlazorHero.CleanArchitecture.Application.Features.ExtendedAttributes.Commands.AddEdit;
 using BlazorHero.CleanArchitecture.Client.Extensions;
 using BlazorHero.CleanArchitecture.Client.Infrastructure.Managers.ExtendedAttribute;
 using BlazorHero.CleanArchitecture.Domain.Contracts;
 using BlazorHero.CleanArchitecture.Domain.Enums;
 using BlazorHero.CleanArchitecture.Shared.Constants.Application;
+using BlazorHero.CleanArchitecture.Shared.Wrapper;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.SignalR.Client;
 using MudBlazor;
 
-namespace BlazorHero.CleanArchitecture.Client.Shared.Components
+namespace BlazorHero.CleanArchitecture.Client.Shared.Components;
+
+public class AddEditExtendedAttributeModalLocalization
 {
-    public class AddEditExtendedAttributeModalLocalization
+    // for localization
+}
+
+public partial class AddEditExtendedAttributeModal<TId, TEntityId, TEntity, TExtendedAttribute>
+    where TEntity : AuditableEntity<TEntityId>, IEntityWithExtendedAttributes<TExtendedAttribute>, IEntity<TEntityId>
+    where TExtendedAttribute : AuditableEntityExtendedAttribute<TId, TEntityId, TEntity>, IEntity<TId>
+    where TId : IEquatable<TId>
+{
+    private MudDatePicker _datePicker;
+
+    private FluentValidationValidator _fluentValidationValidator;
+    private TimeSpan? _time;
+    private MudTimePicker _timePicker;
+
+    [Inject]
+    private IExtendedAttributeManager<TId, TEntityId, TEntity, TExtendedAttribute> ExtendedAttributeManager
     {
-        // for localization
+        get;
+        set;
     }
 
-    public partial class AddEditExtendedAttributeModal<TId, TEntityId, TEntity, TExtendedAttribute>
-        where TEntity : AuditableEntity<TEntityId>, IEntityWithExtendedAttributes<TExtendedAttribute>, IEntity<TEntityId>
-        where TExtendedAttribute : AuditableEntityExtendedAttribute<TId, TEntityId, TEntity>, IEntity<TId>
-        where TId : IEquatable<TId>
+    [CascadingParameter] private HubConnection HubConnection { get; set; }
+    [CascadingParameter] private MudDialogInstance MudDialog { get; set; }
+
+    [Parameter]
+    public AddEditExtendedAttributeCommand<TId, TEntityId, TEntity, TExtendedAttribute> AddEditExtendedAttributeModel
     {
-        [Inject] private IExtendedAttributeManager<TId, TEntityId, TEntity, TExtendedAttribute> ExtendedAttributeManager { get; set; }
+        get;
+        set;
+    } = new();
 
-        [CascadingParameter] private HubConnection HubConnection { get; set; }
-        [CascadingParameter] private MudDialogInstance MudDialog { get; set; }
-        [Parameter] public AddEditExtendedAttributeCommand<TId, TEntityId, TEntity, TExtendedAttribute> AddEditExtendedAttributeModel { get; set; } = new();
+    private bool Validated => _fluentValidationValidator.Validate(options => { options.IncludeAllRuleSets(); });
 
-        private FluentValidationValidator _fluentValidationValidator;
-        private bool Validated => _fluentValidationValidator.Validate(options => { options.IncludeAllRuleSets(); });
+    public void Cancel() => MudDialog.Cancel();
 
-        private MudDatePicker _datePicker;
-        private MudTimePicker _timePicker;
-        private TimeSpan? _time;
-
-        public void Cancel()
+    private async Task SaveAsync()
+    {
+        switch (AddEditExtendedAttributeModel.Type)
         {
-            MudDialog.Cancel();
+            case EntityExtendedAttributeType.Decimal:
+                AddEditExtendedAttributeModel.DateTime = null;
+                AddEditExtendedAttributeModel.Text = null;
+                AddEditExtendedAttributeModel.Json = null;
+                break;
+            case EntityExtendedAttributeType.Text:
+                AddEditExtendedAttributeModel.Decimal = null;
+                AddEditExtendedAttributeModel.DateTime = null;
+                AddEditExtendedAttributeModel.Json = null;
+                break;
+            case EntityExtendedAttributeType.DateTime:
+                AddEditExtendedAttributeModel.DateTime ??= new DateTime(0, 0, 0);
+                AddEditExtendedAttributeModel.DateTime += _time ?? new TimeSpan(0, 0, 0);
+                AddEditExtendedAttributeModel.Decimal = null;
+                AddEditExtendedAttributeModel.Text = null;
+                AddEditExtendedAttributeModel.Json = null;
+                break;
+            case EntityExtendedAttributeType.Json:
+                AddEditExtendedAttributeModel.Decimal = null;
+                AddEditExtendedAttributeModel.Text = null;
+                AddEditExtendedAttributeModel.DateTime = null;
+                break;
         }
 
-        private async Task SaveAsync()
+        IResult<TId> response = await ExtendedAttributeManager.SaveAsync(AddEditExtendedAttributeModel);
+        if (response.Succeeded)
         {
-            switch (AddEditExtendedAttributeModel.Type)
-            {
-                case EntityExtendedAttributeType.Decimal:
-                    AddEditExtendedAttributeModel.DateTime = null;
-                    AddEditExtendedAttributeModel.Text = null;
-                    AddEditExtendedAttributeModel.Json = null;
-                    break;
-                case EntityExtendedAttributeType.Text:
-                    AddEditExtendedAttributeModel.Decimal = null;
-                    AddEditExtendedAttributeModel.DateTime = null;
-                    AddEditExtendedAttributeModel.Json = null;
-                    break;
-                case EntityExtendedAttributeType.DateTime:
-                    AddEditExtendedAttributeModel.DateTime ??= new DateTime(0, 0, 0);
-                    AddEditExtendedAttributeModel.DateTime += _time ?? new TimeSpan(0, 0, 0);
-                    AddEditExtendedAttributeModel.Decimal = null;
-                    AddEditExtendedAttributeModel.Text = null;
-                    AddEditExtendedAttributeModel.Json = null;
-                    break;
-                case EntityExtendedAttributeType.Json:
-                    AddEditExtendedAttributeModel.Decimal = null;
-                    AddEditExtendedAttributeModel.Text = null;
-                    AddEditExtendedAttributeModel.DateTime = null;
-                    break;
-            }
-
-            var response = await ExtendedAttributeManager.SaveAsync(AddEditExtendedAttributeModel);
-            if (response.Succeeded)
-            {
-                _snackBar.Add(response.Messages[0], Severity.Success);
-                MudDialog.Close();
-            }
-            else
-            {
-                foreach (var message in response.Messages)
-                {
-                    _snackBar.Add(message, Severity.Error);
-                }
-            }
-            await HubConnection.SendAsync(ApplicationConstants.SignalR.SendUpdateDashboard);
+            SnackBar.Add(response.Messages[0], Severity.Success);
+            MudDialog.Close();
         }
-
-        protected override async Task OnInitializedAsync()
+        else
         {
-            await LoadDataAsync();
-            HubConnection = HubConnection.TryInitialize(_navigationManager, _localStorage);
-            if (HubConnection.State == HubConnectionState.Disconnected)
+            foreach (var message in response.Messages)
             {
-                await HubConnection.StartAsync();
+                SnackBar.Add(message, Severity.Error);
             }
         }
 
-        private async Task LoadDataAsync()
+        await HubConnection.SendAsync(ApplicationConstants.SignalR.SendUpdateDashboard);
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadDataAsync();
+        HubConnection = HubConnection.TryInitialize(NavigationManager, LocalStorage);
+        if (HubConnection.State == HubConnectionState.Disconnected)
         {
-            await Task.CompletedTask;
+            await HubConnection.StartAsync();
         }
     }
+
+    private static async Task LoadDataAsync() => await Task.CompletedTask;
 }

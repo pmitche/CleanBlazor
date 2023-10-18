@@ -1,55 +1,50 @@
-﻿using BlazorHero.CleanArchitecture.Application.Requests.Identity;
+﻿using Blazored.FluentValidation;
+using BlazorHero.CleanArchitecture.Application.Requests.Identity;
 using BlazorHero.CleanArchitecture.Client.Extensions;
+using BlazorHero.CleanArchitecture.Client.Infrastructure.Managers.Identity.Roles;
 using BlazorHero.CleanArchitecture.Shared.Constants.Application;
+using BlazorHero.CleanArchitecture.Shared.Wrapper;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.SignalR.Client;
 using MudBlazor;
-using System.Threading.Tasks;
-using Blazored.FluentValidation;
-using BlazorHero.CleanArchitecture.Client.Infrastructure.Managers.Identity.Roles;
 
-namespace BlazorHero.CleanArchitecture.Client.Pages.Identity
+namespace BlazorHero.CleanArchitecture.Client.Pages.Identity;
+
+public partial class RoleModal
 {
-    public partial class RoleModal
+    private FluentValidationValidator _fluentValidationValidator;
+    [Inject] private IRoleManager RoleManager { get; set; }
+
+    [Parameter] public RoleRequest RoleModel { get; set; } = new();
+    [CascadingParameter] private MudDialogInstance MudDialog { get; set; }
+    [CascadingParameter] private HubConnection HubConnection { get; set; }
+    private bool Validated => _fluentValidationValidator.Validate(options => { options.IncludeAllRuleSets(); });
+
+    public void Cancel() => MudDialog.Cancel();
+
+    protected override async Task OnInitializedAsync()
     {
-        [Inject] private IRoleManager RoleManager { get; set; }
-
-        [Parameter] public RoleRequest RoleModel { get; set; } = new();
-        [CascadingParameter] private MudDialogInstance MudDialog { get; set; }
-        [CascadingParameter] private HubConnection HubConnection { get; set; }
-
-        private FluentValidationValidator _fluentValidationValidator;
-        private bool Validated => _fluentValidationValidator.Validate(options => { options.IncludeAllRuleSets(); });
-
-        public void Cancel()
+        HubConnection = HubConnection.TryInitialize(NavigationManager, LocalStorage);
+        if (HubConnection.State == HubConnectionState.Disconnected)
         {
-            MudDialog.Cancel();
+            await HubConnection.StartAsync();
         }
+    }
 
-        protected override async Task OnInitializedAsync()
+    private async Task SaveAsync()
+    {
+        IResult<string> response = await RoleManager.SaveAsync(RoleModel);
+        if (response.Succeeded)
         {
-            HubConnection = HubConnection.TryInitialize(_navigationManager, _localStorage);
-            if (HubConnection.State == HubConnectionState.Disconnected)
-            {
-                await HubConnection.StartAsync();
-            }
+            SnackBar.Add(response.Messages[0], Severity.Success);
+            await HubConnection.SendAsync(ApplicationConstants.SignalR.SendUpdateDashboard);
+            MudDialog.Close();
         }
-
-        private async Task SaveAsync()
+        else
         {
-            var response = await RoleManager.SaveAsync(RoleModel);
-            if (response.Succeeded)
+            foreach (var message in response.Messages)
             {
-                _snackBar.Add(response.Messages[0], Severity.Success);
-                await HubConnection.SendAsync(ApplicationConstants.SignalR.SendUpdateDashboard);
-                MudDialog.Close();
-            }
-            else
-            {
-                foreach (var message in response.Messages)
-                {
-                    _snackBar.Add(message, Severity.Error);
-                }
+                SnackBar.Add(message, Severity.Error);
             }
         }
     }

@@ -47,16 +47,16 @@
 @using BlazorHero.CleanArchitecture.Client.Extensions
 
 @attribute [Authorize]
-@inject IAuthenticationManager _authenticationManager
-@inject IAccountManager _accountManager
-@inject NavigationManager _navigationManager
-@inject BlazorHeroStateProvider _stateProvider
-@inject IAuthorizationService _authorizationService
-@inject ISnackbar _snackBar
-@inject IDialogService _dialogService
-@inject HttpClient _httpClient
-@inject IHttpInterceptorManager _interceptor
-@inject ClientPreferenceManager _clientPreferenceManager
-@inject IUserManager _userManager
-@inject ILocalStorageService _localStorage;
-@inject IJSRuntime _jsRuntime;
+@inject IAuthenticationManager AuthenticationManager
+@inject IAccountManager AccountManager
+@inject NavigationManager NavigationManager
+@inject BlazorHeroStateProvider StateProvider
+@inject IAuthorizationService AuthorizationService
+@inject ISnackbar SnackBar
+@inject IDialogService DialogService
+@inject HttpClient HttpClient
+@inject IHttpInterceptorManager Interceptor
+@inject ClientPreferenceManager ClientPreferenceManager
+@inject IUserManager UserManager
+@inject ILocalStorageService LocalStorage;
+@inject IJSRuntime JsRuntime;
