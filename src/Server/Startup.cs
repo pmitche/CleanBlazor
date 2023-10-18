@@ -42,7 +42,8 @@ public class Startup
         services.AddInfrastructureMappings();
         services.AddHangfire(x => x.UseSqlServerStorage(_configuration.GetConnectionString("DefaultConnection")));
         services.AddHangfireServer();
-        services.AddControllers().AddValidators();
+        services.AddControllers();
+        services.AddFluentValidators();
         services.AddExtendedAttributesValidators();
         services.AddExtendedAttributesHandlers();
         services.AddRazorPages();

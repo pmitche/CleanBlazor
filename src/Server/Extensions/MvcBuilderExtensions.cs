@@ -1,19 +1,11 @@
 ﻿using BlazorHero.CleanArchitecture.Application.Features.ExtendedAttributes.Commands.AddEdit;
 using BlazorHero.CleanArchitecture.Application.Validators.Features.ExtendedAttributes.Commands.AddEdit;
 using FluentValidation;
-using FluentValidation.AspNetCore;
 
 namespace BlazorHero.CleanArchitecture.Server.Extensions;
 
 internal static class MvcBuilderExtensions
 {
-    internal static IMvcBuilder AddValidators(this IMvcBuilder builder)
-    {
-        // builder.AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<AppConfiguration>());
-        builder.Services.AddFluentValidationAutoValidation().AddFluentValidationClientsideAdapters();
-        return builder;
-    }
-
     internal static void AddExtendedAttributesValidators(this IServiceCollection services)
     {
         #region AddEditExtendedAttributeCommandValidator

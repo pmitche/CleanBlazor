@@ -28,6 +28,8 @@ using BlazorHero.CleanArchitecture.Shared.Constants.Application;
 using BlazorHero.CleanArchitecture.Shared.Constants.Localization;
 using BlazorHero.CleanArchitecture.Shared.Constants.Permission;
 using BlazorHero.CleanArchitecture.Shared.Wrapper;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Identity;
@@ -252,6 +254,13 @@ internal static class ServiceCollectionExtensions
         services.AddTransient<IDateTimeService, SystemDateTimeService>();
         services.Configure<MailConfiguration>(configuration.GetSection("MailConfiguration"));
         services.AddTransient<IMailService, SMTPMailService>();
+        return services;
+    }
+
+    internal static IServiceCollection AddFluentValidators(this IServiceCollection services)
+    {
+        services.AddValidatorsFromAssemblyContaining<AppConfiguration>();
+        services.AddFluentValidationAutoValidation().AddFluentValidationClientsideAdapters();
         return services;
     }
 
