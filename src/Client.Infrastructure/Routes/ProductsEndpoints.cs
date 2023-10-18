@@ -13,12 +13,14 @@ public static class ProductsEndpoints
     public static string GetAllPaged(int pageNumber, int pageSize, string searchString, string[] orderBy)
     {
         var url = $"api/v1/products?pageNumber={pageNumber}&pageSize={pageSize}&searchString={searchString}&orderBy=";
-        if (orderBy?.Any() == true)
+        if (orderBy?.Any() != true)
         {
-            url = orderBy.Aggregate(url, (current, orderByPart) => current + $"{orderByPart},");
-
-            url = url[..^1]; // loose training ,
+            return url;
         }
+
+        url = orderBy.Aggregate(url, (current, orderByPart) => current + $"{orderByPart},");
+
+        url = url[..^1]; // loose training ,
 
         return url;
     }

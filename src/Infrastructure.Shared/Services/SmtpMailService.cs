@@ -9,12 +9,12 @@ using MimeKit;
 
 namespace BlazorHero.CleanArchitecture.Infrastructure.Shared.Services;
 
-public class SMTPMailService : IMailService
+public class SmtpMailService : IMailService
 {
     private readonly MailConfiguration _config;
-    private readonly ILogger<SMTPMailService> _logger;
+    private readonly ILogger<SmtpMailService> _logger;
 
-    public SMTPMailService(IOptions<MailConfiguration> config, ILogger<SMTPMailService> logger)
+    public SmtpMailService(IOptions<MailConfiguration> config, ILogger<SmtpMailService> logger)
     {
         _config = config.Value;
         _logger = logger;
@@ -39,7 +39,7 @@ public class SMTPMailService : IMailService
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex.Message, ex);
+            _logger.LogError(ex, ex.Message);
         }
     }
 }

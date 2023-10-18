@@ -1,6 +1,4 @@
-﻿@using Microsoft.Extensions.Localization
-@inherits LayoutComponentBase
-@inject IStringLocalizer<MainLayout> Localizer
+﻿@inherits LayoutComponentBase
 
 <MudRTLProvider RightToLeft="@_rightToLeft">
     <audio id="notification" src="/media/notification.mp3"></audio>
@@ -12,7 +10,7 @@
             <MudAppBar Elevation="4" Color="Color.Primary">
                 <MudSpacer/>
                 <LanguageSelector/>
-                <MudIconButton Icon="@Icons.Material.Filled.Brightness4" Color="Color.Inherit" OnClick="@(e => DarkMode())"/>
+                <MudIconButton Icon="@Icons.Material.Filled.Brightness4" Color="Color.Inherit" OnClick="@(_ => DarkMode())"/>
             </MudAppBar>
 
             <MudContainer MaxWidth="MaxWidth.Small" Class="d-flex align-center" Style="height: 100vh;">

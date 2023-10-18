@@ -5,7 +5,6 @@ using BlazorHero.CleanArchitecture.Shared.Constants.Application;
 using BlazorHero.CleanArchitecture.Shared.Wrapper;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.SignalR.Client;
-using MudBlazor;
 using ChartSeries = MudBlazor.ChartSeries;
 
 namespace BlazorHero.CleanArchitecture.Client.Pages.Content;

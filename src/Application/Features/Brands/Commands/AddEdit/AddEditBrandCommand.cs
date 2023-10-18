@@ -48,18 +48,18 @@ internal class AddEditBrandCommandHandler : IRequestHandler<AddEditBrandCommand,
         else
         {
             Brand brand = await _unitOfWork.Repository<Brand>().GetByIdAsync(command.Id);
-            if (brand != null)
+            if (brand == null)
             {
-                brand.Name = command.Name ?? brand.Name;
-                brand.Tax = command.Tax == 0 ? brand.Tax : command.Tax;
-                brand.Description = command.Description ?? brand.Description;
-                await _unitOfWork.Repository<Brand>().UpdateAsync(brand);
-                await _unitOfWork.CommitAndRemoveCache(cancellationToken,
-                    ApplicationConstants.Cache.GetAllBrandsCacheKey);
-                return await Result<int>.SuccessAsync(brand.Id, _localizer["Brand Updated"]);
+                return await Result<int>.FailAsync(_localizer["Brand Not Found!"]);
             }
 
-            return await Result<int>.FailAsync(_localizer["Brand Not Found!"]);
+            brand.Name = command.Name ?? brand.Name;
+            brand.Tax = command.Tax == 0 ? brand.Tax : command.Tax;
+            brand.Description = command.Description ?? brand.Description;
+            await _unitOfWork.Repository<Brand>().UpdateAsync(brand);
+            await _unitOfWork.CommitAndRemoveCache(cancellationToken,
+                ApplicationConstants.Cache.GetAllBrandsCacheKey);
+            return await Result<int>.SuccessAsync(brand.Id, _localizer["Brand Updated"]);
         }
     }
 }

@@ -59,7 +59,7 @@ internal class AddEditDocumentCommandHandler : IRequestHandler<AddEditDocumentCo
             var doc = _mapper.Map<Document>(command);
             if (uploadRequest != null)
             {
-                doc.URL = _uploadService.UploadAsync(uploadRequest);
+                doc.Url = _uploadService.UploadAsync(uploadRequest);
             }
 
             await _unitOfWork.Repository<Document>().AddAsync(doc);
@@ -69,23 +69,23 @@ internal class AddEditDocumentCommandHandler : IRequestHandler<AddEditDocumentCo
         else
         {
             Document doc = await _unitOfWork.Repository<Document>().GetByIdAsync(command.Id);
-            if (doc != null)
+            if (doc == null)
             {
-                doc.Title = command.Title ?? doc.Title;
-                doc.Description = command.Description ?? doc.Description;
-                doc.IsPublic = command.IsPublic;
-                if (uploadRequest != null)
-                {
-                    doc.URL = _uploadService.UploadAsync(uploadRequest);
-                }
-
-                doc.DocumentTypeId = command.DocumentTypeId == 0 ? doc.DocumentTypeId : command.DocumentTypeId;
-                await _unitOfWork.Repository<Document>().UpdateAsync(doc);
-                await _unitOfWork.Commit(cancellationToken);
-                return await Result<int>.SuccessAsync(doc.Id, _localizer["Document Updated"]);
+                return await Result<int>.FailAsync(_localizer["Document Not Found!"]);
             }
 
-            return await Result<int>.FailAsync(_localizer["Document Not Found!"]);
+            doc.Title = command.Title ?? doc.Title;
+            doc.Description = command.Description ?? doc.Description;
+            doc.IsPublic = command.IsPublic;
+            if (uploadRequest != null)
+            {
+                doc.Url = _uploadService.UploadAsync(uploadRequest);
+            }
+
+            doc.DocumentTypeId = command.DocumentTypeId == 0 ? doc.DocumentTypeId : command.DocumentTypeId;
+            await _unitOfWork.Repository<Document>().UpdateAsync(doc);
+            await _unitOfWork.Commit(cancellationToken);
+            return await Result<int>.SuccessAsync(doc.Id, _localizer["Document Updated"]);
         }
     }
 }

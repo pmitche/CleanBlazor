@@ -6,7 +6,6 @@ using BlazorHero.CleanArchitecture.Shared.Constants.Permission;
 using BlazorHero.CleanArchitecture.Shared.Wrapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
-using MudBlazor;
 
 namespace BlazorHero.CleanArchitecture.Client.Pages.Identity;
 

@@ -114,15 +114,15 @@ public class RoleClaimService : IRoleClaimService
         BlazorHeroRoleClaim existingRoleClaim = await _db.RoleClaims
             .Include(x => x.Role)
             .FirstOrDefaultAsync(x => x.Id == id);
-        if (existingRoleClaim != null)
+        if (existingRoleClaim == null)
         {
-            _db.RoleClaims.Remove(existingRoleClaim);
-            await _db.SaveChangesAsync(_currentUserService.UserId);
-            return await Result<string>.SuccessAsync(string.Format(_localizer["Role Claim {0} for {1} Role deleted."],
-                existingRoleClaim.ClaimValue,
-                existingRoleClaim.Role.Name));
+            return await Result<string>.FailAsync(_localizer["Role Claim does not exist."]);
         }
 
-        return await Result<string>.FailAsync(_localizer["Role Claim does not exist."]);
+        _db.RoleClaims.Remove(existingRoleClaim);
+        await _db.SaveChangesAsync(_currentUserService.UserId);
+        return await Result<string>.SuccessAsync(string.Format(_localizer["Role Claim {0} for {1} Role deleted."],
+            existingRoleClaim.ClaimValue,
+            existingRoleClaim.Role.Name));
     }
 }

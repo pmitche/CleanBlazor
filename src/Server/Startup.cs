@@ -66,7 +66,7 @@ public class Startup
         app.UseStaticFiles();
         app.UseStaticFiles(new StaticFileOptions
         {
-            FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), @"Files")),
+            FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "Files")),
             RequestPath = new PathString("/Files")
         });
         app.UseRequestLocalizationByCulture();

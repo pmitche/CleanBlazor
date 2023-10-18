@@ -27,13 +27,13 @@ internal class DeleteProductCommandHandler : IRequestHandler<DeleteProductComman
     public async Task<Result<int>> Handle(DeleteProductCommand command, CancellationToken cancellationToken)
     {
         Product product = await _unitOfWork.Repository<Product>().GetByIdAsync(command.Id);
-        if (product != null)
+        if (product == null)
         {
-            await _unitOfWork.Repository<Product>().DeleteAsync(product);
-            await _unitOfWork.Commit(cancellationToken);
-            return await Result<int>.SuccessAsync(product.Id, _localizer["Product Deleted"]);
+            return await Result<int>.FailAsync(_localizer["Product Not Found!"]);
         }
 
-        return await Result<int>.FailAsync(_localizer["Product Not Found!"]);
+        await _unitOfWork.Repository<Product>().DeleteAsync(product);
+        await _unitOfWork.Commit(cancellationToken);
+        return await Result<int>.SuccessAsync(product.Id, _localizer["Product Deleted"]);
     }
 }

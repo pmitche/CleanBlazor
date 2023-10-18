@@ -54,17 +54,17 @@ internal class AddEditDocumentTypeCommandHandler : IRequestHandler<AddEditDocume
         else
         {
             DocumentType documentType = await _unitOfWork.Repository<DocumentType>().GetByIdAsync(command.Id);
-            if (documentType != null)
+            if (documentType == null)
             {
-                documentType.Name = command.Name ?? documentType.Name;
-                documentType.Description = command.Description ?? documentType.Description;
-                await _unitOfWork.Repository<DocumentType>().UpdateAsync(documentType);
-                await _unitOfWork.CommitAndRemoveCache(cancellationToken,
-                    ApplicationConstants.Cache.GetAllDocumentTypesCacheKey);
-                return await Result<int>.SuccessAsync(documentType.Id, _localizer["Document Type Updated"]);
+                return await Result<int>.FailAsync(_localizer["Document Type Not Found!"]);
             }
 
-            return await Result<int>.FailAsync(_localizer["Document Type Not Found!"]);
+            documentType.Name = command.Name ?? documentType.Name;
+            documentType.Description = command.Description ?? documentType.Description;
+            await _unitOfWork.Repository<DocumentType>().UpdateAsync(documentType);
+            await _unitOfWork.CommitAndRemoveCache(cancellationToken,
+                ApplicationConstants.Cache.GetAllDocumentTypesCacheKey);
+            return await Result<int>.SuccessAsync(documentType.Id, _localizer["Document Type Updated"]);
         }
     }
 }

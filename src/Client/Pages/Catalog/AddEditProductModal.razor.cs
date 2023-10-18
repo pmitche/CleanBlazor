@@ -80,14 +80,14 @@ public partial class AddEditProductModal
             var imageData = data.Data;
             if (!string.IsNullOrEmpty(imageData))
             {
-                AddEditProductModel.ImageDataURL = imageData;
+                AddEditProductModel.ImageDataUrl = imageData;
             }
         }
     }
 
     private void DeleteAsync()
     {
-        AddEditProductModel.ImageDataURL = null;
+        AddEditProductModel.ImageDataUrl = null;
         AddEditProductModel.UploadRequest = new UploadRequest();
     }
 
@@ -97,11 +97,11 @@ public partial class AddEditProductModal
         if (_file != null)
         {
             var extension = Path.GetExtension(_file.Name);
-            var format = "image/png";
+            const string format = "image/png";
             IBrowserFile imageFile = await e.File.RequestImageFileAsync(format, 400, 400);
             var buffer = new byte[imageFile.Size];
             await imageFile.OpenReadStream().ReadAsync(buffer);
-            AddEditProductModel.ImageDataURL = $"data:{format};base64,{Convert.ToBase64String(buffer)}";
+            AddEditProductModel.ImageDataUrl = $"data:{format};base64,{Convert.ToBase64String(buffer)}";
             AddEditProductModel.UploadRequest =
                 new UploadRequest { Data = buffer, UploadType = UploadType.Product, Extension = extension };
         }

@@ -26,8 +26,7 @@ public class GetAllProductsQuery : IRequest<PaginatedResult<GetAllPagedProductsR
     public int PageSize { get; set; }
     public string SearchString { get; set; }
 
-    public string[]
-        OrderBy { get; set; } // of the form fieldname [ascending|descending],fieldname [ascending|descending]...
+    public string[] OrderBy { get; set; }
 }
 
 internal class

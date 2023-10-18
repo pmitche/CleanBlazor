@@ -45,21 +45,21 @@ internal class DeleteExtendedAttributeCommandHandler<TId, TEntityId, TEntity, TE
     {
         TExtendedAttribute extendedAttribute =
             await _unitOfWork.Repository<TExtendedAttribute>().GetByIdAsync(command.Id);
-        if (extendedAttribute != null)
+        if (extendedAttribute == null)
         {
-            await _unitOfWork.Repository<TExtendedAttribute>().DeleteAsync(extendedAttribute);
-
-            // delete all caches related with deleted entity extended attribute
-            List<string> cacheKeys = await _unitOfWork.Repository<TExtendedAttribute>().Entities.Select(x =>
-                ApplicationConstants.Cache.GetAllEntityExtendedAttributesByEntityIdCacheKey(
-                    typeof(TEntity).Name,
-                    x.Entity.Id)).Distinct().ToListAsync(cancellationToken);
-            cacheKeys.Add(ApplicationConstants.Cache.GetAllEntityExtendedAttributesCacheKey(typeof(TEntity).Name));
-            await _unitOfWork.CommitAndRemoveCache(cancellationToken, cacheKeys.ToArray());
-
-            return await Result<TId>.SuccessAsync(extendedAttribute.Id, _localizer["Extended Attribute Deleted"]);
+            return await Result<TId>.FailAsync(_localizer["Extended Attribute Not Found!"]);
         }
 
-        return await Result<TId>.FailAsync(_localizer["Extended Attribute Not Found!"]);
+        await _unitOfWork.Repository<TExtendedAttribute>().DeleteAsync(extendedAttribute);
+
+        // delete all caches related with deleted entity extended attribute
+        List<string> cacheKeys = await _unitOfWork.Repository<TExtendedAttribute>().Entities.Select(x =>
+            ApplicationConstants.Cache.GetAllEntityExtendedAttributesByEntityIdCacheKey(
+                typeof(TEntity).Name,
+                x.Entity.Id)).Distinct().ToListAsync(cancellationToken);
+        cacheKeys.Add(ApplicationConstants.Cache.GetAllEntityExtendedAttributesCacheKey(typeof(TEntity).Name));
+        await _unitOfWork.CommitAndRemoveCache(cancellationToken, cacheKeys.ToArray());
+
+        return await Result<TId>.SuccessAsync(extendedAttribute.Id, _localizer["Extended Attribute Deleted"]);
     }
 }

@@ -94,22 +94,18 @@ public class ExcelService : IExcelService
         }
 
         var dt = new DataTable();
-        var titlesInFirstRow = true;
         foreach (ExcelRangeBase firstRowCell in ws.Cells[1, 1, 1, ws.Dimension.End.Column])
         {
-            dt.Columns.Add(titlesInFirstRow ? firstRowCell.Text : $"Column {firstRowCell.Start.Column}");
+            dt.Columns.Add(firstRowCell.Text);
         }
 
-        var startRow = titlesInFirstRow ? 2 : 1;
+        const int startRow = 2;
         List<string> headers = mappers.Keys.Select(x => x).ToList();
-        var errors = new List<string>();
-        foreach (var header in headers)
-        {
-            if (!dt.Columns.Contains(header))
-            {
-                errors.Add(string.Format(_localizer["Header '{0}' does not exist in table!"], header));
-            }
-        }
+        var errors = mappers.Keys
+            .Select(x => x)
+            .Where(h => !dt.Columns.Contains(h))
+            .Select(header => string.Format(_localizer["Header '{0}' does not exist in table!"], header))
+            .ToList();
 
         if (errors.Any())
         {

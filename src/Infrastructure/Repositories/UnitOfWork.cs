@@ -7,7 +7,7 @@ using LazyCache;
 
 namespace BlazorHero.CleanArchitecture.Infrastructure.Repositories;
 
-public class UnitOfWork<TId> : IUnitOfWork<TId>
+public sealed class UnitOfWork<TId> : IUnitOfWork<TId>
 {
     private readonly IAppCache _cache;
     private readonly ICurrentUserService _currentUserService;
@@ -67,7 +67,7 @@ public class UnitOfWork<TId> : IUnitOfWork<TId>
         GC.SuppressFinalize(this);
     }
 
-    protected virtual void Dispose(bool disposing)
+    private void Dispose(bool disposing)
     {
         if (!_disposed)
         {

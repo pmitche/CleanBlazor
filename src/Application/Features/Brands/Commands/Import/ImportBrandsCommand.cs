@@ -59,36 +59,37 @@ internal class ImportBrandsCommandHandler : IRequestHandler<ImportBrandsCommand,
             },
             _localizer["Brands"]);
 
-        if (result.Succeeded)
+        if (!result.Succeeded)
         {
-            IEnumerable<Brand> importedBrands = result.Data;
-            List<string> errors = new();
-            var errorsOccurred = false;
-            foreach (Brand brand in importedBrands)
-            {
-                ValidationResult validationResult =
-                    await _addBrandValidator.ValidateAsync(_mapper.Map<AddEditBrandCommand>(brand), cancellationToken);
-                if (validationResult.IsValid)
-                {
-                    await _unitOfWork.Repository<Brand>().AddAsync(brand);
-                }
-                else
-                {
-                    errorsOccurred = true;
-                    errors.AddRange(validationResult.Errors.Select(e =>
-                        $"{(!string.IsNullOrWhiteSpace(brand.Name) ? $"{brand.Name} - " : string.Empty)}{e.ErrorMessage}"));
-                }
-            }
-
-            if (errorsOccurred)
-            {
-                return await Result<int>.FailAsync(errors);
-            }
-
-            await _unitOfWork.CommitAndRemoveCache(cancellationToken, ApplicationConstants.Cache.GetAllBrandsCacheKey);
-            return await Result<int>.SuccessAsync(result.Data.Count(), result.Messages[0]);
+            return await Result<int>.FailAsync(result.Messages);
         }
 
-        return await Result<int>.FailAsync(result.Messages);
+        IEnumerable<Brand> importedBrands = result.Data;
+        List<string> errors = new();
+        var errorsOccurred = false;
+        foreach (Brand brand in importedBrands)
+        {
+            ValidationResult validationResult =
+                await _addBrandValidator.ValidateAsync(_mapper.Map<AddEditBrandCommand>(brand), cancellationToken);
+            if (validationResult.IsValid)
+            {
+                await _unitOfWork.Repository<Brand>().AddAsync(brand);
+            }
+            else
+            {
+                errorsOccurred = true;
+                errors.AddRange(validationResult.Errors.Select(e =>
+                    $"{(!string.IsNullOrWhiteSpace(brand.Name) ? $"{brand.Name} - " : string.Empty)}{e.ErrorMessage}"));
+            }
+        }
+
+        if (errorsOccurred)
+        {
+            return await Result<int>.FailAsync(errors);
+        }
+
+        await _unitOfWork.CommitAndRemoveCache(cancellationToken, ApplicationConstants.Cache.GetAllBrandsCacheKey);
+        return await Result<int>.SuccessAsync(result.Data.Count(), result.Messages[0]);
+
     }
 }

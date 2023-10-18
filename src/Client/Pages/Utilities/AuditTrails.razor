@@ -81,7 +81,7 @@ else
             </MudTd>
             <MudTd DataLabel="Tax">@context.Type</MudTd>
             <MudTd Style="text-align:right">
-                <MudButton Variant="Variant.Filled" DisableElevation="true" EndIcon="@Icons.Material.Filled.KeyboardArrowDown" IconColor="Color.Secondary" OnClick="@(() => ShowBtnPress(context.Id))">@(context.ShowDetails == true ? Localizer["Hide"] : Localizer["Show"]) @Localizer["Trail Details"]</MudButton>
+                <MudButton Variant="Variant.Filled" DisableElevation="true" EndIcon="@Icons.Material.Filled.KeyboardArrowDown" IconColor="Color.Secondary" OnClick="@(() => ShowBtnPress(context.Id))">@(context.ShowDetails ? Localizer["Hide"] : Localizer["Show"]) @Localizer["Trail Details"]</MudButton>
             </MudTd>
         </RowTemplate>
         <ChildRowContent>

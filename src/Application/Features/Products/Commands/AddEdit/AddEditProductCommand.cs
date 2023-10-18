@@ -21,7 +21,7 @@ public class AddEditProductCommand : IRequest<Result<int>>
 
     [Required] public string Description { get; set; }
 
-    public string ImageDataURL { get; set; }
+    public string ImageDataUrl { get; set; }
 
     [Required] public decimal Rate { get; set; }
 
@@ -78,23 +78,23 @@ internal class AddEditProductCommandHandler : IRequestHandler<AddEditProductComm
         else
         {
             Product product = await _unitOfWork.Repository<Product>().GetByIdAsync(command.Id);
-            if (product != null)
+            if (product == null)
             {
-                product.Name = command.Name ?? product.Name;
-                product.Description = command.Description ?? product.Description;
-                if (uploadRequest != null)
-                {
-                    product.ImageDataUrl = _uploadService.UploadAsync(uploadRequest);
-                }
-
-                product.Rate = command.Rate == 0 ? product.Rate : command.Rate;
-                product.BrandId = command.BrandId == 0 ? product.BrandId : command.BrandId;
-                await _unitOfWork.Repository<Product>().UpdateAsync(product);
-                await _unitOfWork.Commit(cancellationToken);
-                return await Result<int>.SuccessAsync(product.Id, _localizer["Product Updated"]);
+                return await Result<int>.FailAsync(_localizer["Product Not Found!"]);
             }
 
-            return await Result<int>.FailAsync(_localizer["Product Not Found!"]);
+            product.Name = command.Name ?? product.Name;
+            product.Description = command.Description ?? product.Description;
+            if (uploadRequest != null)
+            {
+                product.ImageDataUrl = _uploadService.UploadAsync(uploadRequest);
+            }
+
+            product.Rate = command.Rate == 0 ? product.Rate : command.Rate;
+            product.BrandId = command.BrandId == 0 ? product.BrandId : command.BrandId;
+            await _unitOfWork.Repository<Product>().UpdateAsync(product);
+            await _unitOfWork.Commit(cancellationToken);
+            return await Result<int>.SuccessAsync(product.Id, _localizer["Product Updated"]);
         }
     }
 }

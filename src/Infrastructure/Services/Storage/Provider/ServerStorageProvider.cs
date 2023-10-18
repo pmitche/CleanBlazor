@@ -22,12 +22,8 @@ internal class ServerStorageProvider : IStorageProvider
     public ValueTask<string> GetItemAsync(string key)
     {
         //TODO - replace on implementation (added for tests)--
-        if (_storage.ContainsKey(key))
-        {
-            return ValueTask.FromResult(_storage[key]);
-        }
+        return ValueTask.FromResult(_storage.TryGetValue(key, out var value) ? value : string.Empty);
 
-        return ValueTask.FromResult(string.Empty);
         //----------------------------------------------------
 
         //throw new NotImplementedException();
@@ -49,14 +45,7 @@ internal class ServerStorageProvider : IStorageProvider
     public ValueTask SetItemAsync(string key, string data)
     {
         //TODO - replace on implementation (added for tests)--
-        if (_storage.ContainsKey(key))
-        {
-            _storage[key] = data;
-        }
-        else
-        {
-            _storage.Add(key, data);
-        }
+        _storage[key] = data;
 
         return ValueTask.CompletedTask;
         //----------------------------------------------------

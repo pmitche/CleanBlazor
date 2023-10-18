@@ -85,11 +85,6 @@ public class ClientPreferenceManager : IClientPreferenceManager
     public async Task<bool> IsRtl()
     {
         var preference = await GetPreference() as ClientPreference;
-        if (preference is { IsDarkMode: true })
-        {
-            return false;
-        }
-
-        return preference.IsRtl;
+        return preference is not { IsDarkMode: true } && preference.IsRtl;
     }
 }

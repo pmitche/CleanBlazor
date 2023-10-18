@@ -31,20 +31,20 @@ internal class DeleteBrandCommandHandler : IRequestHandler<DeleteBrandCommand, R
     public async Task<Result<int>> Handle(DeleteBrandCommand command, CancellationToken cancellationToken)
     {
         var isBrandUsed = await _productRepository.IsBrandUsed(command.Id);
-        if (!isBrandUsed)
+        if (isBrandUsed)
         {
-            Brand brand = await _unitOfWork.Repository<Brand>().GetByIdAsync(command.Id);
-            if (brand != null)
-            {
-                await _unitOfWork.Repository<Brand>().DeleteAsync(brand);
-                await _unitOfWork.CommitAndRemoveCache(cancellationToken,
-                    ApplicationConstants.Cache.GetAllBrandsCacheKey);
-                return await Result<int>.SuccessAsync(brand.Id, _localizer["Brand Deleted"]);
-            }
+            return await Result<int>.FailAsync(_localizer["Deletion Not Allowed"]);
+        }
 
+        Brand brand = await _unitOfWork.Repository<Brand>().GetByIdAsync(command.Id);
+        if (brand == null)
+        {
             return await Result<int>.FailAsync(_localizer["Brand Not Found!"]);
         }
 
-        return await Result<int>.FailAsync(_localizer["Deletion Not Allowed"]);
+        await _unitOfWork.Repository<Brand>().DeleteAsync(brand);
+        await _unitOfWork.CommitAndRemoveCache(cancellationToken,
+            ApplicationConstants.Cache.GetAllBrandsCacheKey);
+        return await Result<int>.SuccessAsync(brand.Id, _localizer["Brand Deleted"]);
     }
 }

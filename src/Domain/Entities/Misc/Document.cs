@@ -7,8 +7,8 @@ public class Document : AuditableEntityWithExtendedAttributes<int, int, Document
 {
     public string Title { get; set; }
     public string Description { get; set; }
-    public bool IsPublic { get; set; } = false;
-    public string URL { get; set; }
+    public bool IsPublic { get; set; }
+    public string Url { get; set; }
     public int DocumentTypeId { get; set; }
     public virtual DocumentType DocumentType { get; set; }
 }

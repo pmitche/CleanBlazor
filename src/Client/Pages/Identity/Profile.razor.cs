@@ -22,7 +22,7 @@ public partial class Profile
     private FluentValidationValidator _fluentValidationValidator;
     private bool Validated => _fluentValidationValidator.Validate(options => { options.IncludeAllRuleSets(); });
 
-    public string UserId { get; set; }
+    private string UserId { get; set; }
 
     [Parameter] public string ImageDataUrl { get; set; }
 
@@ -71,7 +71,7 @@ public partial class Profile
         {
             var extension = Path.GetExtension(_file.Name);
             var fileName = $"{UserId}-{Guid.NewGuid()}{extension}";
-            var format = "image/png";
+            const string format = "image/png";
             IBrowserFile imageFile = await e.File.RequestImageFileAsync(format, 400, 400);
             var buffer = new byte[imageFile.Size];
             await imageFile.OpenReadStream().ReadAsync(buffer);

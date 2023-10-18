@@ -106,34 +106,34 @@ internal class AddEditExtendedAttributeCommandHandler<TId, TEntityId, TEntity, T
         {
             TExtendedAttribute? extendedAttribute =
                 await _unitOfWork.Repository<TExtendedAttribute>().GetByIdAsync(command.Id);
-            if (extendedAttribute != null)
+            if (extendedAttribute == null)
             {
-                extendedAttribute.Key = command.Key;
-                extendedAttribute.EntityId = command.EntityId;
-                extendedAttribute.Type = command.Type;
-                extendedAttribute.Text = command.Text ?? extendedAttribute.Text;
-                extendedAttribute.Decimal = command.Decimal ?? extendedAttribute.Decimal;
-                extendedAttribute.DateTime = command.DateTime ?? extendedAttribute.DateTime;
-                extendedAttribute.Json = command.Json ?? extendedAttribute.Json;
-                extendedAttribute.ExternalId = command.ExternalId ?? extendedAttribute.ExternalId;
-                extendedAttribute.Group = command.Group ?? extendedAttribute.Group;
-                extendedAttribute.Description = command.Description ?? extendedAttribute.Description;
-                extendedAttribute.IsActive = command.IsActive;
-                await _unitOfWork.Repository<TExtendedAttribute>().UpdateAsync(extendedAttribute);
-                await _unitOfWork.CommitAndRemoveCache(cancellationToken,
-                    ApplicationConstants.Cache.GetAllEntityExtendedAttributesCacheKey(typeof(TEntity).Name));
-
-                // delete all caches related with updated entity
-                var cacheKeys = await _unitOfWork.Repository<TExtendedAttribute>().Entities.Select(x =>
-                    ApplicationConstants.Cache.GetAllEntityExtendedAttributesByEntityIdCacheKey(
-                        typeof(TEntity).Name,
-                        x.Entity.Id)).Distinct().ToArrayAsync(cancellationToken);
-                await _unitOfWork.CommitAndRemoveCache(cancellationToken, cacheKeys);
-
-                return await Result<TId>.SuccessAsync(extendedAttribute.Id, _localizer["Extended Attribute Updated"]);
+                return await Result<TId>.FailAsync(_localizer["Extended Attribute Not Found!"]);
             }
 
-            return await Result<TId>.FailAsync(_localizer["Extended Attribute Not Found!"]);
+            extendedAttribute.Key = command.Key;
+            extendedAttribute.EntityId = command.EntityId;
+            extendedAttribute.Type = command.Type;
+            extendedAttribute.Text = command.Text ?? extendedAttribute.Text;
+            extendedAttribute.Decimal = command.Decimal ?? extendedAttribute.Decimal;
+            extendedAttribute.DateTime = command.DateTime ?? extendedAttribute.DateTime;
+            extendedAttribute.Json = command.Json ?? extendedAttribute.Json;
+            extendedAttribute.ExternalId = command.ExternalId ?? extendedAttribute.ExternalId;
+            extendedAttribute.Group = command.Group ?? extendedAttribute.Group;
+            extendedAttribute.Description = command.Description ?? extendedAttribute.Description;
+            extendedAttribute.IsActive = command.IsActive;
+            await _unitOfWork.Repository<TExtendedAttribute>().UpdateAsync(extendedAttribute);
+            await _unitOfWork.CommitAndRemoveCache(cancellationToken,
+                ApplicationConstants.Cache.GetAllEntityExtendedAttributesCacheKey(typeof(TEntity).Name));
+
+            // delete all caches related with updated entity
+            var cacheKeys = await _unitOfWork.Repository<TExtendedAttribute>().Entities.Select(x =>
+                ApplicationConstants.Cache.GetAllEntityExtendedAttributesByEntityIdCacheKey(
+                    typeof(TEntity).Name,
+                    x.Entity.Id)).Distinct().ToArrayAsync(cancellationToken);
+            await _unitOfWork.CommitAndRemoveCache(cancellationToken, cacheKeys);
+
+            return await Result<TId>.SuccessAsync(extendedAttribute.Id, _localizer["Extended Attribute Updated"]);
         }
     }
 }

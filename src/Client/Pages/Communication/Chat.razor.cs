@@ -85,34 +85,40 @@ public partial class Chat
             userId =>
             {
                 ChatUserResponse connectedUser = UserList.Find(x => x.Id.Equals(userId));
-                if (connectedUser is { IsOnline: false })
+                if (connectedUser is not { IsOnline: false })
                 {
-                    connectedUser.IsOnline = true;
-                    SnackBar.Add($"{connectedUser.UserName} {Localizer["Logged In."]}", Severity.Info);
-                    StateHasChanged();
+                    return;
                 }
+
+                connectedUser.IsOnline = true;
+                SnackBar.Add($"{connectedUser.UserName} {Localizer["Logged In."]}", Severity.Info);
+                StateHasChanged();
             });
         HubConnection.On<string>(ApplicationConstants.SignalR.ConnectUser,
             userId =>
             {
                 ChatUserResponse connectedUser = UserList.Find(x => x.Id.Equals(userId));
-                if (connectedUser is { IsOnline: false })
+                if (connectedUser is not { IsOnline: false })
                 {
-                    connectedUser.IsOnline = true;
-                    SnackBar.Info($"{connectedUser.UserName} {Localizer["Logged In."]}");
-                    StateHasChanged();
+                    return;
                 }
+
+                connectedUser.IsOnline = true;
+                SnackBar.Info($"{connectedUser.UserName} {Localizer["Logged In."]}");
+                StateHasChanged();
             });
         HubConnection.On<string>(ApplicationConstants.SignalR.DisconnectUser,
             userId =>
             {
                 ChatUserResponse disconnectedUser = UserList.Find(x => x.Id.Equals(userId));
-                if (disconnectedUser is { IsOnline: true })
+                if (disconnectedUser is not { IsOnline: true })
                 {
-                    disconnectedUser.IsOnline = false;
-                    SnackBar.Info($"{disconnectedUser.UserName} {Localizer["Logged Out."]}");
-                    StateHasChanged();
+                    return;
                 }
+
+                disconnectedUser.IsOnline = false;
+                SnackBar.Info($"{disconnectedUser.UserName} {Localizer["Logged Out."]}");
+                StateHasChanged();
             });
         HubConnection.On<ChatHistory<IChatUser>, string>(ApplicationConstants.SignalR.ReceiveMessage,
             async (chatHistory, userName) =>

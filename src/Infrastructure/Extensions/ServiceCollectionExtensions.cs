@@ -45,8 +45,7 @@ public static class ServiceCollectionExtensions
             .Configure<SystemTextJsonOptions>(configureOptions =>
             {
                 configure?.Invoke(configureOptions);
-                if (!configureOptions.JsonSerializerOptions.Converters.Any(c =>
-                        c.GetType() == typeof(TimespanJsonConverter)))
+                if (configureOptions.JsonSerializerOptions.Converters.All(c => c.GetType() != typeof(TimespanJsonConverter)))
                 {
                     configureOptions.JsonSerializerOptions.Converters.Add(new TimespanJsonConverter());
                 }

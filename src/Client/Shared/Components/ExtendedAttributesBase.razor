@@ -100,21 +100,20 @@ else
                             <MudHighlighter Text="@context.Key" HighlightedText="@_searchString"/>
                         </MudTd>
                         <MudTd DataLabel="@Localizer["Value"]">
-                            @if (context.Type == EntityExtendedAttributeType.Decimal)
+                            @switch (context.Type)
                             {
-                                <MudHighlighter Text="@context.Decimal?.ToString()" HighlightedText="@_searchString"/>
-                            }
-                            else if (context.Type == EntityExtendedAttributeType.Text)
-                            {
-                                <MudHighlighter Text="@context.Text" HighlightedText="@_searchString"/>
-                            }
-                            else if (context.Type == EntityExtendedAttributeType.DateTime)
-                            {
-                                <MudHighlighter Text="@context.DateTime?.ToString()" HighlightedText="@_searchString"/>
-                            }
-                            else if (context.Type == EntityExtendedAttributeType.Json)
-                            {
-                                <MudHighlighter Text="@context.Json" HighlightedText="@_searchString"/>
+                                case EntityExtendedAttributeType.Decimal:
+                                    <MudHighlighter Text="context.Decimal?.ToString()" HighlightedText="@_searchString"/>
+                                    break;
+                                case EntityExtendedAttributeType.Text:
+                                    <MudHighlighter Text="@context.Text" HighlightedText="@_searchString"/>
+                                    break;
+                                case EntityExtendedAttributeType.DateTime:
+                                    <MudHighlighter Text="context.DateTime?.ToString()" HighlightedText="@_searchString"/>
+                                    break;
+                                case EntityExtendedAttributeType.Json:
+                                    <MudHighlighter Text="@context.Json" HighlightedText="@_searchString"/>
+                                    break;
                             }
                         </MudTd>
                         <MudTd DataLabel="@Localizer["External Id"]">

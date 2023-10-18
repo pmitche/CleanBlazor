@@ -7,8 +7,7 @@ using LazyCache;
 
 namespace BlazorHero.CleanArchitecture.Infrastructure.Repositories;
 
-public class
-    ExtendedAttributeUnitOfWork<TId, TEntityId, TEntity> : IExtendedAttributeUnitOfWork<TId, TEntityId, TEntity>
+public sealed class ExtendedAttributeUnitOfWork<TId, TEntityId, TEntity> : IExtendedAttributeUnitOfWork<TId, TEntityId, TEntity>
     where TEntity : AuditableEntity<TEntityId>
 {
     private readonly IAppCache _cache;
@@ -72,7 +71,7 @@ public class
         GC.SuppressFinalize(this);
     }
 
-    protected virtual void Dispose(bool disposing)
+    private void Dispose(bool disposing)
     {
         if (!_disposed)
         {

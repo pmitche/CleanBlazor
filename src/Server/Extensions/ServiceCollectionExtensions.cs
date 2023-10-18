@@ -60,38 +60,40 @@ internal static class ServiceCollectionExtensions
     {
         IConfigurationSection applicationSettingsConfiguration = configuration.GetSection(nameof(AppConfiguration));
         var config = applicationSettingsConfiguration.Get<AppConfiguration>();
-        if (config.BehindSslProxy)
+        if (!config.BehindSslProxy)
         {
-            services.Configure<ForwardedHeadersOptions>(options =>
-            {
-                options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
-                if (!string.IsNullOrWhiteSpace(config.ProxyIp))
-                {
-                    var ipCheck = config.ProxyIp;
-                    if (IPAddress.TryParse(ipCheck, out IPAddress proxyIP))
-                    {
-                        options.KnownProxies.Add(proxyIP);
-                    }
-                    else
-                    {
-                        Log.Logger.Warning("Invalid Proxy IP of {IpCheck}, Not Loaded", ipCheck);
-                    }
-                }
-            });
-
-            services.AddCors(options =>
-            {
-                options.AddDefaultPolicy(
-                    builder =>
-                    {
-                        builder
-                            .AllowCredentials()
-                            .AllowAnyHeader()
-                            .AllowAnyMethod()
-                            .WithOrigins(config.ApplicationUrl.TrimEnd('/'));
-                    });
-            });
+            return services;
         }
+
+        services.Configure<ForwardedHeadersOptions>(options =>
+        {
+            options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+            if (!string.IsNullOrWhiteSpace(config.ProxyIp))
+            {
+                var ipCheck = config.ProxyIp;
+                if (IPAddress.TryParse(ipCheck, out IPAddress proxyIp))
+                {
+                    options.KnownProxies.Add(proxyIp);
+                }
+                else
+                {
+                    Log.Logger.Warning("Invalid Proxy IP of {IpCheck}, Not Loaded", ipCheck);
+                }
+            }
+        });
+
+        services.AddCors(options =>
+        {
+            options.AddDefaultPolicy(
+                builder =>
+                {
+                    builder
+                        .AllowCredentials()
+                        .AllowAnyHeader()
+                        .AllowAnyMethod()
+                        .WithOrigins(config.ApplicationUrl.TrimEnd('/'));
+                });
+        });
 
         return services;
     }
@@ -202,8 +204,8 @@ internal static class ServiceCollectionExtensions
             .AddScoped<IJsonSerializerOptions, SystemTextJsonOptions>()
             .Configure<SystemTextJsonOptions>(configureOptions =>
             {
-                if (!configureOptions.JsonSerializerOptions.Converters.Any(c =>
-                        c.GetType() == typeof(TimespanJsonConverter)))
+                if (configureOptions.JsonSerializerOptions.Converters.All(c =>
+                        c.GetType() != typeof(TimespanJsonConverter)))
                 {
                     configureOptions.JsonSerializerOptions.Converters.Add(new TimespanJsonConverter());
                 }
@@ -253,7 +255,7 @@ internal static class ServiceCollectionExtensions
     {
         services.AddTransient<IDateTimeService, SystemDateTimeService>();
         services.Configure<MailConfiguration>(configuration.GetSection("MailConfiguration"));
-        services.AddTransient<IMailService, SMTPMailService>();
+        services.AddTransient<IMailService, SmtpMailService>();
         return services;
     }
 

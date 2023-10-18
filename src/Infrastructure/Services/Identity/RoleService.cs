@@ -43,30 +43,31 @@ public class RoleService : IRoleService
     public async Task<Result<string>> DeleteAsync(string id)
     {
         BlazorHeroRole existingRole = await _roleManager.FindByIdAsync(id);
-        if (existingRole.Name != RoleConstants.AdministratorRole && existingRole.Name != RoleConstants.BasicRole)
+        if (existingRole.Name is RoleConstants.AdministratorRole or RoleConstants.BasicRole)
         {
-            var roleIsNotUsed = true;
-            List<BlazorHeroUser> allUsers = await _userManager.Users.ToListAsync();
-            foreach (BlazorHeroUser user in allUsers)
-            {
-                if (await _userManager.IsInRoleAsync(user, existingRole.Name))
-                {
-                    roleIsNotUsed = false;
-                }
-            }
+            return await Result<string>.FailAsync(string.Format(_localizer["Not allowed to delete {0} Role."],
+                existingRole.Name));
+        }
 
-            if (roleIsNotUsed)
+        var roleIsUsed = false;
+        List<BlazorHeroUser> allUsers = await _userManager.Users.ToListAsync();
+        foreach (BlazorHeroUser user in allUsers)
+        {
+            if (await _userManager.IsInRoleAsync(user, existingRole.Name))
             {
-                await _roleManager.DeleteAsync(existingRole);
-                return await Result<string>.SuccessAsync(string.Format(_localizer["Role {0} Deleted."],
-                    existingRole.Name));
+                roleIsUsed = true;
+                break;
             }
+        }
 
-            return await Result<string>.SuccessAsync(
+        if (roleIsUsed)
+        {
+            return await Result<string>.FailAsync(
                 string.Format(_localizer["Not allowed to delete {0} Role as it is being used."], existingRole.Name));
         }
 
-        return await Result<string>.SuccessAsync(string.Format(_localizer["Not allowed to delete {0} Role."],
+        await _roleManager.DeleteAsync(existingRole);
+        return await Result<string>.SuccessAsync(string.Format(_localizer["Role {0} Deleted."],
             existingRole.Name));
     }
 
@@ -89,27 +90,7 @@ public class RoleService : IRoleService
             Result<List<RoleClaimResponse>> roleClaimsResult = await _roleClaimService.GetAllByRoleIdAsync(role.Id);
             if (roleClaimsResult.Succeeded)
             {
-                List<RoleClaimResponse> roleClaims = roleClaimsResult.Data;
-                List<string> allClaimValues = allPermissions.Select(a => a.Value).ToList();
-                List<string> roleClaimValues = roleClaims.Select(a => a.Value).ToList();
-                List<string> authorizedClaims = allClaimValues.Intersect(roleClaimValues).ToList();
-                foreach (RoleClaimResponse permission in allPermissions)
-                {
-                    if (authorizedClaims.Exists(a => a == permission.Value))
-                    {
-                        permission.Selected = true;
-                        RoleClaimResponse roleClaim = roleClaims.SingleOrDefault(a => a.Value == permission.Value);
-                        if (roleClaim?.Description != null)
-                        {
-                            permission.Description = roleClaim.Description;
-                        }
-
-                        if (roleClaim?.Group != null)
-                        {
-                            permission.Group = roleClaim.Group;
-                        }
-                    }
-                }
+                model.RoleClaims = ModifyPermissions(allPermissions, roleClaimsResult.Data);
             }
             else
             {
@@ -152,7 +133,7 @@ public class RoleService : IRoleService
         else
         {
             BlazorHeroRole existingRole = await _roleManager.FindByIdAsync(request.Id);
-            if (existingRole.Name == RoleConstants.AdministratorRole || existingRole.Name == RoleConstants.BasicRole)
+            if (existingRole.Name is RoleConstants.AdministratorRole or RoleConstants.BasicRole)
             {
                 return await Result<string>.FailAsync(string.Format(_localizer["Not allowed to modify {0} Role."],
                     existingRole.Name));
@@ -168,79 +149,23 @@ public class RoleService : IRoleService
 
     public async Task<Result<string>> UpdatePermissionsAsync(PermissionRequest request)
     {
+        // TODO: Transaction
         try
         {
             var errors = new List<string>();
             BlazorHeroRole role = await _roleManager.FindByIdAsync(request.RoleId);
-            if (role.Name == RoleConstants.AdministratorRole)
+            if (!IsAllowedRoleModification(role, request, out var disallowedMessage))
             {
-                BlazorHeroUser currentUser =
-                    await _userManager.Users.SingleAsync(x => x.Id == _currentUserService.UserId);
-                if (await _userManager.IsInRoleAsync(currentUser, RoleConstants.AdministratorRole))
-                {
-                    return await Result<string>.FailAsync(
-                        _localizer["Not allowed to modify Permissions for this Role."]);
-                }
+                return await Result<string>.FailAsync(disallowedMessage);
             }
 
-            List<RoleClaimRequest> selectedClaims = request.RoleClaims.Where(a => a.Selected).ToList();
-            if (role.Name == RoleConstants.AdministratorRole &&
-                (!selectedClaims.Any(x => x.Value == Permissions.Roles.View)
-                 || !selectedClaims.Any(x => x.Value == Permissions.RoleClaims.View)
-                 || !selectedClaims.Any(x => x.Value == Permissions.RoleClaims.Edit)))
-            {
-                return await Result<string>.FailAsync(string.Format(
-                    _localizer["Not allowed to deselect {0} or {1} or {2} for this Role."],
-                    Permissions.Roles.View,
-                    Permissions.RoleClaims.View,
-                    Permissions.RoleClaims.Edit));
-            }
+            await RemoveExistingClaims(role);
+            await AddSelectedClaims(request, role, errors);
+            await UpdateRoleClaims(request, role, errors);
 
-            IList<Claim> claims = await _roleManager.GetClaimsAsync(role);
-            foreach (Claim claim in claims)
-            {
-                await _roleManager.RemoveClaimAsync(role, claim);
-            }
-
-            foreach (RoleClaimRequest claim in selectedClaims)
-            {
-                IdentityResult addResult = await _roleManager.AddPermissionClaim(role, claim.Value);
-                if (!addResult.Succeeded)
-                {
-                    errors.AddRange(addResult.Errors.Select(e => _localizer[e.Description].ToString()));
-                }
-            }
-
-            Result<List<RoleClaimResponse>> addedClaims = await _roleClaimService.GetAllByRoleIdAsync(role.Id);
-            if (addedClaims.Succeeded)
-            {
-                foreach (RoleClaimRequest claim in selectedClaims)
-                {
-                    RoleClaimResponse addedClaim =
-                        addedClaims.Data.SingleOrDefault(x => x.Type == claim.Type && x.Value == claim.Value);
-                    if (addedClaim != null)
-                    {
-                        claim.Id = addedClaim.Id;
-                        claim.RoleId = addedClaim.RoleId;
-                        Result<string> saveResult = await _roleClaimService.SaveAsync(claim);
-                        if (!saveResult.Succeeded)
-                        {
-                            errors.AddRange(saveResult.Messages);
-                        }
-                    }
-                }
-            }
-            else
-            {
-                errors.AddRange(addedClaims.Messages);
-            }
-
-            if (errors.Any())
-            {
-                return await Result<string>.FailAsync(errors);
-            }
-
-            return await Result<string>.SuccessAsync(_localizer["Permissions Updated."]);
+            return errors.Any()
+                ? await Result<string>.FailAsync(errors)
+                : await Result<string>.SuccessAsync(_localizer["Permissions Updated."]);
         }
         catch (Exception ex)
         {
@@ -252,6 +177,112 @@ public class RoleService : IRoleService
     {
         var count = await _roleManager.Roles.CountAsync();
         return count;
+    }
+
+    private static List<RoleClaimResponse> ModifyPermissions(
+        List<RoleClaimResponse> allPermissions,
+        IReadOnlyCollection<RoleClaimResponse> roleClaims)
+    {
+        List<string> allClaimValues = allPermissions.Select(a => a.Value).ToList();
+        List<string> roleClaimValues = roleClaims.Select(a => a.Value).ToList();
+        List<string> authorizedClaims = allClaimValues.Intersect(roleClaimValues).ToList();
+        foreach (RoleClaimResponse permission in allPermissions.Where(p =>
+                     authorizedClaims.Exists(claim => claim == p.Value)))
+        {
+            permission.Selected = true;
+            RoleClaimResponse roleClaim = roleClaims.SingleOrDefault(a => a.Value == permission.Value);
+            if (roleClaim?.Description != null)
+            {
+                permission.Description = roleClaim.Description;
+            }
+
+            if (roleClaim?.Group != null)
+            {
+                permission.Group = roleClaim.Group;
+            }
+        }
+
+        return allPermissions;
+    }
+
+    private bool IsAllowedRoleModification(BlazorHeroRole role, PermissionRequest request, out string disallowedMessage)
+    {
+        disallowedMessage = string.Empty;
+        if (role.Name == RoleConstants.AdministratorRole)
+        {
+            BlazorHeroUser currentUser = _userManager.Users.SingleAsync(x => x.Id == _currentUserService.UserId).Result;
+            if (_userManager.IsInRoleAsync(currentUser, RoleConstants.AdministratorRole).Result)
+            {
+                disallowedMessage = _localizer["Not allowed to modify Permissions for this Role."].ToString();
+                return false;
+            }
+        }
+
+        List<RoleClaimRequest> selectedClaims = request.RoleClaims.Where(a => a.Selected).ToList();
+        if (role.Name != RoleConstants.AdministratorRole ||
+            !selectedClaims.TrueForAll(x => x.Value != Permissions.Roles.View) ||
+            !selectedClaims.TrueForAll(x => x.Value != Permissions.RoleClaims.View) ||
+            !selectedClaims.TrueForAll(x => x.Value != Permissions.RoleClaims.Edit))
+        {
+            return true;
+        }
+
+        disallowedMessage = string.Format(
+            _localizer["Not allowed to deselect {0} or {1} or {2} for this Role."],
+            Permissions.Roles.View,
+            Permissions.RoleClaims.View,
+            Permissions.RoleClaims.Edit);
+        return false;
+    }
+
+    private async Task RemoveExistingClaims(BlazorHeroRole role)
+    {
+        IList<Claim> claims = await _roleManager.GetClaimsAsync(role);
+        foreach (Claim claim in claims)
+        {
+            await _roleManager.RemoveClaimAsync(role, claim);
+        }
+    }
+
+    private async Task AddSelectedClaims(PermissionRequest request, BlazorHeroRole role, List<string> errors)
+    {
+        List<RoleClaimRequest> selectedClaims = request.RoleClaims.Where(a => a.Selected).ToList();
+        foreach (RoleClaimRequest claim in selectedClaims)
+        {
+            IdentityResult addResult = await _roleManager.AddPermissionClaim(role, claim.Value);
+            if (!addResult.Succeeded)
+            {
+                errors.AddRange(addResult.Errors.Select(e => _localizer[e.Description].ToString()));
+            }
+        }
+    }
+
+    private async Task UpdateRoleClaims(PermissionRequest request, BlazorHeroRole role, List<string> errors)
+    {
+        Result<List<RoleClaimResponse>> addedClaimsResult = await _roleClaimService.GetAllByRoleIdAsync(role.Id);
+        if (addedClaimsResult.Succeeded)
+        {
+            List<RoleClaimRequest> selectedClaims = request.RoleClaims.Where(a => a.Selected).ToList();
+            foreach (RoleClaimRequest claim in selectedClaims)
+            {
+                RoleClaimResponse addedClaim =
+                    addedClaimsResult.Data.SingleOrDefault(x => x.Type == claim.Type && x.Value == claim.Value);
+                if (addedClaim != null)
+                {
+                    claim.Id = addedClaim.Id;
+                    claim.RoleId = addedClaim.RoleId;
+                    Result<string> saveResult = await _roleClaimService.SaveAsync(claim);
+                    if (!saveResult.Succeeded)
+                    {
+                        errors.AddRange(saveResult.Messages);
+                    }
+                }
+            }
+        }
+        else
+        {
+            errors.AddRange(addedClaimsResult.Messages);
+        }
     }
 
     private static List<RoleClaimResponse> GetAllPermissions()

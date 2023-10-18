@@ -17,12 +17,12 @@ namespace BlazorHero.CleanArchitecture.Client.Pages.Identity;
 
 public partial class RolePermissions
 {
-    private bool _bordered = false;
+    private bool _bordered;
     private bool _canEditRolePermissions;
     private bool _canSearchRolePermissions;
 
     private ClaimsPrincipal _currentUser;
-    private bool _dense = false;
+    private bool _dense;
     private bool _loaded;
     private IMapper _mapper;
 

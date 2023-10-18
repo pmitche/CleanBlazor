@@ -3,7 +3,6 @@ using BlazorHero.CleanArchitecture.Application.Responses.Identity;
 using BlazorHero.CleanArchitecture.Client.Extensions;
 using BlazorHero.CleanArchitecture.Shared.Wrapper;
 using Microsoft.AspNetCore.Components;
-using MudBlazor;
 
 namespace BlazorHero.CleanArchitecture.Client.Pages.Identity;
 

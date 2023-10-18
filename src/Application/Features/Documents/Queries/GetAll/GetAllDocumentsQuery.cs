@@ -47,7 +47,7 @@ internal class
             IsPublic = e.IsPublic,
             CreatedOn = e.CreatedOn,
             Description = e.Description,
-            Url = e.URL,
+            Url = e.Url,
             DocumentType = e.DocumentType.Name,
             DocumentTypeId = e.DocumentTypeId
         };

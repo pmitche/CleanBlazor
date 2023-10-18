@@ -15,15 +15,17 @@ public class AuthenticationHeaderHandler : DelegatingHandler
         HttpRequestMessage request,
         CancellationToken cancellationToken)
     {
-        if (request.Headers.Authorization?.Scheme != "Bearer")
+        if (request.Headers.Authorization?.Scheme == "Bearer")
         {
-            var savedToken =
-                await _localStorage.GetItemAsync<string>(StorageConstants.Local.AuthToken, cancellationToken);
+            return await base.SendAsync(request, cancellationToken);
+        }
 
-            if (!string.IsNullOrWhiteSpace(savedToken))
-            {
-                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", savedToken);
-            }
+        var savedToken =
+            await _localStorage.GetItemAsync<string>(StorageConstants.Local.AuthToken, cancellationToken);
+
+        if (!string.IsNullOrWhiteSpace(savedToken))
+        {
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", savedToken);
         }
 
         return await base.SendAsync(request, cancellationToken);

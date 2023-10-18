@@ -2,7 +2,6 @@
 using BlazorHero.CleanArchitecture.Application.Requests.Identity;
 using BlazorHero.CleanArchitecture.Client.Extensions;
 using BlazorHero.CleanArchitecture.Shared.Wrapper;
-using MudBlazor;
 
 namespace BlazorHero.CleanArchitecture.Client.Pages.Identity;
 

@@ -141,7 +141,7 @@ public class IdentityService : ITokenService
         return claims;
     }
 
-    private string GenerateRefreshToken()
+    private static string GenerateRefreshToken()
     {
         var randomNumber = new byte[32];
         using var rng = RandomNumberGenerator.Create();

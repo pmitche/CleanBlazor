@@ -32,52 +32,14 @@ public abstract class AuditableContext : IdentityDbContext<BlazorHeroUser, Blazo
         var auditEntries = new List<AuditEntry>();
         foreach (EntityEntry entry in ChangeTracker.Entries())
         {
-            if (entry.Entity is Audit || entry.State == EntityState.Detached || entry.State == EntityState.Unchanged)
+            if (ShouldSkipEntry(entry))
             {
                 continue;
             }
 
             var auditEntry = new AuditEntry(entry) { TableName = entry.Entity.GetType().Name, UserId = userId };
             auditEntries.Add(auditEntry);
-            foreach (PropertyEntry property in entry.Properties)
-            {
-                if (property.IsTemporary)
-                {
-                    auditEntry.TemporaryProperties.Add(property);
-                    continue;
-                }
-
-                var propertyName = property.Metadata.Name;
-                if (property.Metadata.IsPrimaryKey())
-                {
-                    auditEntry.KeyValues[propertyName] = property.CurrentValue;
-                    continue;
-                }
-
-                switch (entry.State)
-                {
-                    case EntityState.Added:
-                        auditEntry.AuditType = AuditType.Create;
-                        auditEntry.NewValues[propertyName] = property.CurrentValue;
-                        break;
-
-                    case EntityState.Deleted:
-                        auditEntry.AuditType = AuditType.Delete;
-                        auditEntry.OldValues[propertyName] = property.OriginalValue;
-                        break;
-
-                    case EntityState.Modified:
-                        if (property.IsModified && property.OriginalValue?.Equals(property.CurrentValue) == false)
-                        {
-                            auditEntry.ChangedColumns.Add(propertyName);
-                            auditEntry.AuditType = AuditType.Update;
-                            auditEntry.OldValues[propertyName] = property.OriginalValue;
-                            auditEntry.NewValues[propertyName] = property.CurrentValue;
-                        }
-
-                        break;
-                }
-            }
+            ProcessProperties(entry, auditEntry);
         }
 
         foreach (AuditEntry auditEntry in auditEntries.Where(e => !e.HasTemporaryProperties))
@@ -86,6 +48,58 @@ public abstract class AuditableContext : IdentityDbContext<BlazorHeroUser, Blazo
         }
 
         return auditEntries.Where(e => e.HasTemporaryProperties).ToList();
+    }
+
+    private static bool ShouldSkipEntry(EntityEntry entry) => entry.Entity is Audit ||
+                                                              entry.State == EntityState.Detached ||
+                                                              entry.State == EntityState.Unchanged;
+
+    private static void ProcessProperties(EntityEntry entry, AuditEntry auditEntry)
+    {
+        foreach (PropertyEntry property in entry.Properties)
+        {
+            var propertyName = property.Metadata.Name;
+            if (property.IsTemporary)
+            {
+                auditEntry.TemporaryProperties.Add(property);
+                continue;
+            }
+
+            if (property.Metadata.IsPrimaryKey())
+            {
+                auditEntry.KeyValues[propertyName] = property.CurrentValue;
+                continue;
+            }
+
+            ProcessEntryState(entry.State, property, auditEntry, propertyName);
+        }
+    }
+
+    private static void ProcessEntryState(EntityState state, PropertyEntry property, AuditEntry auditEntry, string propertyName)
+    {
+        switch (state)
+        {
+            case EntityState.Added:
+                auditEntry.AuditType = AuditType.Create;
+                auditEntry.NewValues[propertyName] = property.CurrentValue;
+                break;
+
+            case EntityState.Deleted:
+                auditEntry.AuditType = AuditType.Delete;
+                auditEntry.OldValues[propertyName] = property.OriginalValue;
+                break;
+
+            case EntityState.Modified:
+                if (property.IsModified && property.OriginalValue?.Equals(property.CurrentValue) == false)
+                {
+                    auditEntry.ChangedColumns.Add(propertyName);
+                    auditEntry.AuditType = AuditType.Update;
+                    auditEntry.OldValues[propertyName] = property.OriginalValue;
+                    auditEntry.NewValues[propertyName] = property.CurrentValue;
+                }
+
+                break;
+        }
     }
 
     private Task OnAfterSaveChanges(List<AuditEntry> auditEntries, CancellationToken cancellationToken = new())

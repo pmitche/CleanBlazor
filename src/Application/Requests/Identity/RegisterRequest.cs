@@ -18,6 +18,6 @@ public class RegisterRequest
 
     public string PhoneNumber { get; set; }
 
-    public bool ActivateUser { get; set; } = false;
-    public bool AutoConfirmEmail { get; set; } = false;
+    public bool ActivateUser { get; set; }
+    public bool AutoConfirmEmail { get; set; }
 }

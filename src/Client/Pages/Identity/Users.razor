@@ -22,7 +22,7 @@ else
             <div class="justify-center mud-text-align-center">
                 @if (_canCreateUsers)
                 {
-                    <MudButton DisableElevation Variant="Variant.Filled" Color="Color.Primary" OnClick="() => InvokeModal()" StartIcon="@Icons.Material.Filled.Add" IconColor="Color.Surface">@Localizer["Register New User"]</MudButton>
+                    <MudButton DisableElevation Variant="Variant.Filled" Color="Color.Primary" OnClick="InvokeModal" StartIcon="@Icons.Material.Filled.Add" IconColor="Color.Surface">@Localizer["Register New User"]</MudButton>
                     <MudButton DisableElevation Variant="Variant.Filled" OnClick="GetUsersAsync" StartIcon="@Icons.Material.Filled.Refresh" IconColor="Color.Surface" Color="Color.Secondary">@Localizer["Reload"]</MudButton>
                     @if (_canExportUsers)
                     {

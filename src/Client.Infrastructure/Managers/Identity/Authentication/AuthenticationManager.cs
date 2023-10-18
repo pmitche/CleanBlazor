@@ -44,26 +44,26 @@ public class AuthenticationManager : IAuthenticationManager
     {
         HttpResponseMessage response = await _httpClient.PostAsJsonAsync(TokenEndpoints.Get, model);
         IResult<TokenResponse> result = await response.ToResult<TokenResponse>();
-        if (result.Succeeded)
+        if (!result.Succeeded)
         {
-            var token = result.Data.Token;
-            var refreshToken = result.Data.RefreshToken;
-            var userImageUrl = result.Data.UserImageUrl;
-            await _localStorage.SetItemAsync(StorageConstants.Local.AuthToken, token);
-            await _localStorage.SetItemAsync(StorageConstants.Local.RefreshToken, refreshToken);
-            if (!string.IsNullOrEmpty(userImageUrl))
-            {
-                await _localStorage.SetItemAsync(StorageConstants.Local.UserImageUrl, userImageUrl);
-            }
-
-            await ((BlazorHeroStateProvider)_authenticationStateProvider).StateChangedAsync();
-
-            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-
-            return await Result.SuccessAsync();
+            return await Result.FailAsync(result.Messages);
         }
 
-        return await Result.FailAsync(result.Messages);
+        var token = result.Data.Token;
+        var refreshToken = result.Data.RefreshToken;
+        var userImageUrl = result.Data.UserImageUrl;
+        await _localStorage.SetItemAsync(StorageConstants.Local.AuthToken, token);
+        await _localStorage.SetItemAsync(StorageConstants.Local.RefreshToken, refreshToken);
+        if (!string.IsNullOrEmpty(userImageUrl))
+        {
+            await _localStorage.SetItemAsync(StorageConstants.Local.UserImageUrl, userImageUrl);
+        }
+
+        await ((BlazorHeroStateProvider)_authenticationStateProvider).StateChangedAsync();
+
+        _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+        return await Result.SuccessAsync();
     }
 
     public async Task<IResult> Logout()
