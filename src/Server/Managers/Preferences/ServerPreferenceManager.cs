@@ -22,7 +22,7 @@ namespace BlazorHero.CleanArchitecture.Server.Managers.Preferences
             _localizer = localizer;
         }
 
-        public async Task<IResult> ChangeLanguageAsync(string languageCode)
+        public async Task<Shared.Wrapper.IResult> ChangeLanguageAsync(string languageCode)
         {
             var preference = await GetPreference() as ServerPreference;
             if (preference != null)

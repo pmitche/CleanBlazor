@@ -26,7 +26,7 @@ namespace BlazorHero.CleanArchitecture.Server
 
                     if (context.Database.IsSqlServer())
                     {
-                        context.Database.Migrate();
+                        await context.Database.MigrateAsync();
                     }
                 }
                 catch (Exception ex)
@@ -44,7 +44,7 @@ namespace BlazorHero.CleanArchitecture.Server
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
-            .UseSerilog()
+	            .UseSerilog()
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStaticWebAssets();

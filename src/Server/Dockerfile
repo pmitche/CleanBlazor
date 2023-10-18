@@ -1,12 +1,12 @@
 #See https://aka.ms/containerfastmode to understand how Visual Studio uses this Dockerfile to build your images for faster debugging.
 
-FROM mcr.microsoft.com/dotnet/aspnet:5.0 AS base
+FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS base
 ENV ASPNETCORE_URLS=https://+:5005;http://+:5006
 WORKDIR /app
 EXPOSE 5005
 EXPOSE 5006
 
-FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /
 COPY ["src/Server/Server.csproj", "src/Server/"]
 COPY ["src/Application/Application.csproj", "src/Application/"]
@@ -16,6 +16,8 @@ COPY ["src/Infrastructure.Shared/Infrastructure.Shared.csproj", "src/Infrastruct
 COPY ["src/Infrastructure/Infrastructure.csproj", "src/Infrastructure/"]
 COPY ["src/Client/Client.csproj", "src/Client/"]
 COPY ["src/Client.Infrastructure/Client.Infrastructure.csproj", "src/Client.Infrastructure/"]
+COPY ["Directory.Build.props", "./"]
+COPY ["Directory.Packages.props", "./"]
 RUN dotnet restore "src/Server/Server.csproj" --disable-parallel
 COPY . .
 WORKDIR "src/Server"

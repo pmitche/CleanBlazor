@@ -64,7 +64,7 @@ namespace BlazorHero.CleanArchitecture.Server.Extensions
         internal static IServiceCollection AddForwarding(this IServiceCollection services, IConfiguration configuration)
         {
             var applicationSettingsConfiguration = configuration.GetSection(nameof(AppConfiguration));
-            var config = applicationSettingsConfiguration.Get<AppConfiguration>(); 
+            var config = applicationSettingsConfiguration.Get<AppConfiguration>();
             if (config.BehindSSLProxy)
             {
                 services.Configure<ForwardedHeadersOptions>(options =>
@@ -93,7 +93,7 @@ namespace BlazorHero.CleanArchitecture.Server.Extensions
                         });
                 });
             }
-            
+
             return services;
         }
 
@@ -354,15 +354,8 @@ namespace BlazorHero.CleanArchitecture.Server.Extensions
                 });
             services.AddAuthorization(options =>
             {
-                // Here I stored necessary permissions/roles in a constant
-                foreach (var prop in typeof(Permissions).GetNestedTypes().SelectMany(c => c.GetFields(BindingFlags.Public | BindingFlags.Static | BindingFlags.FlattenHierarchy)))
-                {
-                    var propertyValue = prop.GetValue(null);
-                    if (propertyValue is not null)
-                    {
-                        options.AddPolicy(propertyValue.ToString(), policy => policy.RequireClaim(ApplicationClaimTypes.Permission, propertyValue.ToString()));
-                    }
-                }
+                Permissions.GetRegisteredPermissions().ForEach(permission => options.AddPolicy(permission,
+	                policy => policy.RequireClaim(ApplicationClaimTypes.Permission, permission)));
             });
             return services;
         }
