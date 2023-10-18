@@ -80,15 +80,12 @@ public partial class AddEditExtendedAttributeModal<TId, TEntityId, TEntity, TExt
         IResult<TId> response = await ExtendedAttributeManager.SaveAsync(AddEditExtendedAttributeModel);
         if (response.Succeeded)
         {
-            SnackBar.Add(response.Messages[0], Severity.Success);
+            SnackBar.Success(response.Messages[0]);
             MudDialog.Close();
         }
         else
         {
-            foreach (var message in response.Messages)
-            {
-                SnackBar.Add(message, Severity.Error);
-            }
+            SnackBar.Error(response.Messages);
         }
 
         await HubConnection.SendAsync(ApplicationConstants.SignalR.SendUpdateDashboard);

@@ -66,10 +66,7 @@ public partial class Roles
         }
         else
         {
-            foreach (var message in response.Messages)
-            {
-                SnackBar.Add(message, Severity.Error);
-            }
+            SnackBar.Error(response.Messages);
         }
     }
 
@@ -94,15 +91,12 @@ public partial class Roles
             {
                 await Reset();
                 await HubConnection.SendAsync(ApplicationConstants.SignalR.SendUpdateDashboard);
-                SnackBar.Add(response.Messages[0], Severity.Success);
+                SnackBar.Success(response.Messages[0]);
             }
             else
             {
                 await Reset();
-                foreach (var message in response.Messages)
-                {
-                    SnackBar.Add(message, Severity.Error);
-                }
+                SnackBar.Error(response.Messages);
             }
         }
     }

@@ -84,10 +84,7 @@ public partial class RolePermissions
         }
         else
         {
-            foreach (var error in result.Messages)
-            {
-                SnackBar.Add(error, Severity.Error);
-            }
+            SnackBar.Error(result.Messages);
 
             NavigationManager.NavigateTo("/identity/roles");
         }
@@ -99,7 +96,7 @@ public partial class RolePermissions
         IResult<string> result = await RoleManager.UpdatePermissionsAsync(request);
         if (result.Succeeded)
         {
-            SnackBar.Add(result.Messages[0], Severity.Success);
+            SnackBar.Success(result.Messages[0]);
             await HubConnection.SendAsync(ApplicationConstants.SignalR.SendRegenerateTokens);
             await HubConnection.SendAsync(ApplicationConstants.SignalR.OnChangeRolePermissions,
                 _currentUser.GetUserId(),
@@ -108,10 +105,7 @@ public partial class RolePermissions
         }
         else
         {
-            foreach (var error in result.Messages)
-            {
-                SnackBar.Add(error, Severity.Error);
-            }
+            SnackBar.Error(result.Messages);
         }
     }
 

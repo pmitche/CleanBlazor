@@ -60,10 +60,7 @@ public partial class Chat
             }
             else
             {
-                foreach (var message in response.Messages)
-                {
-                    SnackBar.Add(message, Severity.Error);
-                }
+                SnackBar.Error(response.Messages);
             }
         }
     }
@@ -91,7 +88,7 @@ public partial class Chat
                 if (connectedUser is { IsOnline: false })
                 {
                     connectedUser.IsOnline = true;
-                    //_snackBar.Add($"{connectedUser.UserName} {_localizer["Logged In."]}", Severity.Info);
+                    SnackBar.Add($"{connectedUser.UserName} {Localizer["Logged In."]}", Severity.Info);
                     StateHasChanged();
                 }
             });
@@ -102,7 +99,7 @@ public partial class Chat
                 if (connectedUser is { IsOnline: false })
                 {
                     connectedUser.IsOnline = true;
-                    SnackBar.Add($"{connectedUser.UserName} {Localizer["Logged In."]}", Severity.Info);
+                    SnackBar.Info($"{connectedUser.UserName} {Localizer["Logged In."]}");
                     StateHasChanged();
                 }
             });
@@ -113,7 +110,7 @@ public partial class Chat
                 if (disconnectedUser is { IsOnline: true })
                 {
                     disconnectedUser.IsOnline = false;
-                    SnackBar.Add($"{disconnectedUser.UserName} {Localizer["Logged Out."]}", Severity.Info);
+                    SnackBar.Info($"{disconnectedUser.UserName} {Localizer["Logged Out."]}");
                     StateHasChanged();
                 }
             });
@@ -186,18 +183,12 @@ public partial class Chat
             }
             else
             {
-                foreach (var message in historyResponse.Messages)
-                {
-                    SnackBar.Add(message, Severity.Error);
-                }
+                SnackBar.Error(response.Messages);
             }
         }
         else
         {
-            foreach (var message in response.Messages)
-            {
-                SnackBar.Add(message, Severity.Error);
-            }
+            SnackBar.Error(response.Messages);
         }
     }
 
@@ -211,10 +202,7 @@ public partial class Chat
         }
         else
         {
-            foreach (var message in response.Messages)
-            {
-                SnackBar.Add(message, Severity.Error);
-            }
+            SnackBar.Error(response.Messages);
         }
     }
 

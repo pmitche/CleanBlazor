@@ -144,10 +144,7 @@ public partial class DocumentStore
         }
         else
         {
-            foreach (var message in response.Messages)
-            {
-                SnackBar.Add(message, Severity.Error);
-            }
+            SnackBar.Error(response.Messages);
         }
     }
 
@@ -213,15 +210,12 @@ public partial class DocumentStore
             if (response.Succeeded)
             {
                 OnSearch("");
-                SnackBar.Add(response.Messages[0], Severity.Success);
+                SnackBar.Success(response.Messages[0]);
             }
             else
             {
                 OnSearch("");
-                foreach (var message in response.Messages)
-                {
-                    SnackBar.Add(message, Severity.Error);
-                }
+                SnackBar.Error(response.Messages);
             }
         }
     }

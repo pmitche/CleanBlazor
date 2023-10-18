@@ -37,16 +37,13 @@ public partial class AddEditProductModal
         IResult<int> response = await ProductManager.SaveAsync(AddEditProductModel);
         if (response.Succeeded)
         {
-            SnackBar.Add(response.Messages[0], Severity.Success);
+            SnackBar.Success(response.Messages[0]);
             await HubConnection.SendAsync(ApplicationConstants.SignalR.SendUpdateDashboard);
             MudDialog.Close();
         }
         else
         {
-            foreach (var message in response.Messages)
-            {
-                SnackBar.Add(message, Severity.Error);
-            }
+            SnackBar.Error(response.Messages);
         }
     }
 

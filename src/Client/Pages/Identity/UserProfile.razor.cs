@@ -1,5 +1,6 @@
 ﻿using BlazorHero.CleanArchitecture.Application.Requests.Identity;
 using BlazorHero.CleanArchitecture.Application.Responses.Identity;
+using BlazorHero.CleanArchitecture.Client.Extensions;
 using BlazorHero.CleanArchitecture.Shared.Wrapper;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
@@ -28,15 +29,12 @@ public partial class UserProfile
         IResult result = await UserManager.ToggleUserStatusAsync(request);
         if (result.Succeeded)
         {
-            SnackBar.Add(Localizer["Updated User Status."], Severity.Success);
+            SnackBar.Success(Localizer["Updated User Status."]);
             NavigationManager.NavigateTo("/identity/users");
         }
         else
         {
-            foreach (var error in result.Messages)
-            {
-                SnackBar.Add(error, Severity.Error);
-            }
+            SnackBar.Error(result.Messages);
         }
     }
 

@@ -1,6 +1,7 @@
 ﻿using Blazored.FluentValidation;
 using BlazorHero.CleanArchitecture.Application.Enums;
 using BlazorHero.CleanArchitecture.Application.Requests;
+using BlazorHero.CleanArchitecture.Client.Extensions;
 using BlazorHero.CleanArchitecture.Shared.Wrapper;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
@@ -30,15 +31,12 @@ public partial class ImportExcelModal
             IResult<int> result = await OnSaved.Invoke(UploadRequest);
             if (result.Succeeded)
             {
-                SnackBar.Add(result.Messages[0], Severity.Success);
+                SnackBar.Success(result.Messages[0]);
                 MudDialog.Close();
             }
             else
             {
-                foreach (var message in result.Messages)
-                {
-                    SnackBar.Add(message, Severity.Error);
-                }
+                SnackBar.Error(result.Messages);
             }
 
             _uploading = false;

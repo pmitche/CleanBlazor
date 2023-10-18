@@ -1,6 +1,7 @@
 ﻿using System.Security.Claims;
 using BlazorHero.CleanArchitecture.Application.Requests.Identity;
 using BlazorHero.CleanArchitecture.Application.Responses.Identity;
+using BlazorHero.CleanArchitecture.Client.Extensions;
 using BlazorHero.CleanArchitecture.Shared.Constants.Permission;
 using BlazorHero.CleanArchitecture.Shared.Wrapper;
 using Microsoft.AspNetCore.Authorization;
@@ -57,15 +58,12 @@ public partial class UserRoles
         IResult result = await UserManager.UpdateRolesAsync(request);
         if (result.Succeeded)
         {
-            SnackBar.Add(result.Messages[0], Severity.Success);
+            SnackBar.Success(result.Messages[0]);
             NavigationManager.NavigateTo("/identity/users");
         }
         else
         {
-            foreach (var error in result.Messages)
-            {
-                SnackBar.Add(error, Severity.Error);
-            }
+            SnackBar.Error(result.Messages);
         }
     }
 

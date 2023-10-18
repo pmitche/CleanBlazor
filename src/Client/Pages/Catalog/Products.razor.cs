@@ -95,10 +95,7 @@ public partial class Products
         }
         else
         {
-            foreach (var message in response.Messages)
-            {
-                SnackBar.Add(message, Severity.Error);
-            }
+            SnackBar.Error(response.Messages);
         }
     }
 
@@ -120,17 +117,13 @@ public partial class Products
                     FileName = $"{nameof(Products).ToLower()}_{DateTime.Now:ddMMyyyyHHmmss}.xlsx",
                     MimeType = ApplicationConstants.MimeTypes.OpenXml
                 });
-            SnackBar.Add(string.IsNullOrWhiteSpace(_searchString)
+            SnackBar.Success(string.IsNullOrWhiteSpace(_searchString)
                     ? Localizer["Products exported"]
-                    : Localizer["Filtered Products exported"],
-                Severity.Success);
+                    : Localizer["Filtered Products exported"]);
         }
         else
         {
-            foreach (var message in response.Messages)
-            {
-                SnackBar.Add(message, Severity.Error);
-            }
+            SnackBar.Error(response.Messages);
         }
     }
 
@@ -191,15 +184,12 @@ public partial class Products
             {
                 OnSearch("");
                 await HubConnection.SendAsync(ApplicationConstants.SignalR.SendUpdateDashboard);
-                SnackBar.Add(response.Messages[0], Severity.Success);
+                SnackBar.Success(response.Messages[0]);
             }
             else
             {
                 OnSearch("");
-                foreach (var message in response.Messages)
-                {
-                    SnackBar.Add(message, Severity.Error);
-                }
+                SnackBar.Error(response.Messages);
             }
         }
     }

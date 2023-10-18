@@ -1,5 +1,6 @@
 ﻿using System.Security.Claims;
 using BlazorHero.CleanArchitecture.Application.Responses.Audit;
+using BlazorHero.CleanArchitecture.Client.Extensions;
 using BlazorHero.CleanArchitecture.Client.Infrastructure.Managers.Audit;
 using BlazorHero.CleanArchitecture.Shared.Constants.Application;
 using BlazorHero.CleanArchitecture.Shared.Constants.Permission;
@@ -111,10 +112,7 @@ public partial class AuditTrails
         }
         else
         {
-            foreach (var message in response.Messages)
-            {
-                SnackBar.Add(message, Severity.Error);
-            }
+            SnackBar.Error(response.Messages);
         }
     }
 
@@ -142,17 +140,13 @@ public partial class AuditTrails
                     FileName = $"{nameof(AuditTrails).ToLower()}_{DateTime.Now:ddMMyyyyHHmmss}.xlsx",
                     MimeType = ApplicationConstants.MimeTypes.OpenXml
                 });
-            SnackBar.Add(string.IsNullOrWhiteSpace(_searchString)
+            SnackBar.Success(string.IsNullOrWhiteSpace(_searchString)
                     ? Localizer["Audit Trails exported"]
-                    : Localizer["Filtered Audit Trails exported"],
-                Severity.Success);
+                    : Localizer["Filtered Audit Trails exported"]);
         }
         else
         {
-            foreach (var message in response.Messages)
-            {
-                SnackBar.Add(message, Severity.Error);
-            }
+            SnackBar.Error(response.Messages);
         }
     }
 

@@ -27,6 +27,8 @@ public partial class MainBody
 
     [Parameter] public EventCallback<bool> OnRightToLeftToggle { get; set; }
 
+    [Inject] private ILogger<MainBody> Logger { get; set; }
+
     [Inject] private IRoleManager RoleManager { get; set; }
 
     private string CurrentUserId { get; set; }
@@ -86,15 +88,15 @@ public partial class MainBody
                     var token = await AuthenticationManager.TryForceRefreshToken();
                     if (!string.IsNullOrEmpty(token))
                     {
-                        SnackBar.Add(Localizer["Refreshed Token."], Severity.Success);
+                        SnackBar.Success(Localizer["Refreshed Token."]);
                         HttpClient.DefaultRequestHeaders.Authorization =
                             new AuthenticationHeaderValue("Bearer", token);
                     }
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine(ex.Message);
-                    SnackBar.Add(Localizer["You are Logged Out."], Severity.Error);
+                    Logger.LogError(ex, ex.Message);
+                    SnackBar.Error(Localizer["You are Logged Out."]);
                     await AuthenticationManager.Logout();
                     NavigationManager.NavigateTo("/");
                 }
@@ -115,10 +117,9 @@ public partial class MainBody
                             if (currentUserRolesResponse.Succeeded &&
                                 currentUserRolesResponse.Data.UserRoles.Any(x => x.RoleName == role.Name))
                             {
-                                SnackBar.Add(
+                                SnackBar.Error(
                                     Localizer[
-                                        "You are logged out because the Permissions of one of your Roles have been updated."],
-                                    Severity.Error);
+                                        "You are logged out because the Permissions of one of your Roles have been updated."]);
                                 await _hubConnection.SendAsync(ApplicationConstants.SignalR.OnDisconnect,
                                     CurrentUserId);
                                 await AuthenticationManager.Logout();
@@ -136,7 +137,7 @@ public partial class MainBody
 
         await _hubConnection.SendAsync(ApplicationConstants.SignalR.OnConnect, CurrentUserId);
 
-        SnackBar.Add(string.Format(Localizer["Welcome {0}"], FirstName), Severity.Success);
+        SnackBar.Success(string.Format(Localizer["Welcome {0}"], FirstName));
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -178,9 +179,8 @@ public partial class MainBody
                 IResult<UserResponse> currentUserResult = await UserManager.GetAsync(CurrentUserId);
                 if (!currentUserResult.Succeeded || currentUserResult.Data == null)
                 {
-                    SnackBar.Add(
-                        Localizer["You are logged out because the user with your Token has been deleted."],
-                        Severity.Error);
+                    SnackBar.Error(
+                        Localizer["You are logged out because the user with your Token has been deleted."]);
                     CurrentUserId = string.Empty;
                     ImageDataUrl = string.Empty;
                     FirstName = string.Empty;

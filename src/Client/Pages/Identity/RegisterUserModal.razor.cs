@@ -1,5 +1,6 @@
 ﻿using Blazored.FluentValidation;
 using BlazorHero.CleanArchitecture.Application.Requests.Identity;
+using BlazorHero.CleanArchitecture.Client.Extensions;
 using BlazorHero.CleanArchitecture.Shared.Wrapper;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
@@ -24,15 +25,12 @@ public partial class RegisterUserModal
         IResult response = await UserManager.RegisterUserAsync(_registerUserModel);
         if (response.Succeeded)
         {
-            SnackBar.Add(response.Messages[0], Severity.Success);
+            SnackBar.Success(response.Messages[0]);
             MudDialog.Close();
         }
         else
         {
-            foreach (var message in response.Messages)
-            {
-                SnackBar.Add(message, Severity.Error);
-            }
+            SnackBar.Error(response.Messages);
         }
     }
 

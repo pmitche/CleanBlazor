@@ -27,15 +27,12 @@ public partial class AddEditBrandModal
         IResult<int> response = await BrandManager.SaveAsync(AddEditBrandModel);
         if (response.Succeeded)
         {
-            SnackBar.Add(response.Messages[0], Severity.Success);
+            SnackBar.Success(response.Messages[0]);
             MudDialog.Close();
         }
         else
         {
-            foreach (var message in response.Messages)
-            {
-                SnackBar.Add(message, Severity.Error);
-            }
+            SnackBar.Error(response.Messages);
         }
 
         await HubConnection.SendAsync(ApplicationConstants.SignalR.SendUpdateDashboard);

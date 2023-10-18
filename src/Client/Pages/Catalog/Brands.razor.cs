@@ -74,10 +74,7 @@ public partial class Brands
         }
         else
         {
-            foreach (var message in response.Messages)
-            {
-                SnackBar.Add(message, Severity.Error);
-            }
+            SnackBar.Error(response.Messages);
         }
     }
 
@@ -101,15 +98,12 @@ public partial class Brands
             {
                 await Reset();
                 await HubConnection.SendAsync(ApplicationConstants.SignalR.SendUpdateDashboard);
-                SnackBar.Add(response.Messages[0], Severity.Success);
+                SnackBar.Success(response.Messages[0]);
             }
             else
             {
                 await Reset();
-                foreach (var message in response.Messages)
-                {
-                    SnackBar.Add(message, Severity.Error);
-                }
+                SnackBar.Error(response.Messages);
             }
         }
     }
@@ -126,17 +120,13 @@ public partial class Brands
                     FileName = $"{nameof(Brands).ToLower()}_{DateTime.Now:ddMMyyyyHHmmss}.xlsx",
                     MimeType = ApplicationConstants.MimeTypes.OpenXml
                 });
-            SnackBar.Add(string.IsNullOrWhiteSpace(_searchString)
+            SnackBar.Success(string.IsNullOrWhiteSpace(_searchString)
                     ? Localizer["Brands exported"]
-                    : Localizer["Filtered Brands exported"],
-                Severity.Success);
+                    : Localizer["Filtered Brands exported"]);
         }
         else
         {
-            foreach (var message in response.Messages)
-            {
-                SnackBar.Add(message, Severity.Error);
-            }
+            SnackBar.Error(response.Messages);
         }
     }
 

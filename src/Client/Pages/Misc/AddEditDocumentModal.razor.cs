@@ -3,6 +3,7 @@ using BlazorHero.CleanArchitecture.Application.Enums;
 using BlazorHero.CleanArchitecture.Application.Features.Documents.Commands.AddEdit;
 using BlazorHero.CleanArchitecture.Application.Features.DocumentTypes.Queries.GetAll;
 using BlazorHero.CleanArchitecture.Application.Requests;
+using BlazorHero.CleanArchitecture.Client.Extensions;
 using BlazorHero.CleanArchitecture.Client.Infrastructure.Managers.Misc.Document;
 using BlazorHero.CleanArchitecture.Client.Infrastructure.Managers.Misc.DocumentType;
 using BlazorHero.CleanArchitecture.Shared.Wrapper;
@@ -33,15 +34,12 @@ public partial class AddEditDocumentModal
         IResult<int> response = await DocumentManager.SaveAsync(AddEditDocumentModel);
         if (response.Succeeded)
         {
-            SnackBar.Add(response.Messages[0], Severity.Success);
+            SnackBar.Success(response.Messages[0]);
             MudDialog.Close();
         }
         else
         {
-            foreach (var message in response.Messages)
-            {
-                SnackBar.Add(message, Severity.Error);
-            }
+            SnackBar.Error(response.Messages);
         }
     }
 

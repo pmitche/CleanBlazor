@@ -1,5 +1,6 @@
 ﻿using System.Security.Claims;
 using BlazorHero.CleanArchitecture.Application.Responses.Identity;
+using BlazorHero.CleanArchitecture.Client.Extensions;
 using BlazorHero.CleanArchitecture.Shared.Constants.Application;
 using BlazorHero.CleanArchitecture.Shared.Constants.Permission;
 using BlazorHero.CleanArchitecture.Shared.Wrapper;
@@ -49,10 +50,7 @@ public partial class Users
         }
         else
         {
-            foreach (var message in response.Messages)
-            {
-                SnackBar.Add(message, Severity.Error);
-            }
+            SnackBar.Error(response.Messages);
         }
     }
 
@@ -101,10 +99,9 @@ public partial class Users
                 FileName = $"{nameof(Users).ToLower()}_{DateTime.Now:ddMMyyyyHHmmss}.xlsx",
                 MimeType = ApplicationConstants.MimeTypes.OpenXml
             });
-        SnackBar.Add(string.IsNullOrWhiteSpace(_searchString)
+        SnackBar.Success(string.IsNullOrWhiteSpace(_searchString)
                 ? Localizer["Users exported"]
-                : Localizer["Filtered Users exported"],
-            Severity.Success);
+                : Localizer["Filtered Users exported"]);
     }
 
     private async Task InvokeModal()
@@ -129,7 +126,7 @@ public partial class Users
     {
         if (email == "mukesh@blazorhero.com")
         {
-            SnackBar.Add(Localizer["Not Allowed."], Severity.Error);
+            SnackBar.Error(Localizer["Not Allowed."]);
         }
         else
         {

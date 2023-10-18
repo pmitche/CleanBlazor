@@ -27,15 +27,12 @@ public partial class AddEditDocumentTypeModal
         IResult<int> response = await DocumentTypeManager.SaveAsync(AddEditDocumentTypeModel);
         if (response.Succeeded)
         {
-            SnackBar.Add(response.Messages[0], Severity.Success);
+            SnackBar.Success(response.Messages[0]);
             MudDialog.Close();
         }
         else
         {
-            foreach (var message in response.Messages)
-            {
-                SnackBar.Add(message, Severity.Error);
-            }
+            SnackBar.Error(response.Messages);
         }
 
         await HubConnection.SendAsync(ApplicationConstants.SignalR.SendUpdateDashboard);

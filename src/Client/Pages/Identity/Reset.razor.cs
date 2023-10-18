@@ -1,6 +1,7 @@
 ﻿using System.Text;
 using Blazored.FluentValidation;
 using BlazorHero.CleanArchitecture.Application.Requests.Identity;
+using BlazorHero.CleanArchitecture.Client.Extensions;
 using BlazorHero.CleanArchitecture.Shared.Wrapper;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Primitives;
@@ -35,20 +36,17 @@ public partial class Reset
             IResult result = await UserManager.ResetPasswordAsync(_resetPasswordModel);
             if (result.Succeeded)
             {
-                SnackBar.Add(result.Messages[0], Severity.Success);
+                SnackBar.Success(result.Messages[0]);
                 NavigationManager.NavigateTo("/");
             }
             else
             {
-                foreach (var message in result.Messages)
-                {
-                    SnackBar.Add(message, Severity.Error);
-                }
+                SnackBar.Error(result.Messages);
             }
         }
         else
         {
-            SnackBar.Add(Localizer["Token Not Found!"], Severity.Error);
+            SnackBar.Error(Localizer["Token Not Found!"]);
         }
     }
 

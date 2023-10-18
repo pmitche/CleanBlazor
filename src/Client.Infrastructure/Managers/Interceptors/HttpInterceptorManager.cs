@@ -2,6 +2,7 @@
 using BlazorHero.CleanArchitecture.Client.Infrastructure.Managers.Identity.Authentication;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Localization;
+using Microsoft.Extensions.Logging;
 using MudBlazor;
 using Toolbelt.Blazor;
 
@@ -12,6 +13,7 @@ public class HttpInterceptorManager : IHttpInterceptorManager
     private readonly IAuthenticationManager _authenticationManager;
     private readonly HttpClientInterceptor _interceptor;
     private readonly IStringLocalizer<HttpInterceptorManager> _localizer;
+    private readonly ILogger<HttpInterceptorManager> _logger;
     private readonly NavigationManager _navigationManager;
     private readonly ISnackbar _snackBar;
 
@@ -20,13 +22,15 @@ public class HttpInterceptorManager : IHttpInterceptorManager
         IAuthenticationManager authenticationManager,
         NavigationManager navigationManager,
         ISnackbar snackBar,
-        IStringLocalizer<HttpInterceptorManager> localizer)
+        IStringLocalizer<HttpInterceptorManager> localizer,
+        ILogger<HttpInterceptorManager> logger)
     {
         _interceptor = interceptor;
         _authenticationManager = authenticationManager;
         _navigationManager = navigationManager;
         _snackBar = snackBar;
         _localizer = localizer;
+        _logger = logger;
     }
 
     public void RegisterEvent() => _interceptor.BeforeSendAsync += InterceptBeforeHttpAsync;
@@ -52,7 +56,7 @@ public class HttpInterceptorManager : IHttpInterceptorManager
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                _logger.LogError(ex, ex.Message);
                 _snackBar.Add(_localizer["You are Logged Out."], Severity.Error);
                 await _authenticationManager.Logout();
                 _navigationManager.NavigateTo("/");

@@ -1,6 +1,7 @@
 ﻿using System.Security.Claims;
 using Blazored.FluentValidation;
 using BlazorHero.CleanArchitecture.Application.Requests.Identity;
+using BlazorHero.CleanArchitecture.Client.Extensions;
 using BlazorHero.CleanArchitecture.Shared.Wrapper;
 using Microsoft.AspNetCore.Components.Authorization;
 using MudBlazor;
@@ -31,10 +32,7 @@ public partial class Login
         IResult result = await AuthenticationManager.Login(_tokenModel);
         if (!result.Succeeded)
         {
-            foreach (var message in result.Messages)
-            {
-                SnackBar.Add(message, Severity.Error);
-            }
+            SnackBar.Error(result.Messages);
         }
     }
 

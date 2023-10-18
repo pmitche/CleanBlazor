@@ -32,15 +32,12 @@ public partial class Profile
         if (response.Succeeded)
         {
             await AuthenticationManager.Logout();
-            SnackBar.Add(Localizer["Your Profile has been updated. Please Login to Continue."], Severity.Success);
+            SnackBar.Success(Localizer["Your Profile has been updated. Please Login to Continue."]);
             NavigationManager.NavigateTo("/");
         }
         else
         {
-            foreach (var message in response.Messages)
-            {
-                SnackBar.Add(message, Severity.Error);
-            }
+            SnackBar.Error(response.Messages);
         }
     }
 
@@ -86,15 +83,12 @@ public partial class Profile
             if (result.Succeeded)
             {
                 await LocalStorage.SetItemAsync(StorageConstants.Local.UserImageUrl, result.Data);
-                SnackBar.Add(Localizer["Profile picture added."], Severity.Success);
+                SnackBar.Success(Localizer["Profile picture added."]);
                 NavigationManager.NavigateTo("/account", true);
             }
             else
             {
-                foreach (var error in result.Messages)
-                {
-                    SnackBar.Add(error, Severity.Error);
-                }
+                SnackBar.Error(result.Messages);
             }
         }
     }
@@ -126,15 +120,12 @@ public partial class Profile
             {
                 await LocalStorage.RemoveItemAsync(StorageConstants.Local.UserImageUrl);
                 ImageDataUrl = string.Empty;
-                SnackBar.Add(Localizer["Profile picture deleted."], Severity.Success);
+                SnackBar.Success(Localizer["Profile picture deleted."]);
                 NavigationManager.NavigateTo("/account", true);
             }
             else
             {
-                foreach (var error in data.Messages)
-                {
-                    SnackBar.Add(error, Severity.Error);
-                }
+                SnackBar.Error(data.Messages);
             }
         }
     }

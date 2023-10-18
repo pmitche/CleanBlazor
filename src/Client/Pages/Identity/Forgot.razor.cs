@@ -1,5 +1,6 @@
 ﻿using Blazored.FluentValidation;
 using BlazorHero.CleanArchitecture.Application.Requests.Identity;
+using BlazorHero.CleanArchitecture.Client.Extensions;
 using BlazorHero.CleanArchitecture.Shared.Wrapper;
 using MudBlazor;
 
@@ -16,15 +17,12 @@ public partial class Forgot
         IResult result = await UserManager.ForgotPasswordAsync(_emailModel);
         if (result.Succeeded)
         {
-            SnackBar.Add(Localizer["Done!"], Severity.Success);
+            SnackBar.Success(Localizer["Done!"]);
             NavigationManager.NavigateTo("/");
         }
         else
         {
-            foreach (var message in result.Messages)
-            {
-                SnackBar.Add(message, Severity.Error);
-            }
+            SnackBar.Error(result.Messages);
         }
     }
 }

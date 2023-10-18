@@ -68,10 +68,7 @@ public partial class DocumentTypes
         }
         else
         {
-            foreach (var message in response.Messages)
-            {
-                SnackBar.Add(message, Severity.Error);
-            }
+            SnackBar.Error(response.Messages);
         }
     }
 
@@ -96,15 +93,12 @@ public partial class DocumentTypes
             {
                 await Reset();
                 await HubConnection.SendAsync(ApplicationConstants.SignalR.SendUpdateDashboard);
-                SnackBar.Add(response.Messages[0], Severity.Success);
+                SnackBar.Success(response.Messages[0]);
             }
             else
             {
                 await Reset();
-                foreach (var message in response.Messages)
-                {
-                    SnackBar.Add(message, Severity.Error);
-                }
+                SnackBar.Error(response.Messages);
             }
         }
     }
@@ -121,17 +115,13 @@ public partial class DocumentTypes
                     FileName = $"{nameof(DocumentTypes).ToLower()}_{DateTime.Now:ddMMyyyyHHmmss}.xlsx",
                     MimeType = ApplicationConstants.MimeTypes.OpenXml
                 });
-            SnackBar.Add(string.IsNullOrWhiteSpace(_searchString)
+            SnackBar.Success(string.IsNullOrWhiteSpace(_searchString)
                     ? Localizer["Document Types exported"]
-                    : Localizer["Filtered Document Types exported"],
-                Severity.Success);
+                    : Localizer["Filtered Document Types exported"]);
         }
         else
         {
-            foreach (var message in response.Messages)
-            {
-                SnackBar.Add(message, Severity.Error);
-            }
+            SnackBar.Error(response.Messages);
         }
     }
 

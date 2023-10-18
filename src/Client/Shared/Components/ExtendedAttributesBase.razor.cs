@@ -116,7 +116,7 @@ public abstract partial class ExtendedAttributesBase<TId, TEntityId, TEntity, TE
             (await AuthorizationService.AuthorizeAsync(_currentUser, ExtendedAttributesViewPolicyName)).Succeeded;
         if (!_canViewExtendedAttributes)
         {
-            SnackBar.Add(Localizer["Not Allowed."], Severity.Error);
+            SnackBar.Error(Localizer["Not Allowed."]);
             NavigationManager.NavigateTo("/");
         }
 
@@ -186,10 +186,7 @@ public abstract partial class ExtendedAttributesBase<TId, TEntityId, TEntity, TE
         }
         else
         {
-            foreach (var message in response.Messages)
-            {
-                SnackBar.Add(message, Severity.Error);
-            }
+            SnackBar.Error(response.Messages);
 
             NavigationManager.NavigateTo("/");
         }
@@ -215,18 +212,14 @@ public abstract partial class ExtendedAttributesBase<TId, TEntityId, TEntity, TE
                     FileName = $"{typeof(TExtendedAttribute).Name.ToLower()}_{DateTime.Now:ddMMyyyyHHmmss}.xlsx",
                     MimeType = ApplicationConstants.MimeTypes.OpenXml
                 });
-            SnackBar.Add(string.IsNullOrWhiteSpace(request.SearchString) && !request.IncludeEntity &&
+            SnackBar.Success(string.IsNullOrWhiteSpace(request.SearchString) && !request.IncludeEntity &&
                          !request.OnlyCurrentGroup
                     ? Localizer["Extended Attributes exported"]
-                    : Localizer["Filtered Extended Attributes exported"],
-                Severity.Success);
+                    : Localizer["Filtered Extended Attributes exported"]);
         }
         else
         {
-            foreach (var message in response.Messages)
-            {
-                SnackBar.Add(message, Severity.Error);
-            }
+            SnackBar.Error(response.Messages);
         }
     }
 
@@ -307,15 +300,12 @@ public abstract partial class ExtendedAttributesBase<TId, TEntityId, TEntity, TE
             if (response.Succeeded)
             {
                 await Reset();
-                SnackBar.Add(response.Messages[0], Severity.Success);
+                SnackBar.Success(response.Messages[0]);
             }
             else
             {
                 await Reset();
-                foreach (var message in response.Messages)
-                {
-                    SnackBar.Add(message, Severity.Error);
-                }
+                SnackBar.Error(response.Messages);
             }
         }
     }

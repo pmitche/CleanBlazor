@@ -1,5 +1,6 @@
 ﻿using Blazored.FluentValidation;
 using BlazorHero.CleanArchitecture.Application.Requests.Identity;
+using BlazorHero.CleanArchitecture.Client.Extensions;
 using BlazorHero.CleanArchitecture.Shared.Wrapper;
 using MudBlazor;
 
@@ -24,17 +25,14 @@ public partial class Security
         IResult response = await AccountManager.ChangePasswordAsync(_passwordModel);
         if (response.Succeeded)
         {
-            SnackBar.Add(Localizer["Password Changed!"], Severity.Success);
+            SnackBar.Success(Localizer["Password Changed!"]);
             _passwordModel.Password = string.Empty;
             _passwordModel.NewPassword = string.Empty;
             _passwordModel.ConfirmNewPassword = string.Empty;
         }
         else
         {
-            foreach (var error in response.Messages)
-            {
-                SnackBar.Add(error, Severity.Error);
-            }
+            SnackBar.Error(response.Messages);
         }
     }
 
