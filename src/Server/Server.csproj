@@ -17,6 +17,12 @@
     <Content Remove="Permission\**"/>
     <EmbeddedResource Remove="Permission\**"/>
     <None Remove="Permission\**"/>
+    <Content Update="appsettings.Development.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="appsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="FluentValidation.AspNetCore"/>
@@ -24,6 +30,12 @@
     <PackageReference Include="LazyCache.AspNetCore"/>
     <PackageReference Include="MediatR"/>
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets"/>
+    <PackageReference Include="Serilog" />
+    <PackageReference Include="Serilog.AspNetCore" />
+    <PackageReference Include="Serilog.Enrichers.CorrelationId" />
+    <PackageReference Include="Serilog.Enrichers.Process" />
+    <PackageReference Include="Serilog.Enrichers.Thread" />
+    <PackageReference Include="Serilog.Expressions" />
     <PackageReference Include="Swashbuckle.AspNetCore"/>
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning"/>
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning.ApiExplorer"/>
@@ -49,10 +61,10 @@
     <ProjectReference Include="..\Client\Client.csproj"/>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Files\Images\ProfilePictures\"/>
+    <Folder Include="Files/Images/ProfilePictures/"/>
   </ItemGroup>
   <ItemGroup>
-    <None Update="Files\Images\Products\demo.jpg">
+    <None Update="Files/Images/Products/demo.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

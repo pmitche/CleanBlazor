@@ -8,6 +8,7 @@ using Hangfire;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Localization;
+using Serilog;
 
 namespace BlazorHero.CleanArchitecture.Server;
 
@@ -58,12 +59,12 @@ public class Startup
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IStringLocalizer<Startup> localizer)
     {
+        app.UseSerilogRequestLogging();
         app.UseForwarding(_configuration);
         app.UseExceptionHandling(env);
         app.UseHttpsRedirection();
         app.UseMiddleware<ErrorHandlerMiddleware>();
         app.UseBlazorFrameworkFiles();
-        app.UseStaticFiles();
         app.UseStaticFiles(new StaticFileOptions
         {
             FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "Files")),

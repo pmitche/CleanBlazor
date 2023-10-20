@@ -1,9 +1,7 @@
-﻿using System.Globalization;
-using System.Net;
+﻿using System.Net;
 using System.Reflection;
-using System.Security.Claims;
-using System.Text;
 using BlazorHero.CleanArchitecture.Application.Configurations;
+using BlazorHero.CleanArchitecture.Application.Features.ExtendedAttributes.Commands.AddEdit;
 using BlazorHero.CleanArchitecture.Application.Interfaces.Serialization.Options;
 using BlazorHero.CleanArchitecture.Application.Interfaces.Serialization.Serializers;
 using BlazorHero.CleanArchitecture.Application.Interfaces.Serialization.Settings;
@@ -14,6 +12,7 @@ using BlazorHero.CleanArchitecture.Application.Serialization.JsonConverters;
 using BlazorHero.CleanArchitecture.Application.Serialization.Options;
 using BlazorHero.CleanArchitecture.Application.Serialization.Serializers;
 using BlazorHero.CleanArchitecture.Application.Serialization.Settings;
+using BlazorHero.CleanArchitecture.Application.Validators.Features.ExtendedAttributes.Commands.AddEdit;
 using BlazorHero.CleanArchitecture.Infrastructure;
 using BlazorHero.CleanArchitecture.Infrastructure.Contexts;
 using BlazorHero.CleanArchitecture.Infrastructure.Models.Identity;
@@ -21,13 +20,8 @@ using BlazorHero.CleanArchitecture.Infrastructure.Services;
 using BlazorHero.CleanArchitecture.Infrastructure.Services.Identity;
 using BlazorHero.CleanArchitecture.Infrastructure.Shared.Services;
 using BlazorHero.CleanArchitecture.Server.Localization;
-using BlazorHero.CleanArchitecture.Server.Managers.Preferences;
 using BlazorHero.CleanArchitecture.Server.Services;
-using BlazorHero.CleanArchitecture.Server.Settings;
-using BlazorHero.CleanArchitecture.Shared.Constants.Application;
-using BlazorHero.CleanArchitecture.Shared.Constants.Localization;
 using BlazorHero.CleanArchitecture.Shared.Constants.Permission;
-using BlazorHero.CleanArchitecture.Shared.Wrapper;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -36,25 +30,22 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Localization;
-using Microsoft.Extensions.Primitives;
-using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using Newtonsoft.Json;
 using Serilog;
 
 namespace BlazorHero.CleanArchitecture.Server.Extensions;
 
 internal static class ServiceCollectionExtensions
 {
-    private static async Task<IStringLocalizer> GetRegisteredServerLocalizerAsync<T>(this IServiceCollection services)
-        where T : class
-    {
-        ServiceProvider serviceProvider = services.BuildServiceProvider();
-        await SetCultureFromServerPreferenceAsync(serviceProvider);
-        var localizer = serviceProvider.GetService<IStringLocalizer<T>>();
-        await serviceProvider.DisposeAsync();
-        return localizer;
-    }
+    // private static async Task<IStringLocalizer> GetRegisteredServerLocalizerAsync<T>(this IServiceCollection services)
+    //     where T : class
+    // {
+    //     ServiceProvider serviceProvider = services.BuildServiceProvider();
+    //     await SetCultureFromServerPreferenceAsync(serviceProvider);
+    //     var localizer = serviceProvider.GetService<IStringLocalizer<T>>();
+    //     await serviceProvider.DisposeAsync();
+    //     return localizer;
+    // }
 
     internal static IServiceCollection AddForwarding(this IServiceCollection services, IConfiguration configuration)
     {
@@ -68,17 +59,19 @@ internal static class ServiceCollectionExtensions
         services.Configure<ForwardedHeadersOptions>(options =>
         {
             options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
-            if (!string.IsNullOrWhiteSpace(config.ProxyIp))
+            if (string.IsNullOrWhiteSpace(config.ProxyIp))
             {
-                var ipCheck = config.ProxyIp;
-                if (IPAddress.TryParse(ipCheck, out IPAddress proxyIp))
-                {
-                    options.KnownProxies.Add(proxyIp);
-                }
-                else
-                {
-                    Log.Logger.Warning("Invalid Proxy IP of {IpCheck}, Not Loaded", ipCheck);
-                }
+                return;
+            }
+
+            var ipCheck = config.ProxyIp;
+            if (IPAddress.TryParse(ipCheck, out IPAddress proxyIp))
+            {
+                options.KnownProxies.Add(proxyIp);
+            }
+            else
+            {
+                Log.Warning("Invalid Proxy IP of {IpCheck}, Not Loaded", ipCheck);
             }
         });
 
@@ -98,28 +91,28 @@ internal static class ServiceCollectionExtensions
         return services;
     }
 
-    private static async Task SetCultureFromServerPreferenceAsync(IServiceProvider serviceProvider)
-    {
-        var storageService = serviceProvider.GetService<ServerPreferenceManager>();
-        if (storageService != null)
-        {
-            // TODO - should implement ServerStorageProvider to work correctly!
-            CultureInfo culture;
-            if (await storageService.GetPreference() is ServerPreference preference)
-            {
-                culture = new CultureInfo(preference.LanguageCode);
-            }
-            else
-            {
-                culture = new CultureInfo(LocalizationConstants.SupportedLanguages.FirstOrDefault()?.Code ?? "en-US");
-            }
-
-            CultureInfo.DefaultThreadCurrentCulture = culture;
-            CultureInfo.DefaultThreadCurrentUICulture = culture;
-            CultureInfo.CurrentCulture = culture;
-            CultureInfo.CurrentUICulture = culture;
-        }
-    }
+    // private static async Task SetCultureFromServerPreferenceAsync(IServiceProvider serviceProvider)
+    // {
+    //     var storageService = serviceProvider.GetService<ServerPreferenceManager>();
+    //     if (storageService != null)
+    //     {
+    //         // TODO - should implement ServerStorageProvider to work correctly!
+    //         CultureInfo culture;
+    //         if (await storageService.GetPreference() is ServerPreference preference)
+    //         {
+    //             culture = new CultureInfo(preference.LanguageCode);
+    //         }
+    //         else
+    //         {
+    //             culture = new CultureInfo(LocalizationConstants.SupportedLanguages.FirstOrDefault()?.Code ?? "en-US");
+    //         }
+    //
+    //         CultureInfo.DefaultThreadCurrentCulture = culture;
+    //         CultureInfo.DefaultThreadCurrentUICulture = culture;
+    //         CultureInfo.CurrentCulture = culture;
+    //         CultureInfo.CurrentUICulture = culture;
+    //     }
+    // }
 
     internal static IServiceCollection AddServerLocalization(this IServiceCollection services)
     {
@@ -137,7 +130,7 @@ internal static class ServiceCollectionExtensions
     }
 
     internal static void RegisterSwagger(this IServiceCollection services) =>
-        services.AddSwaggerGen(async c =>
+        services.AddSwaggerGen(c =>
         {
             //TODO - Lowercase Swagger Documents
             //c.DocumentFilter<LowercaseDocumentFilter>();
@@ -169,8 +162,6 @@ internal static class ServiceCollectionExtensions
                     }
                 });
 
-            IStringLocalizer localizer = await GetRegisteredServerLocalizerAsync<ServerCommonResources>(services);
-
             c.AddSecurityDefinition("Bearer",
                 new OpenApiSecurityScheme
                 {
@@ -179,9 +170,7 @@ internal static class ServiceCollectionExtensions
                     Type = SecuritySchemeType.ApiKey,
                     Scheme = "Bearer",
                     BearerFormat = "JWT",
-                    Description =
-                        localizer[
-                            "Input your Bearer token in this format - Bearer {your token here} to access this API"]
+                    Description = "Input your Bearer token in this format - Bearer {your token here} to access this API"
                 });
             c.AddSecurityRequirement(new OpenApiSecurityRequirement
             {
@@ -284,97 +273,46 @@ internal static class ServiceCollectionExtensions
         this IServiceCollection services,
         AppConfiguration config)
     {
-        var key = Encoding.UTF8.GetBytes(config.Secret);
         services
             .AddAuthentication(authentication =>
             {
                 authentication.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 authentication.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             })
-            .AddJwtBearer(async bearer =>
-            {
-                bearer.RequireHttpsMetadata = false;
-                bearer.SaveToken = true;
-                bearer.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(key),
-                    ValidateIssuer = false,
-                    ValidateAudience = false,
-                    RoleClaimType = ClaimTypes.Role,
-                    ClockSkew = TimeSpan.Zero
-                };
+            .AddJwtBearer();
 
-                IStringLocalizer localizer = await GetRegisteredServerLocalizerAsync<ServerCommonResources>(services);
-
-                bearer.Events = new JwtBearerEvents
-                {
-                    OnMessageReceived = context =>
-                    {
-                        StringValues accessToken = context.Request.Query["access_token"];
-
-                        // If the request is for our hub...
-                        PathString path = context.HttpContext.Request.Path;
-                        if (!string.IsNullOrEmpty(accessToken) &&
-                            path.StartsWithSegments(ApplicationConstants.SignalR.HubUrl))
-                        {
-                            // Read the token out of the query string
-                            context.Token = accessToken;
-                        }
-
-                        return Task.CompletedTask;
-                    },
-                    OnAuthenticationFailed = c =>
-                    {
-                        if (c.Exception is SecurityTokenExpiredException)
-                        {
-                            c.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
-                            c.Response.ContentType = "application/json";
-                            var result = JsonConvert.SerializeObject(Result.Fail(localizer["The Token is expired."]));
-                            return c.Response.WriteAsync(result);
-                        }
-#if DEBUG
-                        c.NoResult();
-                        c.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                        c.Response.ContentType = "text/plain";
-                        return c.Response.WriteAsync(c.Exception.ToString());
-#else
-                                c.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                                c.Response.ContentType = "application/json";
-                                var result =
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     JsonConvert.SerializeObject(Result.Fail(localizer["An unhandled error has occurred."]));
-                                return c.Response.WriteAsync(result);
-#endif
-                    },
-                    OnChallenge = context =>
-                    {
-                        context.HandleResponse();
-                        if (!context.Response.HasStarted)
-                        {
-                            context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
-                            context.Response.ContentType = "application/json";
-                            var result = JsonConvert.SerializeObject(Result.Fail(localizer["You are not Authorized."]));
-                            return context.Response.WriteAsync(result);
-                        }
-
-                        return Task.CompletedTask;
-                    },
-                    OnForbidden = context =>
-                    {
-                        context.Response.StatusCode = (int)HttpStatusCode.Forbidden;
-                        context.Response.ContentType = "application/json";
-                        var result =
-                            JsonConvert.SerializeObject(
-                                Result.Fail(localizer["You are not authorized to access this resource."]));
-                        return context.Response.WriteAsync(result);
-                    }
-                };
-            });
+        services.ConfigureOptions<ConfigureJwtBearerOptions>();
         services.AddAuthorization(options =>
         {
             Permissions.GetRegisteredPermissions().ForEach(permission => options.AddPolicy(permission,
                 policy => policy.RequireClaim(ApplicationClaimTypes.Permission, permission)));
         });
         return services;
+    }
+
+    internal static void AddExtendedAttributesValidators(this IServiceCollection services)
+    {
+        #region AddEditExtendedAttributeCommandValidator
+
+        Type addEditExtendedAttributeCommandValidatorType = typeof(AddEditExtendedAttributeCommandValidator<,,,>);
+        var validatorTypes = addEditExtendedAttributeCommandValidatorType
+            .Assembly
+            .GetExportedTypes()
+            .Where(t => t.IsClass && !t.IsAbstract && t.BaseType?.IsGenericType == true)
+            .Select(t => new { BaseGenericType = t.BaseType, CurrentType = t })
+            .Where(t => t.BaseGenericType?.GetGenericTypeDefinition() ==
+                        typeof(AddEditExtendedAttributeCommandValidator<,,,>))
+            .ToList();
+
+        foreach (var validatorType in validatorTypes)
+        {
+            Type addEditExtendedAttributeCommandType =
+                typeof(AddEditExtendedAttributeCommand<,,,>).MakeGenericType(validatorType.BaseGenericType
+                    .GetGenericArguments());
+            Type iValidator = typeof(IValidator<>).MakeGenericType(addEditExtendedAttributeCommandType);
+            services.AddScoped(iValidator, validatorType.CurrentType);
+        }
+
+        #endregion AddEditExtendedAttributeCommandValidator
     }
 }

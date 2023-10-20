@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using BlazorHero.CleanArchitecture.Application.Behaviors;
 using BlazorHero.CleanArchitecture.Application.Features.ExtendedAttributes.Commands.AddEdit;
 using BlazorHero.CleanArchitecture.Application.Features.ExtendedAttributes.Commands.Delete;
 using BlazorHero.CleanArchitecture.Application.Features.ExtendedAttributes.Queries.Export;
@@ -19,7 +20,7 @@ public static class ServiceCollectionExtensions
         services.AddAutoMapper(Assembly.GetExecutingAssembly());
         //services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
         services.AddMediatR(config => config.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
-        //services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+        services.AddScoped(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>));
     }
 
     public static void AddExtendedAttributesHandlers(this IServiceCollection services)

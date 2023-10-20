@@ -4,9 +4,9 @@ namespace BlazorHero.CleanArchitecture.Application.Enums;
 
 public enum UploadType : byte
 {
-    [Description(@"Images\Products")] Product,
+    [Description("Images/Products")] Product,
 
-    [Description(@"Images\ProfilePictures")]
+    [Description("Images/ProfilePictures")]
     ProfilePicture,
 
     [Description("Documents")] Document
