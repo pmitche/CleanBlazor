@@ -7,4 +7,6 @@ public static class LocalizationConstants
         new() { Code = "en-US", DisplayName = "English" },
         new() { Code = "fr-FR", DisplayName = "French" }
     };
+
+    public static LanguageCode DefaultLanguage => SupportedLanguages.First(x => x.Code == "en-US");
 }

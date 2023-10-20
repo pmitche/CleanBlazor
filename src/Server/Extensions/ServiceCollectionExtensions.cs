@@ -37,16 +37,6 @@ namespace BlazorHero.CleanArchitecture.Server.Extensions;
 
 internal static class ServiceCollectionExtensions
 {
-    // private static async Task<IStringLocalizer> GetRegisteredServerLocalizerAsync<T>(this IServiceCollection services)
-    //     where T : class
-    // {
-    //     ServiceProvider serviceProvider = services.BuildServiceProvider();
-    //     await SetCultureFromServerPreferenceAsync(serviceProvider);
-    //     var localizer = serviceProvider.GetService<IStringLocalizer<T>>();
-    //     await serviceProvider.DisposeAsync();
-    //     return localizer;
-    // }
-
     internal static IServiceCollection AddForwarding(this IServiceCollection services, IConfiguration configuration)
     {
         IConfigurationSection applicationSettingsConfiguration = configuration.GetSection(nameof(AppConfiguration));
@@ -90,29 +80,6 @@ internal static class ServiceCollectionExtensions
 
         return services;
     }
-
-    // private static async Task SetCultureFromServerPreferenceAsync(IServiceProvider serviceProvider)
-    // {
-    //     var storageService = serviceProvider.GetService<ServerPreferenceManager>();
-    //     if (storageService != null)
-    //     {
-    //         // TODO - should implement ServerStorageProvider to work correctly!
-    //         CultureInfo culture;
-    //         if (await storageService.GetPreference() is ServerPreference preference)
-    //         {
-    //             culture = new CultureInfo(preference.LanguageCode);
-    //         }
-    //         else
-    //         {
-    //             culture = new CultureInfo(LocalizationConstants.SupportedLanguages.FirstOrDefault()?.Code ?? "en-US");
-    //         }
-    //
-    //         CultureInfo.DefaultThreadCurrentCulture = culture;
-    //         CultureInfo.DefaultThreadCurrentUICulture = culture;
-    //         CultureInfo.CurrentCulture = culture;
-    //         CultureInfo.CurrentUICulture = culture;
-    //     }
-    // }
 
     internal static IServiceCollection AddServerLocalization(this IServiceCollection services)
     {

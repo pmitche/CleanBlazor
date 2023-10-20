@@ -10,6 +10,5 @@ public record ClientPreference : IPreference
     public bool IsDrawerOpen { get; set; }
     public string PrimaryColor { get; set; }
 
-    public string LanguageCode { get; set; } =
-        LocalizationConstants.SupportedLanguages.FirstOrDefault()?.Code ?? "en-US";
+    public string LanguageCode { get; set; } = LocalizationConstants.DefaultLanguage.Code;
 }

@@ -57,7 +57,7 @@ public class Startup
         services.AddLazyCache();
     }
 
-    public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IStringLocalizer<Startup> localizer)
+    public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IServiceProvider serviceProvider)
     {
         app.UseSerilogRequestLogging();
         app.UseForwarding(_configuration);
@@ -70,6 +70,7 @@ public class Startup
             FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "Files")),
             RequestPath = new PathString("/Files")
         });
+        app.UseServerCultureFromPreferences(serviceProvider);
         app.UseRequestLocalizationByCulture();
         app.UseRouting();
         app.UseAuthentication();
@@ -77,7 +78,7 @@ public class Startup
         app.UseHangfireDashboard("/jobs",
             new DashboardOptions
             {
-                DashboardTitle = localizer["BlazorHero Jobs"],
+                DashboardTitle = "BlazorHero Jobs",
                 Authorization = new[] { new HangfireAuthorizationFilter() }
             });
         app.UseEndpoints();

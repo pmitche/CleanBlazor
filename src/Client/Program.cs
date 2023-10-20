@@ -26,7 +26,7 @@ public static class Program
             }
             else
             {
-                culture = new CultureInfo(LocalizationConstants.SupportedLanguages.FirstOrDefault()?.Code ?? "en-US");
+                culture = new CultureInfo(LocalizationConstants.DefaultLanguage.Code);
             }
 
             CultureInfo.DefaultThreadCurrentCulture = culture;

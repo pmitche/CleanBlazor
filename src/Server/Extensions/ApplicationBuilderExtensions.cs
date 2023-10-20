@@ -2,10 +2,13 @@
 using BlazorHero.CleanArchitecture.Application.Configurations;
 using BlazorHero.CleanArchitecture.Application.Interfaces.Services;
 using BlazorHero.CleanArchitecture.Server.Hubs;
+using BlazorHero.CleanArchitecture.Server.Managers.Preferences;
 using BlazorHero.CleanArchitecture.Server.Middlewares;
+using BlazorHero.CleanArchitecture.Server.Settings;
 using BlazorHero.CleanArchitecture.Shared.Constants.Application;
 using BlazorHero.CleanArchitecture.Shared.Constants.Localization;
 using Microsoft.AspNetCore.Localization;
+using Serilog;
 
 namespace BlazorHero.CleanArchitecture.Server.Extensions;
 
@@ -56,15 +59,45 @@ internal static class ApplicationBuilderExtensions
             endpoints.MapHub<SignalRHub>(ApplicationConstants.SignalR.HubUrl);
         });
 
+    internal static IApplicationBuilder UseServerCultureFromPreferences(
+        this IApplicationBuilder app,
+        IServiceProvider serviceProvider)
+    {
+        var storageService = serviceProvider.GetService<ServerPreferenceManager>();
+        if (storageService != null)
+        {
+            // TODO - should implement ServerStorageProvider to work correctly!
+            CultureInfo culture;
+            if (storageService.GetPreference().GetAwaiter().GetResult() is ServerPreference preference)
+            {
+                culture = new CultureInfo(preference.LanguageCode);
+            }
+            else
+            {
+                culture = new CultureInfo(LocalizationConstants.DefaultLanguage.Code);
+            }
+
+            CultureInfo.DefaultThreadCurrentCulture = culture;
+            CultureInfo.DefaultThreadCurrentUICulture = culture;
+            CultureInfo.CurrentCulture = culture;
+            CultureInfo.CurrentUICulture = culture;
+
+            Log.Information("Configured {Culture} as server culture", culture.Name);
+        }
+
+        return app;
+    }
+
     internal static IApplicationBuilder UseRequestLocalizationByCulture(this IApplicationBuilder app)
     {
         CultureInfo[] supportedCultures =
             LocalizationConstants.SupportedLanguages.Select(l => new CultureInfo(l.Code)).ToArray();
+
         app.UseRequestLocalization(options =>
         {
             options.SupportedUICultures = supportedCultures;
             options.SupportedCultures = supportedCultures;
-            options.DefaultRequestCulture = new RequestCulture(supportedCultures[0]);
+            options.DefaultRequestCulture = new RequestCulture(LocalizationConstants.DefaultLanguage.Code);
             options.ApplyCurrentCultureToResponseHeaders = true;
         });
 
