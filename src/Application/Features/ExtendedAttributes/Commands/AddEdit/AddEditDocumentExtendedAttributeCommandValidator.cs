@@ -2,7 +2,7 @@
 using BlazorHero.CleanArchitecture.Domain.Entities.Misc;
 using Microsoft.Extensions.Localization;
 
-namespace BlazorHero.CleanArchitecture.Application.Validators.Features.ExtendedAttributes.Commands.AddEdit;
+namespace BlazorHero.CleanArchitecture.Application.Features.ExtendedAttributes.Commands.AddEdit;
 
 public class AddEditDocumentExtendedAttributeCommandValidator : AddEditExtendedAttributeCommandValidator<int, int,
     Document, DocumentExtendedAttribute>

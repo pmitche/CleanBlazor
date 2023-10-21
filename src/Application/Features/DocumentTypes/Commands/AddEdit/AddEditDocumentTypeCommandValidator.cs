@@ -1,8 +1,7 @@
-﻿using BlazorHero.CleanArchitecture.Application.Features.DocumentTypes.Commands.AddEdit;
-using FluentValidation;
+﻿using FluentValidation;
 using Microsoft.Extensions.Localization;
 
-namespace BlazorHero.CleanArchitecture.Application.Validators.Features.DocumentTypes.Commands.AddEdit;
+namespace BlazorHero.CleanArchitecture.Application.Features.DocumentTypes.Commands.AddEdit;
 
 public class AddEditDocumentTypeCommandValidator : AbstractValidator<AddEditDocumentTypeCommand>
 {

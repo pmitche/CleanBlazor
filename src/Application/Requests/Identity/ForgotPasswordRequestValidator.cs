@@ -1,8 +1,7 @@
-﻿using BlazorHero.CleanArchitecture.Application.Requests.Identity;
-using FluentValidation;
+﻿using FluentValidation;
 using Microsoft.Extensions.Localization;
 
-namespace BlazorHero.CleanArchitecture.Application.Validators.Requests.Identity;
+namespace BlazorHero.CleanArchitecture.Application.Requests.Identity;
 
 public class ForgotPasswordRequestValidator : AbstractValidator<ForgotPasswordRequest>
 {
