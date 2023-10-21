@@ -65,6 +65,7 @@ public class Startup
         app.UseHttpsRedirection();
         app.UseMiddleware<ErrorHandlerMiddleware>();
         app.UseBlazorFrameworkFiles();
+        app.UseStaticFiles();
         app.UseStaticFiles(new StaticFileOptions
         {
             FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "Files")),
