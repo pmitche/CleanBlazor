@@ -1,4 +1,5 @@
 using FluentAssertions;
+using MediatR;
 using NetArchTest.Rules;
 using Domain = BlazorHero.CleanArchitecture.Domain;
 using Application = BlazorHero.CleanArchitecture.Application;
@@ -202,7 +203,7 @@ public class ArchitectureTests
     }
 
     [Fact]
-    public void Handlers_Should_Have_DependencyOnDomainProject()
+    public void Handlers_Should_HaveDependencyOnDomainProject()
     {
         // Arrange
         var assembly = typeof(Application.AssemblyReference).Assembly;
@@ -218,6 +219,25 @@ public class ArchitectureTests
 
         // Assert
         result.IsSuccessful.Should().BeTrue();
+    }
+
+    [Fact]
+    public void Requests_Should_Not_HaveDependencyOnDataAnnotations()
+    {
+        // Arrange
+        var assembly = typeof(Application.AssemblyReference).Assembly;
+        const string dataAnnotationsNameSpace = "System.ComponentModel.DataAnnotations";
+
+        var result = Types
+            .InAssembly(assembly)
+            .That()
+            .ImplementInterface(typeof(IRequest<>))
+            .Should()
+            .NotHaveDependencyOn(dataAnnotationsNameSpace)
+            .GetResult();
+
+        // Assert
+        result.IsSuccessful.Should().BeTrue("FluentValidation should be used instead of DataAnnotations");
     }
 
     [Fact]
@@ -246,6 +266,6 @@ public class ArchitectureTests
         // Utilities, Identity, Communication
 
         // Assert
-        result.IsSuccessful.Should().BeTrue();
+        result.IsSuccessful.Should().BeTrue("All controllers should be slim -- use MediatR to handle requests");
     }
 }

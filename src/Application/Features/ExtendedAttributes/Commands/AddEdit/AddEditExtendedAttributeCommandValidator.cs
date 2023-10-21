@@ -26,7 +26,7 @@ public abstract class
         RuleFor(request => request.EntityId)
             .NotEqual(default(TEntityId)).WithMessage(localizer["Entity is required!"]);
         RuleFor(request => request.Key)
-            .Must(x => !string.IsNullOrWhiteSpace(x)).WithMessage(localizer["Key is required!"]);
+            .NotEmpty().WithMessage(localizer["Key is required!"]);
 
         When(request => request.Type == EntityExtendedAttributeType.Decimal,
             () =>

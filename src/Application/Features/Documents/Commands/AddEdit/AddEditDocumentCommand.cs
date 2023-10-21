@@ -13,17 +13,11 @@ namespace BlazorHero.CleanArchitecture.Application.Features.Documents.Commands.A
 public class AddEditDocumentCommand : IRequest<Result<int>>
 {
     public int Id { get; set; }
-
-    [Required] public string Title { get; set; }
-
-    [Required] public string Description { get; set; }
-
+    public string Title { get; set; }
+    public string Description { get; set; }
     public bool IsPublic { get; set; }
-
-    [Required] public string Url { get; set; }
-
-    [Required] public int DocumentTypeId { get; set; }
-
+    public string Url { get; set; }
+    public int DocumentTypeId { get; set; }
     public UploadRequest UploadRequest { get; set; }
 }
 

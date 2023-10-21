@@ -8,8 +8,14 @@ public class UpdateProfileRequestValidator : AbstractValidator<UpdateProfileRequ
     public UpdateProfileRequestValidator(IStringLocalizer<UpdateProfileRequestValidator> localizer)
     {
         RuleFor(request => request.FirstName)
-            .Must(x => !string.IsNullOrWhiteSpace(x)).WithMessage(localizer["First Name is required"]);
+            .NotEmpty().WithMessage(localizer["First Name is required"]);
         RuleFor(request => request.LastName)
-            .Must(x => !string.IsNullOrWhiteSpace(x)).WithMessage(localizer["Last Name is required"]);
+            .NotEmpty().WithMessage(localizer["Last Name is required"]);
+        RuleFor(request => request.PhoneNumber)
+            .NotEmpty().MinimumLength(6).WithMessage("Phone Number is not correct")
+            .When(x => x.PhoneNumber is not null);
+        RuleFor(request => request.Email)
+            .EmailAddress().WithMessage(localizer["Email is not correct"])
+            .When(x => !string.IsNullOrWhiteSpace(x.Email));
     }
 }

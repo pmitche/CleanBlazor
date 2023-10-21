@@ -7,5 +7,5 @@ public class RoleRequestValidator : AbstractValidator<RoleRequest>
 {
     public RoleRequestValidator(IStringLocalizer<RoleRequestValidator> localizer) =>
         RuleFor(request => request.Name)
-            .Must(x => !string.IsNullOrWhiteSpace(x)).WithMessage(localizer["Name is required"]);
+            .NotEmpty().WithMessage(localizer["Name is required"]);
 }

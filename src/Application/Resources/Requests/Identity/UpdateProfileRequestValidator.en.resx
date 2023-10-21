@@ -128,4 +128,10 @@
   <data name="Last Name is required" xml:space="preserve">
     <value>Last Name is required</value>
   </data>
+  <data name="Email is not correct" xml:space="preserve">
+    <value>Email is not correct</value>
+  </data>
+  <data name="Phone Number is not correct" xml:space="preserve">
+    <value>PhoneNumber is not correct</value>
+  </data>
 </root>

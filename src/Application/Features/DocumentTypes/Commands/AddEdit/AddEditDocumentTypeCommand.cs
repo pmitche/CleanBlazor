@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using AutoMapper;
+﻿using AutoMapper;
 using BlazorHero.CleanArchitecture.Application.Interfaces.Repositories;
 using BlazorHero.CleanArchitecture.Domain.Entities.Misc;
 using BlazorHero.CleanArchitecture.Shared.Constants.Application;
@@ -13,10 +12,8 @@ namespace BlazorHero.CleanArchitecture.Application.Features.DocumentTypes.Comman
 public class AddEditDocumentTypeCommand : IRequest<Result<int>>
 {
     public int Id { get; set; }
-
-    [Required] public string Name { get; set; }
-
-    [Required] public string Description { get; set; }
+    public string Name { get; set; }
+    public string Description { get; set; }
 }
 
 internal class AddEditDocumentTypeCommandHandler : IRequestHandler<AddEditDocumentTypeCommand, Result<int>>

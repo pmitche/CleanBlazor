@@ -1,5 +1,4 @@
 ﻿#nullable enable
-using System.ComponentModel.DataAnnotations;
 using AutoMapper;
 using BlazorHero.CleanArchitecture.Application.Interfaces.Repositories;
 using BlazorHero.CleanArchitecture.Domain.Contracts;
@@ -33,7 +32,6 @@ public class AddEditExtendedAttributeCommand<TId, TEntityId, TEntity, TExtendedA
 
     public EntityExtendedAttributeType Type { get; set; }
 
-    [Required(AllowEmptyStrings = false)]
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
     public string Key { get; set; }
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.

@@ -8,8 +8,8 @@ public class AddEditDocumentTypeCommandValidator : AbstractValidator<AddEditDocu
     public AddEditDocumentTypeCommandValidator(IStringLocalizer<AddEditDocumentTypeCommandValidator> localizer)
     {
         RuleFor(request => request.Name)
-            .Must(x => !string.IsNullOrWhiteSpace(x)).WithMessage(localizer["Name is required!"]);
+            .NotEmpty().WithMessage(localizer["Name is required!"]);
         RuleFor(request => request.Description)
-            .Must(x => !string.IsNullOrWhiteSpace(x)).WithMessage(localizer["Description is required!"]);
+            .NotEmpty().WithMessage(localizer["Description is required!"]);
     }
 }

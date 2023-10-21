@@ -7,6 +7,6 @@ public class ForgotPasswordRequestValidator : AbstractValidator<ForgotPasswordRe
 {
     public ForgotPasswordRequestValidator(IStringLocalizer<ForgotPasswordRequestValidator> localizer) =>
         RuleFor(request => request.Email)
-            .Must(x => !string.IsNullOrWhiteSpace(x)).WithMessage(localizer["Email is required"])
+            .NotEmpty().WithMessage(localizer["Email is required"])
             .EmailAddress().WithMessage(localizer["Email is not correct"]);
 }

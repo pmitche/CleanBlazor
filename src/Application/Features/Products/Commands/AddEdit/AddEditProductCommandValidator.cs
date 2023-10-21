@@ -8,11 +8,11 @@ public class AddEditProductCommandValidator : AbstractValidator<AddEditProductCo
     public AddEditProductCommandValidator(IStringLocalizer<AddEditProductCommandValidator> localizer)
     {
         RuleFor(request => request.Name)
-            .Must(x => !string.IsNullOrWhiteSpace(x)).WithMessage(localizer["Name is required!"]);
+            .NotEmpty().WithMessage(localizer["Name is required!"]);
         RuleFor(request => request.Barcode)
-            .Must(x => !string.IsNullOrWhiteSpace(x)).WithMessage(localizer["Barcode is required!"]);
+            .NotEmpty().WithMessage(localizer["Barcode is required!"]);
         RuleFor(request => request.Description)
-            .Must(x => !string.IsNullOrWhiteSpace(x)).WithMessage(localizer["Description is required!"]);
+            .NotEmpty().WithMessage(localizer["Description is required!"]);
         RuleFor(request => request.BrandId)
             .GreaterThan(0).WithMessage(localizer["Brand is required!"]);
         RuleFor(request => request.Rate)
