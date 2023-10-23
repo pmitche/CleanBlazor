@@ -12,14 +12,14 @@ using Microsoft.Extensions.Primitives;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 
-namespace BlazorHero.CleanArchitecture.Server.Extensions;
+namespace BlazorHero.CleanArchitecture.Server.Settings;
 
-internal class ConfigureJwtBearerOptions : IConfigureNamedOptions<JwtBearerOptions>
+internal class JwtBearerOptionsSetup : IConfigureNamedOptions<JwtBearerOptions>
 {
     private readonly IStringLocalizer<ServerCommonResources> _localizer;
     private readonly IOptions<AppConfiguration> _appConfiguration;
 
-    public ConfigureJwtBearerOptions(
+    public JwtBearerOptionsSetup(
         IStringLocalizer<ServerCommonResources> localizer,
         IOptions<AppConfiguration> appConfiguration)
     {

@@ -29,7 +29,7 @@ internal static class ApplicationBuilderExtensions
 
     internal static IApplicationBuilder UseForwarding(this IApplicationBuilder app, IConfiguration configuration)
     {
-        AppConfiguration config = GetApplicationSettings(configuration);
+        var config = configuration.GetSection(nameof(AppConfiguration)).Get<AppConfiguration>();
         if (config.BehindSslProxy)
         {
             app.UseCors();
@@ -118,11 +118,5 @@ internal static class ApplicationBuilderExtensions
         }
 
         return app;
-    }
-
-    private static AppConfiguration GetApplicationSettings(IConfiguration configuration)
-    {
-        IConfigurationSection applicationSettingsConfiguration = configuration.GetSection(nameof(AppConfiguration));
-        return applicationSettingsConfiguration.Get<AppConfiguration>();
     }
 }

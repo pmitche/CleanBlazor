@@ -1,5 +1,6 @@
-using BlazorHero.CleanArchitecture.Application.Extensions;
-using BlazorHero.CleanArchitecture.Infrastructure.Extensions;
+using BlazorHero.CleanArchitecture.Application;
+using BlazorHero.CleanArchitecture.Infrastructure;
+using BlazorHero.CleanArchitecture.Infrastructure.Shared;
 using BlazorHero.CleanArchitecture.Server.Extensions;
 using BlazorHero.CleanArchitecture.Server.Filters;
 using BlazorHero.CleanArchitecture.Server.Managers.Preferences;
@@ -7,7 +8,6 @@ using BlazorHero.CleanArchitecture.Server.Middlewares;
 using Hangfire;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.FileProviders;
-using Microsoft.Extensions.Localization;
 using Serilog;
 
 namespace BlazorHero.CleanArchitecture.Server;
@@ -23,30 +23,18 @@ public class Startup
 
     public void ConfigureServices(IServiceCollection services)
     {
-        services.AddForwarding(_configuration);
         services.AddLocalization(options => { options.ResourcesPath = "Resources"; });
-        services.AddCurrentUserService();
-        services.AddSerialization();
-        services.AddDatabase(_configuration);
-        services.AddServerStorage(); //TODO - should implement ServerStorageProvider to work correctly!
-        services.AddScoped<ServerPreferenceManager>();
-        services.AddServerLocalization();
-        services.AddIdentity();
-        services.AddJwtAuthentication(services.GetApplicationSettings(_configuration));
-        services.AddSignalR();
-        services.AddApplicationLayer();
-        services.AddApplicationServices();
-        services.AddRepositories();
-        services.AddExtendedAttributesUnitOfWork();
+
+        services.AddApplication(_configuration);
+        services.AddInfrastructure(_configuration);
         services.AddSharedInfrastructure(_configuration);
-        services.RegisterSwagger();
-        services.AddInfrastructureMappings();
+        services.AddServer(_configuration);
+
+        services.AddScoped<ServerPreferenceManager>();
+        services.AddSignalR();
         services.AddHangfire(x => x.UseSqlServerStorage(_configuration.GetConnectionString("DefaultConnection")));
         services.AddHangfireServer();
         services.AddControllers();
-        services.AddFluentValidators();
-        services.AddExtendedAttributesValidators();
-        services.AddExtendedAttributesHandlers();
         services.AddRazorPages();
         services.AddApiVersioning(config =>
         {
@@ -59,7 +47,6 @@ public class Startup
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IServiceProvider serviceProvider)
     {
-        app.UseSerilogRequestLogging();
         app.UseForwarding(_configuration);
         app.UseExceptionHandling(env);
         app.UseHttpsRedirection();
@@ -73,6 +60,7 @@ public class Startup
         });
         app.UseServerCultureFromPreferences(serviceProvider);
         app.UseRequestLocalizationByCulture();
+        app.UseSerilogRequestLogging();
         app.UseRouting();
         app.UseAuthentication();
         app.UseAuthorization();

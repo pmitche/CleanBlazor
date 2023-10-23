@@ -25,7 +25,6 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="FluentValidation.AspNetCore"/>
     <PackageReference Include="Hangfire"/>
     <PackageReference Include="LazyCache.AspNetCore"/>
     <PackageReference Include="MediatR"/>
@@ -36,6 +35,7 @@
     <PackageReference Include="Serilog.Enrichers.Process" />
     <PackageReference Include="Serilog.Enrichers.Thread" />
     <PackageReference Include="Serilog.Expressions" />
+    <PackageReference Include="SharpGrip.FluentValidation.AutoValidation.Mvc" />
     <PackageReference Include="Swashbuckle.AspNetCore"/>
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning"/>
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning.ApiExplorer"/>
