@@ -1,14 +1,14 @@
 ﻿using AutoMapper;
+using BlazorHero.CleanArchitecture.Application.Interfaces.Messaging;
 using BlazorHero.CleanArchitecture.Application.Interfaces.Repositories;
 using BlazorHero.CleanArchitecture.Domain.Entities.Catalog;
 using BlazorHero.CleanArchitecture.Shared.Constants.Application;
 using BlazorHero.CleanArchitecture.Shared.Wrapper;
-using MediatR;
 using Microsoft.Extensions.Localization;
 
 namespace BlazorHero.CleanArchitecture.Application.Features.Brands.Commands.AddEdit;
 
-public class AddEditBrandCommand : IRequest<Result<int>>
+public class AddEditBrandCommand : ICommand<Result<int>>
 {
     public int Id { get; set; }
     public string Name { get; set; }
@@ -16,7 +16,7 @@ public class AddEditBrandCommand : IRequest<Result<int>>
     public decimal Tax { get; set; }
 }
 
-internal class AddEditBrandCommandHandler : IRequestHandler<AddEditBrandCommand, Result<int>>
+internal class AddEditBrandCommandHandler : ICommandHandler<AddEditBrandCommand, Result<int>>
 {
     private readonly IStringLocalizer<AddEditBrandCommandHandler> _localizer;
     private readonly IMapper _mapper;

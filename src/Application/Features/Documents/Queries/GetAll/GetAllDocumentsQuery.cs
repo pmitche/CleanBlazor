@@ -1,19 +1,20 @@
 ﻿using System.Linq.Expressions;
 using BlazorHero.CleanArchitecture.Application.Extensions;
+using BlazorHero.CleanArchitecture.Application.Interfaces.Messaging;
 using BlazorHero.CleanArchitecture.Application.Interfaces.Repositories;
 using BlazorHero.CleanArchitecture.Application.Interfaces.Services;
 using BlazorHero.CleanArchitecture.Application.Specifications.Misc;
+using BlazorHero.CleanArchitecture.Contracts.Documents;
 using BlazorHero.CleanArchitecture.Domain.Entities.Misc;
 using BlazorHero.CleanArchitecture.Shared.Wrapper;
-using MediatR;
 
 namespace BlazorHero.CleanArchitecture.Application.Features.Documents.Queries.GetAll;
 
 public record GetAllDocumentsQuery(int PageNumber, int PageSize, string SearchString)
-    : IRequest<PaginatedResult<GetAllDocumentsResponse>>;
+    : IQuery<PaginatedResult<GetAllDocumentsResponse>>;
 
 internal class
-    GetAllDocumentsQueryHandler : IRequestHandler<GetAllDocumentsQuery, PaginatedResult<GetAllDocumentsResponse>>
+    GetAllDocumentsQueryHandler : IQueryHandler<GetAllDocumentsQuery, PaginatedResult<GetAllDocumentsResponse>>
 {
     private readonly ICurrentUserService _currentUserService;
     private readonly IUnitOfWork<int> _unitOfWork;

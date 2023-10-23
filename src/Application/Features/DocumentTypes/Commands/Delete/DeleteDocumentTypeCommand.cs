@@ -1,15 +1,15 @@
-﻿using BlazorHero.CleanArchitecture.Application.Interfaces.Repositories;
+﻿using BlazorHero.CleanArchitecture.Application.Interfaces.Messaging;
+using BlazorHero.CleanArchitecture.Application.Interfaces.Repositories;
 using BlazorHero.CleanArchitecture.Domain.Entities.Misc;
 using BlazorHero.CleanArchitecture.Shared.Constants.Application;
 using BlazorHero.CleanArchitecture.Shared.Wrapper;
-using MediatR;
 using Microsoft.Extensions.Localization;
 
 namespace BlazorHero.CleanArchitecture.Application.Features.DocumentTypes.Commands.Delete;
 
-public record DeleteDocumentTypeCommand(int Id) : IRequest<Result<int>>;
+public record DeleteDocumentTypeCommand(int Id) : ICommand<Result<int>>;
 
-internal class DeleteDocumentTypeCommandHandler : IRequestHandler<DeleteDocumentTypeCommand, Result<int>>
+internal class DeleteDocumentTypeCommandHandler : ICommandHandler<DeleteDocumentTypeCommand, Result<int>>
 {
     private readonly IDocumentRepository _documentRepository;
     private readonly IStringLocalizer<DeleteDocumentTypeCommandHandler> _localizer;

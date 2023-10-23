@@ -1,16 +1,16 @@
 ﻿using AutoMapper;
+using BlazorHero.CleanArchitecture.Application.Interfaces.Messaging;
 using BlazorHero.CleanArchitecture.Application.Interfaces.Repositories;
 using BlazorHero.CleanArchitecture.Application.Interfaces.Services;
-using BlazorHero.CleanArchitecture.Application.Requests;
+using BlazorHero.CleanArchitecture.Contracts;
 using BlazorHero.CleanArchitecture.Domain.Entities.Catalog;
 using BlazorHero.CleanArchitecture.Shared.Wrapper;
-using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 
 namespace BlazorHero.CleanArchitecture.Application.Features.Products.Commands.AddEdit;
 
-public class AddEditProductCommand : IRequest<Result<int>>
+public class AddEditProductCommand : ICommand<Result<int>>
 {
     public int Id { get; set; }
     public string Name { get; set; }
@@ -22,7 +22,7 @@ public class AddEditProductCommand : IRequest<Result<int>>
     public UploadRequest UploadRequest { get; set; }
 }
 
-internal class AddEditProductCommandHandler : IRequestHandler<AddEditProductCommand, Result<int>>
+internal class AddEditProductCommandHandler : ICommandHandler<AddEditProductCommand, Result<int>>
 {
     private readonly IStringLocalizer<AddEditProductCommandHandler> _localizer;
     private readonly IMapper _mapper;

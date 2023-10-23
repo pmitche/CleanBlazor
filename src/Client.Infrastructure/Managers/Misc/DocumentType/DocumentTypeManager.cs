@@ -3,6 +3,7 @@ using BlazorHero.CleanArchitecture.Application.Features.DocumentTypes.Commands.A
 using BlazorHero.CleanArchitecture.Application.Features.DocumentTypes.Queries.GetAll;
 using BlazorHero.CleanArchitecture.Client.Infrastructure.Extensions;
 using BlazorHero.CleanArchitecture.Client.Infrastructure.Routes;
+using BlazorHero.CleanArchitecture.Contracts.Documents;
 using BlazorHero.CleanArchitecture.Shared.Wrapper;
 
 namespace BlazorHero.CleanArchitecture.Client.Infrastructure.Managers.Misc.DocumentType;

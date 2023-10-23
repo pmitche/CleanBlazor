@@ -1,15 +1,15 @@
-﻿using BlazorHero.CleanArchitecture.Application.Interfaces.Repositories;
+﻿using BlazorHero.CleanArchitecture.Application.Interfaces.Messaging;
+using BlazorHero.CleanArchitecture.Application.Interfaces.Repositories;
 using BlazorHero.CleanArchitecture.Domain.Entities.Catalog;
 using BlazorHero.CleanArchitecture.Shared.Constants.Application;
 using BlazorHero.CleanArchitecture.Shared.Wrapper;
-using MediatR;
 using Microsoft.Extensions.Localization;
 
 namespace BlazorHero.CleanArchitecture.Application.Features.Brands.Commands.Delete;
 
-public record DeleteBrandCommand(int Id) : IRequest<Result<int>>;
+public record DeleteBrandCommand(int Id) : ICommand<Result<int>>;
 
-internal class DeleteBrandCommandHandler : IRequestHandler<DeleteBrandCommand, Result<int>>
+internal class DeleteBrandCommandHandler : ICommandHandler<DeleteBrandCommand, Result<int>>
 {
     private readonly IStringLocalizer<DeleteBrandCommandHandler> _localizer;
     private readonly IProductRepository _productRepository;

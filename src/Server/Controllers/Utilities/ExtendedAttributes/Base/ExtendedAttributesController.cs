@@ -4,6 +4,7 @@ using BlazorHero.CleanArchitecture.Application.Features.ExtendedAttributes.Queri
 using BlazorHero.CleanArchitecture.Application.Features.ExtendedAttributes.Queries.GetAll;
 using BlazorHero.CleanArchitecture.Application.Features.ExtendedAttributes.Queries.GetAllByEntityId;
 using BlazorHero.CleanArchitecture.Application.Features.ExtendedAttributes.Queries.GetById;
+using BlazorHero.CleanArchitecture.Contracts.Documents;
 using BlazorHero.CleanArchitecture.Domain.Contracts;
 using BlazorHero.CleanArchitecture.Shared.Wrapper;
 using Microsoft.AspNetCore.Mvc;

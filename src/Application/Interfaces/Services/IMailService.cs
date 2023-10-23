@@ -1,4 +1,4 @@
-﻿using BlazorHero.CleanArchitecture.Application.Requests.Mail;
+﻿using BlazorHero.CleanArchitecture.Contracts.Mail;
 
 namespace BlazorHero.CleanArchitecture.Application.Interfaces.Services;
 

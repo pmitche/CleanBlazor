@@ -3,6 +3,7 @@ using BlazorHero.CleanArchitecture.Application.Features.DocumentTypes.Commands.D
 using BlazorHero.CleanArchitecture.Application.Features.DocumentTypes.Queries.Export;
 using BlazorHero.CleanArchitecture.Application.Features.DocumentTypes.Queries.GetAll;
 using BlazorHero.CleanArchitecture.Application.Features.DocumentTypes.Queries.GetById;
+using BlazorHero.CleanArchitecture.Contracts.Documents;
 using BlazorHero.CleanArchitecture.Shared.Constants.Permission;
 using BlazorHero.CleanArchitecture.Shared.Wrapper;
 using Microsoft.AspNetCore.Authorization;

@@ -1,6 +1,6 @@
 ﻿@page "/identity/roles"
 @using Microsoft.Extensions.Localization
-@using BlazorHero.CleanArchitecture.Application.Responses.Identity
+@using BlazorHero.CleanArchitecture.Contracts.Identity
 @attribute [Authorize(Policy = Permissions.Roles.View)]
 @inject IStringLocalizer<Roles> Localizer
 

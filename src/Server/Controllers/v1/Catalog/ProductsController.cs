@@ -3,6 +3,7 @@ using BlazorHero.CleanArchitecture.Application.Features.Products.Commands.Delete
 using BlazorHero.CleanArchitecture.Application.Features.Products.Queries.Export;
 using BlazorHero.CleanArchitecture.Application.Features.Products.Queries.GetAllPaged;
 using BlazorHero.CleanArchitecture.Application.Features.Products.Queries.GetProductImage;
+using BlazorHero.CleanArchitecture.Contracts.Catalog;
 using BlazorHero.CleanArchitecture.Shared.Constants.Permission;
 using BlazorHero.CleanArchitecture.Shared.Wrapper;
 using Microsoft.AspNetCore.Authorization;

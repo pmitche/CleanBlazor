@@ -1,4 +1,4 @@
-﻿using BlazorHero.CleanArchitecture.Application.Requests;
+﻿using BlazorHero.CleanArchitecture.Contracts;
 
 namespace BlazorHero.CleanArchitecture.Application.Interfaces.Services;
 

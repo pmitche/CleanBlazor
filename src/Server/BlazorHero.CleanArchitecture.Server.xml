@@ -29,14 +29,14 @@
             <param name="message"></param>
             <returns>Status 200 OK</returns>
         </member>
-        <member name="M:BlazorHero.CleanArchitecture.Server.Controllers.Identity.AccountController.UpdateProfile(BlazorHero.CleanArchitecture.Application.Requests.Identity.UpdateProfileRequest)">
+        <member name="M:BlazorHero.CleanArchitecture.Server.Controllers.Identity.AccountController.UpdateProfile(BlazorHero.CleanArchitecture.Contracts.Identity.UpdateProfileRequest)">
             <summary>
                 Update Profile
             </summary>
             <param name="model"></param>
             <returns>Status 200 OK</returns>
         </member>
-        <member name="M:BlazorHero.CleanArchitecture.Server.Controllers.Identity.AccountController.ChangePassword(BlazorHero.CleanArchitecture.Application.Requests.Identity.ChangePasswordRequest)">
+        <member name="M:BlazorHero.CleanArchitecture.Server.Controllers.Identity.AccountController.ChangePassword(BlazorHero.CleanArchitecture.Contracts.Identity.ChangePasswordRequest)">
             <summary>
                 Change Password
             </summary>
@@ -50,7 +50,7 @@
             <param name="userId"></param>
             <returns>Status 200 OK </returns>
         </member>
-        <member name="M:BlazorHero.CleanArchitecture.Server.Controllers.Identity.AccountController.UpdateProfilePictureAsync(BlazorHero.CleanArchitecture.Application.Requests.Identity.UpdateProfilePictureRequest)">
+        <member name="M:BlazorHero.CleanArchitecture.Server.Controllers.Identity.AccountController.UpdateProfilePictureAsync(BlazorHero.CleanArchitecture.Contracts.Identity.UpdateProfilePictureRequest)">
             <summary>
                 Update Profile Picture
             </summary>
@@ -70,7 +70,7 @@
             <param name="roleId"></param>
             <returns>Status 200 OK</returns>
         </member>
-        <member name="M:BlazorHero.CleanArchitecture.Server.Controllers.Identity.RoleClaimController.Post(BlazorHero.CleanArchitecture.Application.Requests.Identity.RoleClaimRequest)">
+        <member name="M:BlazorHero.CleanArchitecture.Server.Controllers.Identity.RoleClaimController.Post(BlazorHero.CleanArchitecture.Contracts.Identity.RoleClaimRequest)">
             <summary>
                 Add a Role Claim
             </summary>
@@ -90,7 +90,7 @@
             </summary>
             <returns>Status 200 OK</returns>
         </member>
-        <member name="M:BlazorHero.CleanArchitecture.Server.Controllers.Identity.RoleController.Post(BlazorHero.CleanArchitecture.Application.Requests.Identity.RoleRequest)">
+        <member name="M:BlazorHero.CleanArchitecture.Server.Controllers.Identity.RoleController.Post(BlazorHero.CleanArchitecture.Contracts.Identity.RoleRequest)">
             <summary>
                 Add a Role
             </summary>
@@ -111,21 +111,21 @@
             <param name="roleId"></param>
             <returns>Status 200 Ok</returns>
         </member>
-        <member name="M:BlazorHero.CleanArchitecture.Server.Controllers.Identity.RoleController.Update(BlazorHero.CleanArchitecture.Application.Requests.Identity.PermissionRequest)">
+        <member name="M:BlazorHero.CleanArchitecture.Server.Controllers.Identity.RoleController.Update(BlazorHero.CleanArchitecture.Contracts.Identity.PermissionRequest)">
             <summary>
                 Edit a Role Claim
             </summary>
             <param name="model"></param>
             <returns></returns>
         </member>
-        <member name="M:BlazorHero.CleanArchitecture.Server.Controllers.Identity.TokenController.Get(BlazorHero.CleanArchitecture.Application.Requests.Identity.TokenRequest)">
+        <member name="M:BlazorHero.CleanArchitecture.Server.Controllers.Identity.TokenController.Get(BlazorHero.CleanArchitecture.Contracts.Identity.TokenRequest)">
             <summary>
                 Get Token (Email, Password)
             </summary>
             <param name="model"></param>
             <returns>Status 200 OK</returns>
         </member>
-        <member name="M:BlazorHero.CleanArchitecture.Server.Controllers.Identity.TokenController.Refresh(BlazorHero.CleanArchitecture.Application.Requests.Identity.RefreshTokenRequest)">
+        <member name="M:BlazorHero.CleanArchitecture.Server.Controllers.Identity.TokenController.Refresh(BlazorHero.CleanArchitecture.Contracts.Identity.RefreshTokenRequest)">
             <summary>
                 Refresh Token
             </summary>
@@ -152,14 +152,14 @@
             <param name="id"></param>
             <returns>Status 200 OK</returns>
         </member>
-        <member name="M:BlazorHero.CleanArchitecture.Server.Controllers.Identity.UserController.UpdateRolesAsync(BlazorHero.CleanArchitecture.Application.Requests.Identity.UpdateUserRolesRequest)">
+        <member name="M:BlazorHero.CleanArchitecture.Server.Controllers.Identity.UserController.UpdateRolesAsync(BlazorHero.CleanArchitecture.Contracts.Identity.UpdateUserRolesRequest)">
             <summary>
                 Update Roles for User
             </summary>
             <param name="request"></param>
             <returns>Status 200 OK</returns>
         </member>
-        <member name="M:BlazorHero.CleanArchitecture.Server.Controllers.Identity.UserController.RegisterAsync(BlazorHero.CleanArchitecture.Application.Requests.Identity.RegisterRequest)">
+        <member name="M:BlazorHero.CleanArchitecture.Server.Controllers.Identity.UserController.RegisterAsync(BlazorHero.CleanArchitecture.Contracts.Identity.RegisterRequest)">
             <summary>
                 Register a User
             </summary>
@@ -174,21 +174,21 @@
             <param name="code"></param>
             <returns>Status 200 OK</returns>
         </member>
-        <member name="M:BlazorHero.CleanArchitecture.Server.Controllers.Identity.UserController.ToggleUserStatusAsync(BlazorHero.CleanArchitecture.Application.Requests.Identity.ToggleUserStatusRequest)">
+        <member name="M:BlazorHero.CleanArchitecture.Server.Controllers.Identity.UserController.ToggleUserStatusAsync(BlazorHero.CleanArchitecture.Contracts.Identity.ToggleUserStatusRequest)">
             <summary>
                 Toggle User Status (Activate and Deactivate)
             </summary>
             <param name="request"></param>
             <returns>Status 200 OK</returns>
         </member>
-        <member name="M:BlazorHero.CleanArchitecture.Server.Controllers.Identity.UserController.ForgotPasswordAsync(BlazorHero.CleanArchitecture.Application.Requests.Identity.ForgotPasswordRequest)">
+        <member name="M:BlazorHero.CleanArchitecture.Server.Controllers.Identity.UserController.ForgotPasswordAsync(BlazorHero.CleanArchitecture.Contracts.Identity.ForgotPasswordRequest)">
             <summary>
                 Forgot Password
             </summary>
             <param name="request"></param>
             <returns>Status 200 OK</returns>
         </member>
-        <member name="M:BlazorHero.CleanArchitecture.Server.Controllers.Identity.UserController.ResetPasswordAsync(BlazorHero.CleanArchitecture.Application.Requests.Identity.ResetPasswordRequest)">
+        <member name="M:BlazorHero.CleanArchitecture.Server.Controllers.Identity.UserController.ResetPasswordAsync(BlazorHero.CleanArchitecture.Contracts.Identity.ResetPasswordRequest)">
             <summary>
                 Reset Password
             </summary>

@@ -1,22 +1,22 @@
 ﻿using System.Data;
 using AutoMapper;
 using BlazorHero.CleanArchitecture.Application.Features.Brands.Commands.AddEdit;
+using BlazorHero.CleanArchitecture.Application.Interfaces.Messaging;
 using BlazorHero.CleanArchitecture.Application.Interfaces.Repositories;
 using BlazorHero.CleanArchitecture.Application.Interfaces.Services;
-using BlazorHero.CleanArchitecture.Application.Requests;
+using BlazorHero.CleanArchitecture.Contracts;
 using BlazorHero.CleanArchitecture.Domain.Entities.Catalog;
 using BlazorHero.CleanArchitecture.Shared.Constants.Application;
 using BlazorHero.CleanArchitecture.Shared.Wrapper;
 using FluentValidation;
 using FluentValidation.Results;
-using MediatR;
 using Microsoft.Extensions.Localization;
 
 namespace BlazorHero.CleanArchitecture.Application.Features.Brands.Commands.Import;
 
-public record ImportBrandsCommand(UploadRequest UploadRequest) : IRequest<Result<int>>;
+public record ImportBrandsCommand(UploadRequest UploadRequest) : ICommand<Result<int>>;
 
-internal class ImportBrandsCommandHandler : IRequestHandler<ImportBrandsCommand, Result<int>>
+internal class ImportBrandsCommandHandler : ICommandHandler<ImportBrandsCommand, Result<int>>
 {
     private readonly IValidator<AddEditBrandCommand> _addBrandValidator;
     private readonly IExcelService _excelService;

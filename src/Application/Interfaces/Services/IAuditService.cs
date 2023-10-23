@@ -1,4 +1,4 @@
-﻿using BlazorHero.CleanArchitecture.Application.Responses.Audit;
+﻿using BlazorHero.CleanArchitecture.Contracts.Audit;
 using BlazorHero.CleanArchitecture.Shared.Wrapper;
 
 namespace BlazorHero.CleanArchitecture.Application.Interfaces.Services;

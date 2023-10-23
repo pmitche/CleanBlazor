@@ -1,17 +1,18 @@
 ﻿using AutoMapper;
+using BlazorHero.CleanArchitecture.Application.Interfaces.Messaging;
 using BlazorHero.CleanArchitecture.Application.Interfaces.Repositories;
+using BlazorHero.CleanArchitecture.Contracts.Documents;
 using BlazorHero.CleanArchitecture.Domain.Entities.Misc;
 using BlazorHero.CleanArchitecture.Shared.Constants.Application;
 using BlazorHero.CleanArchitecture.Shared.Wrapper;
 using LazyCache;
-using MediatR;
 
 namespace BlazorHero.CleanArchitecture.Application.Features.DocumentTypes.Queries.GetAll;
 
-public record GetAllDocumentTypesQuery : IRequest<Result<List<GetAllDocumentTypesResponse>>>;
+public record GetAllDocumentTypesQuery : IQuery<Result<List<GetAllDocumentTypesResponse>>>;
 
 internal class
-    GetAllDocumentTypesQueryHandler : IRequestHandler<GetAllDocumentTypesQuery,
+    GetAllDocumentTypesQueryHandler : IQueryHandler<GetAllDocumentTypesQuery,
         Result<List<GetAllDocumentTypesResponse>>>
 {
     private readonly IAppCache _cache;

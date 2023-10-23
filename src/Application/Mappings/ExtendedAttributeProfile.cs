@@ -3,6 +3,7 @@ using BlazorHero.CleanArchitecture.Application.Features.ExtendedAttributes.Comma
 using BlazorHero.CleanArchitecture.Application.Features.ExtendedAttributes.Queries.GetAll;
 using BlazorHero.CleanArchitecture.Application.Features.ExtendedAttributes.Queries.GetAllByEntityId;
 using BlazorHero.CleanArchitecture.Application.Features.ExtendedAttributes.Queries.GetById;
+using BlazorHero.CleanArchitecture.Contracts.Documents;
 using BlazorHero.CleanArchitecture.Domain.Entities.ExtendedAttributes;
 
 namespace BlazorHero.CleanArchitecture.Application.Mappings;

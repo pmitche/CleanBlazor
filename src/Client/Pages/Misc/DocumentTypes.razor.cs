@@ -4,6 +4,7 @@ using BlazorHero.CleanArchitecture.Application.Features.DocumentTypes.Queries.Ge
 using BlazorHero.CleanArchitecture.Client.Extensions;
 using BlazorHero.CleanArchitecture.Client.Infrastructure.Managers.Misc.DocumentType;
 using BlazorHero.CleanArchitecture.Client.Shared.Dialogs;
+using BlazorHero.CleanArchitecture.Contracts.Documents;
 using BlazorHero.CleanArchitecture.Shared.Constants.Application;
 using BlazorHero.CleanArchitecture.Shared.Constants.Permission;
 using BlazorHero.CleanArchitecture.Shared.Wrapper;

@@ -1,23 +1,24 @@
 ﻿using System.Linq.Dynamic.Core;
 using System.Linq.Expressions;
 using BlazorHero.CleanArchitecture.Application.Extensions;
+using BlazorHero.CleanArchitecture.Application.Interfaces.Messaging;
 using BlazorHero.CleanArchitecture.Application.Interfaces.Repositories;
 using BlazorHero.CleanArchitecture.Application.Specifications.Catalog;
+using BlazorHero.CleanArchitecture.Contracts.Catalog;
 using BlazorHero.CleanArchitecture.Domain.Entities.Catalog;
 using BlazorHero.CleanArchitecture.Shared.Wrapper;
-using MediatR;
 
 namespace BlazorHero.CleanArchitecture.Application.Features.Products.Queries.GetAllPaged;
 
 public record GetAllProductsQuery(int PageNumber, int PageSize, string SearchString, string OrderByInput)
-    : IRequest<PaginatedResult<GetAllPagedProductsResponse>>
+    : IQuery<PaginatedResult<GetAllPagedProductsResponse>>
 {
     public string[] OrderBy =>
         string.IsNullOrWhiteSpace(OrderByInput) ? Array.Empty<string>() : OrderByInput.Split(',');
 }
 
 internal class GetAllProductsQueryHandler
-    : IRequestHandler<GetAllProductsQuery, PaginatedResult<GetAllPagedProductsResponse>>
+    : IQueryHandler<GetAllProductsQuery, PaginatedResult<GetAllPagedProductsResponse>>
 {
     private readonly IUnitOfWork<int> _unitOfWork;
 

@@ -1,22 +1,22 @@
 ﻿using AutoMapper;
+using BlazorHero.CleanArchitecture.Application.Interfaces.Messaging;
 using BlazorHero.CleanArchitecture.Application.Interfaces.Repositories;
 using BlazorHero.CleanArchitecture.Domain.Entities.Misc;
 using BlazorHero.CleanArchitecture.Shared.Constants.Application;
 using BlazorHero.CleanArchitecture.Shared.Wrapper;
-using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 
 namespace BlazorHero.CleanArchitecture.Application.Features.DocumentTypes.Commands.AddEdit;
 
-public class AddEditDocumentTypeCommand : IRequest<Result<int>>
+public class AddEditDocumentTypeCommand : ICommand<Result<int>>
 {
     public int Id { get; set; }
     public string Name { get; set; }
     public string Description { get; set; }
 }
 
-internal class AddEditDocumentTypeCommandHandler : IRequestHandler<AddEditDocumentTypeCommand, Result<int>>
+internal class AddEditDocumentTypeCommandHandler : ICommandHandler<AddEditDocumentTypeCommand, Result<int>>
 {
     private readonly IStringLocalizer<AddEditDocumentTypeCommandHandler> _localizer;
     private readonly IMapper _mapper;

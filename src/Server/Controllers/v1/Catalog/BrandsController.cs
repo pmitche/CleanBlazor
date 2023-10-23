@@ -4,6 +4,7 @@ using BlazorHero.CleanArchitecture.Application.Features.Brands.Commands.Import;
 using BlazorHero.CleanArchitecture.Application.Features.Brands.Queries.Export;
 using BlazorHero.CleanArchitecture.Application.Features.Brands.Queries.GetAll;
 using BlazorHero.CleanArchitecture.Application.Features.Brands.Queries.GetById;
+using BlazorHero.CleanArchitecture.Contracts.Catalog;
 using BlazorHero.CleanArchitecture.Shared.Constants.Permission;
 using BlazorHero.CleanArchitecture.Shared.Wrapper;
 using Microsoft.AspNetCore.Authorization;

@@ -1,16 +1,17 @@
 ﻿using AutoMapper;
+using BlazorHero.CleanArchitecture.Application.Interfaces.Messaging;
 using BlazorHero.CleanArchitecture.Application.Interfaces.Repositories;
+using BlazorHero.CleanArchitecture.Contracts.Catalog;
 using BlazorHero.CleanArchitecture.Domain.Entities.Catalog;
 using BlazorHero.CleanArchitecture.Shared.Constants.Application;
 using BlazorHero.CleanArchitecture.Shared.Wrapper;
 using LazyCache;
-using MediatR;
 
 namespace BlazorHero.CleanArchitecture.Application.Features.Brands.Queries.GetAll;
 
-public record GetAllBrandsQuery : IRequest<Result<List<GetAllBrandsResponse>>>;
+public record GetAllBrandsQuery : IQuery<Result<List<GetAllBrandsResponse>>>;
 
-internal class GetAllBrandsCachedQueryHandler : IRequestHandler<GetAllBrandsQuery, Result<List<GetAllBrandsResponse>>>
+internal class GetAllBrandsCachedQueryHandler : IQueryHandler<GetAllBrandsQuery, Result<List<GetAllBrandsResponse>>>
 {
     private readonly IAppCache _cache;
     private readonly IMapper _mapper;

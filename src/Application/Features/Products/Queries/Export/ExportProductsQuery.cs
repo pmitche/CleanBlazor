@@ -1,18 +1,18 @@
 ﻿using BlazorHero.CleanArchitecture.Application.Extensions;
+using BlazorHero.CleanArchitecture.Application.Interfaces.Messaging;
 using BlazorHero.CleanArchitecture.Application.Interfaces.Repositories;
 using BlazorHero.CleanArchitecture.Application.Interfaces.Services;
 using BlazorHero.CleanArchitecture.Application.Specifications.Catalog;
 using BlazorHero.CleanArchitecture.Domain.Entities.Catalog;
 using BlazorHero.CleanArchitecture.Shared.Wrapper;
-using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 
 namespace BlazorHero.CleanArchitecture.Application.Features.Products.Queries.Export;
 
-public record ExportProductsQuery(string SearchString = "") : IRequest<Result<string>>;
+public record ExportProductsQuery(string SearchString = "") : IQuery<Result<string>>;
 
-internal class ExportProductsQueryHandler : IRequestHandler<ExportProductsQuery, Result<string>>
+internal class ExportProductsQueryHandler : IQueryHandler<ExportProductsQuery, Result<string>>
 {
     private readonly IExcelService _excelService;
     private readonly IStringLocalizer<ExportProductsQueryHandler> _localizer;

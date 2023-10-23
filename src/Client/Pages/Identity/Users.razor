@@ -1,6 +1,6 @@
 ﻿@page "/identity/users"
 @using Microsoft.Extensions.Localization
-@using BlazorHero.CleanArchitecture.Application.Responses.Identity
+@using BlazorHero.CleanArchitecture.Contracts.Identity
 @attribute [Authorize(Policy = Permissions.Users.View)]
 @inject IStringLocalizer<Users> Localizer
 

@@ -1,14 +1,15 @@
 ﻿using AutoMapper;
+using BlazorHero.CleanArchitecture.Application.Interfaces.Messaging;
 using BlazorHero.CleanArchitecture.Application.Interfaces.Repositories;
+using BlazorHero.CleanArchitecture.Contracts.Catalog;
 using BlazorHero.CleanArchitecture.Domain.Entities.Catalog;
 using BlazorHero.CleanArchitecture.Shared.Wrapper;
-using MediatR;
 
 namespace BlazorHero.CleanArchitecture.Application.Features.Brands.Queries.GetById;
 
-public record GetBrandByIdQuery(int Id) : IRequest<Result<GetBrandByIdResponse>>;
+public record GetBrandByIdQuery(int Id) : IQuery<Result<GetBrandByIdResponse>>;
 
-internal class GetProductByIdQueryHandler : IRequestHandler<GetBrandByIdQuery, Result<GetBrandByIdResponse>>
+internal class GetProductByIdQueryHandler : IQueryHandler<GetBrandByIdQuery, Result<GetBrandByIdResponse>>
 {
     private readonly IMapper _mapper;
     private readonly IUnitOfWork<int> _unitOfWork;

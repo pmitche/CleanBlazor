@@ -2,11 +2,12 @@
 using BlazorHero.CleanArchitecture.Application.Features.Brands.Commands.AddEdit;
 using BlazorHero.CleanArchitecture.Application.Features.Brands.Commands.Import;
 using BlazorHero.CleanArchitecture.Application.Features.Brands.Queries.GetAll;
-using BlazorHero.CleanArchitecture.Application.Requests;
 using BlazorHero.CleanArchitecture.Client.Extensions;
 using BlazorHero.CleanArchitecture.Client.Infrastructure.Managers.Catalog.Brand;
 using BlazorHero.CleanArchitecture.Client.Shared.Components;
 using BlazorHero.CleanArchitecture.Client.Shared.Dialogs;
+using BlazorHero.CleanArchitecture.Contracts;
+using BlazorHero.CleanArchitecture.Contracts.Catalog;
 using BlazorHero.CleanArchitecture.Shared.Constants.Application;
 using BlazorHero.CleanArchitecture.Shared.Constants.Permission;
 using BlazorHero.CleanArchitecture.Shared.Wrapper;

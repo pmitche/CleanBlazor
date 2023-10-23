@@ -1,14 +1,14 @@
-﻿using BlazorHero.CleanArchitecture.Application.Interfaces.Repositories;
+﻿using BlazorHero.CleanArchitecture.Application.Interfaces.Messaging;
+using BlazorHero.CleanArchitecture.Application.Interfaces.Repositories;
 using BlazorHero.CleanArchitecture.Domain.Entities.Catalog;
 using BlazorHero.CleanArchitecture.Shared.Wrapper;
-using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace BlazorHero.CleanArchitecture.Application.Features.Products.Queries.GetProductImage;
 
-public record GetProductImageQuery(int Id) : IRequest<Result<string>>;
+public record GetProductImageQuery(int Id) : IQuery<Result<string>>;
 
-internal class GetProductImageQueryHandler : IRequestHandler<GetProductImageQuery, Result<string>>
+internal class GetProductImageQueryHandler : IQueryHandler<GetProductImageQuery, Result<string>>
 {
     private readonly IUnitOfWork<int> _unitOfWork;
 

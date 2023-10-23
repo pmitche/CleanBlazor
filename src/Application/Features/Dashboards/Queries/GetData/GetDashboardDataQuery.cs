@@ -1,18 +1,19 @@
-﻿using BlazorHero.CleanArchitecture.Application.Interfaces.Repositories;
+﻿using BlazorHero.CleanArchitecture.Application.Interfaces.Messaging;
+using BlazorHero.CleanArchitecture.Application.Interfaces.Repositories;
 using BlazorHero.CleanArchitecture.Application.Interfaces.Services.Identity;
+using BlazorHero.CleanArchitecture.Contracts.Dashboard;
 using BlazorHero.CleanArchitecture.Domain.Entities.Catalog;
 using BlazorHero.CleanArchitecture.Domain.Entities.ExtendedAttributes;
 using BlazorHero.CleanArchitecture.Domain.Entities.Misc;
 using BlazorHero.CleanArchitecture.Shared.Wrapper;
-using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 
 namespace BlazorHero.CleanArchitecture.Application.Features.Dashboards.Queries.GetData;
 
-public record GetDashboardDataQuery : IRequest<Result<DashboardDataResponse>>;
+public record GetDashboardDataQuery : IQuery<Result<DashboardDataResponse>>;
 
-internal class GetDashboardDataQueryHandler : IRequestHandler<GetDashboardDataQuery, Result<DashboardDataResponse>>
+internal class GetDashboardDataQueryHandler : IQueryHandler<GetDashboardDataQuery, Result<DashboardDataResponse>>
 {
     private readonly IStringLocalizer<GetDashboardDataQueryHandler> _localizer;
     private readonly IRoleService _roleService;

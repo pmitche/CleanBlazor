@@ -20,6 +20,7 @@
     <PackageReference Include="System.Linq.Dynamic.Core"/>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Contracts\Contracts.csproj" />
     <ProjectReference Include="..\Domain\Domain.csproj"/>
     <ProjectReference Include="..\Shared\Shared.csproj"/>
   </ItemGroup>

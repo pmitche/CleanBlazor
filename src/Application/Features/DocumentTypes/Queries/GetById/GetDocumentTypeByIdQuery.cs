@@ -1,15 +1,16 @@
 ﻿using AutoMapper;
+using BlazorHero.CleanArchitecture.Application.Interfaces.Messaging;
 using BlazorHero.CleanArchitecture.Application.Interfaces.Repositories;
+using BlazorHero.CleanArchitecture.Contracts.Documents;
 using BlazorHero.CleanArchitecture.Domain.Entities.Misc;
 using BlazorHero.CleanArchitecture.Shared.Wrapper;
-using MediatR;
 
 namespace BlazorHero.CleanArchitecture.Application.Features.DocumentTypes.Queries.GetById;
 
-public record GetDocumentTypeByIdQuery(int Id) : IRequest<Result<GetDocumentTypeByIdResponse>>;
+public record GetDocumentTypeByIdQuery(int Id) : IQuery<Result<GetDocumentTypeByIdResponse>>;
 
 internal class
-    GetDocumentTypeByIdQueryHandler : IRequestHandler<GetDocumentTypeByIdQuery, Result<GetDocumentTypeByIdResponse>>
+    GetDocumentTypeByIdQueryHandler : IQueryHandler<GetDocumentTypeByIdQuery, Result<GetDocumentTypeByIdResponse>>
 {
     private readonly IMapper _mapper;
     private readonly IUnitOfWork<int> _unitOfWork;

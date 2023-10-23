@@ -2,6 +2,7 @@
 using BlazorHero.CleanArchitecture.Application.Features.DocumentTypes.Commands.AddEdit;
 using BlazorHero.CleanArchitecture.Application.Features.DocumentTypes.Queries.GetAll;
 using BlazorHero.CleanArchitecture.Application.Features.DocumentTypes.Queries.GetById;
+using BlazorHero.CleanArchitecture.Contracts.Documents;
 using BlazorHero.CleanArchitecture.Domain.Entities.Misc;
 
 namespace BlazorHero.CleanArchitecture.Application.Mappings;
