@@ -1,4 +1,4 @@
-﻿using BlazorHero.CleanArchitecture.Client.Infrastructure.Settings;
+﻿using BlazorHero.CleanArchitecture.Client.Infrastructure.Configuration;
 using MudBlazor;
 
 namespace BlazorHero.CleanArchitecture.Client.Shared;

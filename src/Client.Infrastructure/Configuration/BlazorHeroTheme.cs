@@ -1,6 +1,6 @@
 ﻿using MudBlazor;
 
-namespace BlazorHero.CleanArchitecture.Client.Infrastructure.Settings;
+namespace BlazorHero.CleanArchitecture.Client.Infrastructure.Configuration;
 
 public static class BlazorHeroTheme
 {

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.Extensions.Options;
 
-namespace BlazorHero.CleanArchitecture.Infrastructure.Configurations;
+namespace BlazorHero.CleanArchitecture.Infrastructure.Configuration;
 
 public class EntityExtendedAttributeConfiguration : IEntityTypeConfiguration<IEntityExtendedAttribute>
 {

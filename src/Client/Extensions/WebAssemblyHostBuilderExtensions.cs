@@ -31,7 +31,7 @@ public static class WebAssemblyHostBuilderExtensions
     {
         builder
             .Services
-            .AddLocalization(options => { options.ResourcesPath = "Resources"; })
+            .AddLocalization(options => { options.ResourcesPath = Path.Combine("Configuration", "Resources"); })
             .AddAuthorizationCore(RegisterPermissionClaims)
             .AddBlazoredLocalStorage()
             .AddMudServices(configuration =>

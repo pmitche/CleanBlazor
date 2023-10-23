@@ -1,10 +1,10 @@
 ﻿using System.Globalization;
-using BlazorHero.CleanArchitecture.Application.Configurations;
+using BlazorHero.CleanArchitecture.Application.Configuration;
 using BlazorHero.CleanArchitecture.Application.Interfaces.Services;
+using BlazorHero.CleanArchitecture.Server.Configuration;
 using BlazorHero.CleanArchitecture.Server.Hubs;
 using BlazorHero.CleanArchitecture.Server.Managers.Preferences;
 using BlazorHero.CleanArchitecture.Server.Middlewares;
-using BlazorHero.CleanArchitecture.Server.Settings;
 using BlazorHero.CleanArchitecture.Shared.Constants.Application;
 using BlazorHero.CleanArchitecture.Shared.Constants.Localization;
 using Microsoft.AspNetCore.Localization;

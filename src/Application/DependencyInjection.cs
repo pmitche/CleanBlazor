@@ -1,6 +1,6 @@
 using System.Reflection;
 using BlazorHero.CleanArchitecture.Application.Behaviors;
-using BlazorHero.CleanArchitecture.Application.Configurations;
+using BlazorHero.CleanArchitecture.Application.Configuration;
 using BlazorHero.CleanArchitecture.Application.Features.ExtendedAttributes.Commands.AddEdit;
 using BlazorHero.CleanArchitecture.Application.Features.ExtendedAttributes.Commands.Delete;
 using BlazorHero.CleanArchitecture.Application.Features.ExtendedAttributes.Queries.Export;

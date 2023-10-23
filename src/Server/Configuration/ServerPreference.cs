@@ -1,7 +1,7 @@
 ﻿using BlazorHero.CleanArchitecture.Shared.Constants.Localization;
 using BlazorHero.CleanArchitecture.Shared.Settings;
 
-namespace BlazorHero.CleanArchitecture.Server.Settings;
+namespace BlazorHero.CleanArchitecture.Server.Configuration;
 
 public record ServerPreference : IPreference
 {

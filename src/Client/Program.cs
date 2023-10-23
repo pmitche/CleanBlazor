@@ -1,7 +1,7 @@
 using System.Globalization;
 using BlazorHero.CleanArchitecture.Client.Extensions;
+using BlazorHero.CleanArchitecture.Client.Infrastructure.Configuration;
 using BlazorHero.CleanArchitecture.Client.Infrastructure.Managers.Preferences;
-using BlazorHero.CleanArchitecture.Client.Infrastructure.Settings;
 using BlazorHero.CleanArchitecture.Shared.Constants.Localization;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 

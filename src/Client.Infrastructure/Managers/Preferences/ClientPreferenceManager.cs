@@ -1,5 +1,5 @@
 ﻿using Blazored.LocalStorage;
-using BlazorHero.CleanArchitecture.Client.Infrastructure.Settings;
+using BlazorHero.CleanArchitecture.Client.Infrastructure.Configuration;
 using BlazorHero.CleanArchitecture.Shared.Constants.Storage;
 using BlazorHero.CleanArchitecture.Shared.Settings;
 using BlazorHero.CleanArchitecture.Shared.Wrapper;
