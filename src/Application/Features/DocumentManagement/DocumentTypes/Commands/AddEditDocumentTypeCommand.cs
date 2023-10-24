@@ -1,0 +1,76 @@
+﻿using System.Diagnostics.CodeAnalysis;
+using AutoMapper;
+using BlazorHero.CleanArchitecture.Application.Abstractions.Messaging;
+using BlazorHero.CleanArchitecture.Application.Abstractions.Persistence;
+using BlazorHero.CleanArchitecture.Domain.Entities.Misc;
+using BlazorHero.CleanArchitecture.Shared.Constants.Application;
+using BlazorHero.CleanArchitecture.Shared.Wrapper;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Localization;
+
+namespace BlazorHero.CleanArchitecture.Application.Features.DocumentManagement.DocumentTypes.Commands;
+
+[ExcludeFromCodeCoverage]
+public sealed class AddEditDocumentTypeCommand : ICommand<Result<int>>
+{
+    public int Id { get; set; }
+    public string Name { get; set; }
+    public string Description { get; set; }
+
+    public AddEditDocumentTypeCommand(int id, string name, string description)
+    {
+        Id = id;
+        Name = name;
+        Description = description;
+    }
+}
+
+internal sealed class AddEditDocumentTypeCommandHandler : ICommandHandler<AddEditDocumentTypeCommand, Result<int>>
+{
+    private readonly IStringLocalizer<AddEditDocumentTypeCommandHandler> _localizer;
+    private readonly IMapper _mapper;
+    private readonly IUnitOfWork<int> _unitOfWork;
+
+    public AddEditDocumentTypeCommandHandler(
+        IUnitOfWork<int> unitOfWork,
+        IMapper mapper,
+        IStringLocalizer<AddEditDocumentTypeCommandHandler> localizer)
+    {
+        _unitOfWork = unitOfWork;
+        _mapper = mapper;
+        _localizer = localizer;
+    }
+
+    public async Task<Result<int>> Handle(AddEditDocumentTypeCommand command, CancellationToken cancellationToken)
+    {
+        if (await _unitOfWork.Repository<DocumentType>().Entities.Where(p => p.Id != command.Id)
+                .AnyAsync(p => p.Name == command.Name, cancellationToken))
+        {
+            return await Result<int>.FailAsync(_localizer["Document type with this name already exists."]);
+        }
+
+        if (command.Id == 0)
+        {
+            var documentType = _mapper.Map<DocumentType>(command);
+            await _unitOfWork.Repository<DocumentType>().AddAsync(documentType);
+            await _unitOfWork.CommitAndRemoveCache(cancellationToken,
+                ApplicationConstants.Cache.GetAllDocumentTypesCacheKey);
+            return await Result<int>.SuccessAsync(documentType.Id, _localizer["Document Type Saved"]);
+        }
+        else
+        {
+            DocumentType documentType = await _unitOfWork.Repository<DocumentType>().GetByIdAsync(command.Id);
+            if (documentType == null)
+            {
+                return await Result<int>.FailAsync(_localizer["Document Type Not Found!"]);
+            }
+
+            documentType.Name = command.Name ?? documentType.Name;
+            documentType.Description = command.Description ?? documentType.Description;
+            await _unitOfWork.Repository<DocumentType>().UpdateAsync(documentType);
+            await _unitOfWork.CommitAndRemoveCache(cancellationToken,
+                ApplicationConstants.Cache.GetAllDocumentTypesCacheKey);
+            return await Result<int>.SuccessAsync(documentType.Id, _localizer["Document Type Updated"]);
+        }
+    }
+}

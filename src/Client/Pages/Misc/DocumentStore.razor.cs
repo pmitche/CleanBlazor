@@ -1,5 +1,4 @@
 ﻿using System.Security.Claims;
-using BlazorHero.CleanArchitecture.Application.Features.Documents.Commands;
 using BlazorHero.CleanArchitecture.Client.Extensions;
 using BlazorHero.CleanArchitecture.Client.Infrastructure.Managers.Misc.Document;
 using BlazorHero.CleanArchitecture.Client.Shared.Dialogs;
@@ -157,7 +156,7 @@ public partial class DocumentStore
             if (doc != null)
             {
                 parameters.Add(nameof(AddEditDocumentModal.AddEditDocumentModel),
-                    new AddEditDocumentCommand
+                    new AddEditDocumentRequest
                     {
                         Id = doc.Id,
                         Title = doc.Title,

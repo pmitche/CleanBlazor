@@ -1,5 +1,5 @@
-﻿using BlazorHero.CleanArchitecture.Application.Features.Documents.Commands;
-using BlazorHero.CleanArchitecture.Application.Features.Documents.Queries;
+﻿using BlazorHero.CleanArchitecture.Application.Features.DocumentManagement.Documents.Commands;
+using BlazorHero.CleanArchitecture.Application.Features.DocumentManagement.Documents.Queries;
 using BlazorHero.CleanArchitecture.Contracts.Documents;
 using BlazorHero.CleanArchitecture.Shared.Constants.Permission;
 using BlazorHero.CleanArchitecture.Shared.Wrapper;
@@ -44,11 +44,24 @@ public class DocumentsController : BaseApiController
     /// <summary>
     ///     Add/Edit Document
     /// </summary>
-    /// <param name="command"></param>
+    /// <param name="request"></param>
     /// <returns>Status 200 OK</returns>
     [Authorize(Policy = Permissions.Documents.Create)]
     [HttpPost]
-    public async Task<IActionResult> Post(AddEditDocumentCommand command) => Ok(await Mediator.Send(command));
+    public async Task<IActionResult> Post(AddEditDocumentRequest request)
+    {
+        var command = new AddEditDocumentCommand
+        {
+            Id = request.Id,
+            Title = request.Title,
+            Description = request.Description,
+            IsPublic = request.IsPublic,
+            Url = request.Url,
+            DocumentTypeId = request.DocumentTypeId,
+            UploadRequest = request.UploadRequest
+        };
+        return Ok(await Mediator.Send(command));
+    }
 
     /// <summary>
     ///     Delete a Document

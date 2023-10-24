@@ -1,7 +1,7 @@
 ﻿using Blazored.FluentValidation;
-using BlazorHero.CleanArchitecture.Application.Features.DocumentTypes.Commands;
 using BlazorHero.CleanArchitecture.Client.Extensions;
 using BlazorHero.CleanArchitecture.Client.Infrastructure.Managers.Misc.DocumentType;
+using BlazorHero.CleanArchitecture.Contracts.Documents;
 using BlazorHero.CleanArchitecture.Shared.Constants.Application;
 using BlazorHero.CleanArchitecture.Shared.Wrapper;
 using Microsoft.AspNetCore.Components;
@@ -15,7 +15,7 @@ public partial class AddEditDocumentTypeModal
     private FluentValidationValidator _fluentValidationValidator;
     [Inject] private IDocumentTypeManager DocumentTypeManager { get; set; }
 
-    [Parameter] public AddEditDocumentTypeCommand AddEditDocumentTypeModel { get; set; } = new();
+    [Parameter] public AddEditDocumentTypeRequest AddEditDocumentTypeModel { get; set; } = new();
     [CascadingParameter] private MudDialogInstance MudDialog { get; set; }
     [CascadingParameter] private HubConnection HubConnection { get; set; }
     private bool Validated => _fluentValidationValidator.Validate(options => { options.IncludeAllRuleSets(); });

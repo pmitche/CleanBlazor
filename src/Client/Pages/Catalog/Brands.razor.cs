@@ -1,11 +1,10 @@
 ﻿using System.Security.Claims;
-using BlazorHero.CleanArchitecture.Application.Features.Brands.Commands;
 using BlazorHero.CleanArchitecture.Client.Extensions;
 using BlazorHero.CleanArchitecture.Client.Infrastructure.Managers.Catalog.Brand;
 using BlazorHero.CleanArchitecture.Client.Shared.Components;
 using BlazorHero.CleanArchitecture.Client.Shared.Dialogs;
 using BlazorHero.CleanArchitecture.Contracts;
-using BlazorHero.CleanArchitecture.Contracts.Catalog;
+using BlazorHero.CleanArchitecture.Contracts.Catalog.Brands;
 using BlazorHero.CleanArchitecture.Shared.Constants.Application;
 using BlazorHero.CleanArchitecture.Shared.Constants.Permission;
 using BlazorHero.CleanArchitecture.Shared.Wrapper;
@@ -137,8 +136,8 @@ public partial class Brands
             _brand = _brandList.FirstOrDefault(c => c.Id == id);
             if (_brand != null)
             {
-                parameters.Add(nameof(AddEditBrandModal.AddEditBrandCommandModel),
-                    new AddEditBrandCommand
+                parameters.Add(nameof(AddEditBrandModal.AddEditBrandRequestModel),
+                    new AddEditBrandRequest
                     {
                         Id = _brand.Id, Name = _brand.Name, Description = _brand.Description, Tax = _brand.Tax
                     });
@@ -162,7 +161,7 @@ public partial class Brands
 
     private async Task<IResult<int>> ImportExcel(UploadRequest uploadFile)
     {
-        IResult<int> result = await BrandManager.ImportAsync(new ImportBrandsCommand(uploadFile));
+        IResult<int> result = await BrandManager.ImportAsync(uploadFile);
         return result;
     }
 

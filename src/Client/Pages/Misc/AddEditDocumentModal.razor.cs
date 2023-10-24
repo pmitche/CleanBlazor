@@ -1,5 +1,4 @@
 ﻿using Blazored.FluentValidation;
-using BlazorHero.CleanArchitecture.Application.Features.Documents.Commands;
 using BlazorHero.CleanArchitecture.Client.Extensions;
 using BlazorHero.CleanArchitecture.Client.Infrastructure.Managers.Misc.Document;
 using BlazorHero.CleanArchitecture.Client.Infrastructure.Managers.Misc.DocumentType;
@@ -23,7 +22,7 @@ public partial class AddEditDocumentModal
     [Inject] private IDocumentManager DocumentManager { get; set; }
     [Inject] private IDocumentTypeManager DocumentTypeManager { get; set; }
 
-    [Parameter] public AddEditDocumentCommand AddEditDocumentModel { get; set; } = new();
+    [Parameter] public AddEditDocumentRequest AddEditDocumentModel { get; set; } = new();
     [CascadingParameter] private MudDialogInstance MudDialog { get; set; }
     private bool Validated => _fluentValidationValidator.Validate(options => { options.IncludeAllRuleSets(); });
 

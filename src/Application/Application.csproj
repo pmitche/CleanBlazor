@@ -7,8 +7,6 @@
   <ItemGroup>
     <PackageReference Include="AutoMapper"/>
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection"/>
-    <PackageReference Include="FluentValidation"/>
-    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" />
     <PackageReference Include="LazyCache"/>
     <PackageReference Include="MediatR"/>
     <PackageReference Include="Microsoft.AspNetCore.Http.Features"/>
@@ -24,5 +22,9 @@
     <ProjectReference Include="..\Contracts\Contracts.csproj" />
     <ProjectReference Include="..\Domain\Domain.csproj"/>
     <ProjectReference Include="..\Shared\Shared.csproj"/>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Features\Catalog\" />
+    <Folder Include="Features\DocumentManagement\" />
   </ItemGroup>
 </Project>

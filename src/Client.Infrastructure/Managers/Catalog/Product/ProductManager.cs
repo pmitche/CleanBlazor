@@ -1,8 +1,7 @@
 ﻿using System.Net.Http.Json;
-using BlazorHero.CleanArchitecture.Application.Features.Products.Commands;
 using BlazorHero.CleanArchitecture.Client.Infrastructure.Extensions;
 using BlazorHero.CleanArchitecture.Client.Infrastructure.Routes;
-using BlazorHero.CleanArchitecture.Contracts.Catalog;
+using BlazorHero.CleanArchitecture.Contracts.Catalog.Products;
 using BlazorHero.CleanArchitecture.Shared.Wrapper;
 
 namespace BlazorHero.CleanArchitecture.Client.Infrastructure.Managers.Catalog.Product;
@@ -42,7 +41,7 @@ public class ProductManager : IProductManager
         return await response.ToPaginatedResult<GetAllPagedProductsResponse>();
     }
 
-    public async Task<IResult<int>> SaveAsync(AddEditProductCommand request)
+    public async Task<IResult<int>> SaveAsync(AddEditProductRequest request)
     {
         HttpResponseMessage response = await _httpClient.PostAsJsonAsync(ProductsEndpoints.Save, request);
         return await response.ToResult<int>();

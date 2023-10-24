@@ -1,0 +1,6 @@
+﻿namespace BlazorHero.CleanArchitecture.Contracts.Catalog.Products;
+
+public class GetAllPagedProductsRequest : PagedRequest
+{
+    public string SearchString { get; set; }
+}

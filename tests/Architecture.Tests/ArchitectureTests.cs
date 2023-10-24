@@ -17,6 +17,7 @@ public class ArchitectureTests
     private const string NamespacePrefix = "BlazorHero.CleanArchitecture";
     private const string DomainNamespace = $"{NamespacePrefix}.Domain";
     private const string ApplicationNamespace = $"{NamespacePrefix}.Application";
+    private const string ApplicationAbstractionsNamespace = $"{NamespacePrefix}.Application.Abstractions";
     private const string InfrastructureNamespace = $"{NamespacePrefix}.Infrastucture";
     private const string InfrastructureSharedNamespace = $"{NamespacePrefix}.Infrastucture.Shared";
     private const string ServerNamespace = $"{NamespacePrefix}.Server";
@@ -32,6 +33,7 @@ public class ArchitectureTests
         var otherProjects = new[]
         {
             ApplicationNamespace,
+            ApplicationAbstractionsNamespace,
             InfrastructureNamespace,
             InfrastructureSharedNamespace,
             ServerNamespace,
@@ -60,6 +62,7 @@ public class ArchitectureTests
         {
             // DomainNamespace,
             ApplicationNamespace,
+            ApplicationAbstractionsNamespace,
             InfrastructureNamespace,
             InfrastructureSharedNamespace,
             ServerNamespace,
@@ -162,6 +165,8 @@ public class ArchitectureTests
 
         var otherProjects = new[]
         {
+            ApplicationNamespace,
+            ApplicationAbstractionsNamespace,
             InfrastructureNamespace,
             InfrastructureSharedNamespace,
             ServerNamespace
@@ -186,6 +191,8 @@ public class ArchitectureTests
 
         var otherProjects = new[]
         {
+            ApplicationNamespace,
+            ApplicationAbstractionsNamespace,
             InfrastructureNamespace,
             InfrastructureSharedNamespace,
             ServerNamespace

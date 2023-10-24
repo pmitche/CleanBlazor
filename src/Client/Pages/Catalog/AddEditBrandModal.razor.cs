@@ -1,7 +1,7 @@
 ﻿using Blazored.FluentValidation;
-using BlazorHero.CleanArchitecture.Application.Features.Brands.Commands;
 using BlazorHero.CleanArchitecture.Client.Extensions;
 using BlazorHero.CleanArchitecture.Client.Infrastructure.Managers.Catalog.Brand;
+using BlazorHero.CleanArchitecture.Contracts.Catalog.Brands;
 using BlazorHero.CleanArchitecture.Shared.Constants.Application;
 using BlazorHero.CleanArchitecture.Shared.Wrapper;
 using Microsoft.AspNetCore.Components;
@@ -15,7 +15,7 @@ public partial class AddEditBrandModal
     private FluentValidationValidator _fluentValidationValidator;
     [Inject] private IBrandManager BrandManager { get; set; }
 
-    [Parameter] public AddEditBrandCommand AddEditBrandCommandModel { get; set; } = new();
+    [Parameter] public AddEditBrandRequest AddEditBrandRequestModel { get; set; } = new();
     [CascadingParameter] private MudDialogInstance MudDialog { get; set; }
     [CascadingParameter] private HubConnection HubConnection { get; set; }
     private bool Validated => _fluentValidationValidator.Validate(options => { options.IncludeAllRuleSets(); });
@@ -24,7 +24,7 @@ public partial class AddEditBrandModal
 
     private async Task SaveAsync()
     {
-        IResult<int> response = await BrandManager.SaveAsync(AddEditBrandCommandModel);
+        IResult<int> response = await BrandManager.SaveAsync(AddEditBrandRequestModel);
         if (response.Succeeded)
         {
             SnackBar.Success(response.Messages[0]);

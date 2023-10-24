@@ -1,10 +1,10 @@
 ﻿using Blazored.FluentValidation;
-using BlazorHero.CleanArchitecture.Application.Features.Products.Commands;
 using BlazorHero.CleanArchitecture.Client.Extensions;
 using BlazorHero.CleanArchitecture.Client.Infrastructure.Managers.Catalog.Brand;
 using BlazorHero.CleanArchitecture.Client.Infrastructure.Managers.Catalog.Product;
 using BlazorHero.CleanArchitecture.Contracts;
-using BlazorHero.CleanArchitecture.Contracts.Catalog;
+using BlazorHero.CleanArchitecture.Contracts.Catalog.Brands;
+using BlazorHero.CleanArchitecture.Contracts.Catalog.Products;
 using BlazorHero.CleanArchitecture.Shared.Constants.Application;
 using BlazorHero.CleanArchitecture.Shared.Enums;
 using BlazorHero.CleanArchitecture.Shared.Wrapper;
@@ -25,7 +25,7 @@ public partial class AddEditProductModal
     [Inject] private IProductManager ProductManager { get; set; }
     [Inject] private IBrandManager BrandManager { get; set; }
 
-    [Parameter] public AddEditProductCommand AddEditProductModel { get; set; } = new();
+    [Parameter] public AddEditProductRequest AddEditProductModel { get; set; } = new();
     [CascadingParameter] private HubConnection HubConnection { get; set; }
     [CascadingParameter] private MudDialogInstance MudDialog { get; set; }
     private bool Validated => _fluentValidationValidator.Validate(options => { options.IncludeAllRuleSets(); });

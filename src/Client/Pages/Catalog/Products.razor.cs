@@ -1,9 +1,8 @@
 ﻿using System.Security.Claims;
-using BlazorHero.CleanArchitecture.Application.Features.Products.Commands;
 using BlazorHero.CleanArchitecture.Client.Extensions;
 using BlazorHero.CleanArchitecture.Client.Infrastructure.Managers.Catalog.Product;
 using BlazorHero.CleanArchitecture.Client.Shared.Dialogs;
-using BlazorHero.CleanArchitecture.Contracts.Catalog;
+using BlazorHero.CleanArchitecture.Contracts.Catalog.Products;
 using BlazorHero.CleanArchitecture.Shared.Constants.Application;
 using BlazorHero.CleanArchitecture.Shared.Constants.Permission;
 using BlazorHero.CleanArchitecture.Shared.Wrapper;
@@ -135,7 +134,7 @@ public partial class Products
             if (product != null)
             {
                 parameters.Add(nameof(AddEditProductModal.AddEditProductModel),
-                    new AddEditProductCommand
+                    new AddEditProductRequest
                     {
                         Id = product.Id,
                         Name = product.Name,

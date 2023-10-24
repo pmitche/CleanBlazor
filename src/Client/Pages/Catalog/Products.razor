@@ -1,6 +1,7 @@
 ﻿@page "/catalog/products"
 @using Microsoft.Extensions.Localization
 @using BlazorHero.CleanArchitecture.Contracts.Catalog
+@using BlazorHero.CleanArchitecture.Contracts.Catalog.Products
 @attribute [Authorize(Policy = Permissions.Products.View)]
 @inject IStringLocalizer<Products> Localizer
 

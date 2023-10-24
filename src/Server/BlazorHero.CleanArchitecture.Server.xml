@@ -233,11 +233,11 @@
             <param name="id"></param>
             <returns>Status 200 Ok</returns>
         </member>
-        <member name="M:BlazorHero.CleanArchitecture.Server.Controllers.Utilities.Misc.DocumentsController.Post(BlazorHero.CleanArchitecture.Application.Features.Documents.Commands.AddEditDocumentCommand)">
+        <member name="M:BlazorHero.CleanArchitecture.Server.Controllers.Utilities.Misc.DocumentsController.Post(BlazorHero.CleanArchitecture.Contracts.Documents.AddEditDocumentRequest)">
             <summary>
                 Add/Edit Document
             </summary>
-            <param name="command"></param>
+            <param name="request"></param>
             <returns>Status 200 OK</returns>
         </member>
         <member name="M:BlazorHero.CleanArchitecture.Server.Controllers.Utilities.Misc.DocumentsController.Delete(System.Int32)">
@@ -260,11 +260,11 @@
             <param name="id"></param>
             <returns>Status 200 Ok</returns>
         </member>
-        <member name="M:BlazorHero.CleanArchitecture.Server.Controllers.Utilities.Misc.DocumentTypesController.Post(BlazorHero.CleanArchitecture.Application.Features.DocumentTypes.Commands.AddEditDocumentTypeCommand)">
+        <member name="M:BlazorHero.CleanArchitecture.Server.Controllers.Utilities.Misc.DocumentTypesController.Post(BlazorHero.CleanArchitecture.Contracts.Documents.AddEditDocumentTypeRequest)">
             <summary>
                 Create/Update a Document Type
             </summary>
-            <param name="command"></param>
+            <param name="request"></param>
             <returns>Status 200 OK</returns>
         </member>
         <member name="M:BlazorHero.CleanArchitecture.Server.Controllers.Utilities.Misc.DocumentTypesController.Delete(System.Int32)">
@@ -301,11 +301,11 @@
             <param name="id"></param>
             <returns>Status 200 Ok</returns>
         </member>
-        <member name="M:BlazorHero.CleanArchitecture.Server.Controllers.v1.Catalog.BrandsController.Post(BlazorHero.CleanArchitecture.Application.Features.Brands.Commands.AddEditBrandCommand)">
+        <member name="M:BlazorHero.CleanArchitecture.Server.Controllers.v1.Catalog.BrandsController.Post(BlazorHero.CleanArchitecture.Contracts.Catalog.Brands.AddEditBrandRequest)">
             <summary>
                 Create/Update a Brand
             </summary>
-            <param name="command"></param>
+            <param name="request"></param>
             <returns>Status 200 OK</returns>
         </member>
         <member name="M:BlazorHero.CleanArchitecture.Server.Controllers.v1.Catalog.BrandsController.Delete(System.Int32)">
@@ -322,11 +322,11 @@
             <param name="searchString"></param>
             <returns></returns>
         </member>
-        <member name="M:BlazorHero.CleanArchitecture.Server.Controllers.v1.Catalog.BrandsController.Import(BlazorHero.CleanArchitecture.Application.Features.Brands.Commands.ImportBrandsCommand)">
+        <member name="M:BlazorHero.CleanArchitecture.Server.Controllers.v1.Catalog.BrandsController.Import(BlazorHero.CleanArchitecture.Contracts.UploadRequest)">
             <summary>
                 Import Brands from Excel
             </summary>
-            <param name="command"></param>
+            <param name="request"></param>
             <returns></returns>
         </member>
         <member name="M:BlazorHero.CleanArchitecture.Server.Controllers.v1.Catalog.ProductsController.GetAll(System.Int32,System.Int32,System.String,System.String)">
@@ -346,11 +346,11 @@
             <param name="id"></param>
             <returns>Status 200 OK</returns>
         </member>
-        <member name="M:BlazorHero.CleanArchitecture.Server.Controllers.v1.Catalog.ProductsController.Post(BlazorHero.CleanArchitecture.Application.Features.Products.Commands.AddEditProductCommand)">
+        <member name="M:BlazorHero.CleanArchitecture.Server.Controllers.v1.Catalog.ProductsController.Post(BlazorHero.CleanArchitecture.Contracts.Catalog.Products.AddEditProductRequest)">
             <summary>
                 Add/Edit a Product
             </summary>
-            <param name="command"></param>
+            <param name="request"></param>
             <returns>Status 200 OK</returns>
         </member>
         <member name="M:BlazorHero.CleanArchitecture.Server.Controllers.v1.Catalog.ProductsController.Delete(System.Int32)">

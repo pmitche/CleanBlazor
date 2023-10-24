@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using BlazorHero.CleanArchitecture.Application.Features.DocumentTypes.Commands;
+using BlazorHero.CleanArchitecture.Application.Features.DocumentManagement.DocumentTypes.Commands;
 using BlazorHero.CleanArchitecture.Contracts.Documents;
 using BlazorHero.CleanArchitecture.Domain.Entities.Misc;
 

@@ -1,5 +1,5 @@
-﻿using BlazorHero.CleanArchitecture.Application.Features.DocumentTypes.Commands;
-using BlazorHero.CleanArchitecture.Application.Features.DocumentTypes.Queries;
+﻿using BlazorHero.CleanArchitecture.Application.Features.DocumentManagement.DocumentTypes.Commands;
+using BlazorHero.CleanArchitecture.Application.Features.DocumentManagement.DocumentTypes.Queries;
 using BlazorHero.CleanArchitecture.Contracts.Documents;
 using BlazorHero.CleanArchitecture.Shared.Constants.Permission;
 using BlazorHero.CleanArchitecture.Shared.Wrapper;
@@ -40,11 +40,15 @@ public class DocumentTypesController : BaseApiController
     /// <summary>
     ///     Create/Update a Document Type
     /// </summary>
-    /// <param name="command"></param>
+    /// <param name="request"></param>
     /// <returns>Status 200 OK</returns>
     [Authorize(Policy = Permissions.DocumentTypes.Create)]
     [HttpPost]
-    public async Task<IActionResult> Post(AddEditDocumentTypeCommand command) => Ok(await Mediator.Send(command));
+    public async Task<IActionResult> Post(AddEditDocumentTypeRequest request)
+    {
+        var command = new AddEditDocumentTypeCommand(request.Id, request.Name, request.Description);
+        return Ok(await Mediator.Send(command));
+    }
 
     /// <summary>
     ///     Delete a Document Type

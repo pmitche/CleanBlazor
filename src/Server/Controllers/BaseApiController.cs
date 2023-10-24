@@ -10,6 +10,6 @@ namespace BlazorHero.CleanArchitecture.Server.Controllers;
 [Route("api/v{version:apiVersion}/[controller]")]
 public abstract class BaseApiController : ControllerBase
 {
-    private IMediator _mediatorInstance;
-    protected IMediator Mediator => _mediatorInstance ??= HttpContext.RequestServices.GetService<IMediator>();
+    private ISender _mediatorInstance;
+    protected ISender Mediator => _mediatorInstance ??= HttpContext.RequestServices.GetService<ISender>();
 }

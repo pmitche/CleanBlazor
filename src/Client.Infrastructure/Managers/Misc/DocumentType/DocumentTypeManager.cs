@@ -1,5 +1,4 @@
 ﻿using System.Net.Http.Json;
-using BlazorHero.CleanArchitecture.Application.Features.DocumentTypes.Commands;
 using BlazorHero.CleanArchitecture.Client.Infrastructure.Extensions;
 using BlazorHero.CleanArchitecture.Client.Infrastructure.Routes;
 using BlazorHero.CleanArchitecture.Contracts.Documents;
@@ -33,7 +32,7 @@ public class DocumentTypeManager : IDocumentTypeManager
         return await response.ToResult<List<GetAllDocumentTypesResponse>>();
     }
 
-    public async Task<IResult<int>> SaveAsync(AddEditDocumentTypeCommand request)
+    public async Task<IResult<int>> SaveAsync(AddEditDocumentTypeRequest request)
     {
         HttpResponseMessage response = await _httpClient.PostAsJsonAsync(DocumentTypesEndpoints.Save, request);
         return await response.ToResult<int>();

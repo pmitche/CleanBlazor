@@ -1,8 +1,8 @@
 ﻿using System.Net.Http.Json;
-using BlazorHero.CleanArchitecture.Application.Features.Brands.Commands;
 using BlazorHero.CleanArchitecture.Client.Infrastructure.Extensions;
 using BlazorHero.CleanArchitecture.Client.Infrastructure.Routes;
-using BlazorHero.CleanArchitecture.Contracts.Catalog;
+using BlazorHero.CleanArchitecture.Contracts;
+using BlazorHero.CleanArchitecture.Contracts.Catalog.Brands;
 using BlazorHero.CleanArchitecture.Shared.Wrapper;
 
 namespace BlazorHero.CleanArchitecture.Client.Infrastructure.Managers.Catalog.Brand;
@@ -33,13 +33,13 @@ public class BrandManager : IBrandManager
         return await response.ToResult<List<GetAllBrandsResponse>>();
     }
 
-    public async Task<IResult<int>> SaveAsync(AddEditBrandCommand request)
+    public async Task<IResult<int>> SaveAsync(AddEditBrandRequest request)
     {
         HttpResponseMessage response = await _httpClient.PostAsJsonAsync(BrandsEndpoints.Save, request);
         return await response.ToResult<int>();
     }
 
-    public async Task<IResult<int>> ImportAsync(ImportBrandsCommand request)
+    public async Task<IResult<int>> ImportAsync(UploadRequest request)
     {
         HttpResponseMessage response = await _httpClient.PostAsJsonAsync(BrandsEndpoints.Import, request);
         return await response.ToResult<int>();

@@ -1,6 +1,6 @@
-﻿using BlazorHero.CleanArchitecture.Application.Features.Products.Commands;
-using BlazorHero.CleanArchitecture.Application.Features.Products.Queries;
-using BlazorHero.CleanArchitecture.Contracts.Catalog;
+﻿using BlazorHero.CleanArchitecture.Application.Features.Catalog.Products.Commands;
+using BlazorHero.CleanArchitecture.Application.Features.Catalog.Products.Queries;
+using BlazorHero.CleanArchitecture.Contracts.Catalog.Products;
 using BlazorHero.CleanArchitecture.Shared.Constants.Permission;
 using BlazorHero.CleanArchitecture.Shared.Wrapper;
 using Microsoft.AspNetCore.Authorization;
@@ -43,11 +43,25 @@ public class ProductsController : BaseApiController
     /// <summary>
     ///     Add/Edit a Product
     /// </summary>
-    /// <param name="command"></param>
+    /// <param name="request"></param>
     /// <returns>Status 200 OK</returns>
     [Authorize(Policy = Permissions.Products.Create)]
     [HttpPost]
-    public async Task<IActionResult> Post(AddEditProductCommand command) => Ok(await Mediator.Send(command));
+    public async Task<IActionResult> Post(AddEditProductRequest request)
+    {
+        var command = new AddEditProductCommand
+        {
+            Id = request.Id,
+            Name = request.Name,
+            Barcode = request.Barcode,
+            Description = request.Description,
+            Rate = request.Rate,
+            BrandId = request.BrandId,
+            UploadRequest = request.UploadRequest,
+            ImageDataUrl = request.ImageDataUrl
+        };
+        return Ok(await Mediator.Send(command));
+    }
 
     /// <summary>
     ///     Delete a Product

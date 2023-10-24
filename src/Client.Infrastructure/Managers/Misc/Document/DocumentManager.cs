@@ -1,6 +1,4 @@
 ﻿using System.Net.Http.Json;
-using BlazorHero.CleanArchitecture.Application.Features.Documents.Commands;
-using BlazorHero.CleanArchitecture.Application.Features.Documents.Queries;
 using BlazorHero.CleanArchitecture.Client.Infrastructure.Extensions;
 using BlazorHero.CleanArchitecture.Client.Infrastructure.Routes;
 using BlazorHero.CleanArchitecture.Contracts.Documents;
@@ -29,13 +27,13 @@ public class DocumentManager : IDocumentManager
         return await response.ToPaginatedResult<GetAllDocumentsResponse>();
     }
 
-    public async Task<IResult<GetDocumentByIdResponse>> GetByIdAsync(GetDocumentByIdQuery request)
+    public async Task<IResult<GetDocumentByIdResponse>> GetByIdAsync(int id)
     {
-        HttpResponseMessage response = await _httpClient.GetAsync(DocumentsEndpoints.GetById(request.Id));
+        HttpResponseMessage response = await _httpClient.GetAsync(DocumentsEndpoints.GetById(id));
         return await response.ToResult<GetDocumentByIdResponse>();
     }
 
-    public async Task<IResult<int>> SaveAsync(AddEditDocumentCommand request)
+    public async Task<IResult<int>> SaveAsync(AddEditDocumentRequest request)
     {
         HttpResponseMessage response = await _httpClient.PostAsJsonAsync(DocumentsEndpoints.Save, request);
         return await response.ToResult<int>();

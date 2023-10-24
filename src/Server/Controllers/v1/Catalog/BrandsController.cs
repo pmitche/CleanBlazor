@@ -1,6 +1,8 @@
-﻿using BlazorHero.CleanArchitecture.Application.Features.Brands.Commands;
-using BlazorHero.CleanArchitecture.Application.Features.Brands.Queries;
+﻿using BlazorHero.CleanArchitecture.Application.Features.Catalog.Brands.Commands;
+using BlazorHero.CleanArchitecture.Application.Features.Catalog.Brands.Queries;
+using BlazorHero.CleanArchitecture.Contracts;
 using BlazorHero.CleanArchitecture.Contracts.Catalog;
+using BlazorHero.CleanArchitecture.Contracts.Catalog.Brands;
 using BlazorHero.CleanArchitecture.Shared.Constants.Permission;
 using BlazorHero.CleanArchitecture.Shared.Wrapper;
 using Microsoft.AspNetCore.Authorization;
@@ -38,11 +40,15 @@ public class BrandsController : BaseApiController
     /// <summary>
     ///     Create/Update a Brand
     /// </summary>
-    /// <param name="command"></param>
+    /// <param name="request"></param>
     /// <returns>Status 200 OK</returns>
     [Authorize(Policy = Permissions.Brands.Create)]
     [HttpPost]
-    public async Task<IActionResult> Post(AddEditBrandCommand command) => Ok(await Mediator.Send(command));
+    public async Task<IActionResult> Post(AddEditBrandRequest request)
+    {
+        var command = new AddEditBrandCommand(request.Id, request.Name, request.Description, request.Tax);
+        return Ok(await Mediator.Send(command));
+    }
 
     /// <summary>
     ///     Delete a Brand
@@ -66,9 +72,10 @@ public class BrandsController : BaseApiController
     /// <summary>
     ///     Import Brands from Excel
     /// </summary>
-    /// <param name="command"></param>
+    /// <param name="request"></param>
     /// <returns></returns>
     [Authorize(Policy = Permissions.Brands.Import)]
     [HttpPost("import")]
-    public async Task<IActionResult> Import(ImportBrandsCommand command) => Ok(await Mediator.Send(command));
+    public async Task<IActionResult> Import(UploadRequest request) =>
+        Ok(await Mediator.Send(new ImportBrandsCommand(request)));
 }

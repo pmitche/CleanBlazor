@@ -1,5 +1,5 @@
 ﻿using System.Security.Claims;
-using BlazorHero.CleanArchitecture.Application.Features.DocumentTypes.Commands;
+using BlazorHero.CleanArchitecture.Application.Features.DocumentManagement.DocumentTypes.Commands;
 using BlazorHero.CleanArchitecture.Client.Extensions;
 using BlazorHero.CleanArchitecture.Client.Infrastructure.Managers.Misc.DocumentType;
 using BlazorHero.CleanArchitecture.Client.Shared.Dialogs;
@@ -134,7 +134,7 @@ public partial class DocumentTypes
             if (_documentType != null)
             {
                 parameters.Add(nameof(AddEditDocumentTypeModal.AddEditDocumentTypeModel),
-                    new AddEditDocumentTypeCommand
+                    new AddEditDocumentTypeRequest
                     {
                         Id = _documentType.Id, Name = _documentType.Name, Description = _documentType.Description
                     });
