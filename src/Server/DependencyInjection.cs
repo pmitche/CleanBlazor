@@ -1,7 +1,7 @@
 using System.Net;
 using System.Reflection;
+using BlazorHero.CleanArchitecture.Application.Abstractions.Infrastructure.Services;
 using BlazorHero.CleanArchitecture.Application.Configuration;
-using BlazorHero.CleanArchitecture.Application.Interfaces.Services;
 using BlazorHero.CleanArchitecture.Server.Configuration;
 using BlazorHero.CleanArchitecture.Server.Localization;
 using BlazorHero.CleanArchitecture.Server.Services;

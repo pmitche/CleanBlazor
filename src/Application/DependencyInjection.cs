@@ -1,4 +1,5 @@
 using System.Reflection;
+using BlazorHero.CleanArchitecture.Application.Abstractions.Serialization;
 using BlazorHero.CleanArchitecture.Application.Behaviors;
 using BlazorHero.CleanArchitecture.Application.Configuration;
 using BlazorHero.CleanArchitecture.Application.Features.ExtendedAttributes.Commands.AddEdit;
@@ -7,13 +8,7 @@ using BlazorHero.CleanArchitecture.Application.Features.ExtendedAttributes.Queri
 using BlazorHero.CleanArchitecture.Application.Features.ExtendedAttributes.Queries.GetAll;
 using BlazorHero.CleanArchitecture.Application.Features.ExtendedAttributes.Queries.GetAllByEntityId;
 using BlazorHero.CleanArchitecture.Application.Features.ExtendedAttributes.Queries.GetById;
-using BlazorHero.CleanArchitecture.Application.Interfaces.Serialization.Options;
-using BlazorHero.CleanArchitecture.Application.Interfaces.Serialization.Serializers;
-using BlazorHero.CleanArchitecture.Application.Interfaces.Serialization.Settings;
-using BlazorHero.CleanArchitecture.Application.Serialization.JsonConverters;
-using BlazorHero.CleanArchitecture.Application.Serialization.Options;
-using BlazorHero.CleanArchitecture.Application.Serialization.Serializers;
-using BlazorHero.CleanArchitecture.Application.Serialization.Settings;
+using BlazorHero.CleanArchitecture.Application.Serialization;
 using BlazorHero.CleanArchitecture.Contracts.Documents;
 using BlazorHero.CleanArchitecture.Domain.Contracts;
 using BlazorHero.CleanArchitecture.Shared.Wrapper;
@@ -53,18 +48,7 @@ public static class DependencyInjection
     private static IServiceCollection AddSerialization(this IServiceCollection services)
     {
         services
-            .AddScoped<IJsonSerializerOptions, SystemTextJsonOptions>()
-            .AddScoped<IJsonSerializerSettings, NewtonsoftJsonSettings>()
             .AddScoped<IJsonSerializer, SystemTextJsonSerializer>(); // you can change it
-
-        services.Configure<SystemTextJsonOptions>(configureOptions =>
-        {
-            if (configureOptions.JsonSerializerOptions.Converters.All(c =>
-                    c.GetType() != typeof(TimespanJsonConverter)))
-            {
-                configureOptions.JsonSerializerOptions.Converters.Add(new TimespanJsonConverter());
-            }
-        });
 
         return services;
     }

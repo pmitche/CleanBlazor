@@ -1,4 +1,4 @@
-﻿using BlazorHero.CleanArchitecture.Application.Interfaces.Services;
+﻿using BlazorHero.CleanArchitecture.Application.Abstractions.Common;
 
 namespace BlazorHero.CleanArchitecture.Infrastructure.Shared.Services;
 

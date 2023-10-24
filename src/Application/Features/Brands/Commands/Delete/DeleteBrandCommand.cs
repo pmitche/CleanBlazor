@@ -1,5 +1,6 @@
-﻿using BlazorHero.CleanArchitecture.Application.Interfaces.Messaging;
-using BlazorHero.CleanArchitecture.Application.Interfaces.Repositories;
+﻿using BlazorHero.CleanArchitecture.Application.Abstractions.Messaging;
+using BlazorHero.CleanArchitecture.Application.Abstractions.Persistence;
+using BlazorHero.CleanArchitecture.Application.Abstractions.Persistence.Repositories;
 using BlazorHero.CleanArchitecture.Domain.Entities.Catalog;
 using BlazorHero.CleanArchitecture.Shared.Constants.Application;
 using BlazorHero.CleanArchitecture.Shared.Wrapper;

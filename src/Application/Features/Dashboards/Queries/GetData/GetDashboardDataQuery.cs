@@ -1,6 +1,6 @@
-﻿using BlazorHero.CleanArchitecture.Application.Interfaces.Messaging;
-using BlazorHero.CleanArchitecture.Application.Interfaces.Repositories;
-using BlazorHero.CleanArchitecture.Application.Interfaces.Services.Identity;
+﻿using BlazorHero.CleanArchitecture.Application.Abstractions.Infrastructure.Services.Identity;
+using BlazorHero.CleanArchitecture.Application.Abstractions.Messaging;
+using BlazorHero.CleanArchitecture.Application.Abstractions.Persistence;
 using BlazorHero.CleanArchitecture.Contracts.Dashboard;
 using BlazorHero.CleanArchitecture.Domain.Entities.Catalog;
 using BlazorHero.CleanArchitecture.Domain.Entities.ExtendedAttributes;

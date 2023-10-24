@@ -9,4 +9,8 @@
     <PackageReference Include="Microsoft.Extensions.Localization.Abstractions"/>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Domain\Domain.csproj" />
+  </ItemGroup>
+
 </Project>

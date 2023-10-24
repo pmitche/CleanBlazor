@@ -1,4 +1,4 @@
-﻿using BlazorHero.CleanArchitecture.Application.Interfaces.Services.Identity;
+﻿using BlazorHero.CleanArchitecture.Application.Abstractions.Infrastructure.Services.Identity;
 using BlazorHero.CleanArchitecture.Contracts.Identity;
 using BlazorHero.CleanArchitecture.Shared.Constants.Permission;
 using BlazorHero.CleanArchitecture.Shared.Wrapper;

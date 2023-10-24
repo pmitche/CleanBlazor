@@ -1,6 +1,6 @@
 ﻿using System.Collections;
-using BlazorHero.CleanArchitecture.Application.Interfaces.Repositories;
-using BlazorHero.CleanArchitecture.Application.Interfaces.Services;
+using BlazorHero.CleanArchitecture.Application.Abstractions.Infrastructure.Services;
+using BlazorHero.CleanArchitecture.Application.Abstractions.Persistence.Repositories;
 using BlazorHero.CleanArchitecture.Domain.Contracts;
 using BlazorHero.CleanArchitecture.Infrastructure.Contexts;
 using LazyCache;

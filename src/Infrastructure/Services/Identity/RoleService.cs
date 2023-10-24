@@ -1,7 +1,7 @@
 ﻿using System.Security.Claims;
 using AutoMapper;
-using BlazorHero.CleanArchitecture.Application.Interfaces.Services;
-using BlazorHero.CleanArchitecture.Application.Interfaces.Services.Identity;
+using BlazorHero.CleanArchitecture.Application.Abstractions.Infrastructure.Services;
+using BlazorHero.CleanArchitecture.Application.Abstractions.Infrastructure.Services.Identity;
 using BlazorHero.CleanArchitecture.Contracts.Identity;
 using BlazorHero.CleanArchitecture.Infrastructure.Helpers;
 using BlazorHero.CleanArchitecture.Infrastructure.Models.Identity;

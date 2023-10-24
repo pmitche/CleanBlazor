@@ -22,7 +22,7 @@
             </summary>
             <returns>Status 200 OK</returns>
         </member>
-        <member name="M:BlazorHero.CleanArchitecture.Server.Controllers.Communication.ChatsController.SaveMessageAsync(BlazorHero.CleanArchitecture.Application.Models.Chat.ChatHistory{BlazorHero.CleanArchitecture.Application.Interfaces.Chat.IChatUser})">
+        <member name="M:BlazorHero.CleanArchitecture.Server.Controllers.Communication.ChatsController.SaveMessageAsync(BlazorHero.CleanArchitecture.Shared.Models.Chat.ChatHistory{BlazorHero.CleanArchitecture.Domain.Contracts.Chat.IChatUser})">
             <summary>
                 Save Chat Message
             </summary>

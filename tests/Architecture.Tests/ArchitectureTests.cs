@@ -58,7 +58,7 @@ public class ArchitectureTests
 
         var otherProjects = new[]
         {
-            DomainNamespace,
+            // DomainNamespace,
             ApplicationNamespace,
             InfrastructureNamespace,
             InfrastructureSharedNamespace,

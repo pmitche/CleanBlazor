@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using BlazorHero.CleanArchitecture.Application.Responses.Chat;
+using BlazorHero.CleanArchitecture.Contracts.Chat;
 using BlazorHero.CleanArchitecture.Contracts.Identity;
 using BlazorHero.CleanArchitecture.Infrastructure.Models.Identity;
 

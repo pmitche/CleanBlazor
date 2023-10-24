@@ -1,6 +1,6 @@
-﻿using BlazorHero.CleanArchitecture.Application.Interfaces.Chat;
-using BlazorHero.CleanArchitecture.Application.Models.Chat;
+﻿using BlazorHero.CleanArchitecture.Domain.Contracts.Chat;
 using BlazorHero.CleanArchitecture.Shared.Constants.Application;
+using BlazorHero.CleanArchitecture.Shared.Models.Chat;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 

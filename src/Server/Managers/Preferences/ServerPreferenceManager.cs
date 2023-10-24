@@ -1,4 +1,4 @@
-﻿using BlazorHero.CleanArchitecture.Application.Interfaces.Services.Storage;
+﻿using BlazorHero.CleanArchitecture.Application.Abstractions.Infrastructure.Services.Storage;
 using BlazorHero.CleanArchitecture.Server.Configuration;
 using BlazorHero.CleanArchitecture.Shared.Constants.Storage;
 using BlazorHero.CleanArchitecture.Shared.Settings;

@@ -1,6 +1,6 @@
-﻿using BlazorHero.CleanArchitecture.Application.Interfaces.Chat;
-using BlazorHero.CleanArchitecture.Application.Models.Chat;
-using BlazorHero.CleanArchitecture.Application.Responses.Chat;
+﻿using BlazorHero.CleanArchitecture.Contracts.Chat;
+using BlazorHero.CleanArchitecture.Domain.Contracts.Chat;
+using BlazorHero.CleanArchitecture.Shared.Models.Chat;
 using BlazorHero.CleanArchitecture.Shared.Wrapper;
 
 namespace BlazorHero.CleanArchitecture.Client.Infrastructure.Managers.Communication;

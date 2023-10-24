@@ -1,5 +1,5 @@
-﻿using BlazorHero.CleanArchitecture.Application.Interfaces.Services;
-using BlazorHero.CleanArchitecture.Application.Interfaces.Services.Storage.Provider;
+﻿using BlazorHero.CleanArchitecture.Application.Abstractions.Infrastructure.Services;
+using BlazorHero.CleanArchitecture.Application.Abstractions.Infrastructure.Services.Storage.Provider;
 
 namespace BlazorHero.CleanArchitecture.Infrastructure.Services.Storage.Provider;
 

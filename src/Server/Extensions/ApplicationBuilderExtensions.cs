@@ -1,6 +1,6 @@
 ﻿using System.Globalization;
+using BlazorHero.CleanArchitecture.Application.Abstractions.Persistence;
 using BlazorHero.CleanArchitecture.Application.Configuration;
-using BlazorHero.CleanArchitecture.Application.Interfaces.Services;
 using BlazorHero.CleanArchitecture.Server.Configuration;
 using BlazorHero.CleanArchitecture.Server.Hubs;
 using BlazorHero.CleanArchitecture.Server.Managers.Preferences;

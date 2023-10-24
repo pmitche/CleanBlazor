@@ -2,8 +2,8 @@
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
+using BlazorHero.CleanArchitecture.Application.Abstractions.Infrastructure.Services.Identity;
 using BlazorHero.CleanArchitecture.Application.Configuration;
-using BlazorHero.CleanArchitecture.Application.Interfaces.Services.Identity;
 using BlazorHero.CleanArchitecture.Contracts.Identity;
 using BlazorHero.CleanArchitecture.Infrastructure.Models.Identity;
 using BlazorHero.CleanArchitecture.Shared.Wrapper;

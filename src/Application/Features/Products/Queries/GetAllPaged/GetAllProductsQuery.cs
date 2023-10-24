@@ -1,8 +1,8 @@
 ﻿using System.Linq.Dynamic.Core;
 using System.Linq.Expressions;
+using BlazorHero.CleanArchitecture.Application.Abstractions.Messaging;
+using BlazorHero.CleanArchitecture.Application.Abstractions.Persistence;
 using BlazorHero.CleanArchitecture.Application.Extensions;
-using BlazorHero.CleanArchitecture.Application.Interfaces.Messaging;
-using BlazorHero.CleanArchitecture.Application.Interfaces.Repositories;
 using BlazorHero.CleanArchitecture.Application.Specifications.Catalog;
 using BlazorHero.CleanArchitecture.Contracts.Catalog;
 using BlazorHero.CleanArchitecture.Domain.Entities.Catalog;

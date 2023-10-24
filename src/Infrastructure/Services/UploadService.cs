@@ -1,5 +1,5 @@
-﻿using BlazorHero.CleanArchitecture.Application.Extensions;
-using BlazorHero.CleanArchitecture.Application.Interfaces.Services;
+﻿using BlazorHero.CleanArchitecture.Application.Abstractions.Infrastructure.Services;
+using BlazorHero.CleanArchitecture.Application.Extensions;
 using BlazorHero.CleanArchitecture.Contracts;
 
 namespace BlazorHero.CleanArchitecture.Infrastructure.Services;

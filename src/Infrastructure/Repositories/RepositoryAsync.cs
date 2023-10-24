@@ -1,4 +1,4 @@
-﻿using BlazorHero.CleanArchitecture.Application.Interfaces.Repositories;
+﻿using BlazorHero.CleanArchitecture.Application.Abstractions.Persistence.Repositories;
 using BlazorHero.CleanArchitecture.Domain.Contracts;
 using BlazorHero.CleanArchitecture.Infrastructure.Contexts;
 using Microsoft.EntityFrameworkCore;

@@ -1,10 +1,10 @@
 using System.Reflection;
-using BlazorHero.CleanArchitecture.Application.Interfaces.Repositories;
-using BlazorHero.CleanArchitecture.Application.Interfaces.Services;
-using BlazorHero.CleanArchitecture.Application.Interfaces.Services.Account;
-using BlazorHero.CleanArchitecture.Application.Interfaces.Services.Identity;
-using BlazorHero.CleanArchitecture.Application.Interfaces.Services.Storage;
-using BlazorHero.CleanArchitecture.Application.Interfaces.Services.Storage.Provider;
+using BlazorHero.CleanArchitecture.Application.Abstractions.Infrastructure.Services;
+using BlazorHero.CleanArchitecture.Application.Abstractions.Infrastructure.Services.Identity;
+using BlazorHero.CleanArchitecture.Application.Abstractions.Infrastructure.Services.Storage;
+using BlazorHero.CleanArchitecture.Application.Abstractions.Infrastructure.Services.Storage.Provider;
+using BlazorHero.CleanArchitecture.Application.Abstractions.Persistence;
+using BlazorHero.CleanArchitecture.Application.Abstractions.Persistence.Repositories;
 using BlazorHero.CleanArchitecture.Infrastructure.Contexts;
 using BlazorHero.CleanArchitecture.Infrastructure.Models.Identity;
 using BlazorHero.CleanArchitecture.Infrastructure.Repositories;

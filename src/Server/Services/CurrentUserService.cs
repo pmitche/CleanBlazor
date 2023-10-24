@@ -1,5 +1,5 @@
 ﻿using System.Security.Claims;
-using BlazorHero.CleanArchitecture.Application.Interfaces.Services;
+using BlazorHero.CleanArchitecture.Application.Abstractions.Infrastructure.Services;
 
 namespace BlazorHero.CleanArchitecture.Server.Services;
 
