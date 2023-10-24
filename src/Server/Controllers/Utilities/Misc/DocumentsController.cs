@@ -1,7 +1,5 @@
-﻿using BlazorHero.CleanArchitecture.Application.Features.Documents.Commands.AddEdit;
-using BlazorHero.CleanArchitecture.Application.Features.Documents.Commands.Delete;
-using BlazorHero.CleanArchitecture.Application.Features.Documents.Queries.GetAll;
-using BlazorHero.CleanArchitecture.Application.Features.Documents.Queries.GetById;
+﻿using BlazorHero.CleanArchitecture.Application.Features.Documents.Commands;
+using BlazorHero.CleanArchitecture.Application.Features.Documents.Queries;
 using BlazorHero.CleanArchitecture.Contracts.Documents;
 using BlazorHero.CleanArchitecture.Shared.Constants.Permission;
 using BlazorHero.CleanArchitecture.Shared.Wrapper;

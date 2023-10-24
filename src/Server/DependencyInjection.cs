@@ -12,7 +12,6 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Localization;
 using Microsoft.OpenApi.Models;
 using Serilog;
-using SharpGrip.FluentValidation.AutoValidation.Mvc.Extensions;
 
 namespace BlazorHero.CleanArchitecture.Server;
 
@@ -21,7 +20,6 @@ public static class DependencyInjection
     public static IServiceCollection AddServer(this IServiceCollection services, IConfiguration configuration)
     {
         services
-            .AddFluentValidationAutoValidation()
             .AddForwarding(configuration)
             .AddServerLocalization()
             .RegisterSwagger()

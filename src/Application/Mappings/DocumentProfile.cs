@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
-using BlazorHero.CleanArchitecture.Application.Features.Documents.Commands.AddEdit;
-using BlazorHero.CleanArchitecture.Application.Features.Documents.Queries.GetById;
+using BlazorHero.CleanArchitecture.Application.Features.Documents.Commands;
 using BlazorHero.CleanArchitecture.Contracts.Documents;
 using BlazorHero.CleanArchitecture.Domain.Entities.Misc;
 

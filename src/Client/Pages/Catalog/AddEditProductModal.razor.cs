@@ -1,7 +1,6 @@
 ﻿using Blazored.FluentValidation;
 using BlazorHero.CleanArchitecture.Application.Enums;
-using BlazorHero.CleanArchitecture.Application.Features.Brands.Queries.GetAll;
-using BlazorHero.CleanArchitecture.Application.Features.Products.Commands.AddEdit;
+using BlazorHero.CleanArchitecture.Application.Features.Products.Commands;
 using BlazorHero.CleanArchitecture.Client.Extensions;
 using BlazorHero.CleanArchitecture.Client.Infrastructure.Managers.Catalog.Brand;
 using BlazorHero.CleanArchitecture.Client.Infrastructure.Managers.Catalog.Product;

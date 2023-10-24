@@ -1,5 +1,5 @@
 ﻿using Blazored.FluentValidation;
-using BlazorHero.CleanArchitecture.Application.Features.DocumentTypes.Commands.AddEdit;
+using BlazorHero.CleanArchitecture.Application.Features.DocumentTypes.Commands;
 using BlazorHero.CleanArchitecture.Client.Extensions;
 using BlazorHero.CleanArchitecture.Client.Infrastructure.Managers.Misc.DocumentType;
 using BlazorHero.CleanArchitecture.Shared.Constants.Application;

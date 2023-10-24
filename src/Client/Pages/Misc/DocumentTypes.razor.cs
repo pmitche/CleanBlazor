@@ -1,6 +1,5 @@
 ﻿using System.Security.Claims;
-using BlazorHero.CleanArchitecture.Application.Features.DocumentTypes.Commands.AddEdit;
-using BlazorHero.CleanArchitecture.Application.Features.DocumentTypes.Queries.GetAll;
+using BlazorHero.CleanArchitecture.Application.Features.DocumentTypes.Commands;
 using BlazorHero.CleanArchitecture.Client.Extensions;
 using BlazorHero.CleanArchitecture.Client.Infrastructure.Managers.Misc.DocumentType;
 using BlazorHero.CleanArchitecture.Client.Shared.Dialogs;

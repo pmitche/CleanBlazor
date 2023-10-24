@@ -1,5 +1,4 @@
-﻿using BlazorHero.CleanArchitecture.Application.Features.Products.Commands.AddEdit;
-using BlazorHero.CleanArchitecture.Application.Features.Products.Queries.GetAllPaged;
+﻿using BlazorHero.CleanArchitecture.Application.Features.Products.Commands;
 using BlazorHero.CleanArchitecture.Contracts.Catalog;
 using BlazorHero.CleanArchitecture.Shared.Wrapper;
 

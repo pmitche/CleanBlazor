@@ -1,5 +1,5 @@
 ﻿using Blazored.FluentValidation;
-using BlazorHero.CleanArchitecture.Application.Features.ExtendedAttributes.Commands.AddEdit;
+using BlazorHero.CleanArchitecture.Application.Features.ExtendedAttributes.Commands;
 using BlazorHero.CleanArchitecture.Client.Extensions;
 using BlazorHero.CleanArchitecture.Client.Infrastructure.Managers.ExtendedAttribute;
 using BlazorHero.CleanArchitecture.Domain.Contracts;

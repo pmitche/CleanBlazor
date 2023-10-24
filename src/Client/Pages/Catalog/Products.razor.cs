@@ -1,6 +1,5 @@
 ﻿using System.Security.Claims;
-using BlazorHero.CleanArchitecture.Application.Features.Products.Commands.AddEdit;
-using BlazorHero.CleanArchitecture.Application.Features.Products.Queries.GetAllPaged;
+using BlazorHero.CleanArchitecture.Application.Features.Products.Commands;
 using BlazorHero.CleanArchitecture.Client.Extensions;
 using BlazorHero.CleanArchitecture.Client.Infrastructure.Managers.Catalog.Product;
 using BlazorHero.CleanArchitecture.Client.Shared.Dialogs;

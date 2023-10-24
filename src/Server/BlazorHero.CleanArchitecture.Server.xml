@@ -242,7 +242,7 @@
             <param name="id"></param>
             <returns>Status 200 Ok</returns>
         </member>
-        <member name="M:BlazorHero.CleanArchitecture.Server.Controllers.Utilities.ExtendedAttributes.Base.ExtendedAttributesController`4.Post(BlazorHero.CleanArchitecture.Application.Features.ExtendedAttributes.Commands.AddEdit.AddEditExtendedAttributeCommand{`0,`1,`2,`3})">
+        <member name="M:BlazorHero.CleanArchitecture.Server.Controllers.Utilities.ExtendedAttributes.Base.ExtendedAttributesController`4.Post(BlazorHero.CleanArchitecture.Application.Features.ExtendedAttributes.Commands.AddEditExtendedAttributeCommand{`0,`1,`2,`3})">
             <summary>
                 Create/Update a Entity Extended Attribute
             </summary>
@@ -283,7 +283,7 @@
             <param name="id"></param>
             <returns>Status 200 Ok</returns>
         </member>
-        <member name="M:BlazorHero.CleanArchitecture.Server.Controllers.Utilities.Misc.DocumentsController.Post(BlazorHero.CleanArchitecture.Application.Features.Documents.Commands.AddEdit.AddEditDocumentCommand)">
+        <member name="M:BlazorHero.CleanArchitecture.Server.Controllers.Utilities.Misc.DocumentsController.Post(BlazorHero.CleanArchitecture.Application.Features.Documents.Commands.AddEditDocumentCommand)">
             <summary>
                 Add/Edit Document
             </summary>
@@ -310,7 +310,7 @@
             <param name="id"></param>
             <returns>Status 200 Ok</returns>
         </member>
-        <member name="M:BlazorHero.CleanArchitecture.Server.Controllers.Utilities.Misc.DocumentTypesController.Post(BlazorHero.CleanArchitecture.Application.Features.DocumentTypes.Commands.AddEdit.AddEditDocumentTypeCommand)">
+        <member name="M:BlazorHero.CleanArchitecture.Server.Controllers.Utilities.Misc.DocumentTypesController.Post(BlazorHero.CleanArchitecture.Application.Features.DocumentTypes.Commands.AddEditDocumentTypeCommand)">
             <summary>
                 Create/Update a Document Type
             </summary>
@@ -351,7 +351,7 @@
             <param name="id"></param>
             <returns>Status 200 Ok</returns>
         </member>
-        <member name="M:BlazorHero.CleanArchitecture.Server.Controllers.v1.Catalog.BrandsController.Post(BlazorHero.CleanArchitecture.Application.Features.Brands.Commands.AddEdit.AddEditBrandCommand)">
+        <member name="M:BlazorHero.CleanArchitecture.Server.Controllers.v1.Catalog.BrandsController.Post(BlazorHero.CleanArchitecture.Application.Features.Brands.Commands.AddEditBrandCommand)">
             <summary>
                 Create/Update a Brand
             </summary>
@@ -372,7 +372,7 @@
             <param name="searchString"></param>
             <returns></returns>
         </member>
-        <member name="M:BlazorHero.CleanArchitecture.Server.Controllers.v1.Catalog.BrandsController.Import(BlazorHero.CleanArchitecture.Application.Features.Brands.Commands.Import.ImportBrandsCommand)">
+        <member name="M:BlazorHero.CleanArchitecture.Server.Controllers.v1.Catalog.BrandsController.Import(BlazorHero.CleanArchitecture.Application.Features.Brands.Commands.ImportBrandsCommand)">
             <summary>
                 Import Brands from Excel
             </summary>
@@ -396,7 +396,7 @@
             <param name="id"></param>
             <returns>Status 200 OK</returns>
         </member>
-        <member name="M:BlazorHero.CleanArchitecture.Server.Controllers.v1.Catalog.ProductsController.Post(BlazorHero.CleanArchitecture.Application.Features.Products.Commands.AddEdit.AddEditProductCommand)">
+        <member name="M:BlazorHero.CleanArchitecture.Server.Controllers.v1.Catalog.ProductsController.Post(BlazorHero.CleanArchitecture.Application.Features.Products.Commands.AddEditProductCommand)">
             <summary>
                 Add/Edit a Product
             </summary>

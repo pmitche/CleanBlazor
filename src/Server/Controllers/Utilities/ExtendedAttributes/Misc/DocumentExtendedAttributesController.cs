@@ -1,4 +1,4 @@
-﻿using BlazorHero.CleanArchitecture.Application.Features.ExtendedAttributes.Commands.AddEdit;
+﻿using BlazorHero.CleanArchitecture.Application.Features.ExtendedAttributes.Commands;
 using BlazorHero.CleanArchitecture.Domain.Entities.ExtendedAttributes;
 using BlazorHero.CleanArchitecture.Domain.Entities.Misc;
 using BlazorHero.CleanArchitecture.Server.Controllers.Utilities.ExtendedAttributes.Base;

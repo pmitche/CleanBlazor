@@ -1,7 +1,5 @@
 ﻿using System.Security.Claims;
-using BlazorHero.CleanArchitecture.Application.Features.Brands.Commands.AddEdit;
-using BlazorHero.CleanArchitecture.Application.Features.Brands.Commands.Import;
-using BlazorHero.CleanArchitecture.Application.Features.Brands.Queries.GetAll;
+using BlazorHero.CleanArchitecture.Application.Features.Brands.Commands;
 using BlazorHero.CleanArchitecture.Client.Extensions;
 using BlazorHero.CleanArchitecture.Client.Infrastructure.Managers.Catalog.Brand;
 using BlazorHero.CleanArchitecture.Client.Shared.Components;
@@ -139,7 +137,7 @@ public partial class Brands
             _brand = _brandList.FirstOrDefault(c => c.Id == id);
             if (_brand != null)
             {
-                parameters.Add(nameof(AddEditBrandModal.AddEditBrandModel),
+                parameters.Add(nameof(AddEditBrandModal.AddEditBrandCommandModel),
                     new AddEditBrandCommand
                     {
                         Id = _brand.Id, Name = _brand.Name, Description = _brand.Description, Tax = _brand.Tax

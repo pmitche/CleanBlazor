@@ -1,12 +1,12 @@
 ﻿@using Microsoft.Extensions.Localization
 @inject IStringLocalizer<AddEditBrandModal> Localizer
 
-<EditForm Model="@AddEditBrandModel" OnValidSubmit="SaveAsync">
+<EditForm Model="@AddEditBrandCommandModel" OnValidSubmit="SaveAsync">
     <FluentValidationValidator @ref="_fluentValidationValidator"/>
     <MudDialog>
         <TitleContent>
             @{
-                if (AddEditBrandModel.Id == 0)
+                if (AddEditBrandCommandModel.Id == 0)
                 {
                     <MudText Typo="Typo.h6">
                         <MudIcon Icon="@Icons.Material.Filled.Add" Class="mr-3 mb-n1"/>
@@ -24,26 +24,26 @@
         </TitleContent>
         <DialogContent>
             <MudGrid>
-                @if (AddEditBrandModel.Id != 0)
+                @if (AddEditBrandCommandModel.Id != 0)
                 {
                     <MudItem xs="12" md="6">
-                        <MudTextField Disabled For="@(() => AddEditBrandModel.Id)" @bind-Value="AddEditBrandModel.Id" Label="@Localizer["Id"]"/>
+                        <MudTextField Disabled For="@(() => AddEditBrandCommandModel.Id)" @bind-Value="AddEditBrandCommandModel.Id" Label="@Localizer["Id"]"/>
                     </MudItem>
                 }
                 <MudItem xs="12" md="6">
-                    <MudTextField T="string" For="@(() => AddEditBrandModel.Name)" @bind-Value="AddEditBrandModel.Name" Label="@Localizer["Name"]"/>
+                    <MudTextField T="string" For="@(() => AddEditBrandCommandModel.Name)" @bind-Value="AddEditBrandCommandModel.Name" Label="@Localizer["Name"]"/>
                 </MudItem>
                 <MudItem xs="12" md="6">
-                    <MudTextField For="@(() => AddEditBrandModel.Description)" @bind-Value="AddEditBrandModel.Description" Label="@Localizer["Description"]"/>
+                    <MudTextField For="@(() => AddEditBrandCommandModel.Description)" @bind-Value="AddEditBrandCommandModel.Description" Label="@Localizer["Description"]"/>
                 </MudItem>
                 <MudItem xs="12" md="6">
-                    <MudTextField For="@(() => AddEditBrandModel.Tax)" @bind-Value="AddEditBrandModel.Tax" Label="@Localizer["Tax"]"/>
+                    <MudTextField For="@(() => AddEditBrandCommandModel.Tax)" @bind-Value="AddEditBrandCommandModel.Tax" Label="@Localizer["Tax"]"/>
                 </MudItem>
             </MudGrid>
         </DialogContent>
         <DialogActions>
             <MudButton DisableElevation Variant="Variant.Filled" OnClick="Cancel">@Localizer["Cancel"]</MudButton>
-            @if (AddEditBrandModel.Id != 0)
+            @if (AddEditBrandCommandModel.Id != 0)
             {
                 <MudButton DisableElevation Variant="Variant.Filled" ButtonType="ButtonType.Submit" Disabled="@(!Validated)" Color="Color.Secondary">@Localizer["Update"]</MudButton>
             }

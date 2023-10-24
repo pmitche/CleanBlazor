@@ -1,4 +1,5 @@
 using BlazorHero.CleanArchitecture.Application;
+using BlazorHero.CleanArchitecture.Contracts;
 using BlazorHero.CleanArchitecture.Infrastructure;
 using BlazorHero.CleanArchitecture.Infrastructure.Shared;
 using BlazorHero.CleanArchitecture.Server.Extensions;
@@ -9,6 +10,7 @@ using Hangfire;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.FileProviders;
 using Serilog;
+using SharpGrip.FluentValidation.AutoValidation.Mvc.Extensions;
 
 namespace BlazorHero.CleanArchitecture.Server;
 
@@ -26,6 +28,7 @@ public class Startup
         services.AddLocalization(options => { options.ResourcesPath = Path.Combine("Configuration", "Resources"); });
 
         services.AddApplication(_configuration);
+        services.AddContracts();
         services.AddInfrastructure(_configuration);
         services.AddSharedInfrastructure(_configuration);
         services.AddServer(_configuration);
@@ -35,6 +38,7 @@ public class Startup
         services.AddHangfire(x => x.UseSqlServerStorage(_configuration.GetConnectionString("DefaultConnection")));
         services.AddHangfireServer();
         services.AddControllers();
+        services.AddFluentValidationAutoValidation();
         services.AddRazorPages();
         services.AddApiVersioning(config =>
         {

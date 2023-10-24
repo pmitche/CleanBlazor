@@ -1,7 +1,6 @@
 ﻿using System.Security.Claims;
-using BlazorHero.CleanArchitecture.Application.Features.ExtendedAttributes.Commands.AddEdit;
-using BlazorHero.CleanArchitecture.Application.Features.ExtendedAttributes.Queries.Export;
-using BlazorHero.CleanArchitecture.Application.Features.ExtendedAttributes.Queries.GetAllByEntityId;
+using BlazorHero.CleanArchitecture.Application.Features.ExtendedAttributes.Commands;
+using BlazorHero.CleanArchitecture.Application.Features.ExtendedAttributes.Queries;
 using BlazorHero.CleanArchitecture.Client.Extensions;
 using BlazorHero.CleanArchitecture.Client.Infrastructure.Managers.ExtendedAttribute;
 using BlazorHero.CleanArchitecture.Client.Shared.Dialogs;

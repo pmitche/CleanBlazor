@@ -1,8 +1,5 @@
-﻿using BlazorHero.CleanArchitecture.Application.Features.Products.Commands.AddEdit;
-using BlazorHero.CleanArchitecture.Application.Features.Products.Commands.Delete;
-using BlazorHero.CleanArchitecture.Application.Features.Products.Queries.Export;
-using BlazorHero.CleanArchitecture.Application.Features.Products.Queries.GetAllPaged;
-using BlazorHero.CleanArchitecture.Application.Features.Products.Queries.GetProductImage;
+﻿using BlazorHero.CleanArchitecture.Application.Features.Products.Commands;
+using BlazorHero.CleanArchitecture.Application.Features.Products.Queries;
 using BlazorHero.CleanArchitecture.Contracts.Catalog;
 using BlazorHero.CleanArchitecture.Shared.Constants.Permission;
 using BlazorHero.CleanArchitecture.Shared.Wrapper;

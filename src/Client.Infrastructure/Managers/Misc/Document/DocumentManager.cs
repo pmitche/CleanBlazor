@@ -1,7 +1,6 @@
 ﻿using System.Net.Http.Json;
-using BlazorHero.CleanArchitecture.Application.Features.Documents.Commands.AddEdit;
-using BlazorHero.CleanArchitecture.Application.Features.Documents.Queries.GetAll;
-using BlazorHero.CleanArchitecture.Application.Features.Documents.Queries.GetById;
+using BlazorHero.CleanArchitecture.Application.Features.Documents.Commands;
+using BlazorHero.CleanArchitecture.Application.Features.Documents.Queries;
 using BlazorHero.CleanArchitecture.Client.Infrastructure.Extensions;
 using BlazorHero.CleanArchitecture.Client.Infrastructure.Routes;
 using BlazorHero.CleanArchitecture.Contracts.Documents;
