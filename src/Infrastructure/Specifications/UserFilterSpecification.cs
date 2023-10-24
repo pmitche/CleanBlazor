@@ -3,7 +3,7 @@ using BlazorHero.CleanArchitecture.Infrastructure.Models.Identity;
 
 namespace BlazorHero.CleanArchitecture.Infrastructure.Specifications;
 
-public class UserFilterSpecification : HeroSpecification<BlazorHeroUser>
+public class UserFilterSpecification : BaseSpecification<BlazorHeroUser>
 {
     public UserFilterSpecification(string searchString)
     {
