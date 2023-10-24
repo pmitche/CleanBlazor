@@ -4,7 +4,7 @@
         <name>BlazorHero.CleanArchitecture.Server</name>
     </assembly>
     <members>
-        <member name="T:BlazorHero.CleanArchitecture.Server.Controllers.BaseApiController`1">
+        <member name="T:BlazorHero.CleanArchitecture.Server.Controllers.BaseApiController">
             <summary>
                 Abstract BaseApi Controller Class
             </summary>
@@ -216,56 +216,6 @@
             <param name="searchInOldValues"></param>
             <param name="searchInNewValues"></param>
             <returns>Status 200 OK</returns>
-        </member>
-        <member name="T:BlazorHero.CleanArchitecture.Server.Controllers.Utilities.ExtendedAttributes.Base.ExtendedAttributesController`4">
-            <summary>
-                Abstract Extended Attributes Controller Class
-            </summary>
-        </member>
-        <member name="M:BlazorHero.CleanArchitecture.Server.Controllers.Utilities.ExtendedAttributes.Base.ExtendedAttributesController`4.GetAll">
-            <summary>
-                Get All Entity Extended Attributes
-            </summary>
-            <returns>Status 200 OK</returns>
-        </member>
-        <member name="M:BlazorHero.CleanArchitecture.Server.Controllers.Utilities.ExtendedAttributes.Base.ExtendedAttributesController`4.GetAllByEntityId(`1)">
-            <summary>
-                Get All Entity Extended Attributes by entity id
-            </summary>
-            <param name="entityId"></param>
-            <returns>Status 200 OK</returns>
-        </member>
-        <member name="M:BlazorHero.CleanArchitecture.Server.Controllers.Utilities.ExtendedAttributes.Base.ExtendedAttributesController`4.GetById(`0)">
-            <summary>
-                Get Entity Extended Attribute By Id
-            </summary>
-            <param name="id"></param>
-            <returns>Status 200 Ok</returns>
-        </member>
-        <member name="M:BlazorHero.CleanArchitecture.Server.Controllers.Utilities.ExtendedAttributes.Base.ExtendedAttributesController`4.Post(BlazorHero.CleanArchitecture.Application.Features.ExtendedAttributes.Commands.AddEditExtendedAttributeCommand{`0,`1,`2,`3})">
-            <summary>
-                Create/Update a Entity Extended Attribute
-            </summary>
-            <param name="command"></param>
-            <returns>Status 200 OK</returns>
-        </member>
-        <member name="M:BlazorHero.CleanArchitecture.Server.Controllers.Utilities.ExtendedAttributes.Base.ExtendedAttributesController`4.Delete(`0)">
-            <summary>
-                Delete a Entity Extended Attribute
-            </summary>
-            <param name="id"></param>
-            <returns>Status 200 OK</returns>
-        </member>
-        <member name="M:BlazorHero.CleanArchitecture.Server.Controllers.Utilities.ExtendedAttributes.Base.ExtendedAttributesController`4.Export(System.String,`1,System.Boolean,System.Boolean,System.String)">
-            <summary>
-                Search Entity Extended Attribute and Export to Excel
-            </summary>
-            <param name="searchString"></param>
-            <param name="entityId"></param>
-            <param name="includeEntity"></param>
-            <param name="onlyCurrentGroup"></param>
-            <param name="currentGroup"></param>
-            <returns></returns>
         </member>
         <member name="M:BlazorHero.CleanArchitecture.Server.Controllers.Utilities.Misc.DocumentsController.GetAll(System.Int32,System.Int32,System.String)">
             <summary>

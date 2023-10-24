@@ -41,23 +41,16 @@ internal sealed class GetAllProductsQueryHandler
             BrandId = e.BrandId
         };
         ProductFilterSpecification productFilterSpec = new(request.SearchString);
-        if (request.OrderBy?.Any() != true)
+        var queryable = _unitOfWork.Repository<Product>().Entities
+            .Specify(productFilterSpec);
+
+        if (!string.IsNullOrWhiteSpace(request.OrderByInput))
         {
-            PaginatedResult<GetAllPagedProductsResponse> data = await _unitOfWork.Repository<Product>().Entities
-                .Specify(productFilterSpec)
-                .Select(expression)
-                .ToPaginatedListAsync(request.PageNumber, request.PageSize);
-            return data;
+            queryable = queryable.OrderBy(request.OrderByInput);
         }
-        else
-        {
-            var ordering = string.Join(",", request.OrderBy); // of the form fieldname [ascending|descending], ...
-            PaginatedResult<GetAllPagedProductsResponse> data = await _unitOfWork.Repository<Product>().Entities
-                .Specify(productFilterSpec)
-                .OrderBy(ordering) // require system.linq.dynamic.core
-                .Select(expression)
-                .ToPaginatedListAsync(request.PageNumber, request.PageSize);
-            return data;
-        }
+
+        return await queryable
+            .Select(expression)
+            .ToPaginatedListAsync(request.PageNumber, request.PageSize);
     }
 }

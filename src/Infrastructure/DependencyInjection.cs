@@ -29,7 +29,6 @@ public static class DependencyInjection
             .AddIdentity()
             .AddServices()
             .AddInfrastructureMappings()
-            .AddExtendedAttributesUnitOfWork()
             .AddServerStorage();
 
         return services;
@@ -91,10 +90,6 @@ public static class DependencyInjection
             .AddTransient<IDocumentRepository, DocumentRepository>()
             .AddTransient<IDocumentTypeRepository, DocumentTypeRepository>()
             .AddTransient(typeof(IUnitOfWork<>), typeof(UnitOfWork<>));
-
-    private static IServiceCollection AddExtendedAttributesUnitOfWork(this IServiceCollection services) =>
-        services
-            .AddTransient(typeof(IExtendedAttributeUnitOfWork<,,>), typeof(ExtendedAttributeUnitOfWork<,,>));
 
     private static IServiceCollection AddServerStorage(this IServiceCollection services)
     {

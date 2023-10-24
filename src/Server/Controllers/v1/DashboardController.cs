@@ -1,5 +1,4 @@
 ﻿using BlazorHero.CleanArchitecture.Application.Features.Dashboards.Queries;
-using BlazorHero.CleanArchitecture.Application.Features.Dashboards.Queries.GetData;
 using BlazorHero.CleanArchitecture.Contracts.Dashboard;
 using BlazorHero.CleanArchitecture.Shared.Constants.Permission;
 using BlazorHero.CleanArchitecture.Shared.Wrapper;
@@ -9,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace BlazorHero.CleanArchitecture.Server.Controllers.v1;
 
 [ApiController]
-public class DashboardController : BaseApiController<DashboardController>
+public class DashboardController : BaseApiController
 {
     /// <summary>
     ///     Get Dashboard Data

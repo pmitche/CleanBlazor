@@ -5,7 +5,6 @@ using BlazorHero.CleanArchitecture.Application.Abstractions.Persistence;
 using BlazorHero.CleanArchitecture.Application.Features.Dashboards.Queries.GetData;
 using BlazorHero.CleanArchitecture.Contracts.Dashboard;
 using BlazorHero.CleanArchitecture.Domain.Entities.Catalog;
-using BlazorHero.CleanArchitecture.Domain.Entities.ExtendedAttributes;
 using BlazorHero.CleanArchitecture.Domain.Entities.Misc;
 using BlazorHero.CleanArchitecture.Shared.Wrapper;
 using Microsoft.EntityFrameworkCore;
@@ -45,8 +44,6 @@ internal sealed class GetDashboardDataQueryHandler : IQueryHandler<GetDashboardD
             BrandCount = await _unitOfWork.Repository<Brand>().Entities.CountAsync(cancellationToken),
             DocumentCount = await _unitOfWork.Repository<Document>().Entities.CountAsync(cancellationToken),
             DocumentTypeCount = await _unitOfWork.Repository<DocumentType>().Entities.CountAsync(cancellationToken),
-            DocumentExtendedAttributeCount =
-                await _unitOfWork.Repository<DocumentExtendedAttribute>().Entities.CountAsync(cancellationToken),
             UserCount = await _userService.GetCountAsync(),
             RoleCount = await _roleService.GetCountAsync()
         };
@@ -56,7 +53,6 @@ internal sealed class GetDashboardDataQueryHandler : IQueryHandler<GetDashboardD
         var brandsFigure = new double[13];
         var documentsFigure = new double[13];
         var documentTypesFigure = new double[13];
-        var documentExtendedAttributesFigure = new double[13];
         for (var month = 1; month <= 12; month++)
         {
             DateTime filterStartDate = new(selectedYear, month, 01, 0, 0, 0, DateTimeKind.Utc);
@@ -81,9 +77,6 @@ internal sealed class GetDashboardDataQueryHandler : IQueryHandler<GetDashboardD
             documentTypesFigure[month - 1] = await _unitOfWork.Repository<DocumentType>().Entities
                 .Where(x => x.CreatedOn >= filterStartDate && x.CreatedOn <= filterEndDate)
                 .CountAsync(cancellationToken);
-            documentExtendedAttributesFigure[month - 1] = await _unitOfWork.Repository<DocumentExtendedAttribute>().Entities
-                .Where(x => x.CreatedOn >= filterStartDate && x.CreatedOn <= filterEndDate)
-                .CountAsync(cancellationToken);
         }
 
         response.DataEnterBarChart.Add(new ChartSeries { Name = _localizer["Products"], Data = productsFigure });
@@ -92,10 +85,6 @@ internal sealed class GetDashboardDataQueryHandler : IQueryHandler<GetDashboardD
         response.DataEnterBarChart.Add(new ChartSeries
         {
             Name = _localizer["Document Types"], Data = documentTypesFigure
-        });
-        response.DataEnterBarChart.Add(new ChartSeries
-        {
-            Name = _localizer["Document Extended Attributes"], Data = documentExtendedAttributesFigure
         });
 
         return await Result<DashboardDataResponse>.SuccessAsync(response);

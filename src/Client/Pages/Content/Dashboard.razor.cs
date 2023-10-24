@@ -1,5 +1,4 @@
-﻿using BlazorHero.CleanArchitecture.Application.Features.Dashboards.Queries.GetData;
-using BlazorHero.CleanArchitecture.Client.Extensions;
+﻿using BlazorHero.CleanArchitecture.Client.Extensions;
 using BlazorHero.CleanArchitecture.Client.Infrastructure.Managers.Dashboard;
 using BlazorHero.CleanArchitecture.Contracts.Dashboard;
 using BlazorHero.CleanArchitecture.Shared.Constants.Application;
@@ -27,7 +26,6 @@ public partial class Dashboard
     [Parameter] public int BrandCount { get; set; }
     [Parameter] public int DocumentCount { get; set; }
     [Parameter] public int DocumentTypeCount { get; set; }
-    [Parameter] public int DocumentExtendedAttributeCount { get; set; }
     [Parameter] public int UserCount { get; set; }
     [Parameter] public int RoleCount { get; set; }
 
@@ -57,7 +55,6 @@ public partial class Dashboard
             BrandCount = response.Data.BrandCount;
             DocumentCount = response.Data.DocumentCount;
             DocumentTypeCount = response.Data.DocumentTypeCount;
-            DocumentExtendedAttributeCount = response.Data.DocumentExtendedAttributeCount;
             UserCount = response.Data.UserCount;
             RoleCount = response.Data.RoleCount;
             foreach (Application.Features.Dashboards.Queries.GetData.ChartSeries item in

@@ -2,7 +2,6 @@
 using BlazorHero.CleanArchitecture.Client.Extensions;
 using BlazorHero.CleanArchitecture.Contracts.Identity;
 using BlazorHero.CleanArchitecture.Shared.Constants.Permission;
-using BlazorHero.CleanArchitecture.Shared.Models;
 using BlazorHero.CleanArchitecture.Shared.Models.Identity;
 using BlazorHero.CleanArchitecture.Shared.Wrapper;
 using Microsoft.AspNetCore.Authorization;

@@ -5,4 +5,8 @@
     <AssemblyName>BlazorHero.CleanArchitecture.Domain</AssemblyName>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="Enums\" />
+  </ItemGroup>
+
 </Project>

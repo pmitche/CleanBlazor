@@ -1,5 +1,4 @@
 ﻿using Blazored.FluentValidation;
-using BlazorHero.CleanArchitecture.Application.Enums;
 using BlazorHero.CleanArchitecture.Client.Extensions;
 using BlazorHero.CleanArchitecture.Contracts;
 using BlazorHero.CleanArchitecture.Shared.Enums;

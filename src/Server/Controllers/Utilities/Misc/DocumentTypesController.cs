@@ -10,7 +10,7 @@ namespace BlazorHero.CleanArchitecture.Server.Controllers.Utilities.Misc;
 
 [Route("api/[controller]")]
 [ApiController]
-public class DocumentTypesController : BaseApiController<DocumentTypesController>
+public class DocumentTypesController : BaseApiController
 {
     /// <summary>
     ///     Get All Document Types

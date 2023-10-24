@@ -1,12 +1,9 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using BlazorHero.CleanArchitecture.Application.Abstractions.Messaging;
 using BlazorHero.CleanArchitecture.Application.Abstractions.Persistence;
-using BlazorHero.CleanArchitecture.Domain.Entities.ExtendedAttributes;
 using BlazorHero.CleanArchitecture.Domain.Entities.Misc;
 using BlazorHero.CleanArchitecture.Shared.Constants.Application;
 using BlazorHero.CleanArchitecture.Shared.Wrapper;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Query;
 using Microsoft.Extensions.Localization;
 
 namespace BlazorHero.CleanArchitecture.Application.Features.Documents.Commands;
@@ -29,9 +26,6 @@ internal sealed class DeleteDocumentCommandHandler : ICommandHandler<DeleteDocum
 
     public async Task<Result<int>> Handle(DeleteDocumentCommand command, CancellationToken cancellationToken)
     {
-        IIncludableQueryable<Document, ICollection<DocumentExtendedAttribute>> documentsWithExtendedAttributes =
-            _unitOfWork.Repository<Document>().Entities.Include(x => x.ExtendedAttributes);
-
         Document document = await _unitOfWork.Repository<Document>().GetByIdAsync(command.Id);
         if (document == null)
         {
@@ -39,16 +33,7 @@ internal sealed class DeleteDocumentCommandHandler : ICommandHandler<DeleteDocum
         }
 
         await _unitOfWork.Repository<Document>().DeleteAsync(document);
-
-        // delete all caches related with deleted entity
-        List<string> cacheKeys = await documentsWithExtendedAttributes.SelectMany(x => x.ExtendedAttributes)
-            .Where(x => x.EntityId == command.Id).Distinct().Select(x =>
-                ApplicationConstants.Cache.GetAllEntityExtendedAttributesByEntityIdCacheKey(nameof(Document),
-                    x.EntityId))
-            .ToListAsync(cancellationToken);
-        cacheKeys.Add(ApplicationConstants.Cache.GetAllEntityExtendedAttributesCacheKey(nameof(Document)));
-        await _unitOfWork.CommitAndRemoveCache(cancellationToken, cacheKeys.ToArray());
-
+        await _unitOfWork.CommitAndRemoveCache(cancellationToken, ApplicationConstants.Cache.GetAllBrandsCacheKey);
         return await Result<int>.SuccessAsync(document.Id, _localizer["Document Deleted"]);
     }
 }

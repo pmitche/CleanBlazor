@@ -1,9 +1,8 @@
 ﻿using BlazorHero.CleanArchitecture.Domain.Contracts;
-using BlazorHero.CleanArchitecture.Domain.Entities.ExtendedAttributes;
 
 namespace BlazorHero.CleanArchitecture.Domain.Entities.Misc;
 
-public class Document : AuditableEntityWithExtendedAttributes<int, int, Document, DocumentExtendedAttribute>
+public class Document : AuditableEntity<int>
 {
     public string Title { get; set; }
     public string Description { get; set; }

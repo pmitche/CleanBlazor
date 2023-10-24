@@ -1,5 +1,4 @@
-﻿using BlazorHero.CleanArchitecture.Application.Features.Dashboards.Queries.GetData;
-using BlazorHero.CleanArchitecture.Contracts.Dashboard;
+﻿using BlazorHero.CleanArchitecture.Contracts.Dashboard;
 using BlazorHero.CleanArchitecture.Shared.Wrapper;
 
 namespace BlazorHero.CleanArchitecture.Client.Infrastructure.Managers.Dashboard;

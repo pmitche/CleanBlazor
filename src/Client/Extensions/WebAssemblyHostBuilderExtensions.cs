@@ -2,10 +2,7 @@
 using Blazored.LocalStorage;
 using BlazorHero.CleanArchitecture.Client.Infrastructure.Authentication;
 using BlazorHero.CleanArchitecture.Client.Infrastructure.Managers;
-using BlazorHero.CleanArchitecture.Client.Infrastructure.Managers.ExtendedAttribute;
 using BlazorHero.CleanArchitecture.Client.Infrastructure.Managers.Preferences;
-using BlazorHero.CleanArchitecture.Domain.Entities.ExtendedAttributes;
-using BlazorHero.CleanArchitecture.Domain.Entities.Misc;
 using BlazorHero.CleanArchitecture.Shared.Constants.Permission;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components.Authorization;
@@ -47,7 +44,6 @@ public static class WebAssemblyHostBuilderExtensions
             .AddScoped<BlazorHeroStateProvider>()
             .AddScoped<AuthenticationStateProvider, BlazorHeroStateProvider>()
             .AddManagers()
-            .AddExtendedAttributeManagers()
             .AddTransient<AuthenticationHeaderHandler>()
             .AddScoped(sp => sp
                 .GetRequiredService<IHttpClientFactory>()
@@ -83,12 +79,6 @@ public static class WebAssemblyHostBuilderExtensions
 
         return services;
     }
-
-    private static IServiceCollection AddExtendedAttributeManagers(this IServiceCollection services) =>
-        //TODO - add managers with reflection!
-        services
-            .AddTransient(typeof(IExtendedAttributeManager<int, int, Document, DocumentExtendedAttribute>),
-                typeof(ExtendedAttributeManager<int, int, Document, DocumentExtendedAttribute>));
 
     private static void RegisterPermissionClaims(AuthorizationOptions options) =>
         Permissions.GetRegisteredPermissions().ForEach(permission => options.AddPolicy(permission,

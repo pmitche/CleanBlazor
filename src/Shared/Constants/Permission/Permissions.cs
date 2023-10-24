@@ -73,18 +73,6 @@ public static class Permissions
         public const string Search = "Permissions.DocumentTypes.Search";
     }
 
-    [DisplayName("Document Extended Attributes")]
-    [Description("Document Extended Attributes Permissions")]
-    public static class DocumentExtendedAttributes
-    {
-        public const string View = "Permissions.DocumentExtendedAttributes.View";
-        public const string Create = "Permissions.DocumentExtendedAttributes.Create";
-        public const string Edit = "Permissions.DocumentExtendedAttributes.Edit";
-        public const string Delete = "Permissions.DocumentExtendedAttributes.Delete";
-        public const string Export = "Permissions.DocumentExtendedAttributes.Export";
-        public const string Search = "Permissions.DocumentExtendedAttributes.Search";
-    }
-
     [DisplayName("Users")]
     [Description("Users Permissions")]
     public static class Users

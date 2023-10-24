@@ -29,14 +29,6 @@ public static class ApplicationConstants
     {
         public const string GetAllBrandsCacheKey = "all-brands";
         public const string GetAllDocumentTypesCacheKey = "all-document-types";
-
-        public static string GetAllEntityExtendedAttributesCacheKey(string entityFullName) =>
-            $"all-{entityFullName}-extended-attributes";
-
-        public static string GetAllEntityExtendedAttributesByEntityIdCacheKey<TEntityId>(
-            string entityFullName,
-            TEntityId entityId) =>
-            $"all-{entityFullName}-extended-attributes-{entityId}";
     }
 
     public static class MimeTypes

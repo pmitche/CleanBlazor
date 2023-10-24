@@ -2,7 +2,6 @@
 using BlazorHero.CleanArchitecture.Application.Abstractions.Infrastructure.Services;
 using BlazorHero.CleanArchitecture.Domain.Contracts;
 using BlazorHero.CleanArchitecture.Domain.Entities.Catalog;
-using BlazorHero.CleanArchitecture.Domain.Entities.ExtendedAttributes;
 using BlazorHero.CleanArchitecture.Domain.Entities.Misc;
 using BlazorHero.CleanArchitecture.Infrastructure.Models.Identity;
 using BlazorHero.CleanArchitecture.Shared.Models.Chat;
@@ -33,7 +32,6 @@ public class BlazorHeroContext : AuditableContext
     public DbSet<Brand> Brands { get; set; }
     public DbSet<Document> Documents { get; set; }
     public DbSet<DocumentType> DocumentTypes { get; set; }
-    public DbSet<DocumentExtendedAttribute> DocumentExtendedAttributes { get; set; }
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new())
     {

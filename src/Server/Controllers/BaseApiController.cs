@@ -8,10 +8,8 @@ namespace BlazorHero.CleanArchitecture.Server.Controllers;
 /// </summary>
 [ApiController]
 [Route("api/v{version:apiVersion}/[controller]")]
-public abstract class BaseApiController<T> : ControllerBase
+public abstract class BaseApiController : ControllerBase
 {
-    private ILogger<T> _loggerInstance;
     private IMediator _mediatorInstance;
     protected IMediator Mediator => _mediatorInstance ??= HttpContext.RequestServices.GetService<IMediator>();
-    protected ILogger<T> Logger => _loggerInstance ??= HttpContext.RequestServices.GetService<ILogger<T>>();
 }

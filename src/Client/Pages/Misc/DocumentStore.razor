@@ -89,13 +89,9 @@
                         }
                     </MudTd>
                     <MudTd DataLabel="Actions" Style="text-align: right">
-                        @if (_canEditDocuments || _canDeleteDocuments || _canViewDocumentExtendedAttributes)
+                        @if (_canEditDocuments || _canDeleteDocuments)
                         {
                             <MudMenu Label="@Localizer["Actions"]" Variant="Variant.Filled" DisableElevation="true" EndIcon="@Icons.Material.Filled.KeyboardArrowDown" IconColor="Color.Secondary" Direction="Direction.Left" OffsetX="true">
-                                @if (_canViewDocumentExtendedAttributes)
-                                {
-                                    <MudMenuItem @onclick="@(() => ManageExtendedAttributes(context.Id))">@Localizer["Manage Extended Attributes"]</MudMenuItem>
-                                }
                                 @if (context.CreatedBy == CurrentUserId)
                                 {
                                     @if (_canEditDocuments)

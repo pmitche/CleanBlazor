@@ -1,5 +1,4 @@
-﻿using BlazorHero.CleanArchitecture.Shared.Models;
-using BlazorHero.CleanArchitecture.Shared.Models.Identity;
+﻿using BlazorHero.CleanArchitecture.Shared.Models.Identity;
 
 namespace BlazorHero.CleanArchitecture.Contracts.Identity;
 

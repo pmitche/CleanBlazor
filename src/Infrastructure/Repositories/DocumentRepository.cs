@@ -12,7 +12,4 @@ public class DocumentRepository : IDocumentRepository
 
     public async Task<bool> IsDocumentTypeUsed(int documentTypeId) =>
         await _repository.Entities.AnyAsync(b => b.DocumentTypeId == documentTypeId);
-
-    public async Task<bool> IsDocumentExtendedAttributeUsed(int documentExtendedAttributeId) =>
-        await _repository.Entities.AnyAsync(b => b.ExtendedAttributes.Any(x => x.Id == documentExtendedAttributeId));
 }

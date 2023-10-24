@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BlazorHero.CleanArchitecture.Server.Controllers.v1.Catalog;
 
-public class ProductsController : BaseApiController<ProductsController>
+public class ProductsController : BaseApiController
 {
     /// <summary>
     ///     Get All Products

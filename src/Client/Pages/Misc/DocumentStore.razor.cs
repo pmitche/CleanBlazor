@@ -4,7 +4,6 @@ using BlazorHero.CleanArchitecture.Client.Extensions;
 using BlazorHero.CleanArchitecture.Client.Infrastructure.Managers.Misc.Document;
 using BlazorHero.CleanArchitecture.Client.Shared.Dialogs;
 using BlazorHero.CleanArchitecture.Contracts.Documents;
-using BlazorHero.CleanArchitecture.Domain.Entities.Misc;
 using BlazorHero.CleanArchitecture.Shared.Constants.Permission;
 using BlazorHero.CleanArchitecture.Shared.Wrapper;
 using Microsoft.AspNetCore.Authorization;
@@ -21,7 +20,6 @@ public partial class DocumentStore
     private bool _canDeleteDocuments;
     private bool _canEditDocuments;
     private bool _canSearchDocuments;
-    private bool _canViewDocumentExtendedAttributes;
     private int _currentPage;
 
     private ClaimsPrincipal _currentUser;
@@ -46,9 +44,6 @@ public partial class DocumentStore
         _canDeleteDocuments = (await AuthorizationService.AuthorizeAsync(_currentUser, Permissions.Documents.Delete))
             .Succeeded;
         _canSearchDocuments = (await AuthorizationService.AuthorizeAsync(_currentUser, Permissions.Documents.Search))
-            .Succeeded;
-        _canViewDocumentExtendedAttributes =
-            (await AuthorizationService.AuthorizeAsync(_currentUser, Permissions.DocumentExtendedAttributes.View))
             .Succeeded;
 
         _loaded = true;
@@ -218,7 +213,4 @@ public partial class DocumentStore
             }
         }
     }
-
-    private void ManageExtendedAttributes(int documentId) =>
-        NavigationManager.NavigateTo($"/extended-attributes/{nameof(Document)}/{documentId}");
 }
