@@ -6,10 +6,8 @@ using BlazorHero.CleanArchitecture.Shared.Wrapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace BlazorHero.CleanArchitecture.Server.Controllers.Utilities.Misc;
+namespace BlazorHero.CleanArchitecture.Server.Controllers.v1.DocumentManagement;
 
-[Route("api/[controller]")]
-[ApiController]
 public class DocumentsController : BaseApiController
 {
     /// <summary>

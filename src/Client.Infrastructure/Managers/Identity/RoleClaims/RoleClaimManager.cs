@@ -14,7 +14,7 @@ public class RoleClaimManager : IRoleClaimManager
 
     public async Task<IResult<string>> DeleteAsync(string id)
     {
-        HttpResponseMessage response = await _httpClient.DeleteAsync($"{RoleClaimsEndpoints.Delete}/{id}");
+        HttpResponseMessage response = await _httpClient.DeleteAsync(RoleClaimsEndpoints.DeleteByRoleId(id));
         return await response.ToResult<string>();
     }
 
@@ -26,7 +26,7 @@ public class RoleClaimManager : IRoleClaimManager
 
     public async Task<IResult<List<RoleClaimResponse>>> GetRoleClaimsByRoleIdAsync(string roleId)
     {
-        HttpResponseMessage response = await _httpClient.GetAsync($"{RoleClaimsEndpoints.GetAll}/{roleId}");
+        HttpResponseMessage response = await _httpClient.GetAsync(RoleClaimsEndpoints.GetAllByRoleId(roleId));
         return await response.ToResult<List<RoleClaimResponse>>();
     }
 

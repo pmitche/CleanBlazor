@@ -14,58 +14,59 @@ public class UserManager : IUserManager
 
     public async Task<IResult<List<UserResponse>>> GetAllAsync()
     {
-        HttpResponseMessage response = await _httpClient.GetAsync(UserEndpoints.GetAll);
+        HttpResponseMessage response = await _httpClient.GetAsync(UsersEndpoints.GetAll);
         return await response.ToResult<List<UserResponse>>();
     }
 
     public async Task<IResult<UserResponse>> GetAsync(string userId)
     {
-        HttpResponseMessage response = await _httpClient.GetAsync(UserEndpoints.Get(userId));
+        HttpResponseMessage response = await _httpClient.GetAsync(UsersEndpoints.GetById(userId));
         return await response.ToResult<UserResponse>();
     }
 
     public async Task<IResult> RegisterUserAsync(RegisterRequest request)
     {
-        HttpResponseMessage response = await _httpClient.PostAsJsonAsync(UserEndpoints.Register, request);
+        HttpResponseMessage response = await _httpClient.PostAsJsonAsync(UsersEndpoints.Register, request);
         return await response.ToResult();
     }
 
     public async Task<IResult> ToggleUserStatusAsync(ToggleUserStatusRequest request)
     {
-        HttpResponseMessage response = await _httpClient.PostAsJsonAsync(UserEndpoints.ToggleUserStatus, request);
+        HttpResponseMessage response =
+            await _httpClient.PostAsJsonAsync(UsersEndpoints.ToggleUserStatus(request.UserId), request);
         return await response.ToResult();
     }
 
     public async Task<IResult<UserRolesResponse>> GetRolesAsync(string userId)
     {
-        HttpResponseMessage response = await _httpClient.GetAsync(UserEndpoints.GetUserRoles(userId));
+        HttpResponseMessage response = await _httpClient.GetAsync(UsersEndpoints.GetUserRolesById(userId));
         return await response.ToResult<UserRolesResponse>();
     }
 
     public async Task<IResult> UpdateRolesAsync(UpdateUserRolesRequest request)
     {
         HttpResponseMessage response =
-            await _httpClient.PutAsJsonAsync(UserEndpoints.GetUserRoles(request.UserId), request);
+            await _httpClient.PutAsJsonAsync(UsersEndpoints.GetUserRolesById(request.UserId), request);
         return await response.ToResult<UserRolesResponse>();
     }
 
     public async Task<IResult> ForgotPasswordAsync(ForgotPasswordRequest request)
     {
-        HttpResponseMessage response = await _httpClient.PostAsJsonAsync(UserEndpoints.ForgotPassword, request);
+        HttpResponseMessage response = await _httpClient.PostAsJsonAsync(UsersEndpoints.ForgotPassword, request);
         return await response.ToResult();
     }
 
     public async Task<IResult> ResetPasswordAsync(ResetPasswordRequest request)
     {
-        HttpResponseMessage response = await _httpClient.PostAsJsonAsync(UserEndpoints.ResetPassword, request);
+        HttpResponseMessage response = await _httpClient.PostAsJsonAsync(UsersEndpoints.ResetPassword, request);
         return await response.ToResult();
     }
 
     public async Task<string> ExportToExcelAsync(string searchString = "")
     {
         HttpResponseMessage response = await _httpClient.GetAsync(string.IsNullOrWhiteSpace(searchString)
-            ? UserEndpoints.Export
-            : UserEndpoints.ExportFiltered(searchString));
+            ? UsersEndpoints.Export
+            : UsersEndpoints.ExportFiltered(searchString));
         var data = await response.Content.ReadAsStringAsync();
         return data;
     }

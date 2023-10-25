@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BlazorHero.CleanArchitecture.Server.Controllers.v1;
 
-[ApiController]
 public class DashboardController : BaseApiController
 {
     /// <summary>

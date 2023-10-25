@@ -2,12 +2,12 @@
 
 public static class DocumentTypesEndpoints
 {
-    public const string Export = "api/documentTypes/export";
+    private const string Prefix = "api/v1/documentTypes";
 
-    public const string GetAll = "api/documentTypes";
-    public const string Delete = "api/documentTypes";
-    public const string Save = "api/documentTypes";
-    public const string GetCount = "api/documentTypes/count";
+    public const string GetAll = Prefix;
+    public const string Save = Prefix;
+    public const string Export = $"{Prefix}/export";
 
     public static string ExportFiltered(string searchString) => $"{Export}?searchString={searchString}";
+    public static string DeleteById(int documentTypeId) => $"{Prefix}/{documentTypeId}";
 }

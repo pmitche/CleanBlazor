@@ -14,26 +14,26 @@ public class AccountManager : IAccountManager
 
     public async Task<IResult> ChangePasswordAsync(ChangePasswordRequest model)
     {
-        HttpResponseMessage response = await _httpClient.PutAsJsonAsync(AccountEndpoints.ChangePassword, model);
+        HttpResponseMessage response = await _httpClient.PutAsJsonAsync(AccountsEndpoints.ChangePassword, model);
         return await response.ToResult();
     }
 
     public async Task<IResult> UpdateProfileAsync(UpdateProfileRequest model)
     {
-        HttpResponseMessage response = await _httpClient.PutAsJsonAsync(AccountEndpoints.UpdateProfile, model);
+        HttpResponseMessage response = await _httpClient.PutAsJsonAsync(AccountsEndpoints.UpdateProfile, model);
         return await response.ToResult();
     }
 
     public async Task<IResult<string>> GetProfilePictureAsync(string userId)
     {
-        HttpResponseMessage response = await _httpClient.GetAsync(AccountEndpoints.GetProfilePicture(userId));
+        HttpResponseMessage response = await _httpClient.GetAsync(AccountsEndpoints.GetProfilePicture(userId));
         return await response.ToResult<string>();
     }
 
     public async Task<IResult<string>> UpdateProfilePictureAsync(UpdateProfilePictureRequest request, string userId)
     {
         HttpResponseMessage response =
-            await _httpClient.PostAsJsonAsync(AccountEndpoints.UpdateProfilePicture(userId), request);
+            await _httpClient.PostAsJsonAsync(AccountsEndpoints.UpdateProfilePicture(userId), request);
         return await response.ToResult<string>();
     }
 }

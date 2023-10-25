@@ -6,16 +6,15 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Primitives;
 
-namespace BlazorHero.CleanArchitecture.Server.Controllers.Identity;
+namespace BlazorHero.CleanArchitecture.Server.Controllers.v1.Identity;
 
 [Authorize]
-[Route("api/identity/user")]
-[ApiController]
-public class UserController : ControllerBase
+[Route("api/v1/identity/users")]
+public class UsersController : BaseApiController
 {
     private readonly IUserService _userService;
 
-    public UserController(IUserService userService) => _userService = userService;
+    public UsersController(IUserService userService) => _userService = userService;
 
     /// <summary>
     ///     Get Users Details
@@ -32,26 +31,26 @@ public class UserController : ControllerBase
     /// <summary>
     ///     Get User By Id
     /// </summary>
-    /// <param name="id"></param>
+    /// <param name="userId"></param>
     /// <returns>Status 200 OK</returns>
     //[Authorize(Policy = Permissions.Users.View)]
-    [HttpGet("{id}")]
-    public async Task<IActionResult> GetById(string id)
+    [HttpGet("{userId}")]
+    public async Task<IActionResult> GetById(string userId)
     {
-        IResult<UserResponse> user = await _userService.GetAsync(id);
+        IResult<UserResponse> user = await _userService.GetAsync(userId);
         return Ok(user);
     }
 
     /// <summary>
     ///     Get User Roles By Id
     /// </summary>
-    /// <param name="id"></param>
+    /// <param name="userId"></param>
     /// <returns>Status 200 OK</returns>
     [Authorize(Policy = Permissions.Users.View)]
-    [HttpGet("roles/{id}")]
-    public async Task<IActionResult> GetRolesAsync(string id)
+    [HttpGet("{userId}/roles")]
+    public async Task<IActionResult> GetRolesAsync(string userId)
     {
-        IResult<UserRolesResponse> userRoles = await _userService.GetRolesAsync(id);
+        IResult<UserRolesResponse> userRoles = await _userService.GetRolesAsync(userId);
         return Ok(userRoles);
     }
 
@@ -61,7 +60,7 @@ public class UserController : ControllerBase
     /// <param name="request"></param>
     /// <returns>Status 200 OK</returns>
     [Authorize(Policy = Permissions.Users.Edit)]
-    [HttpPut("roles/{id}")]
+    [HttpPut("{userId}/roles")]
     public async Task<IActionResult> UpdateRolesAsync(UpdateUserRolesRequest request) =>
         Ok(await _userService.UpdateRolesAsync(request));
 
@@ -94,7 +93,7 @@ public class UserController : ControllerBase
     /// </summary>
     /// <param name="request"></param>
     /// <returns>Status 200 OK</returns>
-    [HttpPost("toggle-status")]
+    [HttpPost("{userId}/toggle-status")]
     public async Task<IActionResult> ToggleUserStatusAsync(ToggleUserStatusRequest request) =>
         Ok(await _userService.ToggleUserStatusAsync(request));
 

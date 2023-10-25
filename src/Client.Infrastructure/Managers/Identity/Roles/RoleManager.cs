@@ -14,7 +14,7 @@ public class RoleManager : IRoleManager
 
     public async Task<IResult<string>> DeleteAsync(string id)
     {
-        HttpResponseMessage response = await _httpClient.DeleteAsync($"{RolesEndpoints.Delete}/{id}");
+        HttpResponseMessage response = await _httpClient.DeleteAsync(RolesEndpoints.DeleteById(id));
         return await response.ToResult<string>();
     }
 
@@ -32,13 +32,14 @@ public class RoleManager : IRoleManager
 
     public async Task<IResult<PermissionResponse>> GetPermissionsAsync(string roleId)
     {
-        HttpResponseMessage response = await _httpClient.GetAsync(RolesEndpoints.GetPermissions + roleId);
+        HttpResponseMessage response = await _httpClient.GetAsync(RolesEndpoints.GetPermissionsById(roleId));
         return await response.ToResult<PermissionResponse>();
     }
 
     public async Task<IResult<string>> UpdatePermissionsAsync(PermissionRequest request)
     {
-        HttpResponseMessage response = await _httpClient.PutAsJsonAsync(RolesEndpoints.UpdatePermissions, request);
+        HttpResponseMessage response =
+            await _httpClient.PutAsJsonAsync(RolesEndpoints.UpdatePermissionsId(request.RoleId), request);
         return await response.ToResult<string>();
     }
 }

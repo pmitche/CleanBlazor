@@ -14,7 +14,7 @@ public class DocumentManager : IDocumentManager
 
     public async Task<IResult<int>> DeleteAsync(int id)
     {
-        HttpResponseMessage response = await _httpClient.DeleteAsync($"{DocumentsEndpoints.Delete}/{id}");
+        HttpResponseMessage response = await _httpClient.DeleteAsync(DocumentsEndpoints.DeleteById(id));
         return await response.ToResult<int>();
     }
 

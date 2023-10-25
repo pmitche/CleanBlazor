@@ -5,15 +5,14 @@ using BlazorHero.CleanArchitecture.Shared.Wrapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace BlazorHero.CleanArchitecture.Server.Controllers.Identity;
+namespace BlazorHero.CleanArchitecture.Server.Controllers.v1.Identity;
 
-[Route("api/identity/roleClaim")]
-[ApiController]
-public class RoleClaimController : ControllerBase
+[Route("api/v1/identity/roleClaims")]
+public class RoleClaimsController : BaseApiController
 {
     private readonly IRoleClaimService _roleClaimService;
 
-    public RoleClaimController(IRoleClaimService roleClaimService) => _roleClaimService = roleClaimService;
+    public RoleClaimsController(IRoleClaimService roleClaimService) => _roleClaimService = roleClaimService;
 
     /// <summary>
     ///     Get All Role Claims(e.g. Product Create Permission)

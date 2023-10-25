@@ -22,7 +22,7 @@ public class DocumentTypeManager : IDocumentTypeManager
 
     public async Task<IResult<int>> DeleteAsync(int id)
     {
-        HttpResponseMessage response = await _httpClient.DeleteAsync($"{DocumentTypesEndpoints.Delete}/{id}");
+        HttpResponseMessage response = await _httpClient.DeleteAsync(DocumentTypesEndpoints.DeleteById(id));
         return await response.ToResult<int>();
     }
 

@@ -2,11 +2,13 @@
 
 public static class DocumentsEndpoints
 {
-    public const string Save = "api/documents";
-    public const string Delete = "api/documents";
+    private const string Prefix = "api/v1/documents";
+
+    public const string Save = Prefix;
 
     public static string GetAllPaged(int pageNumber, int pageSize, string searchString) =>
-        $"api/documents?pageNumber={pageNumber}&pageSize={pageSize}&searchString={searchString}";
+        $"{Prefix}?pageNumber={pageNumber}&pageSize={pageSize}&searchString={searchString}";
 
-    public static string GetById(int documentId) => $"api/documents/{documentId}";
+    public static string GetById(int documentId) => $"{Prefix}/{documentId}";
+    public static string DeleteById(int documentId) => $"{Prefix}/{documentId}";
 }

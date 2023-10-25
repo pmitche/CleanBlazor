@@ -5,12 +5,10 @@ using BlazorHero.CleanArchitecture.Shared.Models.Chat;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace BlazorHero.CleanArchitecture.Server.Controllers.Communication;
+namespace BlazorHero.CleanArchitecture.Server.Controllers.v1.Communication;
 
 [Authorize(Policy = Permissions.Communication.Chat)]
-[Route("api/[controller]")]
-[ApiController]
-public class ChatsController : ControllerBase
+public class ChatsController : BaseApiController
 {
     private readonly IChatService _chatService;
     private readonly ICurrentUserService _currentUserService;

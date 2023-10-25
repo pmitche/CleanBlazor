@@ -4,12 +4,10 @@ using BlazorHero.CleanArchitecture.Shared.Wrapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace BlazorHero.CleanArchitecture.Server.Controllers.Utilities;
+namespace BlazorHero.CleanArchitecture.Server.Controllers.v1.Utilities;
 
-[Route("api/[controller]")]
-[ApiController]
 [Authorize]
-public class AuditsController : ControllerBase
+public class AuditsController : BaseApiController
 {
     private readonly IAuditService _auditService;
     private readonly ICurrentUserService _currentUserService;

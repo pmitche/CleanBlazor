@@ -233,7 +233,7 @@ public class UserService : IUserService
         // visit https://go.microsoft.com/fwlink/?LinkID=532713
         var code = await _userManager.GeneratePasswordResetTokenAsync(user);
         code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-        const string route = "account/reset-password";
+        const string route = "api/v1/identity/users/reset-password";
         var endpointUri = new Uri(string.Concat($"{origin}/", route));
         var passwordResetUrl = QueryHelpers.AddQueryString(endpointUri.ToString(), "Token", code);
         var mailRequest = new MailRequest
@@ -307,7 +307,7 @@ public class UserService : IUserService
     {
         var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
         code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-        const string route = "api/identity/user/confirm-email/";
+        const string route = "api/v1/identity/users/confirm-email";
         var endpointUri = new Uri(string.Concat($"{origin}/", route));
         var verificationUri = QueryHelpers.AddQueryString(endpointUri.ToString(), "userId", user.Id);
         verificationUri = QueryHelpers.AddQueryString(verificationUri, "code", code);

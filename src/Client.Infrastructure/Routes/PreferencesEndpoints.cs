@@ -2,7 +2,7 @@
 
 public static class PreferencesEndpoints
 {
-    public const string ChangeLanguage = "changeLanguage";
+    private const string Prefix = "api/v1/preferences";
 
-    //TODO - add endpoints
+    public const string ChangeLanguage = $"{Prefix}/changeLanguage";
 }

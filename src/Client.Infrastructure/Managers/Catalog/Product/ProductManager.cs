@@ -14,7 +14,7 @@ public class ProductManager : IProductManager
 
     public async Task<IResult<int>> DeleteAsync(int id)
     {
-        HttpResponseMessage response = await _httpClient.DeleteAsync($"{ProductsEndpoints.Delete}/{id}");
+        HttpResponseMessage response = await _httpClient.DeleteAsync(ProductsEndpoints.DeleteById(id));
         return await response.ToResult<int>();
     }
 

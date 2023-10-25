@@ -23,7 +23,7 @@ public class BrandManager : IBrandManager
 
     public async Task<IResult<int>> DeleteAsync(int id)
     {
-        HttpResponseMessage response = await _httpClient.DeleteAsync($"{BrandsEndpoints.Delete}/{id}");
+        HttpResponseMessage response = await _httpClient.DeleteAsync(BrandsEndpoints.DeleteById(id));
         return await response.ToResult<int>();
     }
 

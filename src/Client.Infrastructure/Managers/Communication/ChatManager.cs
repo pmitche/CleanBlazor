@@ -14,9 +14,9 @@ public class ChatManager : IChatManager
 
     public ChatManager(HttpClient httpClient) => _httpClient = httpClient;
 
-    public async Task<IResult<IEnumerable<ChatHistoryResponse>>> GetChatHistoryAsync(string cId)
+    public async Task<IResult<IEnumerable<ChatHistoryResponse>>> GetChatHistoryAsync(string chatId)
     {
-        HttpResponseMessage response = await _httpClient.GetAsync(ChatEndpoint.GetChatHistory(cId));
+        HttpResponseMessage response = await _httpClient.GetAsync(ChatEndpoint.GetChatHistory(chatId));
         IResult<IEnumerable<ChatHistoryResponse>> data = await response.ToResult<IEnumerable<ChatHistoryResponse>>();
         return data;
     }

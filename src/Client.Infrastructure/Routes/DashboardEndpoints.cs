@@ -2,5 +2,7 @@
 
 public static class DashboardEndpoints
 {
-    public const string GetData = "api/v1/dashboard";
+    private const string Prefix = "api/v1/dashboard";
+
+    public const string GetData = Prefix;
 }

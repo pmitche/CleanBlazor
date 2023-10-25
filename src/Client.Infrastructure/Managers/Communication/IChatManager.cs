@@ -11,5 +11,5 @@ public interface IChatManager : IManager
 
     Task<IResult> SaveMessageAsync(ChatHistory<IChatUser> chatHistory);
 
-    Task<IResult<IEnumerable<ChatHistoryResponse>>> GetChatHistoryAsync(string cId);
+    Task<IResult<IEnumerable<ChatHistoryResponse>>> GetChatHistoryAsync(string chatId);
 }

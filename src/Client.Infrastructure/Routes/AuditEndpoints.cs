@@ -2,8 +2,10 @@
 
 public static class AuditEndpoints
 {
-    public const string GetCurrentUserTrails = "api/audits";
-    public const string DownloadFile = "api/audits/export";
+    private const string Prefix = "api/v1/audits";
+
+    public const string GetCurrentUserTrails = Prefix;
+    public const string DownloadFile = $"{Prefix}/export";
 
     public static string DownloadFileFiltered(
         string searchString,

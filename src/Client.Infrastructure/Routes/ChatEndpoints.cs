@@ -2,8 +2,10 @@
 
 public static class ChatEndpoint
 {
-    public const string GetAvailableUsers = "api/chats/users";
-    public const string SaveMessage = "api/chats";
+    private const string Prefix = "api/v1/chats";
 
-    public static string GetChatHistory(string userId) => $"api/chats/{userId}";
+    public const string GetAvailableUsers = $"{Prefix}/users";
+    public const string SaveMessage = Prefix;
+
+    public static string GetChatHistory(string userId) => $"{Prefix}/{userId}";
 }

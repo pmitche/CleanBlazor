@@ -5,17 +5,16 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using IResult = BlazorHero.CleanArchitecture.Shared.Wrapper.IResult;
 
-namespace BlazorHero.CleanArchitecture.Server.Controllers.Identity;
+namespace BlazorHero.CleanArchitecture.Server.Controllers.v1.Identity;
 
 [Authorize]
-[Route("api/identity/account")]
-[ApiController]
-public class AccountController : ControllerBase
+[Route("api/v1/identity/accounts")]
+public class AccountsController : BaseApiController
 {
     private readonly IAccountService _accountService;
     private readonly ICurrentUserService _currentUser;
 
-    public AccountController(IAccountService accountService, ICurrentUserService currentUser)
+    public AccountsController(IAccountService accountService, ICurrentUserService currentUser)
     {
         _accountService = accountService;
         _currentUser = currentUser;
@@ -26,7 +25,7 @@ public class AccountController : ControllerBase
     /// </summary>
     /// <param name="model"></param>
     /// <returns>Status 200 OK</returns>
-    [HttpPut(nameof(UpdateProfile))]
+    [HttpPut("update-profile")]
     public async Task<ActionResult> UpdateProfile(UpdateProfileRequest model)
     {
         IResult response = await _accountService.UpdateProfileAsync(model, _currentUser.UserId);
@@ -38,7 +37,7 @@ public class AccountController : ControllerBase
     /// </summary>
     /// <param name="model"></param>
     /// <returns>Status 200 OK</returns>
-    [HttpPut(nameof(ChangePassword))]
+    [HttpPut("change-password")]
     public async Task<ActionResult> ChangePassword(ChangePasswordRequest model)
     {
         IResult response = await _accountService.ChangePasswordAsync(model, _currentUser.UserId);
@@ -50,7 +49,7 @@ public class AccountController : ControllerBase
     /// </summary>
     /// <param name="userId"></param>
     /// <returns>Status 200 OK </returns>
-    [HttpGet("profile-picture/{userId}")]
+    [HttpGet("{userId}/profile-picture")]
     [ResponseCache(NoStore = false, Location = ResponseCacheLocation.Client, Duration = 60)]
     public async Task<IActionResult> GetProfilePictureAsync(string userId) =>
         Ok(await _accountService.GetProfilePictureAsync(userId));
@@ -60,7 +59,7 @@ public class AccountController : ControllerBase
     /// </summary>
     /// <param name="request"></param>
     /// <returns>Status 200 OK</returns>
-    [HttpPost("profile-picture/{userId}")]
+    [HttpPost("{userId}/profile-picture")]
     public async Task<IActionResult> UpdateProfilePictureAsync(UpdateProfilePictureRequest request) =>
         Ok(await _accountService.UpdateProfilePictureAsync(request, _currentUser.UserId));
 }

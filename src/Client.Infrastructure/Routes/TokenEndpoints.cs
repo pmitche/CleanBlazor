@@ -2,6 +2,8 @@
 
 public static class TokenEndpoints
 {
-    public const string Get = "api/identity/token";
-    public const string Refresh = "api/identity/token/refresh";
+    private const string Prefix = "api/v1/identity/token";
+
+    public const string Get = Prefix;
+    public const string Refresh = $"{Prefix}/refresh";
 }

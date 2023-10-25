@@ -3,11 +3,10 @@ using BlazorHero.CleanArchitecture.Contracts.Identity;
 using BlazorHero.CleanArchitecture.Shared.Wrapper;
 using Microsoft.AspNetCore.Mvc;
 
-namespace BlazorHero.CleanArchitecture.Server.Controllers.Identity;
+namespace BlazorHero.CleanArchitecture.Server.Controllers.v1.Identity;
 
-[Route("api/identity/token")]
-[ApiController]
-public class TokenController : ControllerBase
+[Route("api/v1/identity/token")]
+public class TokenController : BaseApiController
 {
     private readonly ITokenService _identityService;
 

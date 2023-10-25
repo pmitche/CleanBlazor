@@ -2,9 +2,12 @@
 
 public static class RolesEndpoints
 {
-    public const string Delete = "api/identity/role";
-    public const string GetAll = "api/identity/role";
-    public const string Save = "api/identity/role";
-    public const string GetPermissions = "api/identity/role/permissions/";
-    public const string UpdatePermissions = "api/identity/role/permissions/update";
+    private const string Prefix = "api/v1/identity/roles";
+
+    public const string GetAll = Prefix;
+    public const string Save = Prefix;
+
+    public static string GetPermissionsById(string roleId) => $"{Prefix}/{roleId}/permissions";
+    public static string UpdatePermissionsId(string roleId) => $"{Prefix}/{roleId}/permissions";
+    public static string DeleteById(string roleId) => $"{Prefix}/{roleId}";
 }

@@ -5,15 +5,14 @@ using BlazorHero.CleanArchitecture.Shared.Wrapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace BlazorHero.CleanArchitecture.Server.Controllers.Identity;
+namespace BlazorHero.CleanArchitecture.Server.Controllers.v1.Identity;
 
-[Route("api/identity/role")]
-[ApiController]
-public class RoleController : ControllerBase
+[Route("api/v1/identity/roles")]
+public class RolesController : BaseApiController
 {
     private readonly IRoleService _roleService;
 
-    public RoleController(IRoleService roleService) => _roleService = roleService;
+    public RolesController(IRoleService roleService) => _roleService = roleService;
 
     /// <summary>
     ///     Get All Roles (basic, admin etc.)
@@ -59,7 +58,7 @@ public class RoleController : ControllerBase
     /// <param name="roleId"></param>
     /// <returns>Status 200 Ok</returns>
     [Authorize(Policy = Permissions.RoleClaims.View)]
-    [HttpGet("permissions/{roleId}")]
+    [HttpGet("{roleId}/permissions")]
     public async Task<IActionResult> GetPermissionsByRoleId([FromRoute] string roleId)
     {
         Result<PermissionResponse> response = await _roleService.GetAllPermissionsAsync(roleId);
@@ -67,12 +66,12 @@ public class RoleController : ControllerBase
     }
 
     /// <summary>
-    ///     Edit a Role Claim
+    ///     Edit role permissions for Role Id
     /// </summary>
     /// <param name="model"></param>
     /// <returns></returns>
     [Authorize(Policy = Permissions.RoleClaims.Edit)]
-    [HttpPut("permissions/update")]
+    [HttpPut("{roleId}/permissions")]
     public async Task<IActionResult> Update(PermissionRequest model)
     {
         Result<string> response = await _roleService.UpdatePermissionsAsync(model);

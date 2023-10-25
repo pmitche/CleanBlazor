@@ -1,7 +1,6 @@
 ﻿using BlazorHero.CleanArchitecture.Application.Features.Catalog.Brands.Commands;
 using BlazorHero.CleanArchitecture.Application.Features.Catalog.Brands.Queries;
 using BlazorHero.CleanArchitecture.Contracts;
-using BlazorHero.CleanArchitecture.Contracts.Catalog;
 using BlazorHero.CleanArchitecture.Contracts.Catalog.Brands;
 using BlazorHero.CleanArchitecture.Shared.Constants.Permission;
 using BlazorHero.CleanArchitecture.Shared.Wrapper;

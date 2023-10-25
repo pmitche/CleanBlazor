@@ -2,7 +2,11 @@
 
 public static class RoleClaimsEndpoints
 {
-    public const string Delete = "api/identity/roleClaim";
-    public const string GetAll = "api/identity/roleClaim";
-    public const string Save = "api/identity/roleClaim";
+    private const string Prefix = "api/v1/identity/roleClaims";
+
+    public const string GetAll = Prefix;
+    public const string Save = Prefix;
+
+    public static string GetAllByRoleId(string roleId) => $"{Prefix}/{roleId}";
+    public static string DeleteByRoleId(string roleId) => $"{Prefix}/{roleId}";
 }

@@ -4,11 +4,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using IResult = BlazorHero.CleanArchitecture.Shared.Wrapper.IResult;
 
-namespace BlazorHero.CleanArchitecture.Server.Controllers.Utilities;
+namespace BlazorHero.CleanArchitecture.Server.Controllers.v1.Utilities;
 
-[Route("api/[controller]")]
-[ApiController]
-public class PreferencesController : ControllerBase
+public class PreferencesController : BaseApiController
 {
     private readonly ServerPreferenceManager _serverPreferenceManager;
 
@@ -27,6 +25,4 @@ public class PreferencesController : ControllerBase
         IResult result = await _serverPreferenceManager.ChangeLanguageAsync(languageCode);
         return Ok(result);
     }
-
-    //TODO - add actions
 }
