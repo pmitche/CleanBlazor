@@ -1,6 +1,5 @@
 ﻿using System.Data;
 using System.Diagnostics.CodeAnalysis;
-using AutoMapper;
 using BlazorHero.CleanArchitecture.Application.Abstractions.Infrastructure.Services;
 using BlazorHero.CleanArchitecture.Application.Abstractions.Messaging;
 using BlazorHero.CleanArchitecture.Application.Abstractions.Persistence;
@@ -8,7 +7,6 @@ using BlazorHero.CleanArchitecture.Contracts;
 using BlazorHero.CleanArchitecture.Domain.Entities.Catalog;
 using BlazorHero.CleanArchitecture.Shared.Constants.Application;
 using BlazorHero.CleanArchitecture.Shared.Wrapper;
-using FluentValidation;
 using FluentValidation.Results;
 using Microsoft.Extensions.Localization;
 
@@ -19,23 +17,17 @@ public sealed record ImportBrandsCommand(UploadRequest UploadRequest) : ICommand
 
 internal sealed class ImportBrandsCommandHandler : ICommandHandler<ImportBrandsCommand, Result<int>>
 {
-    private readonly IValidator<AddEditBrandCommand> _addBrandValidator;
     private readonly IExcelService _excelService;
     private readonly IStringLocalizer<ImportBrandsCommandHandler> _localizer;
-    private readonly IMapper _mapper;
     private readonly IUnitOfWork<int> _unitOfWork;
 
     public ImportBrandsCommandHandler(
         IUnitOfWork<int> unitOfWork,
         IExcelService excelService,
-        IMapper mapper,
-        IValidator<AddEditBrandCommand> addBrandValidator,
         IStringLocalizer<ImportBrandsCommandHandler> localizer)
     {
         _unitOfWork = unitOfWork;
         _excelService = excelService;
-        _mapper = mapper;
-        _addBrandValidator = addBrandValidator;
         _localizer = localizer;
     }
 
@@ -67,8 +59,7 @@ internal sealed class ImportBrandsCommandHandler : ICommandHandler<ImportBrandsC
         var errorsOccurred = false;
         foreach (Brand brand in importedBrands)
         {
-            ValidationResult validationResult =
-                await _addBrandValidator.ValidateAsync(_mapper.Map<AddEditBrandCommand>(brand), cancellationToken);
+            ValidationResult validationResult = ValidateBrand(brand);
             if (validationResult.IsValid)
             {
                 await _unitOfWork.Repository<Brand>().AddAsync(brand);
@@ -88,5 +79,27 @@ internal sealed class ImportBrandsCommandHandler : ICommandHandler<ImportBrandsC
 
         await _unitOfWork.CommitAndRemoveCache(cancellationToken, ApplicationConstants.Cache.GetAllBrandsCacheKey);
         return await Result<int>.SuccessAsync(result.Data.Count(), result.Messages[0]);
+    }
+
+    private ValidationResult ValidateBrand(Brand brand)
+    {
+        var errors = new List<ValidationFailure>();
+
+        if (string.IsNullOrWhiteSpace(brand.Name))
+        {
+            errors.Add(new ValidationFailure("Name", _localizer["Name is required!"]));
+        }
+
+        if (string.IsNullOrWhiteSpace(brand.Description))
+        {
+            errors.Add(new ValidationFailure("Description", _localizer["Description is required!"]));
+        }
+
+        if (brand.Tax <= 0)
+        {
+            errors.Add(new ValidationFailure("Tax", _localizer["Tax must be greater than 0"]));
+        }
+
+        return new ValidationResult(errors);
     }
 }
