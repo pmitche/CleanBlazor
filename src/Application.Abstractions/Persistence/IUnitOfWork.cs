@@ -1,15 +1,21 @@
-﻿using BlazorHero.CleanArchitecture.Application.Abstractions.Persistence.Repositories;
-using BlazorHero.CleanArchitecture.Domain.Contracts;
+﻿namespace BlazorHero.CleanArchitecture.Application.Abstractions.Persistence;
 
-namespace BlazorHero.CleanArchitecture.Application.Abstractions.Persistence;
-
-public interface IUnitOfWork<TId> : IDisposable
+/// <summary>
+/// Represents the unit of work interface.
+/// </summary>
+public interface IUnitOfWork
 {
-    IRepositoryAsync<T, TId> Repository<T>() where T : AuditableEntity<TId>;
+    /// <summary>
+    /// Saves all of the pending changes in the unit of work.
+    /// </summary>
+    /// <param name="cancellationToken">The cancellation token.</param>
+    /// <returns>The number of entities that have been saved.</returns>
+    Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 
-    Task<int> Commit(CancellationToken cancellationToken);
-
-    Task<int> CommitAndRemoveCache(CancellationToken cancellationToken, params string[] cacheKeys);
-
-    Task Rollback();
+    /// <summary>
+    /// Begins a transaction on the current unit of work.
+    /// </summary>
+    /// <param name="cancellationToken">The cancellation token.</param>
+    /// <returns>The new database context transaction.</returns>
+    Task<ITransaction> BeginTransactionAsync(CancellationToken cancellationToken = default);
 }

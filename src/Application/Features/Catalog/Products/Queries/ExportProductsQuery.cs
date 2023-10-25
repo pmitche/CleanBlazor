@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using BlazorHero.CleanArchitecture.Application.Abstractions.Infrastructure.Services;
 using BlazorHero.CleanArchitecture.Application.Abstractions.Messaging;
-using BlazorHero.CleanArchitecture.Application.Abstractions.Persistence;
+using BlazorHero.CleanArchitecture.Application.Abstractions.Persistence.Repositories;
 using BlazorHero.CleanArchitecture.Application.Extensions;
 using BlazorHero.CleanArchitecture.Application.Specifications.Catalog;
 using BlazorHero.CleanArchitecture.Domain.Entities.Catalog;
@@ -18,22 +18,22 @@ internal sealed class ExportProductsQueryHandler : IQueryHandler<ExportProductsQ
 {
     private readonly IExcelService _excelService;
     private readonly IStringLocalizer<ExportProductsQueryHandler> _localizer;
-    private readonly IUnitOfWork<int> _unitOfWork;
+    private readonly IProductRepository _productRepository;
 
     public ExportProductsQueryHandler(
         IExcelService excelService,
-        IUnitOfWork<int> unitOfWork,
-        IStringLocalizer<ExportProductsQueryHandler> localizer)
+        IStringLocalizer<ExportProductsQueryHandler> localizer,
+        IProductRepository productRepository)
     {
         _excelService = excelService;
-        _unitOfWork = unitOfWork;
         _localizer = localizer;
+        _productRepository = productRepository;
     }
 
     public async Task<Result<string>> Handle(ExportProductsQuery request, CancellationToken cancellationToken)
     {
         ProductFilterSpecification productFilterSpec = new(request.SearchString);
-        List<Product> products = await _unitOfWork.Repository<Product>().Entities
+        var products = await _productRepository.Entities
             .Specify(productFilterSpec)
             .ToListAsync(cancellationToken);
         var data = await _excelService.ExportAsync(products,

@@ -3,6 +3,7 @@ using AutoMapper;
 using BlazorHero.CleanArchitecture.Application.Abstractions.Infrastructure.Services;
 using BlazorHero.CleanArchitecture.Application.Abstractions.Messaging;
 using BlazorHero.CleanArchitecture.Application.Abstractions.Persistence;
+using BlazorHero.CleanArchitecture.Application.Abstractions.Persistence.Repositories;
 using BlazorHero.CleanArchitecture.Contracts;
 using BlazorHero.CleanArchitecture.Domain.Entities.Misc;
 using BlazorHero.CleanArchitecture.Shared.Wrapper;
@@ -25,20 +26,23 @@ public sealed class AddEditDocumentCommand : ICommand<Result<int>>
 internal sealed class AddEditDocumentCommandHandler : ICommandHandler<AddEditDocumentCommand, Result<int>>
 {
     private readonly IStringLocalizer<AddEditDocumentCommandHandler> _localizer;
+    private readonly IDocumentRepository _documentRepository;
     private readonly IMapper _mapper;
-    private readonly IUnitOfWork<int> _unitOfWork;
+    private readonly IUnitOfWork _unitOfWork;
     private readonly IUploadService _uploadService;
 
     public AddEditDocumentCommandHandler(
-        IUnitOfWork<int> unitOfWork,
+        IUnitOfWork unitOfWork,
         IMapper mapper,
         IUploadService uploadService,
-        IStringLocalizer<AddEditDocumentCommandHandler> localizer)
+        IStringLocalizer<AddEditDocumentCommandHandler> localizer,
+        IDocumentRepository documentRepository)
     {
         _unitOfWork = unitOfWork;
         _mapper = mapper;
         _uploadService = uploadService;
         _localizer = localizer;
+        _documentRepository = documentRepository;
     }
 
     public async Task<Result<int>> Handle(AddEditDocumentCommand command, CancellationToken cancellationToken)
@@ -57,13 +61,13 @@ internal sealed class AddEditDocumentCommandHandler : ICommandHandler<AddEditDoc
                 doc.Url = _uploadService.UploadAsync(uploadRequest);
             }
 
-            await _unitOfWork.Repository<Document>().AddAsync(doc);
-            await _unitOfWork.Commit(cancellationToken);
+            _documentRepository.Add(doc);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
             return await Result<int>.SuccessAsync(doc.Id, _localizer["Document Saved"]);
         }
         else
         {
-            Document doc = await _unitOfWork.Repository<Document>().GetByIdAsync(command.Id);
+            var doc = await _documentRepository.GetByIdAsync(command.Id, cancellationToken);
             if (doc == null)
             {
                 return await Result<int>.FailAsync(_localizer["Document Not Found!"]);
@@ -78,8 +82,8 @@ internal sealed class AddEditDocumentCommandHandler : ICommandHandler<AddEditDoc
             }
 
             doc.DocumentTypeId = command.DocumentTypeId == 0 ? doc.DocumentTypeId : command.DocumentTypeId;
-            await _unitOfWork.Repository<Document>().UpdateAsync(doc);
-            await _unitOfWork.Commit(cancellationToken);
+            _documentRepository.Update(doc);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
             return await Result<int>.SuccessAsync(doc.Id, _localizer["Document Updated"]);
         }
     }

@@ -4,7 +4,7 @@ using Microsoft.Extensions.Logging;
 
 namespace BlazorHero.CleanArchitecture.Application.Behaviors;
 
-public class LoggingBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
+internal sealed class LoggingBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
 {
     private readonly ILogger<TRequest> _logger;
 

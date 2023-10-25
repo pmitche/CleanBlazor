@@ -19,6 +19,7 @@ public static class DependencyInjection
             .AddAutoMapper(executingAssembly)
             .AddMediatR(config => config.RegisterServicesFromAssembly(executingAssembly))
             .AddScoped(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>))
+            .AddScoped(typeof(IPipelineBehavior<,>), typeof(TransactionBehavior<,>))
             .AddScoped<IJsonSerializer, SystemTextJsonSerializer>(); // you can change it
 
         services.AddOptions<AppConfiguration>().Bind(configuration.GetSection(nameof(AppConfiguration)));

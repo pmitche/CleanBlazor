@@ -1,6 +1,8 @@
-﻿namespace BlazorHero.CleanArchitecture.Application.Abstractions.Persistence.Repositories;
+﻿using BlazorHero.CleanArchitecture.Domain.Entities.Misc;
 
-public interface IDocumentRepository
+namespace BlazorHero.CleanArchitecture.Application.Abstractions.Persistence.Repositories;
+
+public interface IDocumentRepository : IRepository<Document, int>
 {
-    Task<bool> IsDocumentTypeUsed(int documentTypeId);
+    Task<bool> IsDocumentTypeUsedAsync(int documentTypeId);
 }

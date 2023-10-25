@@ -2,9 +2,11 @@
 using AutoMapper;
 using BlazorHero.CleanArchitecture.Application.Abstractions.Messaging;
 using BlazorHero.CleanArchitecture.Application.Abstractions.Persistence;
+using BlazorHero.CleanArchitecture.Application.Abstractions.Persistence.Repositories;
 using BlazorHero.CleanArchitecture.Domain.Entities.Misc;
 using BlazorHero.CleanArchitecture.Shared.Constants.Application;
 using BlazorHero.CleanArchitecture.Shared.Wrapper;
+using LazyCache;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 
@@ -28,22 +30,28 @@ public sealed class AddEditDocumentTypeCommand : ICommand<Result<int>>
 internal sealed class AddEditDocumentTypeCommandHandler : ICommandHandler<AddEditDocumentTypeCommand, Result<int>>
 {
     private readonly IStringLocalizer<AddEditDocumentTypeCommandHandler> _localizer;
+    private readonly IDocumentTypeRepository _documentTypeRepository;
+    private readonly IAppCache _cache;
     private readonly IMapper _mapper;
-    private readonly IUnitOfWork<int> _unitOfWork;
+    private readonly IUnitOfWork _unitOfWork;
 
     public AddEditDocumentTypeCommandHandler(
-        IUnitOfWork<int> unitOfWork,
+        IUnitOfWork unitOfWork,
         IMapper mapper,
-        IStringLocalizer<AddEditDocumentTypeCommandHandler> localizer)
+        IStringLocalizer<AddEditDocumentTypeCommandHandler> localizer,
+        IDocumentTypeRepository documentTypeRepository,
+        IAppCache cache)
     {
         _unitOfWork = unitOfWork;
         _mapper = mapper;
         _localizer = localizer;
+        _documentTypeRepository = documentTypeRepository;
+        _cache = cache;
     }
 
     public async Task<Result<int>> Handle(AddEditDocumentTypeCommand command, CancellationToken cancellationToken)
     {
-        if (await _unitOfWork.Repository<DocumentType>().Entities.Where(p => p.Id != command.Id)
+        if (await _documentTypeRepository.Entities.Where(p => p.Id != command.Id)
                 .AnyAsync(p => p.Name == command.Name, cancellationToken))
         {
             return await Result<int>.FailAsync(_localizer["Document type with this name already exists."]);
@@ -52,14 +60,14 @@ internal sealed class AddEditDocumentTypeCommandHandler : ICommandHandler<AddEdi
         if (command.Id == 0)
         {
             var documentType = _mapper.Map<DocumentType>(command);
-            await _unitOfWork.Repository<DocumentType>().AddAsync(documentType);
-            await _unitOfWork.CommitAndRemoveCache(cancellationToken,
-                ApplicationConstants.Cache.GetAllDocumentTypesCacheKey);
+            _documentTypeRepository.Add(documentType);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
+            _cache.Remove(ApplicationConstants.Cache.GetAllDocumentTypesCacheKey);
             return await Result<int>.SuccessAsync(documentType.Id, _localizer["Document Type Saved"]);
         }
         else
         {
-            DocumentType documentType = await _unitOfWork.Repository<DocumentType>().GetByIdAsync(command.Id);
+            var documentType = await _documentTypeRepository.GetByIdAsync(command.Id, cancellationToken);
             if (documentType == null)
             {
                 return await Result<int>.FailAsync(_localizer["Document Type Not Found!"]);
@@ -67,9 +75,9 @@ internal sealed class AddEditDocumentTypeCommandHandler : ICommandHandler<AddEdi
 
             documentType.Name = command.Name ?? documentType.Name;
             documentType.Description = command.Description ?? documentType.Description;
-            await _unitOfWork.Repository<DocumentType>().UpdateAsync(documentType);
-            await _unitOfWork.CommitAndRemoveCache(cancellationToken,
-                ApplicationConstants.Cache.GetAllDocumentTypesCacheKey);
+            _documentTypeRepository.Update(documentType);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
+            _cache.Remove(ApplicationConstants.Cache.GetAllDocumentTypesCacheKey);
             return await Result<int>.SuccessAsync(documentType.Id, _localizer["Document Type Updated"]);
         }
     }

@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using AutoMapper;
 using BlazorHero.CleanArchitecture.Application.Abstractions.Messaging;
-using BlazorHero.CleanArchitecture.Application.Abstractions.Persistence;
+using BlazorHero.CleanArchitecture.Application.Abstractions.Persistence.Repositories;
 using BlazorHero.CleanArchitecture.Contracts.Documents;
 using BlazorHero.CleanArchitecture.Domain.Entities.Misc;
 using BlazorHero.CleanArchitecture.Shared.Wrapper;
@@ -13,12 +13,12 @@ public sealed record GetDocumentByIdQuery(int Id) : IQuery<Result<GetDocumentByI
 
 internal sealed class GetDocumentByIdQueryHandler : IQueryHandler<GetDocumentByIdQuery, Result<GetDocumentByIdResponse>>
 {
+    private readonly IDocumentRepository _documentRepository;
     private readonly IMapper _mapper;
-    private readonly IUnitOfWork<int> _unitOfWork;
 
-    public GetDocumentByIdQueryHandler(IUnitOfWork<int> unitOfWork, IMapper mapper)
+    public GetDocumentByIdQueryHandler(IDocumentRepository documentRepository, IMapper mapper)
     {
-        _unitOfWork = unitOfWork;
+        _documentRepository = documentRepository;
         _mapper = mapper;
     }
 
@@ -26,7 +26,7 @@ internal sealed class GetDocumentByIdQueryHandler : IQueryHandler<GetDocumentByI
         GetDocumentByIdQuery query,
         CancellationToken cancellationToken)
     {
-        Document document = await _unitOfWork.Repository<Document>().GetByIdAsync(query.Id);
+        Document document = await _documentRepository.GetByIdAsync(query.Id, cancellationToken);
         var mappedDocument = _mapper.Map<GetDocumentByIdResponse>(document);
         return await Result<GetDocumentByIdResponse>.SuccessAsync(mappedDocument);
     }

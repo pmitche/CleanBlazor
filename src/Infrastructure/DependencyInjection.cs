@@ -54,7 +54,8 @@ public static class DependencyInjection
         => services
             .AddDbContext<BlazorHeroContext>(options => options
                 .UseSqlServer(configuration.GetConnectionString("DefaultConnection")))
-            .AddTransient<IDatabaseSeeder, DatabaseSeeder>();
+            .AddTransient<IDatabaseSeeder, DatabaseSeeder>()
+            .AddScoped<IUnitOfWork>(serviceProvider => serviceProvider.GetRequiredService<BlazorHeroContext>());
 
     private static IServiceCollection AddIdentity(this IServiceCollection services)
     {
@@ -84,12 +85,10 @@ public static class DependencyInjection
 
     private static IServiceCollection AddRepositories(this IServiceCollection services) =>
         services
-            .AddTransient(typeof(IRepositoryAsync<,>), typeof(RepositoryAsync<,>))
-            .AddTransient<IProductRepository, ProductRepository>()
-            .AddTransient<IBrandRepository, BrandRepository>()
-            .AddTransient<IDocumentRepository, DocumentRepository>()
-            .AddTransient<IDocumentTypeRepository, DocumentTypeRepository>()
-            .AddTransient(typeof(IUnitOfWork<>), typeof(UnitOfWork<>));
+            .AddScoped<IProductRepository, ProductRepository>()
+            .AddScoped<IBrandRepository, BrandRepository>()
+            .AddScoped<IDocumentRepository, DocumentRepository>()
+            .AddScoped<IDocumentTypeRepository, DocumentTypeRepository>();
 
     private static IServiceCollection AddServerStorage(this IServiceCollection services)
     {

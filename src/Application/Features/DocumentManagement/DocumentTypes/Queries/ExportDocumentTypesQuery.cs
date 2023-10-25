@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using BlazorHero.CleanArchitecture.Application.Abstractions.Infrastructure.Services;
 using BlazorHero.CleanArchitecture.Application.Abstractions.Messaging;
-using BlazorHero.CleanArchitecture.Application.Abstractions.Persistence;
+using BlazorHero.CleanArchitecture.Application.Abstractions.Persistence.Repositories;
 using BlazorHero.CleanArchitecture.Application.Extensions;
 using BlazorHero.CleanArchitecture.Application.Specifications.Misc;
 using BlazorHero.CleanArchitecture.Domain.Entities.Misc;
@@ -18,22 +18,22 @@ internal sealed class ExportDocumentTypesQueryHandler : IQueryHandler<ExportDocu
 {
     private readonly IExcelService _excelService;
     private readonly IStringLocalizer<ExportDocumentTypesQueryHandler> _localizer;
-    private readonly IUnitOfWork<int> _unitOfWork;
+    private readonly IDocumentTypeRepository _documentTypeRepository;
 
     public ExportDocumentTypesQueryHandler(
         IExcelService excelService,
-        IUnitOfWork<int> unitOfWork,
-        IStringLocalizer<ExportDocumentTypesQueryHandler> localizer)
+        IStringLocalizer<ExportDocumentTypesQueryHandler> localizer,
+        IDocumentTypeRepository documentTypeRepository)
     {
         _excelService = excelService;
-        _unitOfWork = unitOfWork;
         _localizer = localizer;
+        _documentTypeRepository = documentTypeRepository;
     }
 
     public async Task<Result<string>> Handle(ExportDocumentTypesQuery request, CancellationToken cancellationToken)
     {
         DocumentTypeFilterSpecification documentTypeFilterSpec = new(request.SearchString);
-        List<DocumentType> documentTypes = await _unitOfWork.Repository<DocumentType>().Entities
+        var documentTypes = await _documentTypeRepository.Entities
             .Specify(documentTypeFilterSpec)
             .ToListAsync(cancellationToken);
         var data = await _excelService.ExportAsync(documentTypes,

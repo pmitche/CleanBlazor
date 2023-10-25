@@ -3,11 +3,13 @@ using System.Diagnostics.CodeAnalysis;
 using BlazorHero.CleanArchitecture.Application.Abstractions.Infrastructure.Services;
 using BlazorHero.CleanArchitecture.Application.Abstractions.Messaging;
 using BlazorHero.CleanArchitecture.Application.Abstractions.Persistence;
+using BlazorHero.CleanArchitecture.Application.Abstractions.Persistence.Repositories;
 using BlazorHero.CleanArchitecture.Contracts;
 using BlazorHero.CleanArchitecture.Domain.Entities.Catalog;
 using BlazorHero.CleanArchitecture.Shared.Constants.Application;
 using BlazorHero.CleanArchitecture.Shared.Wrapper;
 using FluentValidation.Results;
+using LazyCache;
 using Microsoft.Extensions.Localization;
 
 namespace BlazorHero.CleanArchitecture.Application.Features.Catalog.Brands.Commands;
@@ -19,16 +21,22 @@ internal sealed class ImportBrandsCommandHandler : ICommandHandler<ImportBrandsC
 {
     private readonly IExcelService _excelService;
     private readonly IStringLocalizer<ImportBrandsCommandHandler> _localizer;
-    private readonly IUnitOfWork<int> _unitOfWork;
+    private readonly IBrandRepository _brandRepository;
+    private readonly IAppCache _cache;
+    private readonly IUnitOfWork _unitOfWork;
 
     public ImportBrandsCommandHandler(
-        IUnitOfWork<int> unitOfWork,
+        IUnitOfWork unitOfWork,
         IExcelService excelService,
-        IStringLocalizer<ImportBrandsCommandHandler> localizer)
+        IStringLocalizer<ImportBrandsCommandHandler> localizer,
+        IBrandRepository brandRepository,
+        IAppCache cache)
     {
         _unitOfWork = unitOfWork;
         _excelService = excelService;
         _localizer = localizer;
+        _brandRepository = brandRepository;
+        _cache = cache;
     }
 
     public async Task<Result<int>> Handle(ImportBrandsCommand request, CancellationToken cancellationToken)
@@ -62,7 +70,7 @@ internal sealed class ImportBrandsCommandHandler : ICommandHandler<ImportBrandsC
             ValidationResult validationResult = ValidateBrand(brand);
             if (validationResult.IsValid)
             {
-                await _unitOfWork.Repository<Brand>().AddAsync(brand);
+                _brandRepository.Add(brand);
             }
             else
             {
@@ -77,7 +85,8 @@ internal sealed class ImportBrandsCommandHandler : ICommandHandler<ImportBrandsC
             return await Result<int>.FailAsync(errors);
         }
 
-        await _unitOfWork.CommitAndRemoveCache(cancellationToken, ApplicationConstants.Cache.GetAllBrandsCacheKey);
+        await _unitOfWork.SaveChangesAsync(cancellationToken);
+        _cache.Remove(ApplicationConstants.Cache.GetAllBrandsCacheKey);
         return await Result<int>.SuccessAsync(result.Data.Count(), result.Messages[0]);
     }
 

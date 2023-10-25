@@ -1,11 +1,12 @@
 ﻿using BlazorHero.CleanArchitecture.Application.Abstractions.Persistence.Repositories;
 using BlazorHero.CleanArchitecture.Domain.Entities.Misc;
+using BlazorHero.CleanArchitecture.Infrastructure.Contexts;
 
 namespace BlazorHero.CleanArchitecture.Infrastructure.Repositories;
 
-public class DocumentTypeRepository : IDocumentTypeRepository
+internal sealed class DocumentTypeRepository : GenericRepository<DocumentType, int>, IDocumentTypeRepository
 {
-    private readonly IRepositoryAsync<DocumentType, int> _repository;
-
-    public DocumentTypeRepository(IRepositoryAsync<DocumentType, int> repository) => _repository = repository;
+    public DocumentTypeRepository(BlazorHeroContext dbContext) : base(dbContext)
+    {
+    }
 }

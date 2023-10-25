@@ -1,15 +1,16 @@
 ﻿using BlazorHero.CleanArchitecture.Application.Abstractions.Persistence.Repositories;
 using BlazorHero.CleanArchitecture.Domain.Entities.Misc;
+using BlazorHero.CleanArchitecture.Infrastructure.Contexts;
 using Microsoft.EntityFrameworkCore;
 
 namespace BlazorHero.CleanArchitecture.Infrastructure.Repositories;
 
-public class DocumentRepository : IDocumentRepository
+internal sealed class DocumentRepository : GenericRepository<Document, int>, IDocumentRepository
 {
-    private readonly IRepositoryAsync<Document, int> _repository;
+    public DocumentRepository(BlazorHeroContext dbContext) : base(dbContext)
+    {
+    }
 
-    public DocumentRepository(IRepositoryAsync<Document, int> repository) => _repository = repository;
-
-    public async Task<bool> IsDocumentTypeUsed(int documentTypeId) =>
-        await _repository.Entities.AnyAsync(b => b.DocumentTypeId == documentTypeId);
+    public async Task<bool> IsDocumentTypeUsedAsync(int documentTypeId) =>
+        await Entities.AnyAsync(b => b.DocumentTypeId == documentTypeId);
 }

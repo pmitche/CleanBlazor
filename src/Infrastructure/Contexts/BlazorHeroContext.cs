@@ -1,9 +1,11 @@
 ﻿using BlazorHero.CleanArchitecture.Application.Abstractions.Common;
 using BlazorHero.CleanArchitecture.Application.Abstractions.Infrastructure.Services;
+using BlazorHero.CleanArchitecture.Application.Abstractions.Persistence;
 using BlazorHero.CleanArchitecture.Domain.Contracts;
 using BlazorHero.CleanArchitecture.Domain.Entities.Catalog;
 using BlazorHero.CleanArchitecture.Domain.Entities.Misc;
 using BlazorHero.CleanArchitecture.Infrastructure.Models.Identity;
+using BlazorHero.CleanArchitecture.Infrastructure.Repositories;
 using BlazorHero.CleanArchitecture.Shared.Models.Chat;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -12,7 +14,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace BlazorHero.CleanArchitecture.Infrastructure.Contexts;
 
-public class BlazorHeroContext : AuditableContext
+public class BlazorHeroContext : AuditableContext, IUnitOfWork
 {
     private readonly ICurrentUserService _currentUserService;
     private readonly IDateTimeService _dateTimeService;
@@ -57,6 +59,12 @@ public class BlazorHeroContext : AuditableContext
         }
 
         return await base.SaveChangesAsync(_currentUserService.UserId, cancellationToken);
+    }
+
+    public async Task<ITransaction> BeginTransactionAsync(CancellationToken cancellationToken = default)
+    {
+        var transaction = await Database.BeginTransactionAsync(cancellationToken);
+        return new EfTransaction(transaction);
     }
 
     protected override void OnModelCreating(ModelBuilder builder)

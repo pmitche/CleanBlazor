@@ -2,7 +2,7 @@
 using System.Linq.Dynamic.Core;
 using System.Linq.Expressions;
 using BlazorHero.CleanArchitecture.Application.Abstractions.Messaging;
-using BlazorHero.CleanArchitecture.Application.Abstractions.Persistence;
+using BlazorHero.CleanArchitecture.Application.Abstractions.Persistence.Repositories;
 using BlazorHero.CleanArchitecture.Application.Extensions;
 using BlazorHero.CleanArchitecture.Application.Specifications.Catalog;
 using BlazorHero.CleanArchitecture.Contracts.Catalog.Products;
@@ -22,9 +22,12 @@ public sealed record GetAllProductsQuery(int PageNumber, int PageSize, string Se
 internal sealed class GetAllProductsQueryHandler
     : IQueryHandler<GetAllProductsQuery, PaginatedResult<GetAllPagedProductsResponse>>
 {
-    private readonly IUnitOfWork<int> _unitOfWork;
+    private readonly IProductRepository _productRepository;
 
-    public GetAllProductsQueryHandler(IUnitOfWork<int> unitOfWork) => _unitOfWork = unitOfWork;
+    public GetAllProductsQueryHandler(IProductRepository productRepository)
+    {
+        _productRepository = productRepository;
+    }
 
     public async Task<PaginatedResult<GetAllPagedProductsResponse>> Handle(
         GetAllProductsQuery request,
@@ -41,7 +44,7 @@ internal sealed class GetAllProductsQueryHandler
             BrandId = e.BrandId
         };
         ProductFilterSpecification productFilterSpec = new(request.SearchString);
-        var queryable = _unitOfWork.Repository<Product>().Entities
+        var queryable = _productRepository.Entities
             .Specify(productFilterSpec);
 
         if (!string.IsNullOrWhiteSpace(request.OrderByInput))

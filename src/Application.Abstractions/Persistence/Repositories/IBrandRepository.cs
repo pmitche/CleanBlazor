@@ -1,5 +1,7 @@
-﻿namespace BlazorHero.CleanArchitecture.Application.Abstractions.Persistence.Repositories;
+﻿using BlazorHero.CleanArchitecture.Domain.Entities.Catalog;
 
-public interface IBrandRepository
+namespace BlazorHero.CleanArchitecture.Application.Abstractions.Persistence.Repositories;
+
+public interface IBrandRepository : IRepository<Brand, int>
 {
 }

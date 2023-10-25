@@ -3,6 +3,7 @@ using AutoMapper;
 using BlazorHero.CleanArchitecture.Application.Abstractions.Infrastructure.Services;
 using BlazorHero.CleanArchitecture.Application.Abstractions.Messaging;
 using BlazorHero.CleanArchitecture.Application.Abstractions.Persistence;
+using BlazorHero.CleanArchitecture.Application.Abstractions.Persistence.Repositories;
 using BlazorHero.CleanArchitecture.Contracts;
 using BlazorHero.CleanArchitecture.Domain.Entities.Catalog;
 using BlazorHero.CleanArchitecture.Shared.Wrapper;
@@ -27,25 +28,28 @@ public sealed class AddEditProductCommand : ICommand<Result<int>>
 internal sealed class AddEditProductCommandHandler : ICommandHandler<AddEditProductCommand, Result<int>>
 {
     private readonly IStringLocalizer<AddEditProductCommandHandler> _localizer;
+    private readonly IProductRepository _productRepository;
     private readonly IMapper _mapper;
-    private readonly IUnitOfWork<int> _unitOfWork;
+    private readonly IUnitOfWork _unitOfWork;
     private readonly IUploadService _uploadService;
 
     public AddEditProductCommandHandler(
-        IUnitOfWork<int> unitOfWork,
+        IUnitOfWork unitOfWork,
         IMapper mapper,
         IUploadService uploadService,
-        IStringLocalizer<AddEditProductCommandHandler> localizer)
+        IStringLocalizer<AddEditProductCommandHandler> localizer,
+        IProductRepository productRepository)
     {
         _unitOfWork = unitOfWork;
         _mapper = mapper;
         _uploadService = uploadService;
         _localizer = localizer;
+        _productRepository = productRepository;
     }
 
     public async Task<Result<int>> Handle(AddEditProductCommand command, CancellationToken cancellationToken)
     {
-        if (await _unitOfWork.Repository<Product>().Entities.Where(p => p.Id != command.Id)
+        if (await _productRepository.Entities.Where(p => p.Id != command.Id)
                 .AnyAsync(p => p.Barcode == command.Barcode, cancellationToken))
         {
             return await Result<int>.FailAsync(_localizer["Barcode already exists."]);
@@ -65,13 +69,13 @@ internal sealed class AddEditProductCommandHandler : ICommandHandler<AddEditProd
                 product.ImageDataUrl = _uploadService.UploadAsync(uploadRequest);
             }
 
-            await _unitOfWork.Repository<Product>().AddAsync(product);
-            await _unitOfWork.Commit(cancellationToken);
+            _productRepository.Add(product);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
             return await Result<int>.SuccessAsync(product.Id, _localizer["Product Saved"]);
         }
         else
         {
-            Product product = await _unitOfWork.Repository<Product>().GetByIdAsync(command.Id);
+            var product = await _productRepository.GetByIdAsync(command.Id, cancellationToken);
             if (product == null)
             {
                 return await Result<int>.FailAsync(_localizer["Product Not Found!"]);
@@ -86,8 +90,8 @@ internal sealed class AddEditProductCommandHandler : ICommandHandler<AddEditProd
 
             product.Rate = command.Rate == 0 ? product.Rate : command.Rate;
             product.BrandId = command.BrandId == 0 ? product.BrandId : command.BrandId;
-            await _unitOfWork.Repository<Product>().UpdateAsync(product);
-            await _unitOfWork.Commit(cancellationToken);
+            _productRepository.Update(product);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
             return await Result<int>.SuccessAsync(product.Id, _localizer["Product Updated"]);
         }
     }

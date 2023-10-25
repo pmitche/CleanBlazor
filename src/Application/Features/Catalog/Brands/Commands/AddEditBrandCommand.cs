@@ -2,9 +2,11 @@
 using AutoMapper;
 using BlazorHero.CleanArchitecture.Application.Abstractions.Messaging;
 using BlazorHero.CleanArchitecture.Application.Abstractions.Persistence;
+using BlazorHero.CleanArchitecture.Application.Abstractions.Persistence.Repositories;
 using BlazorHero.CleanArchitecture.Domain.Entities.Catalog;
 using BlazorHero.CleanArchitecture.Shared.Constants.Application;
 using BlazorHero.CleanArchitecture.Shared.Wrapper;
+using LazyCache;
 using Microsoft.Extensions.Localization;
 
 namespace BlazorHero.CleanArchitecture.Application.Features.Catalog.Brands.Commands;
@@ -29,17 +31,23 @@ public sealed class AddEditBrandCommand : ICommand<Result<int>>
 internal sealed class AddEditBrandCommandHandler : ICommandHandler<AddEditBrandCommand, Result<int>>
 {
     private readonly IStringLocalizer<AddEditBrandCommandHandler> _localizer;
+    private readonly IBrandRepository _brandRepository;
+    private readonly IAppCache _cache;
     private readonly IMapper _mapper;
-    private readonly IUnitOfWork<int> _unitOfWork;
+    private readonly IUnitOfWork _unitOfWork;
 
     public AddEditBrandCommandHandler(
-        IUnitOfWork<int> unitOfWork,
+        IUnitOfWork unitOfWork,
         IMapper mapper,
-        IStringLocalizer<AddEditBrandCommandHandler> localizer)
+        IStringLocalizer<AddEditBrandCommandHandler> localizer,
+        IBrandRepository brandRepository,
+        IAppCache cache)
     {
         _unitOfWork = unitOfWork;
         _mapper = mapper;
         _localizer = localizer;
+        _brandRepository = brandRepository;
+        _cache = cache;
     }
 
     public async Task<Result<int>> Handle(AddEditBrandCommand command, CancellationToken cancellationToken)
@@ -47,13 +55,14 @@ internal sealed class AddEditBrandCommandHandler : ICommandHandler<AddEditBrandC
         if (command.Id == 0)
         {
             var brand = _mapper.Map<Brand>(command);
-            await _unitOfWork.Repository<Brand>().AddAsync(brand);
-            await _unitOfWork.CommitAndRemoveCache(cancellationToken, ApplicationConstants.Cache.GetAllBrandsCacheKey);
+            _brandRepository.Add(brand);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
+            _cache.Remove(ApplicationConstants.Cache.GetAllBrandsCacheKey);
             return await Result<int>.SuccessAsync(brand.Id, _localizer["Brand Saved"]);
         }
         else
         {
-            Brand brand = await _unitOfWork.Repository<Brand>().GetByIdAsync(command.Id);
+            var brand = await _brandRepository.GetByIdAsync(command.Id, cancellationToken);
             if (brand == null)
             {
                 return await Result<int>.FailAsync(_localizer["Brand Not Found!"]);
@@ -62,8 +71,10 @@ internal sealed class AddEditBrandCommandHandler : ICommandHandler<AddEditBrandC
             brand.Name = command.Name ?? brand.Name;
             brand.Tax = command.Tax == 0 ? brand.Tax : command.Tax;
             brand.Description = command.Description ?? brand.Description;
-            await _unitOfWork.Repository<Brand>().UpdateAsync(brand);
-            await _unitOfWork.CommitAndRemoveCache(cancellationToken, ApplicationConstants.Cache.GetAllBrandsCacheKey);
+            
+            _brandRepository.Update(brand);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
+            _cache.Remove(ApplicationConstants.Cache.GetAllBrandsCacheKey);
             return await Result<int>.SuccessAsync(brand.Id, _localizer["Brand Updated"]);
         }
     }

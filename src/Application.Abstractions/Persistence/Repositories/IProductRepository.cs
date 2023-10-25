@@ -1,6 +1,8 @@
-﻿namespace BlazorHero.CleanArchitecture.Application.Abstractions.Persistence.Repositories;
+﻿using BlazorHero.CleanArchitecture.Domain.Entities.Catalog;
 
-public interface IProductRepository
+namespace BlazorHero.CleanArchitecture.Application.Abstractions.Persistence.Repositories;
+
+public interface IProductRepository : IRepository<Product, int>
 {
-    Task<bool> IsBrandUsed(int brandId);
+    Task<bool> IsBrandUsedAsync(int brandId, CancellationToken cancellationToken = default);
 }

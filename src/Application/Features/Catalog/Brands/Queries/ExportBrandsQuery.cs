@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using BlazorHero.CleanArchitecture.Application.Abstractions.Infrastructure.Services;
 using BlazorHero.CleanArchitecture.Application.Abstractions.Messaging;
-using BlazorHero.CleanArchitecture.Application.Abstractions.Persistence;
+using BlazorHero.CleanArchitecture.Application.Abstractions.Persistence.Repositories;
 using BlazorHero.CleanArchitecture.Application.Extensions;
 using BlazorHero.CleanArchitecture.Application.Specifications.Catalog;
 using BlazorHero.CleanArchitecture.Domain.Entities.Catalog;
@@ -16,24 +16,24 @@ public sealed record ExportBrandsQuery(string SearchString = "") : IQuery<Result
 
 internal sealed class ExportBrandsQueryHandler : IQueryHandler<ExportBrandsQuery, Result<string>>
 {
+    private readonly IBrandRepository _brandRepository;
     private readonly IExcelService _excelService;
     private readonly IStringLocalizer<ExportBrandsQueryHandler> _localizer;
-    private readonly IUnitOfWork<int> _unitOfWork;
 
     public ExportBrandsQueryHandler(
         IExcelService excelService,
-        IUnitOfWork<int> unitOfWork,
-        IStringLocalizer<ExportBrandsQueryHandler> localizer)
+        IStringLocalizer<ExportBrandsQueryHandler> localizer,
+        IBrandRepository brandRepository)
     {
         _excelService = excelService;
-        _unitOfWork = unitOfWork;
         _localizer = localizer;
+        _brandRepository = brandRepository;
     }
 
     public async Task<Result<string>> Handle(ExportBrandsQuery request, CancellationToken cancellationToken)
     {
         BrandFilterSpecification brandFilterSpec = new(request.SearchString);
-        List<Brand> brands = await _unitOfWork.Repository<Brand>().Entities
+        var brands = await _brandRepository.Entities
             .Specify(brandFilterSpec)
             .ToListAsync(cancellationToken);
         var data = await _excelService.ExportAsync(brands,
