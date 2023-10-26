@@ -1,10 +1,12 @@
 ﻿using BlazorHero.CleanArchitecture.Contracts.Identity;
+using BlazorHero.CleanArchitecture.Domain.Contracts;
 using BlazorHero.CleanArchitecture.Shared.Wrapper;
 
 namespace BlazorHero.CleanArchitecture.Application.Abstractions.Infrastructure.Services.Identity;
 
 public interface IUserService
 {
+    IQueryable<IUser> Users { get; }
     Task<Result<List<UserResponse>>> GetAllAsync();
 
     Task<int> GetCountAsync();

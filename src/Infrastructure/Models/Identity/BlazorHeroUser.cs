@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace BlazorHero.CleanArchitecture.Infrastructure.Models.Identity;
 
-public class BlazorHeroUser : IdentityUser<string>, IChatUser, IAuditableEntity<string>
+public class BlazorHeroUser : IdentityUser<string>, IUser, IChatUser, IAuditableEntity<string>
 {
     public bool IsDeleted { get; set; }
 

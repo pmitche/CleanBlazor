@@ -25,7 +25,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Features\Catalog\" />
-    <Folder Include="Features\Communication\Chat\Queries\" />
     <Folder Include="Features\DocumentManagement\" />
   </ItemGroup>
 </Project>

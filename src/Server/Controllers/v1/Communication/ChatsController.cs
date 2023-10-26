@@ -1,5 +1,5 @@
-﻿using BlazorHero.CleanArchitecture.Application.Abstractions.Infrastructure.Services;
-using BlazorHero.CleanArchitecture.Application.Features.Communication.Chat.Commands;
+﻿using BlazorHero.CleanArchitecture.Application.Features.Communication.Chat.Commands;
+using BlazorHero.CleanArchitecture.Application.Features.Communication.Chat.Queries;
 using BlazorHero.CleanArchitecture.Domain.Entities.Communication;
 using BlazorHero.CleanArchitecture.Shared.Constants.Permission;
 using Microsoft.AspNetCore.Authorization;
@@ -10,15 +10,6 @@ namespace BlazorHero.CleanArchitecture.Server.Controllers.v1.Communication;
 [Authorize(Policy = Permissions.Communication.Chat)]
 public class ChatsController : BaseApiController
 {
-    private readonly IChatService _chatService;
-    private readonly ICurrentUserService _currentUserService;
-
-    public ChatsController(ICurrentUserService currentUserService, IChatService chatService)
-    {
-        _currentUserService = currentUserService;
-        _chatService = chatService;
-    }
-
     /// <summary>
     ///     Get user wise chat history
     /// </summary>
@@ -27,7 +18,7 @@ public class ChatsController : BaseApiController
     //Get user wise chat history
     [HttpGet("{contactId}")]
     public async Task<IActionResult> GetChatHistoryAsync(string contactId) =>
-        Ok(await _chatService.GetChatHistoryAsync(_currentUserService.UserId, contactId));
+        Ok(await Mediator.Send(new GetChatHistoryQuery(contactId)));
 
     /// <summary>
     ///     get available users
@@ -36,7 +27,7 @@ public class ChatsController : BaseApiController
     //get available users - sorted by date of last message if exists
     [HttpGet("users")]
     public async Task<IActionResult> GetChatUsersAsync() =>
-        Ok(await _chatService.GetChatUsersAsync(_currentUserService.UserId));
+        Ok(await Mediator.Send(new GetChatUsersQuery()));
 
     /// <summary>
     ///     Save Chat Message

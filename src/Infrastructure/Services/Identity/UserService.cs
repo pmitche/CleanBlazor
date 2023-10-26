@@ -8,6 +8,7 @@ using BlazorHero.CleanArchitecture.Application.Exceptions;
 using BlazorHero.CleanArchitecture.Application.Extensions;
 using BlazorHero.CleanArchitecture.Contracts.Identity;
 using BlazorHero.CleanArchitecture.Contracts.Mail;
+using BlazorHero.CleanArchitecture.Domain.Contracts;
 using BlazorHero.CleanArchitecture.Infrastructure.Models.Identity;
 using BlazorHero.CleanArchitecture.Infrastructure.Specifications;
 using BlazorHero.CleanArchitecture.Shared.Constants.Role;
@@ -48,6 +49,8 @@ public class UserService : IUserService
         _excelService = excelService;
         _currentUserService = currentUserService;
     }
+
+    public IQueryable<IUser> Users => _userManager.Users.Cast<IUser>();
 
     public async Task<Result<List<UserResponse>>> GetAllAsync()
     {
