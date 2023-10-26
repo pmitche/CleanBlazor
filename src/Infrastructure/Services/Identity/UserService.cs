@@ -148,6 +148,11 @@ public class UserService : IUserService
         return await Result.SuccessAsync();
     }
 
+    public async Task<bool> IsInRoleAsync(string userId, string role)
+    {
+        var user = await _userManager.FindByIdAsync(userId);
+        return user != null && await _userManager.IsInRoleAsync(user, role);
+    }
     public async Task<IResult<UserRolesResponse>> GetRolesAsync(string userId)
     {
         var viewModel = new List<UserRoleModel>();

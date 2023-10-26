@@ -15,6 +15,7 @@ public interface IUserService
 
     Task<IResult> ToggleUserStatusAsync(ToggleUserStatusRequest request);
 
+    Task<bool> IsInRoleAsync(string userId, string role);
     Task<IResult<UserRolesResponse>> GetRolesAsync(string userId);
 
     Task<IResult> UpdateRolesAsync(UpdateUserRolesRequest request);

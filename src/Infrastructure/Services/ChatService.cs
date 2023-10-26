@@ -66,9 +66,7 @@ public class ChatService : IChatService
 
     public async Task<Result<IEnumerable<ChatUserResponse>>> GetChatUsersAsync(string userId)
     {
-        IResult<UserRolesResponse> userRoles = await _userService.GetRolesAsync(userId);
-        var userIsAdmin =
-            userRoles.Data?.UserRoles?.Exists(x => x.Selected && x.RoleName == RoleConstants.AdministratorRole) == true;
+        var userIsAdmin = await _userService.IsInRoleAsync(userId, RoleConstants.AdministratorRole);
         List<BlazorHeroUser> allUsers = await _context.Users
             .Where(user => user.Id != userId && (userIsAdmin || (user.IsActive && user.EmailConfirmed))).ToListAsync();
         var chatUsers = _mapper.Map<IEnumerable<ChatUserResponse>>(allUsers);
