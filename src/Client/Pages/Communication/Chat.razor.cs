@@ -18,7 +18,7 @@ namespace BlazorHero.CleanArchitecture.Client.Pages.Communication;
 
 public partial class Chat
 {
-    private List<ChatHistoryResponse> _messages = new();
+    private List<ChatMessageResponse> _messages = new();
 
     private bool _open;
 
@@ -43,19 +43,19 @@ public partial class Chat
         if (!string.IsNullOrEmpty(CurrentMessage) && !string.IsNullOrEmpty(CId))
         {
             //Save Message to DB
-            var chatHistory = new ChatHistory<IChatUser>
+            var chatMessage = new ChatMessage<IChatUser>
             {
                 Message = CurrentMessage, ToUserId = CId, CreatedDate = DateTime.Now
             };
-            IResult response = await ChatManager.SaveMessageAsync(chatHistory);
+            IResult response = await ChatManager.SaveMessageAsync(chatMessage);
             if (response.Succeeded)
             {
                 AuthenticationState state = await StateProvider.GetAuthenticationStateAsync();
                 ClaimsPrincipal user = state.User;
                 CurrentUserId = user.GetUserId();
-                chatHistory.FromUserId = CurrentUserId;
+                chatMessage.FromUserId = CurrentUserId;
                 var userName = $"{user.GetFirstName()} {user.GetLastName()}";
-                await HubConnection.SendAsync(ApplicationConstants.SignalR.SendMessage, chatHistory, userName);
+                await HubConnection.SendAsync(ApplicationConstants.SignalR.SendMessage, chatMessage, userName);
                 CurrentMessage = string.Empty;
             }
             else
@@ -120,19 +120,19 @@ public partial class Chat
                 SnackBar.Info($"{disconnectedUser.UserName} {Localizer["Logged Out."]}");
                 StateHasChanged();
             });
-        HubConnection.On<ChatHistory<IChatUser>, string>(ApplicationConstants.SignalR.ReceiveMessage,
-            async (chatHistory, userName) =>
+        HubConnection.On<ChatMessage<IChatUser>, string>(ApplicationConstants.SignalR.ReceiveMessage,
+            async (chatMessage, userName) =>
             {
-                if ((CId == chatHistory.ToUserId && CurrentUserId == chatHistory.FromUserId) ||
-                    (CId == chatHistory.FromUserId && CurrentUserId == chatHistory.ToUserId))
+                if ((CId == chatMessage.ToUserId && CurrentUserId == chatMessage.FromUserId) ||
+                    (CId == chatMessage.FromUserId && CurrentUserId == chatMessage.ToUserId))
                 {
-                    if (CId == chatHistory.ToUserId && CurrentUserId == chatHistory.FromUserId)
+                    if (CId == chatMessage.ToUserId && CurrentUserId == chatMessage.FromUserId)
                     {
-                        _messages.Add(new ChatHistoryResponse
+                        _messages.Add(new ChatMessageResponse
                         {
-                            Message = chatHistory.Message,
+                            Message = chatMessage.Message,
                             FromUserFullName = userName,
-                            CreatedDate = chatHistory.CreatedDate,
+                            CreatedDate = chatMessage.CreatedDate,
                             FromUserImageUrl = CurrentUserImageUrl
                         });
                         await HubConnection.SendAsync(ApplicationConstants.SignalR.SendChatNotification,
@@ -140,13 +140,13 @@ public partial class Chat
                             CId,
                             CurrentUserId);
                     }
-                    else if (CId == chatHistory.FromUserId && CurrentUserId == chatHistory.ToUserId)
+                    else if (CId == chatMessage.FromUserId && CurrentUserId == chatMessage.ToUserId)
                     {
-                        _messages.Add(new ChatHistoryResponse
+                        _messages.Add(new ChatMessageResponse
                         {
-                            Message = chatHistory.Message,
+                            Message = chatMessage.Message,
                             FromUserFullName = userName,
-                            CreatedDate = chatHistory.CreatedDate,
+                            CreatedDate = chatMessage.CreatedDate,
                             FromUserImageUrl = CImageUrl
                         });
                     }
@@ -181,11 +181,11 @@ public partial class Chat
             CImageUrl = contact.ProfilePictureDataUrl;
             NavigationManager.NavigateTo($"chat/{CId}");
             //Load messages from db here
-            _messages = new List<ChatHistoryResponse>();
-            IResult<IEnumerable<ChatHistoryResponse>> historyResponse = await ChatManager.GetChatHistoryAsync(CId);
-            if (historyResponse.Succeeded)
+            _messages = new List<ChatMessageResponse>();
+            IResult<IEnumerable<ChatMessageResponse>> chatHistoryResponse = await ChatManager.GetChatHistoryAsync(CId);
+            if (chatHistoryResponse.Succeeded)
             {
-                _messages = historyResponse.Data.ToList();
+                _messages = chatHistoryResponse.Data.ToList();
             }
             else
             {

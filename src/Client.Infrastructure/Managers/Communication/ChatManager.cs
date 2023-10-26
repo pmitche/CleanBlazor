@@ -13,10 +13,10 @@ public class ChatManager : IChatManager
 
     public ChatManager(HttpClient httpClient) => _httpClient = httpClient;
 
-    public async Task<IResult<IEnumerable<ChatHistoryResponse>>> GetChatHistoryAsync(string chatId)
+    public async Task<IResult<IEnumerable<ChatMessageResponse>>> GetChatHistoryAsync(string chatId)
     {
         HttpResponseMessage response = await _httpClient.GetAsync(ChatEndpoint.GetChatHistory(chatId));
-        IResult<IEnumerable<ChatHistoryResponse>> data = await response.ToResult<IEnumerable<ChatHistoryResponse>>();
+        IResult<IEnumerable<ChatMessageResponse>> data = await response.ToResult<IEnumerable<ChatMessageResponse>>();
         return data;
     }
 
@@ -27,9 +27,9 @@ public class ChatManager : IChatManager
         return data;
     }
 
-    public async Task<IResult> SaveMessageAsync(ChatHistory<IChatUser> chatHistory)
+    public async Task<IResult> SaveMessageAsync(ChatMessage<IChatUser> chatMessage)
     {
-        HttpResponseMessage response = await _httpClient.PostAsJsonAsync(ChatEndpoint.SaveMessage, chatHistory);
+        HttpResponseMessage response = await _httpClient.PostAsJsonAsync(ChatEndpoint.SaveMessage, chatMessage);
         IResult data = await response.ToResult();
         return data;
     }

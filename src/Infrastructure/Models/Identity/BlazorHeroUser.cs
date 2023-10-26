@@ -14,11 +14,11 @@ public class BlazorHeroUser : IdentityUser<string>, IUser, IChatUser, IAuditable
     public string RefreshToken { get; set; }
     public DateTime RefreshTokenExpiryTime { get; set; }
 
-    public virtual ICollection<ChatHistory<BlazorHeroUser>> ChatHistoryFromUsers { get; set; } =
-        new HashSet<ChatHistory<BlazorHeroUser>>();
+    public virtual ICollection<ChatMessage<BlazorHeroUser>> ChatMessagesFromUsers { get; set; } =
+        new HashSet<ChatMessage<BlazorHeroUser>>();
 
-    public virtual ICollection<ChatHistory<BlazorHeroUser>> ChatHistoryToUsers { get; set; } =
-        new HashSet<ChatHistory<BlazorHeroUser>>();
+    public virtual ICollection<ChatMessage<BlazorHeroUser>> ChatMessagesToUsers { get; set; } =
+        new HashSet<ChatMessage<BlazorHeroUser>>();
     public string CreatedBy { get; set; }
 
     public DateTime CreatedOn { get; set; }

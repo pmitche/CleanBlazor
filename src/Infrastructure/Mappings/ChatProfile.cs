@@ -4,7 +4,7 @@ using BlazorHero.CleanArchitecture.Infrastructure.Models.Identity;
 
 namespace BlazorHero.CleanArchitecture.Infrastructure.Mappings;
 
-public class ChatHistoryProfile : Profile
+public class ChatProfile : Profile
 {
-    public ChatHistoryProfile() => CreateMap<ChatHistory<IChatUser>, ChatHistory<BlazorHeroUser>>().ReverseMap();
+    public ChatProfile() => CreateMap<ChatMessage<IChatUser>, ChatMessage<BlazorHeroUser>>().ReverseMap();
 }

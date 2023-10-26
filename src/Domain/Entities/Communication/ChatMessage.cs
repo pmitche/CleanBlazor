@@ -2,7 +2,7 @@
 
 namespace BlazorHero.CleanArchitecture.Domain.Entities.Communication;
 
-public class ChatHistory<TUser> : IEntity<long> where TUser : IChatUser
+public class ChatMessage<TUser> : IEntity<long> where TUser : IChatUser
 {
     public long Id { get; set; }
     public string FromUserId { get; set; }

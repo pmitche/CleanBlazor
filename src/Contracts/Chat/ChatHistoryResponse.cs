@@ -1,6 +1,6 @@
 ﻿namespace BlazorHero.CleanArchitecture.Contracts.Chat;
 
-public class ChatHistoryResponse
+public class ChatMessageResponse
 {
     public long Id { get; set; }
     public string FromUserId { get; set; }

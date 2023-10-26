@@ -29,7 +29,7 @@ public class BlazorHeroContext : AuditableContext, IUnitOfWork
         _dateTimeService = dateTimeService;
     }
 
-    public DbSet<ChatHistory<BlazorHeroUser>> ChatHistories { get; set; }
+    public DbSet<ChatMessage<BlazorHeroUser>> ChatHistories { get; set; }
     public DbSet<Product> Products { get; set; }
     public DbSet<Brand> Brands { get; set; }
     public DbSet<Document> Documents { get; set; }
@@ -84,17 +84,17 @@ public class BlazorHeroContext : AuditableContext, IUnitOfWork
         }
 
         base.OnModelCreating(builder);
-        builder.Entity<ChatHistory<BlazorHeroUser>>(entity =>
+        builder.Entity<ChatMessage<BlazorHeroUser>>(entity =>
         {
-            entity.ToTable("ChatHistory");
+            entity.ToTable("ChatMessages");
 
             entity.HasOne(d => d.FromUser)
-                .WithMany(p => p.ChatHistoryFromUsers)
+                .WithMany(p => p.ChatMessagesFromUsers)
                 .HasForeignKey(d => d.FromUserId)
                 .OnDelete(DeleteBehavior.ClientSetNull);
 
             entity.HasOne(d => d.ToUser)
-                .WithMany(p => p.ChatHistoryToUsers)
+                .WithMany(p => p.ChatMessagesToUsers)
                 .HasForeignKey(d => d.ToUserId)
                 .OnDelete(DeleteBehavior.ClientSetNull);
         });

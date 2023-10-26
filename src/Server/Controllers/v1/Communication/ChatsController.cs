@@ -36,6 +36,6 @@ public class ChatsController : BaseApiController
     /// <returns>Status 200 OK</returns>
     //save chat message
     [HttpPost]
-    public async Task<IActionResult> SaveMessageAsync(ChatHistory<IChatUser> message) =>
+    public async Task<IActionResult> SaveMessageAsync(ChatMessage<IChatUser> message) =>
         Ok(await Mediator.Send(new SaveChatMessageCommand(message.ToUserId, message.Message)));
 }

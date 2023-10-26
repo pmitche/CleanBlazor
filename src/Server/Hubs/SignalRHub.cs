@@ -23,12 +23,12 @@ public class SignalRHub : Hub
     public async Task OnChangeRolePermissions(string userId, string roleId) =>
         await Clients.All.SendAsync(ApplicationConstants.SignalR.LogoutUsersByRole, userId, roleId);
 
-    public async Task SendMessageAsync(ChatHistory<IChatUser> chatHistory, string userName)
+    public async Task SendMessageAsync(ChatMessage<IChatUser> chatMessage, string userName)
     {
-        await Clients.User(chatHistory.ToUserId)
-            .SendAsync(ApplicationConstants.SignalR.ReceiveMessage, chatHistory, userName);
-        await Clients.User(chatHistory.FromUserId)
-            .SendAsync(ApplicationConstants.SignalR.ReceiveMessage, chatHistory, userName);
+        await Clients.User(chatMessage.ToUserId)
+            .SendAsync(ApplicationConstants.SignalR.ReceiveMessage, chatMessage, userName);
+        await Clients.User(chatMessage.FromUserId)
+            .SendAsync(ApplicationConstants.SignalR.ReceiveMessage, chatMessage, userName);
     }
 
     public async Task ChatNotificationAsync(string message, string receiverUserId, string senderUserId) => await Clients

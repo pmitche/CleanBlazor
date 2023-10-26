@@ -8,7 +8,7 @@ public interface IChatManager : IManager
 {
     Task<IResult<IEnumerable<ChatUserResponse>>> GetChatUsersAsync();
 
-    Task<IResult> SaveMessageAsync(ChatHistory<IChatUser> chatHistory);
+    Task<IResult> SaveMessageAsync(ChatMessage<IChatUser> chatMessage);
 
-    Task<IResult<IEnumerable<ChatHistoryResponse>>> GetChatHistoryAsync(string chatId);
+    Task<IResult<IEnumerable<ChatMessageResponse>>> GetChatHistoryAsync(string chatId);
 }
