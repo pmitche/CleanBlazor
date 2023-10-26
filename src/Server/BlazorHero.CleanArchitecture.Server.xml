@@ -101,7 +101,7 @@
             </summary>
             <returns>Status 200 OK</returns>
         </member>
-        <member name="M:BlazorHero.CleanArchitecture.Server.Controllers.v1.Communication.ChatsController.SaveMessageAsync(BlazorHero.CleanArchitecture.Shared.Models.Chat.ChatHistory{BlazorHero.CleanArchitecture.Domain.Contracts.Chat.IChatUser})">
+        <member name="M:BlazorHero.CleanArchitecture.Server.Controllers.v1.Communication.ChatsController.SaveMessageAsync(BlazorHero.CleanArchitecture.Domain.Entities.Communication.ChatHistory{BlazorHero.CleanArchitecture.Domain.Entities.Communication.IChatUser})">
             <summary>
                 Save Chat Message
             </summary>

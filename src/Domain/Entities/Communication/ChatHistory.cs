@@ -1,8 +1,8 @@
-﻿using BlazorHero.CleanArchitecture.Domain.Contracts.Chat;
+﻿using BlazorHero.CleanArchitecture.Domain.Contracts;
 
-namespace BlazorHero.CleanArchitecture.Shared.Models.Chat;
+namespace BlazorHero.CleanArchitecture.Domain.Entities.Communication;
 
-public class ChatHistory<TUser> : IChatHistory<TUser> where TUser : IChatUser
+public class ChatHistory<TUser> : IEntity<long> where TUser : IChatUser
 {
     public long Id { get; set; }
     public string FromUserId { get; set; }

@@ -1,7 +1,7 @@
 ﻿using BlazorHero.CleanArchitecture.Application.Abstractions.Infrastructure.Services;
-using BlazorHero.CleanArchitecture.Domain.Contracts.Chat;
+using BlazorHero.CleanArchitecture.Application.Features.Communication.Chat.Commands;
+using BlazorHero.CleanArchitecture.Domain.Entities.Communication;
 using BlazorHero.CleanArchitecture.Shared.Constants.Permission;
-using BlazorHero.CleanArchitecture.Shared.Models.Chat;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -45,10 +45,6 @@ public class ChatsController : BaseApiController
     /// <returns>Status 200 OK</returns>
     //save chat message
     [HttpPost]
-    public async Task<IActionResult> SaveMessageAsync(ChatHistory<IChatUser> message)
-    {
-        message.FromUserId = _currentUserService.UserId;
-        message.CreatedDate = DateTime.Now;
-        return Ok(await _chatService.SaveMessageAsync(message));
-    }
+    public async Task<IActionResult> SaveMessageAsync(ChatHistory<IChatUser> message) =>
+        Ok(await Mediator.Send(new SaveChatMessageCommand(message.ToUserId, message.Message)));
 }

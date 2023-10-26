@@ -1,7 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using BlazorHero.CleanArchitecture.Domain.Contracts;
-using BlazorHero.CleanArchitecture.Domain.Contracts.Chat;
-using BlazorHero.CleanArchitecture.Shared.Models.Chat;
+using BlazorHero.CleanArchitecture.Domain.Entities.Communication;
 using Microsoft.AspNetCore.Identity;
 
 namespace BlazorHero.CleanArchitecture.Infrastructure.Models.Identity;

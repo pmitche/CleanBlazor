@@ -88,7 +88,8 @@ public static class DependencyInjection
             .AddScoped<IProductRepository, ProductRepository>()
             .AddScoped<IBrandRepository, BrandRepository>()
             .AddScoped<IDocumentRepository, DocumentRepository>()
-            .AddScoped<IDocumentTypeRepository, DocumentTypeRepository>();
+            .AddScoped<IDocumentTypeRepository, DocumentTypeRepository>()
+            .AddScoped<IChatHistoryRepository, ChatHistoryRepository>();
 
     private static IServiceCollection AddServerStorage(this IServiceCollection services)
     {

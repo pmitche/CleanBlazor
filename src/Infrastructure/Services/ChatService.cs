@@ -1,15 +1,16 @@
 ﻿using AutoMapper;
 using BlazorHero.CleanArchitecture.Application.Abstractions.Infrastructure.Services;
 using BlazorHero.CleanArchitecture.Application.Abstractions.Infrastructure.Services.Identity;
+using BlazorHero.CleanArchitecture.Application.Abstractions.Persistence;
+using BlazorHero.CleanArchitecture.Application.Abstractions.Persistence.Repositories;
 using BlazorHero.CleanArchitecture.Application.Exceptions;
 using BlazorHero.CleanArchitecture.Contracts.Chat;
 using BlazorHero.CleanArchitecture.Contracts.Identity;
-using BlazorHero.CleanArchitecture.Domain.Contracts.Chat;
-using BlazorHero.CleanArchitecture.Infrastructure.Contexts;
+using BlazorHero.CleanArchitecture.Domain.Entities.Communication;
 using BlazorHero.CleanArchitecture.Infrastructure.Models.Identity;
 using BlazorHero.CleanArchitecture.Shared.Constants.Role;
-using BlazorHero.CleanArchitecture.Shared.Models.Chat;
 using BlazorHero.CleanArchitecture.Shared.Wrapper;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 
@@ -17,21 +18,27 @@ namespace BlazorHero.CleanArchitecture.Infrastructure.Services;
 
 public class ChatService : IChatService
 {
-    private readonly BlazorHeroContext _context;
     private readonly IStringLocalizer<ChatService> _localizer;
+    private readonly IChatHistoryRepository _chatHistoryRepository;
+    private readonly UserManager<BlazorHeroUser> _userManager;
+    private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
     private readonly IUserService _userService;
 
     public ChatService(
-        BlazorHeroContext context,
         IMapper mapper,
         IUserService userService,
-        IStringLocalizer<ChatService> localizer)
+        IStringLocalizer<ChatService> localizer,
+        IChatHistoryRepository chatHistoryRepository,
+        UserManager<BlazorHeroUser> userManager,
+        IUnitOfWork unitOfWork)
     {
-        _context = context;
         _mapper = mapper;
         _userService = userService;
         _localizer = localizer;
+        _chatHistoryRepository = chatHistoryRepository;
+        _userManager = userManager;
+        _unitOfWork = unitOfWork;
     }
 
     public async Task<Result<IEnumerable<ChatHistoryResponse>>> GetChatHistoryAsync(string userId, string contactId)
@@ -42,12 +49,10 @@ public class ChatService : IChatService
             throw new ApiException(_localizer["User Not Found!"]);
         }
 
-        List<ChatHistoryResponse> query = await _context.ChatHistories
+        List<ChatHistoryResponse> query = await _chatHistoryRepository.Entities
             .Where(h => (h.FromUserId == userId && h.ToUserId == contactId) ||
                         (h.FromUserId == contactId && h.ToUserId == userId))
             .OrderBy(a => a.CreatedDate)
-            .Include(a => a.FromUser)
-            .Include(a => a.ToUser)
             .Select(x => new ChatHistoryResponse
             {
                 FromUserId = x.FromUserId,
@@ -67,7 +72,7 @@ public class ChatService : IChatService
     public async Task<Result<IEnumerable<ChatUserResponse>>> GetChatUsersAsync(string userId)
     {
         var userIsAdmin = await _userService.IsInRoleAsync(userId, RoleConstants.AdministratorRole);
-        List<BlazorHeroUser> allUsers = await _context.Users
+        List<BlazorHeroUser> allUsers = await _userManager.Users
             .Where(user => user.Id != userId && (userIsAdmin || (user.IsActive && user.EmailConfirmed))).ToListAsync();
         var chatUsers = _mapper.Map<IEnumerable<ChatUserResponse>>(allUsers);
         return await Result<IEnumerable<ChatUserResponse>>.SuccessAsync(chatUsers);
@@ -75,9 +80,8 @@ public class ChatService : IChatService
 
     public async Task<IResult> SaveMessageAsync(ChatHistory<IChatUser> message)
     {
-        message.ToUser = await _context.Users.Where(user => user.Id == message.ToUserId).FirstOrDefaultAsync();
-        await _context.ChatHistories.AddAsync(_mapper.Map<ChatHistory<BlazorHeroUser>>(message));
-        await _context.SaveChangesAsync();
+        _chatHistoryRepository.Add(message);
+        await _unitOfWork.SaveChangesAsync();
         return await Result.SuccessAsync();
     }
 }

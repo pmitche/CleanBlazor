@@ -1,7 +1,4 @@
-﻿using BlazorHero.CleanArchitecture.Domain.Contracts.Chat;
-using BlazorHero.CleanArchitecture.Shared.Models.Chat;
-
-namespace BlazorHero.CleanArchitecture.Contracts.Chat;
+﻿namespace BlazorHero.CleanArchitecture.Contracts.Chat;
 
 public class ChatUserResponse
 {
@@ -12,6 +9,4 @@ public class ChatUserResponse
     public string LastName { get; set; }
     public string EmailAddress { get; set; }
     public bool IsOnline { get; set; }
-    public virtual ICollection<ChatHistory<IChatUser>> ChatHistoryFromUsers { get; set; }
-    public virtual ICollection<ChatHistory<IChatUser>> ChatHistoryToUsers { get; set; }
 }

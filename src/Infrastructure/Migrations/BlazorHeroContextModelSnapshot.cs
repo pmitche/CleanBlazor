@@ -101,6 +101,35 @@ namespace BlazorHero.CleanArchitecture.Infrastructure.Migrations
                     b.ToTable("Products");
                 });
 
+            modelBuilder.Entity("BlazorHero.CleanArchitecture.Domain.Entities.Communication.ChatHistory<BlazorHero.CleanArchitecture.Infrastructure.Models.Identity.BlazorHeroUser>", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("FromUserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Message")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ToUserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FromUserId");
+
+                    b.HasIndex("ToUserId");
+
+                    b.ToTable("ChatHistory", (string)null);
+                });
+
             modelBuilder.Entity("BlazorHero.CleanArchitecture.Domain.Entities.Misc.Document", b =>
                 {
                     b.Property<int>("Id")
@@ -398,35 +427,6 @@ namespace BlazorHero.CleanArchitecture.Infrastructure.Migrations
                     b.ToTable("Users", "Identity");
                 });
 
-            modelBuilder.Entity("BlazorHero.CleanArchitecture.Shared.Models.Chat.ChatHistory<BlazorHero.CleanArchitecture.Infrastructure.Models.Identity.BlazorHeroUser>", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("FromUserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Message")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ToUserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("FromUserId");
-
-                    b.HasIndex("ToUserId");
-
-                    b.ToTable("ChatHistory", (string)null);
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
                     b.Property<int>("Id")
@@ -519,6 +519,21 @@ namespace BlazorHero.CleanArchitecture.Infrastructure.Migrations
                     b.Navigation("Brand");
                 });
 
+            modelBuilder.Entity("BlazorHero.CleanArchitecture.Domain.Entities.Communication.ChatHistory<BlazorHero.CleanArchitecture.Infrastructure.Models.Identity.BlazorHeroUser>", b =>
+                {
+                    b.HasOne("BlazorHero.CleanArchitecture.Infrastructure.Models.Identity.BlazorHeroUser", "FromUser")
+                        .WithMany("ChatHistoryFromUsers")
+                        .HasForeignKey("FromUserId");
+
+                    b.HasOne("BlazorHero.CleanArchitecture.Infrastructure.Models.Identity.BlazorHeroUser", "ToUser")
+                        .WithMany("ChatHistoryToUsers")
+                        .HasForeignKey("ToUserId");
+
+                    b.Navigation("FromUser");
+
+                    b.Navigation("ToUser");
+                });
+
             modelBuilder.Entity("BlazorHero.CleanArchitecture.Domain.Entities.Misc.Document", b =>
                 {
                     b.HasOne("BlazorHero.CleanArchitecture.Domain.Entities.Misc.DocumentType", "DocumentType")
@@ -539,21 +554,6 @@ namespace BlazorHero.CleanArchitecture.Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("Role");
-                });
-
-            modelBuilder.Entity("BlazorHero.CleanArchitecture.Shared.Models.Chat.ChatHistory<BlazorHero.CleanArchitecture.Infrastructure.Models.Identity.BlazorHeroUser>", b =>
-                {
-                    b.HasOne("BlazorHero.CleanArchitecture.Infrastructure.Models.Identity.BlazorHeroUser", "FromUser")
-                        .WithMany("ChatHistoryFromUsers")
-                        .HasForeignKey("FromUserId");
-
-                    b.HasOne("BlazorHero.CleanArchitecture.Infrastructure.Models.Identity.BlazorHeroUser", "ToUser")
-                        .WithMany("ChatHistoryToUsers")
-                        .HasForeignKey("ToUserId");
-
-                    b.Navigation("FromUser");
-
-                    b.Navigation("ToUser");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>

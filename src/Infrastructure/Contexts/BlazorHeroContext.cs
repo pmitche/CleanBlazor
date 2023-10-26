@@ -3,10 +3,10 @@ using BlazorHero.CleanArchitecture.Application.Abstractions.Infrastructure.Servi
 using BlazorHero.CleanArchitecture.Application.Abstractions.Persistence;
 using BlazorHero.CleanArchitecture.Domain.Contracts;
 using BlazorHero.CleanArchitecture.Domain.Entities.Catalog;
+using BlazorHero.CleanArchitecture.Domain.Entities.Communication;
 using BlazorHero.CleanArchitecture.Domain.Entities.Misc;
 using BlazorHero.CleanArchitecture.Infrastructure.Models.Identity;
 using BlazorHero.CleanArchitecture.Infrastructure.Repositories;
-using BlazorHero.CleanArchitecture.Shared.Models.Chat;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
