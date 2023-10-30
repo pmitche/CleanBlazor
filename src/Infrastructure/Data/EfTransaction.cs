@@ -1,9 +1,9 @@
 using BlazorHero.CleanArchitecture.Application.Abstractions.Persistence;
 using Microsoft.EntityFrameworkCore.Storage;
 
-namespace BlazorHero.CleanArchitecture.Infrastructure.Repositories;
+namespace BlazorHero.CleanArchitecture.Infrastructure.Data;
 
-internal class EfTransaction : ITransaction
+internal sealed class EfTransaction : ITransaction
 {
     private readonly IDbContextTransaction _transaction;
 

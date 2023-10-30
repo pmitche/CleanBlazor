@@ -1,6 +1,6 @@
 using AutoMapper;
+using BlazorHero.CleanArchitecture.Application.Abstractions.Infrastructure.Services.Identity;
 using BlazorHero.CleanArchitecture.Contracts.Chat;
-using BlazorHero.CleanArchitecture.Domain.Contracts;
 
 namespace BlazorHero.CleanArchitecture.Application.Mappings;
 

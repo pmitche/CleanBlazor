@@ -105,18 +105,4 @@ internal static class ApplicationBuilderExtensions
 
         return app;
     }
-
-    internal static IApplicationBuilder Initialize(this IApplicationBuilder app)
-    {
-        using IServiceScope serviceScope = app.ApplicationServices.CreateScope();
-
-        IEnumerable<IDatabaseSeeder> initializers = serviceScope.ServiceProvider.GetServices<IDatabaseSeeder>();
-
-        foreach (IDatabaseSeeder initializer in initializers)
-        {
-            initializer.Initialize();
-        }
-
-        return app;
-    }
 }

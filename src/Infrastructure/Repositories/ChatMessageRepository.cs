@@ -2,7 +2,7 @@ using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using BlazorHero.CleanArchitecture.Application.Abstractions.Persistence.Repositories;
 using BlazorHero.CleanArchitecture.Domain.Entities.Communication;
-using BlazorHero.CleanArchitecture.Infrastructure.Contexts;
+using BlazorHero.CleanArchitecture.Infrastructure.Data;
 using BlazorHero.CleanArchitecture.Infrastructure.Models.Identity;
 
 namespace BlazorHero.CleanArchitecture.Infrastructure.Repositories;

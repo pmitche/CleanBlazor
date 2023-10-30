@@ -1,5 +1,4 @@
 ﻿using BlazorHero.CleanArchitecture.Contracts.Identity;
-using BlazorHero.CleanArchitecture.Domain.Contracts;
 using BlazorHero.CleanArchitecture.Shared.Wrapper;
 
 namespace BlazorHero.CleanArchitecture.Application.Abstractions.Infrastructure.Services.Identity;

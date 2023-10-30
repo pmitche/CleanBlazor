@@ -5,7 +5,8 @@ using BlazorHero.CleanArchitecture.Application.Abstractions.Infrastructure.Servi
 using BlazorHero.CleanArchitecture.Application.Abstractions.Infrastructure.Services.Storage.Provider;
 using BlazorHero.CleanArchitecture.Application.Abstractions.Persistence;
 using BlazorHero.CleanArchitecture.Application.Abstractions.Persistence.Repositories;
-using BlazorHero.CleanArchitecture.Infrastructure.Contexts;
+using BlazorHero.CleanArchitecture.Infrastructure.Data;
+using BlazorHero.CleanArchitecture.Infrastructure.Data.Interceptors;
 using BlazorHero.CleanArchitecture.Infrastructure.Models.Identity;
 using BlazorHero.CleanArchitecture.Infrastructure.Repositories;
 using BlazorHero.CleanArchitecture.Infrastructure.Services;
@@ -14,6 +15,7 @@ using BlazorHero.CleanArchitecture.Infrastructure.Services.Storage;
 using BlazorHero.CleanArchitecture.Infrastructure.Services.Storage.Provider;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -51,9 +53,13 @@ public static class DependencyInjection
         this IServiceCollection services,
         IConfiguration configuration)
         => services
-            .AddDbContext<BlazorHeroContext>(options => options
+            .AddScoped<ISaveChangesInterceptor, AuditableEntityInterceptor>()
+            .AddScoped<ISaveChangesInterceptor, SoftDeletableEntityInterceptor>()
+            .AddScoped<ISaveChangesInterceptor, DispatchDomainEventsInterceptor>()
+            .AddDbContext<BlazorHeroContext>((sp, options) => options
+                .AddInterceptors(sp.GetService<ISaveChangesInterceptor>())
                 .UseSqlServer(configuration.GetConnectionString("DefaultConnection")))
-            .AddTransient<IDatabaseSeeder, DatabaseSeeder>()
+            .AddScoped<BlazorHeroContextInitializer>()
             .AddScoped<IUnitOfWork>(serviceProvider => serviceProvider.GetRequiredService<BlazorHeroContext>());
 
     private static IServiceCollection AddIdentity(this IServiceCollection services)

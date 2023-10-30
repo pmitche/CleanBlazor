@@ -3,7 +3,7 @@ using AutoMapper;
 using BlazorHero.CleanArchitecture.Application.Abstractions.Infrastructure.Services;
 using BlazorHero.CleanArchitecture.Application.Extensions;
 using BlazorHero.CleanArchitecture.Contracts.Audit;
-using BlazorHero.CleanArchitecture.Infrastructure.Contexts;
+using BlazorHero.CleanArchitecture.Infrastructure.Data;
 using BlazorHero.CleanArchitecture.Infrastructure.Models.Audit;
 using BlazorHero.CleanArchitecture.Infrastructure.Specifications;
 using BlazorHero.CleanArchitecture.Shared.Wrapper;

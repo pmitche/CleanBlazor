@@ -1,4 +1,4 @@
-﻿using BlazorHero.CleanArchitecture.Domain.Contracts;
+﻿using BlazorHero.CleanArchitecture.Domain.Abstractions;
 
 namespace BlazorHero.CleanArchitecture.Application.Abstractions.Persistence.Repositories;
 

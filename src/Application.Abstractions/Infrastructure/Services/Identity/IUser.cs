@@ -1,4 +1,4 @@
-namespace BlazorHero.CleanArchitecture.Domain.Contracts;
+namespace BlazorHero.CleanArchitecture.Application.Abstractions.Infrastructure.Services.Identity;
 
 public interface IUser
 {

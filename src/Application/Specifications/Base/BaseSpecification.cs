@@ -1,6 +1,6 @@
 ﻿using System.Linq.Expressions;
 using BlazorHero.CleanArchitecture.Application.Extensions;
-using BlazorHero.CleanArchitecture.Domain.Contracts;
+using BlazorHero.CleanArchitecture.Domain.Abstractions;
 
 namespace BlazorHero.CleanArchitecture.Application.Specifications.Base;
 

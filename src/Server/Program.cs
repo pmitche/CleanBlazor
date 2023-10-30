@@ -1,4 +1,4 @@
-﻿using BlazorHero.CleanArchitecture.Infrastructure.Contexts;
+﻿using BlazorHero.CleanArchitecture.Infrastructure.Data;
 using BlazorHero.CleanArchitecture.Server.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Serilog;

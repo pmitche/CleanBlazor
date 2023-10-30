@@ -2,7 +2,7 @@
 using BlazorHero.CleanArchitecture.Application.Abstractions.Infrastructure.Services;
 using BlazorHero.CleanArchitecture.Application.Abstractions.Infrastructure.Services.Identity;
 using BlazorHero.CleanArchitecture.Contracts.Identity;
-using BlazorHero.CleanArchitecture.Infrastructure.Contexts;
+using BlazorHero.CleanArchitecture.Infrastructure.Data;
 using BlazorHero.CleanArchitecture.Infrastructure.Models.Identity;
 using BlazorHero.CleanArchitecture.Shared.Wrapper;
 using Microsoft.EntityFrameworkCore;
@@ -80,7 +80,7 @@ public class RoleClaimService : IRoleClaimService
 
             var roleClaim = _mapper.Map<BlazorHeroRoleClaim>(request);
             await _db.RoleClaims.AddAsync(roleClaim);
-            await _db.SaveChangesAsync(_currentUserService.UserId);
+            await _db.SaveChangesAsync();
             return await Result<string>.SuccessAsync(
                 string.Format(_localizer["Role Claim {0} created."], request.Value));
         }
@@ -101,7 +101,7 @@ public class RoleClaimService : IRoleClaimService
             existingRoleClaim.Description = request.Description;
             existingRoleClaim.RoleId = request.RoleId;
             _db.RoleClaims.Update(existingRoleClaim);
-            await _db.SaveChangesAsync(_currentUserService.UserId);
+            await _db.SaveChangesAsync();
             return await Result<string>.SuccessAsync(string.Format(_localizer["Role Claim {0} for Role {1} updated."],
                 request.Value,
                 existingRoleClaim.Role.Name));
@@ -119,7 +119,7 @@ public class RoleClaimService : IRoleClaimService
         }
 
         _db.RoleClaims.Remove(existingRoleClaim);
-        await _db.SaveChangesAsync(_currentUserService.UserId);
+        await _db.SaveChangesAsync();
         return await Result<string>.SuccessAsync(string.Format(_localizer["Role Claim {0} for {1} Role deleted."],
             existingRoleClaim.ClaimValue,
             existingRoleClaim.Role.Name));

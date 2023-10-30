@@ -1,6 +1,6 @@
 ﻿using BlazorHero.CleanArchitecture.Application.Abstractions.Persistence.Repositories;
 using BlazorHero.CleanArchitecture.Domain.Entities.Catalog;
-using BlazorHero.CleanArchitecture.Infrastructure.Contexts;
+using BlazorHero.CleanArchitecture.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
 namespace BlazorHero.CleanArchitecture.Infrastructure.Repositories;

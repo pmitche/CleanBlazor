@@ -1,9 +1,10 @@
-﻿using BlazorHero.CleanArchitecture.Domain.Contracts;
+﻿using BlazorHero.CleanArchitecture.Domain.Abstractions;
 
 namespace BlazorHero.CleanArchitecture.Infrastructure.Models.Audit;
 
 public class Audit : IEntity<int>
 {
+    public int Id { get; set; }
     public string UserId { get; set; }
     public string Type { get; set; }
     public string TableName { get; set; }
@@ -12,5 +13,4 @@ public class Audit : IEntity<int>
     public string NewValues { get; set; }
     public string AffectedColumns { get; set; }
     public string PrimaryKey { get; set; }
-    public int Id { get; set; }
 }

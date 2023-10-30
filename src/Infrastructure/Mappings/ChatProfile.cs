@@ -6,5 +6,8 @@ namespace BlazorHero.CleanArchitecture.Infrastructure.Mappings;
 
 public class ChatProfile : Profile
 {
-    public ChatProfile() => CreateMap<ChatMessage<IChatUser>, ChatMessage<BlazorHeroUser>>().ReverseMap();
+    public ChatProfile() => CreateMap<ChatMessage<IChatUser>, ChatMessage<BlazorHeroUser>>()
+        .ForMember(dest => dest.DomainEvents, opt => opt.Ignore())
+        .ReverseMap()
+        .ForMember(dest => dest.DomainEvents, opt => opt.Ignore());
 }

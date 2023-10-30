@@ -1,10 +1,9 @@
-﻿using BlazorHero.CleanArchitecture.Domain.Contracts;
+﻿using BlazorHero.CleanArchitecture.Domain.Primitives;
 
 namespace BlazorHero.CleanArchitecture.Domain.Entities.Communication;
 
-public class ChatMessage<TUser> : IEntity<long> where TUser : IChatUser
+public class ChatMessage<TUser> : AggregateRoot<long> where TUser : IChatUser
 {
-    public long Id { get; set; }
     public string FromUserId { get; set; }
     public string ToUserId { get; set; }
     public string Message { get; set; }

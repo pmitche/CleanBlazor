@@ -1,6 +1,7 @@
 using BlazorHero.CleanArchitecture.Application;
 using BlazorHero.CleanArchitecture.Contracts;
 using BlazorHero.CleanArchitecture.Infrastructure;
+using BlazorHero.CleanArchitecture.Infrastructure.Data;
 using BlazorHero.CleanArchitecture.Infrastructure.Shared;
 using BlazorHero.CleanArchitecture.Server.Extensions;
 using BlazorHero.CleanArchitecture.Server.Filters;
@@ -76,6 +77,6 @@ public class Startup
             });
         app.UseEndpoints();
         app.ConfigureSwagger();
-        app.Initialize();
+        app.InitializeDatabaseAsync().GetAwaiter().GetResult();
     }
 }
