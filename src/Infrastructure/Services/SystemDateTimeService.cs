@@ -1,6 +1,6 @@
 ﻿using BlazorHero.CleanArchitecture.Application.Abstractions.Common;
 
-namespace BlazorHero.CleanArchitecture.Infrastructure.Shared.Services;
+namespace BlazorHero.CleanArchitecture.Infrastructure.Services;
 
 public class SystemDateTimeService : IDateTimeService
 {

@@ -7,7 +7,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using MimeKit;
 
-namespace BlazorHero.CleanArchitecture.Infrastructure.Shared.Services;
+namespace BlazorHero.CleanArchitecture.Infrastructure.Services.Mail;
 
 public class SmtpMailService : IMailService
 {

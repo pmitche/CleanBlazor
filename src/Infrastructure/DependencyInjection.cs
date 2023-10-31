@@ -1,4 +1,5 @@
 using System.Reflection;
+using BlazorHero.CleanArchitecture.Application.Abstractions.Common;
 using BlazorHero.CleanArchitecture.Application.Abstractions.Infrastructure.Services;
 using BlazorHero.CleanArchitecture.Application.Abstractions.Infrastructure.Services.Identity;
 using BlazorHero.CleanArchitecture.Application.Abstractions.Infrastructure.Services.Storage;
@@ -11,6 +12,7 @@ using BlazorHero.CleanArchitecture.Infrastructure.Models.Identity;
 using BlazorHero.CleanArchitecture.Infrastructure.Repositories;
 using BlazorHero.CleanArchitecture.Infrastructure.Services;
 using BlazorHero.CleanArchitecture.Infrastructure.Services.Identity;
+using BlazorHero.CleanArchitecture.Infrastructure.Services.Mail;
 using BlazorHero.CleanArchitecture.Infrastructure.Services.Storage;
 using BlazorHero.CleanArchitecture.Infrastructure.Services.Storage.Provider;
 using Microsoft.AspNetCore.Identity;
@@ -45,6 +47,8 @@ public static class DependencyInjection
         services.AddTransient<IUserService, UserService>();
         services.AddTransient<IUploadService, UploadService>();
         services.AddTransient<IAuditService, AuditService>();
+        services.AddTransient<IDateTimeService, SystemDateTimeService>();
+        services.AddTransient<IMailService, SmtpMailService>();
         services.AddScoped<IExcelService, ExcelService>();
         return services;
     }

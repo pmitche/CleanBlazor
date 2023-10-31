@@ -23,6 +23,7 @@ public static class DependencyInjection
             .AddScoped<IJsonSerializer, SystemTextJsonSerializer>(); // you can change it
 
         services.AddOptions<AppConfiguration>().Bind(configuration.GetSection(nameof(AppConfiguration)));
+        services.AddOptions<MailConfiguration>().Bind(configuration.GetSection(nameof(MailConfiguration)));
 
         return services;
     }

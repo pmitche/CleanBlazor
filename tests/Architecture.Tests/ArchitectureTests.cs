@@ -4,7 +4,6 @@ using NetArchTest.Rules;
 using Domain = BlazorHero.CleanArchitecture.Domain;
 using Application = BlazorHero.CleanArchitecture.Application;
 using Infrastructure = BlazorHero.CleanArchitecture.Infrastructure;
-using InfrastructureShared = BlazorHero.CleanArchitecture.Infrastructure.Shared;
 using Shared = BlazorHero.CleanArchitecture.Shared;
 using Server = BlazorHero.CleanArchitecture.Server;
 using Client = BlazorHero.CleanArchitecture.Client;
@@ -19,7 +18,6 @@ public class ArchitectureTests
     private const string ApplicationNamespace = $"{NamespacePrefix}.Application";
     private const string ApplicationAbstractionsNamespace = $"{NamespacePrefix}.Application.Abstractions";
     private const string InfrastructureNamespace = $"{NamespacePrefix}.Infrastucture";
-    private const string InfrastructureSharedNamespace = $"{NamespacePrefix}.Infrastucture.Shared";
     private const string ServerNamespace = $"{NamespacePrefix}.Server";
     private const string ClientNamespace = $"{NamespacePrefix}.Client";
     private const string ClientInfrastructureNamespace = $"{NamespacePrefix}.Client.Infrastructure";
@@ -35,7 +33,6 @@ public class ArchitectureTests
             ApplicationNamespace,
             ApplicationAbstractionsNamespace,
             InfrastructureNamespace,
-            InfrastructureSharedNamespace,
             ServerNamespace,
             ClientNamespace,
             ClientInfrastructureNamespace
@@ -64,7 +61,6 @@ public class ArchitectureTests
             ApplicationNamespace,
             ApplicationAbstractionsNamespace,
             InfrastructureNamespace,
-            InfrastructureSharedNamespace,
             ServerNamespace,
             ClientNamespace,
             ClientInfrastructureNamespace
@@ -90,7 +86,6 @@ public class ArchitectureTests
         var otherProjects = new[]
         {
             InfrastructureNamespace,
-            InfrastructureSharedNamespace,
             ServerNamespace,
             ClientNamespace,
             ClientInfrastructureNamespace
@@ -115,32 +110,6 @@ public class ArchitectureTests
 
         var otherProjects = new[]
         {
-            InfrastructureSharedNamespace,
-            ServerNamespace,
-            ClientNamespace,
-            ClientInfrastructureNamespace
-        };
-
-        // Act
-        var result = Types
-            .InAssembly(assembly)
-            .Should()
-            .NotHaveDependencyOnAny(otherProjects)
-            .GetResult();
-
-        // Assert
-        result.IsSuccessful.Should().BeTrue();
-    }
-
-    [Fact]
-    public void InfrastructureShared_Should_Not_HaveDependencyOnOtherProjects()
-    {
-        // Arrange
-        var assembly = typeof(InfrastructureShared.AssemblyReference).Assembly;
-
-        var otherProjects = new[]
-        {
-            InfrastructureNamespace,
             ServerNamespace,
             ClientNamespace,
             ClientInfrastructureNamespace
@@ -168,7 +137,6 @@ public class ArchitectureTests
             ApplicationNamespace,
             ApplicationAbstractionsNamespace,
             InfrastructureNamespace,
-            InfrastructureSharedNamespace,
             ServerNamespace
         };
 
@@ -194,7 +162,6 @@ public class ArchitectureTests
             ApplicationNamespace,
             ApplicationAbstractionsNamespace,
             InfrastructureNamespace,
-            InfrastructureSharedNamespace,
             ServerNamespace
         };
 
@@ -252,7 +219,7 @@ public class ArchitectureTests
     {
         // Arrange
         var assembly = typeof(Server.AssemblyReference).Assembly;
-        const string controllersNamespace = $"{ServerNamespace}.Controllers";
+        const string controllersNamespace = $"{ServerNamespace}.Controllers.v1";
 
         // TODO: Fix controllers that don't have dependency on MediatR
         // Act
@@ -264,13 +231,9 @@ public class ArchitectureTests
             .DoNotResideInNamespaceStartingWith($"{controllersNamespace}.Utilities")
             .And()
             .DoNotResideInNamespaceStartingWith($"{controllersNamespace}.Identity")
-            .And()
-            .DoNotResideInNamespaceStartingWith($"{controllersNamespace}.Communication")
             .Should()
             .HaveDependencyOn("MediatR")
             .GetResult();
-
-        // Utilities, Identity, Communication
 
         // Assert
         result.IsSuccessful.Should().BeTrue("All controllers should be slim -- use MediatR to handle requests");

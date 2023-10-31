@@ -28,7 +28,6 @@
       <ProjectReference Include="..\..\src\Client.Infrastructure\Client.Infrastructure.csproj" />
       <ProjectReference Include="..\..\src\Client\Client.csproj" />
       <ProjectReference Include="..\..\src\Domain\Domain.csproj" />
-      <ProjectReference Include="..\..\src\Infrastructure.Shared\Infrastructure.Shared.csproj" />
       <ProjectReference Include="..\..\src\Infrastructure\Infrastructure.csproj" />
       <ProjectReference Include="..\..\src\Server\Server.csproj" />
       <ProjectReference Include="..\..\src\Shared\Shared.csproj" />

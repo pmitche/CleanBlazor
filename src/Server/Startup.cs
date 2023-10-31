@@ -2,7 +2,6 @@ using BlazorHero.CleanArchitecture.Application;
 using BlazorHero.CleanArchitecture.Contracts;
 using BlazorHero.CleanArchitecture.Infrastructure;
 using BlazorHero.CleanArchitecture.Infrastructure.Data;
-using BlazorHero.CleanArchitecture.Infrastructure.Shared;
 using BlazorHero.CleanArchitecture.Server.Extensions;
 using BlazorHero.CleanArchitecture.Server.Filters;
 using BlazorHero.CleanArchitecture.Server.Managers.Preferences;
@@ -29,9 +28,8 @@ public class Startup
         services.AddLocalization(options => { options.ResourcesPath = Path.Combine("Configuration", "Resources"); });
 
         services.AddApplication(_configuration);
-        services.AddContracts();
         services.AddInfrastructure(_configuration);
-        services.AddSharedInfrastructure(_configuration);
+        services.AddContracts();
         services.AddServer(_configuration);
 
         services.AddScoped<ServerPreferenceManager>();
