@@ -13,16 +13,16 @@ using Microsoft.Extensions.Localization;
 namespace BlazorHero.CleanArchitecture.Application.Features.Catalog.Products.Commands;
 
 [ExcludeFromCodeCoverage]
-public sealed class AddEditProductCommand : ICommand<Result<int>>
+public sealed record AddEditProductCommand : ICommand<Result<int>>
 {
-    public int Id { get; set; }
-    public string Name { get; set; }
-    public string Barcode { get; set; }
-    public string Description { get; set; }
+    public int Id { get; init; }
+    public string Name { get; init; }
+    public string Barcode { get; init; }
+    public string Description { get; init; }
     public string ImageDataUrl { get; set; }
-    public decimal Rate { get; set; }
-    public int BrandId { get; set; }
-    public UploadRequest UploadRequest { get; set; }
+    public decimal Rate { get; init; }
+    public int BrandId { get; init; }
+    public UploadRequest UploadRequest { get; init; }
 }
 
 internal sealed class AddEditProductCommandHandler : ICommandHandler<AddEditProductCommand, Result<int>>

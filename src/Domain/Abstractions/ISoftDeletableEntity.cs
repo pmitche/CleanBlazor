@@ -2,14 +2,13 @@ namespace BlazorHero.CleanArchitecture.Domain.Abstractions;
 
 public interface ISoftDeletableEntity
 {
-    string DeletedBy { get; protected set; }
-    DateTimeOffset? DeletedOnUtc { get; protected set; }
-    bool Deleted { get; protected set; }
+    string DeletedBy { get; }
+    DateTime? DeletedOn { get; }
+    bool Deleted { get; }
 
-    public void Restore()
-    {
-        DeletedBy = null;
-        DeletedOnUtc = null;
-        Deleted = false;
-    }
+    /// <summary>
+    /// Restore the soft deletable entity.
+    /// Should set Deleted to <c>false</c>, DeletedOn to <c>null</c> and DeletedBy to <c>null</c>.
+    /// </summary>
+    void Restore();
 }

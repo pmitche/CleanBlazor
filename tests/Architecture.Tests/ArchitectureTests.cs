@@ -1,3 +1,6 @@
+using System.Runtime.CompilerServices;
+using BlazorHero.CleanArchitecture.Application.Abstractions.Messaging;
+using BlazorHero.CleanArchitecture.Domain.Abstractions;
 using FluentAssertions;
 using MediatR;
 using NetArchTest.Rules;
@@ -46,7 +49,7 @@ public class ArchitectureTests
             .GetResult();
 
         // Assert
-        result.IsSuccessful.Should().BeTrue();
+        result.IsSuccessful.Should().BeTrue($"{GetFailingTypes(result)}");
     }
 
     [Fact]
@@ -74,7 +77,7 @@ public class ArchitectureTests
             .GetResult();
 
         // Assert
-        result.IsSuccessful.Should().BeTrue();
+        result.IsSuccessful.Should().BeTrue($"{GetFailingTypes(result)}");
     }
 
     [Fact]
@@ -99,7 +102,7 @@ public class ArchitectureTests
             .GetResult();
 
         // Assert
-        result.IsSuccessful.Should().BeTrue();
+        result.IsSuccessful.Should().BeTrue($"{GetFailingTypes(result)}");
     }
 
     [Fact]
@@ -123,7 +126,7 @@ public class ArchitectureTests
             .GetResult();
 
         // Assert
-        result.IsSuccessful.Should().BeTrue();
+        result.IsSuccessful.Should().BeTrue($"{GetFailingTypes(result)}");
     }
 
     [Fact]
@@ -148,7 +151,7 @@ public class ArchitectureTests
             .GetResult();
 
         // Assert
-        result.IsSuccessful.Should().BeTrue();
+        result.IsSuccessful.Should().BeTrue($"{GetFailingTypes(result)}");
     }
 
     [Fact]
@@ -173,26 +176,7 @@ public class ArchitectureTests
             .GetResult();
 
         // Assert
-        result.IsSuccessful.Should().BeTrue();
-    }
-
-    [Fact]
-    public void Handlers_Should_HaveDependencyOnDomainProject()
-    {
-        // Arrange
-        var assembly = typeof(Application.AssemblyReference).Assembly;
-
-        // Act
-        var result = Types
-            .InAssembly(assembly)
-            .That()
-            .HaveNameEndingWith("Handler")
-            .Should()
-            .HaveDependencyOnAny(DomainNamespace)
-            .GetResult();
-
-        // Assert
-        result.IsSuccessful.Should().BeTrue();
+        result.IsSuccessful.Should().BeTrue($"{GetFailingTypes(result)}");
     }
 
     [Fact]
@@ -211,7 +195,65 @@ public class ArchitectureTests
             .GetResult();
 
         // Assert
-        result.IsSuccessful.Should().BeTrue("FluentValidation should be used instead of DataAnnotations");
+        result.IsSuccessful.Should().BeTrue($"FluentValidation should be used instead of DataAnnotations. {GetFailingTypes(result)}");
+    }
+
+    [Fact]
+    public void Entities_Should_Not_HaveDependencyOnDataAnnotations()
+    {
+        // Arrange
+        var domainAssembly = typeof(Domain.AssemblyReference).Assembly;
+        var infrastructureAssembly = typeof(Infrastructure.AssemblyReference).Assembly;
+        const string dataAnnotationsNameSpace = "System.ComponentModel.DataAnnotations";
+
+        var result = Types
+            .InAssemblies(new[] { domainAssembly, infrastructureAssembly })
+            .That()
+            .ImplementInterface(typeof(IEntity))
+            .Should()
+            .NotHaveDependencyOn(dataAnnotationsNameSpace)
+            .GetResult();
+
+        // Assert
+        result.IsSuccessful.Should().BeTrue($"Fluent API configuration should be used instead of DataAnnotations. {GetFailingTypes(result)}");
+    }
+
+    [Fact]
+    public void Requests_Should_BeSealed()
+    {
+        // Arrange
+        var assembly = typeof(Application.AssemblyReference).Assembly;
+
+        var result = Types
+            .InAssembly(assembly)
+            .That()
+            .ImplementInterface(typeof(IRequest<>))
+            .Should()
+            .BeSealed()
+            .GetResult();
+
+        // Assert
+        result.IsSuccessful.Should().BeTrue($"IRequests should be sealed. {GetFailingTypes(result)}");
+    }
+
+    [Fact]
+    public void Requests_Should_ImplementIQueryOrICommand()
+    {
+        // Arrange
+        var assembly = typeof(Application.AssemblyReference).Assembly;
+
+        var result = Types
+            .InAssembly(assembly)
+            .That()
+            .ImplementInterface(typeof(IRequest<>))
+            .Should()
+            .ImplementInterface(typeof(IQuery<>))
+            .Or()
+            .ImplementInterface(typeof(ICommand<>))
+            .GetResult();
+
+        // Assert
+        result.IsSuccessful.Should().BeTrue($"IRequests should implement IQuery or ICommand. Failing types: {GetFailingTypes(result)}");
     }
 
     [Fact]
@@ -236,6 +278,16 @@ public class ArchitectureTests
             .GetResult();
 
         // Assert
-        result.IsSuccessful.Should().BeTrue("All controllers should be slim -- use MediatR to handle requests");
+        result.IsSuccessful.Should().BeTrue($"All controllers should be slim -- use MediatR to handle requests. {GetFailingTypes(result)}");
+    }
+
+    private static string GetFailingTypes(TestResult? result)
+    {
+        if (result == null || result.IsSuccessful || result.FailingTypeNames == null)
+        {
+            return string.Empty;
+        }
+
+        return $"Failing types:\n\t {string.Join("\n\t", result.FailingTypeNames)}\n";
     }
 }

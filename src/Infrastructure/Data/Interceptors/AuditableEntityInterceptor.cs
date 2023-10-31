@@ -74,7 +74,7 @@ public class AuditableEntityInterceptor : SaveChangesInterceptor
                 entry.Property(nameof(IAuditableEntity.CreatedOn)).CurrentValue = now;
             }
 
-            if (entry.State is EntityState.Added or EntityState.Modified || entry.HasChangedOwnedEntities())
+            if (entry.State is EntityState.Modified || entry.HasChangedOwnedEntities())
             {
                 entry.Property(nameof(IAuditableEntity.LastModifiedBy)).CurrentValue = _currentUserService.UserId;
                 entry.Property(nameof(IAuditableEntity.LastModifiedOn)).CurrentValue = now;

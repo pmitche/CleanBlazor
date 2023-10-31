@@ -51,7 +51,7 @@ public class SoftDeletableEntityInterceptor : SaveChangesInterceptor
             }
 
             entry.Property(nameof(ISoftDeletableEntity.DeletedBy)).CurrentValue = _currentUserService.UserId;
-            entry.Property(nameof(ISoftDeletableEntity.DeletedOnUtc)).CurrentValue = now;
+            entry.Property(nameof(ISoftDeletableEntity.DeletedOn)).CurrentValue = now;
             entry.Property(nameof(ISoftDeletableEntity.Deleted)).CurrentValue = true;
             entry.State = EntityState.Modified;
 

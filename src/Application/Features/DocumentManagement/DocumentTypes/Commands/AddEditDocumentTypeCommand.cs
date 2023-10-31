@@ -13,19 +13,7 @@ using Microsoft.Extensions.Localization;
 namespace BlazorHero.CleanArchitecture.Application.Features.DocumentManagement.DocumentTypes.Commands;
 
 [ExcludeFromCodeCoverage]
-public sealed class AddEditDocumentTypeCommand : ICommand<Result<int>>
-{
-    public int Id { get; set; }
-    public string Name { get; set; }
-    public string Description { get; set; }
-
-    public AddEditDocumentTypeCommand(int id, string name, string description)
-    {
-        Id = id;
-        Name = name;
-        Description = description;
-    }
-}
+public sealed record AddEditDocumentTypeCommand(int Id, string Name, string Description) : ICommand<Result<int>>;
 
 internal sealed class AddEditDocumentTypeCommandHandler : ICommandHandler<AddEditDocumentTypeCommand, Result<int>>
 {

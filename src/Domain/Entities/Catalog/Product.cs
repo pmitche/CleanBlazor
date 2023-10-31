@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using BlazorHero.CleanArchitecture.Domain.Abstractions;
+﻿using BlazorHero.CleanArchitecture.Domain.Abstractions;
 using BlazorHero.CleanArchitecture.Domain.Primitives;
 
 namespace BlazorHero.CleanArchitecture.Domain.Entities.Catalog;
@@ -8,8 +7,6 @@ public class Product : AggregateRoot<int>, IAuditableEntity
 {
     public string Name { get; set; }
     public string Barcode { get; set; }
-
-    [Column(TypeName = "text")]
     public string ImageDataUrl { get; set; }
     public string Description { get; set; }
     public decimal Rate { get; set; }

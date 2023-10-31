@@ -12,15 +12,15 @@ using Microsoft.Extensions.Localization;
 namespace BlazorHero.CleanArchitecture.Application.Features.DocumentManagement.Documents.Commands;
 
 [ExcludeFromCodeCoverage]
-public sealed class AddEditDocumentCommand : ICommand<Result<int>>
+public sealed record AddEditDocumentCommand : ICommand<Result<int>>
 {
-    public int Id { get; set; }
-    public string Title { get; set; }
-    public string Description { get; set; }
-    public bool IsPublic { get; set; }
+    public int Id { get; init; }
+    public string Title { get; init; }
+    public string Description { get; init; }
+    public bool IsPublic { get; init; }
     public string Url { get; set; }
-    public int DocumentTypeId { get; set; }
-    public UploadRequest UploadRequest { get; set; }
+    public int DocumentTypeId { get; init; }
+    public UploadRequest UploadRequest { get; init; }
 }
 
 internal sealed class AddEditDocumentCommandHandler : ICommandHandler<AddEditDocumentCommand, Result<int>>

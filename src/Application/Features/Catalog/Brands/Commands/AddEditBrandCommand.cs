@@ -12,21 +12,7 @@ using Microsoft.Extensions.Localization;
 namespace BlazorHero.CleanArchitecture.Application.Features.Catalog.Brands.Commands;
 
 [ExcludeFromCodeCoverage]
-public sealed class AddEditBrandCommand : ICommand<Result<int>>
-{
-    public int Id { get; set; }
-    public string Name { get; set; }
-    public string Description { get; set; }
-    public decimal Tax { get; set; }
-
-    public AddEditBrandCommand(int id, string name, string description, decimal tax)
-    {
-        Id = id;
-        Name = name;
-        Description = description;
-        Tax = tax;
-    }
-}
+public sealed record AddEditBrandCommand(int Id, string Name, string Description, decimal Tax) : ICommand<Result<int>>;
 
 internal sealed class AddEditBrandCommandHandler : ICommandHandler<AddEditBrandCommand, Result<int>>
 {
@@ -71,7 +57,7 @@ internal sealed class AddEditBrandCommandHandler : ICommandHandler<AddEditBrandC
             brand.Name = command.Name ?? brand.Name;
             brand.Tax = command.Tax == 0 ? brand.Tax : command.Tax;
             brand.Description = command.Description ?? brand.Description;
-            
+
             _brandRepository.Update(brand);
             await _unitOfWork.SaveChangesAsync(cancellationToken);
             _cache.Remove(ApplicationConstants.Cache.GetAllBrandsCacheKey);

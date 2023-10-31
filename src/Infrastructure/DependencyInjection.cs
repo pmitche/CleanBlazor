@@ -61,7 +61,7 @@ public static class DependencyInjection
             .AddScoped<ISaveChangesInterceptor, SoftDeletableEntityInterceptor>()
             .AddScoped<ISaveChangesInterceptor, DispatchDomainEventsInterceptor>()
             .AddDbContext<BlazorHeroContext>((sp, options) => options
-                .AddInterceptors(sp.GetService<ISaveChangesInterceptor>())
+                .AddInterceptors(sp.GetServices<ISaveChangesInterceptor>())
                 .UseSqlServer(configuration.GetConnectionString("DefaultConnection")))
             .AddScoped<BlazorHeroContextInitializer>()
             .AddScoped<IUnitOfWork>(serviceProvider => serviceProvider.GetRequiredService<BlazorHeroContext>());

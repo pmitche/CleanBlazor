@@ -3,6 +3,7 @@ using BlazorHero.CleanArchitecture.Application.Abstractions.Persistence;
 using BlazorHero.CleanArchitecture.Domain.Entities.Catalog;
 using BlazorHero.CleanArchitecture.Domain.Entities.Communication;
 using BlazorHero.CleanArchitecture.Domain.Entities.Misc;
+using BlazorHero.CleanArchitecture.Infrastructure.Data.Extensions;
 using BlazorHero.CleanArchitecture.Infrastructure.Models.Audit;
 using BlazorHero.CleanArchitecture.Infrastructure.Models.Identity;
 using Microsoft.AspNetCore.Identity;
@@ -34,5 +35,7 @@ public class BlazorHeroContext : IdentityDbContext<BlazorHeroUser, BlazorHeroRol
     {
         base.OnModelCreating(builder);
         builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+        builder.ApplyAuditableEntityConfiguration();
+        builder.ApplySoftDeletableEntityConfiguration();
     }
 }

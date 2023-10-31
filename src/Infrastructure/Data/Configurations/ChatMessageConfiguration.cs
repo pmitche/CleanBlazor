@@ -25,5 +25,7 @@ public class ChatMessageConfiguration : IEntityTypeConfiguration<ChatMessage<Bla
             .HasForeignKey(d => d.ToUserId)
             .IsRequired()
             .OnDelete(DeleteBehavior.ClientSetNull);
+
+        builder.HasQueryFilter(p => !p.FromUser.Deleted && !p.ToUser.Deleted);
     }
 }
