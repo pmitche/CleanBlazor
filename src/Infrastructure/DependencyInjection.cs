@@ -4,7 +4,7 @@ using BlazorHero.CleanArchitecture.Application.Abstractions.Infrastructure.Servi
 using BlazorHero.CleanArchitecture.Application.Abstractions.Infrastructure.Services.Storage;
 using BlazorHero.CleanArchitecture.Application.Abstractions.Infrastructure.Services.Storage.Provider;
 using BlazorHero.CleanArchitecture.Application.Abstractions.Persistence;
-using BlazorHero.CleanArchitecture.Application.Abstractions.Persistence.Repositories;
+using BlazorHero.CleanArchitecture.Domain.Repositories;
 using BlazorHero.CleanArchitecture.Infrastructure.Data;
 using BlazorHero.CleanArchitecture.Infrastructure.Data.Interceptors;
 using BlazorHero.CleanArchitecture.Infrastructure.Models.Identity;

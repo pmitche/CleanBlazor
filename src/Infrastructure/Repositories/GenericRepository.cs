@@ -1,5 +1,5 @@
-using BlazorHero.CleanArchitecture.Application.Abstractions.Persistence.Repositories;
 using BlazorHero.CleanArchitecture.Domain.Abstractions;
+using BlazorHero.CleanArchitecture.Domain.Repositories;
 using BlazorHero.CleanArchitecture.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 

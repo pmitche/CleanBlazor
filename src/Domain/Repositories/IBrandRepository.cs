@@ -1,6 +1,6 @@
 ﻿using BlazorHero.CleanArchitecture.Domain.Entities.Catalog;
 
-namespace BlazorHero.CleanArchitecture.Application.Abstractions.Persistence.Repositories;
+namespace BlazorHero.CleanArchitecture.Domain.Repositories;
 
 public interface IBrandRepository : IRepository<Brand, int>
 {

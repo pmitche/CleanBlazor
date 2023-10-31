@@ -1,6 +1,6 @@
 ﻿using BlazorHero.CleanArchitecture.Domain.Abstractions;
 
-namespace BlazorHero.CleanArchitecture.Application.Abstractions.Persistence.Repositories;
+namespace BlazorHero.CleanArchitecture.Domain.Repositories;
 
 public interface IRepository<T, in TId>
     where T : IEntity<TId>
