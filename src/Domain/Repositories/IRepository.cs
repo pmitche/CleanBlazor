@@ -14,7 +14,7 @@ public interface IRepository<T, in TId>
 
     T Add(T entity);
 
-    void AddRange(IReadOnlyCollection<T> entities);
+    void AddRange(IEnumerable<T> entities);
 
     void Update(T entity);
 

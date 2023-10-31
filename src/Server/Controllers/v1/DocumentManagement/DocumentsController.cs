@@ -22,7 +22,7 @@ public class DocumentsController : BaseApiController
     public async Task<IActionResult> GetAll(int pageNumber, int pageSize, string searchString)
     {
         PaginatedResult<GetAllDocumentsResponse> docs =
-            await Mediator.Send(new GetAllDocumentsQuery(pageNumber, pageSize, searchString));
+            await Sender.Send(new GetAllDocumentsQuery(pageNumber, pageSize, searchString));
         return Ok(docs);
     }
 
@@ -35,7 +35,7 @@ public class DocumentsController : BaseApiController
     [HttpGet("{id:int}")]
     public async Task<IActionResult> GetById(int id)
     {
-        Result<GetDocumentByIdResponse> document = await Mediator.Send(new GetDocumentByIdQuery(id));
+        Result<GetDocumentByIdResponse> document = await Sender.Send(new GetDocumentByIdQuery(id));
         return Ok(document);
     }
 
@@ -58,7 +58,7 @@ public class DocumentsController : BaseApiController
             DocumentTypeId = request.DocumentTypeId,
             UploadRequest = request.UploadRequest
         };
-        return Ok(await Mediator.Send(command));
+        return Ok(await Sender.Send(command));
     }
 
     /// <summary>
@@ -68,5 +68,5 @@ public class DocumentsController : BaseApiController
     /// <returns>Status 200 OK</returns>
     [Authorize(Policy = Permissions.Documents.Delete)]
     [HttpDelete("{id:int}")]
-    public async Task<IActionResult> Delete(int id) => Ok(await Mediator.Send(new DeleteDocumentCommand(id)));
+    public async Task<IActionResult> Delete(int id) => Ok(await Sender.Send(new DeleteDocumentCommand(id)));
 }

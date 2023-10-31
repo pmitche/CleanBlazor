@@ -18,7 +18,7 @@ public class ChatsController : BaseApiController
     //Get user wise chat history
     [HttpGet("{contactId}")]
     public async Task<IActionResult> GetChatHistoryAsync(string contactId) =>
-        Ok(await Mediator.Send(new GetChatHistoryQuery(contactId)));
+        Ok(await Sender.Send(new GetChatHistoryQuery(contactId)));
 
     /// <summary>
     ///     get available users
@@ -27,7 +27,7 @@ public class ChatsController : BaseApiController
     //get available users - sorted by date of last message if exists
     [HttpGet("users")]
     public async Task<IActionResult> GetChatUsersAsync() =>
-        Ok(await Mediator.Send(new GetChatUsersQuery()));
+        Ok(await Sender.Send(new GetChatUsersQuery()));
 
     /// <summary>
     ///     Save Chat Message
@@ -37,5 +37,5 @@ public class ChatsController : BaseApiController
     //save chat message
     [HttpPost]
     public async Task<IActionResult> SaveMessageAsync(ChatMessage<IChatUser> message) =>
-        Ok(await Mediator.Send(new SaveChatMessageCommand(message.ToUserId, message.Message)));
+        Ok(await Sender.Send(new SaveChatMessageCommand(message.ToUserId, message.Message)));
 }

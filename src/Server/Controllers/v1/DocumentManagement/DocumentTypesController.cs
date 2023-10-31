@@ -18,7 +18,7 @@ public class DocumentTypesController : BaseApiController
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
-        Result<List<GetAllDocumentTypesResponse>> documentTypes = await Mediator.Send(new GetAllDocumentTypesQuery());
+        Result<List<GetAllDocumentTypesResponse>> documentTypes = await Sender.Send(new GetAllDocumentTypesQuery());
         return Ok(documentTypes);
     }
 
@@ -31,7 +31,7 @@ public class DocumentTypesController : BaseApiController
     [HttpGet("{id:int}")]
     public async Task<IActionResult> GetById(int id)
     {
-        Result<GetDocumentTypeByIdResponse> documentType = await Mediator.Send(new GetDocumentTypeByIdQuery(id));
+        Result<GetDocumentTypeByIdResponse> documentType = await Sender.Send(new GetDocumentTypeByIdQuery(id));
         return Ok(documentType);
     }
 
@@ -45,7 +45,7 @@ public class DocumentTypesController : BaseApiController
     public async Task<IActionResult> Post(AddEditDocumentTypeRequest request)
     {
         var command = new AddEditDocumentTypeCommand(request.Id, request.Name, request.Description);
-        return Ok(await Mediator.Send(command));
+        return Ok(await Sender.Send(command));
     }
 
     /// <summary>
@@ -56,7 +56,7 @@ public class DocumentTypesController : BaseApiController
     [Authorize(Policy = Permissions.DocumentTypes.Delete)]
     [HttpDelete("{id:int}")]
     public async Task<IActionResult> Delete(int id) =>
-        Ok(await Mediator.Send(new DeleteDocumentTypeCommand(id)));
+        Ok(await Sender.Send(new DeleteDocumentTypeCommand(id)));
 
     /// <summary>
     ///     Search Document Types and Export to Excel
@@ -66,5 +66,5 @@ public class DocumentTypesController : BaseApiController
     [Authorize(Policy = Permissions.DocumentTypes.Export)]
     [HttpGet("export")]
     public async Task<IActionResult> Export(string searchString = "") =>
-        Ok(await Mediator.Send(new ExportDocumentTypesQuery(searchString)));
+        Ok(await Sender.Send(new ExportDocumentTypesQuery(searchString)));
 }

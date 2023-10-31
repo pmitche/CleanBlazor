@@ -31,7 +31,7 @@ internal abstract class GenericRepository<TEntity, TId> : IRepository<TEntity, T
 
     public virtual TEntity Add(TEntity entity) => DbContext.Set<TEntity>().Add(entity).Entity;
 
-    public virtual void AddRange(IReadOnlyCollection<TEntity> entities) => DbContext.Set<TEntity>().AddRange(entities);
+    public virtual void AddRange(IEnumerable<TEntity> entities) => DbContext.Set<TEntity>().AddRange(entities);
 
     public virtual void Update(TEntity entity) => DbContext.Set<TEntity>().Update(entity);
 

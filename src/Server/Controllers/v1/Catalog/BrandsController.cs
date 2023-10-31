@@ -19,7 +19,7 @@ public class BrandsController : BaseApiController
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
-        Result<List<GetAllBrandsResponse>> brands = await Mediator.Send(new GetAllBrandsQuery());
+        Result<List<GetAllBrandsResponse>> brands = await Sender.Send(new GetAllBrandsQuery());
         return Ok(brands);
     }
 
@@ -32,7 +32,7 @@ public class BrandsController : BaseApiController
     [HttpGet("{id:int}")]
     public async Task<IActionResult> GetById(int id)
     {
-        Result<GetBrandByIdResponse> brand = await Mediator.Send(new GetBrandByIdQuery(id));
+        Result<GetBrandByIdResponse> brand = await Sender.Send(new GetBrandByIdQuery(id));
         return Ok(brand);
     }
 
@@ -46,7 +46,7 @@ public class BrandsController : BaseApiController
     public async Task<IActionResult> Post(AddEditBrandRequest request)
     {
         var command = new AddEditBrandCommand(request.Id, request.Name, request.Description, request.Tax);
-        return Ok(await Mediator.Send(command));
+        return Ok(await Sender.Send(command));
     }
 
     /// <summary>
@@ -56,7 +56,7 @@ public class BrandsController : BaseApiController
     /// <returns>Status 200 OK</returns>
     [Authorize(Policy = Permissions.Brands.Delete)]
     [HttpDelete("{id:int}")]
-    public async Task<IActionResult> Delete(int id) => Ok(await Mediator.Send(new DeleteBrandCommand(id)));
+    public async Task<IActionResult> Delete(int id) => Ok(await Sender.Send(new DeleteBrandCommand(id)));
 
     /// <summary>
     ///     Search Brands and Export to Excel
@@ -66,7 +66,7 @@ public class BrandsController : BaseApiController
     [Authorize(Policy = Permissions.Brands.Export)]
     [HttpGet("export")]
     public async Task<IActionResult> Export(string searchString = "") =>
-        Ok(await Mediator.Send(new ExportBrandsQuery(searchString)));
+        Ok(await Sender.Send(new ExportBrandsQuery(searchString)));
 
     /// <summary>
     ///     Import Brands from Excel
@@ -76,5 +76,5 @@ public class BrandsController : BaseApiController
     [Authorize(Policy = Permissions.Brands.Import)]
     [HttpPost("import")]
     public async Task<IActionResult> Import(UploadRequest request) =>
-        Ok(await Mediator.Send(new ImportBrandsCommand(request)));
+        Ok(await Sender.Send(new ImportBrandsCommand(request)));
 }

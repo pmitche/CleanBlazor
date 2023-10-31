@@ -17,7 +17,7 @@ public class DashboardController : BaseApiController
     [HttpGet]
     public async Task<IActionResult> GetDataAsync()
     {
-        Result<DashboardDataResponse> result = await Mediator.Send(new GetDashboardDataQuery());
+        Result<DashboardDataResponse> result = await Sender.Send(new GetDashboardDataQuery());
         return Ok(result);
     }
 }

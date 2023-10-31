@@ -23,7 +23,7 @@ public class ProductsController : BaseApiController
     public async Task<IActionResult> GetAll(int pageNumber, int pageSize, string searchString, string orderBy = null)
     {
         PaginatedResult<GetAllPagedProductsResponse> products =
-            await Mediator.Send(new GetAllProductsQuery(pageNumber, pageSize, searchString, orderBy));
+            await Sender.Send(new GetAllProductsQuery(pageNumber, pageSize, searchString, orderBy));
         return Ok(products);
     }
 
@@ -36,7 +36,7 @@ public class ProductsController : BaseApiController
     [HttpGet("image/{id:int}")]
     public async Task<IActionResult> GetProductImageAsync(int id)
     {
-        Result<string> result = await Mediator.Send(new GetProductImageQuery(id));
+        Result<string> result = await Sender.Send(new GetProductImageQuery(id));
         return Ok(result);
     }
 
@@ -60,7 +60,7 @@ public class ProductsController : BaseApiController
             UploadRequest = request.UploadRequest,
             ImageDataUrl = request.ImageDataUrl
         };
-        return Ok(await Mediator.Send(command));
+        return Ok(await Sender.Send(command));
     }
 
     /// <summary>
@@ -70,7 +70,7 @@ public class ProductsController : BaseApiController
     /// <returns>Status 200 OK response</returns>
     [Authorize(Policy = Permissions.Products.Delete)]
     [HttpDelete("{id:int}")]
-    public async Task<IActionResult> Delete(int id) => Ok(await Mediator.Send(new DeleteProductCommand(id)));
+    public async Task<IActionResult> Delete(int id) => Ok(await Sender.Send(new DeleteProductCommand(id)));
 
     /// <summary>
     ///     Search Products and Export to Excel
@@ -80,5 +80,5 @@ public class ProductsController : BaseApiController
     [Authorize(Policy = Permissions.Products.Export)]
     [HttpGet("export")]
     public async Task<IActionResult> Export(string searchString = "") =>
-        Ok(await Mediator.Send(new ExportProductsQuery(searchString)));
+        Ok(await Sender.Send(new ExportProductsQuery(searchString)));
 }
