@@ -34,8 +34,8 @@ public partial class AddEditProductModal
 
     private async Task SaveAsync()
     {
-        IResult<int> response = await ProductManager.SaveAsync(AddEditProductModel);
-        if (response.Succeeded)
+        Result<int> response = await ProductManager.SaveAsync(AddEditProductModel);
+        if (response.IsSuccess)
         {
             SnackBar.Success(response.Messages[0]);
             await HubConnection.SendAsync(ApplicationConstants.SignalR.SendUpdateDashboard);
@@ -65,8 +65,8 @@ public partial class AddEditProductModal
 
     private async Task LoadBrandsAsync()
     {
-        IResult<List<GetAllBrandsResponse>> data = await BrandManager.GetAllAsync();
-        if (data.Succeeded)
+        Result<List<GetAllBrandsResponse>> data = await BrandManager.GetAllAsync();
+        if (data.IsSuccess)
         {
             _brands = data.Data;
         }
@@ -74,8 +74,8 @@ public partial class AddEditProductModal
 
     private async Task LoadImageAsync()
     {
-        IResult<string> data = await ProductManager.GetProductImageAsync(AddEditProductModel.Id);
-        if (data.Succeeded)
+        Result<string> data = await ProductManager.GetProductImageAsync(AddEditProductModel.Id);
+        if (data.IsSuccess)
         {
             var imageData = data.Data;
             if (!string.IsNullOrEmpty(imageData))

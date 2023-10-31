@@ -31,7 +31,7 @@ public class AuditService : IAuditService
         _localizer = localizer;
     }
 
-    public async Task<IResult<IEnumerable<AuditResponse>>> GetCurrentUserTrailsAsync(string userId)
+    public async Task<Result<IEnumerable<AuditResponse>>> GetCurrentUserTrailsAsync(string userId)
     {
         List<Audit> trails = await _context.AuditTrails
             .Where(a => a.UserId == userId)
@@ -39,10 +39,10 @@ public class AuditService : IAuditService
             .Take(250)
             .ToListAsync();
         var mappedLogs = _mapper.Map<List<AuditResponse>>(trails);
-        return await Result<IEnumerable<AuditResponse>>.SuccessAsync(mappedLogs);
+        return mappedLogs;
     }
 
-    public async Task<IResult<string>> ExportToExcelAsync(
+    public async Task<Result<string>> ExportToExcelAsync(
         string userId,
         string searchString = "",
         bool searchInOldValues = false,
@@ -70,6 +70,6 @@ public class AuditService : IAuditService
                 { _localizer["New Values"], item => item.NewValues }
             });
 
-        return await Result<string>.SuccessAsync(data: data);
+        return data;
     }
 }

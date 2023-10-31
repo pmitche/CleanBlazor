@@ -78,7 +78,7 @@ public partial class DocumentStore
             PageSize = pageSize, PageNumber = pageNumber + 1, SearchString = _searchString
         };
         PaginatedResult<GetAllDocumentsResponse> response = await DocumentManager.GetAllAsync(request);
-        if (response.Succeeded)
+        if (response.IsSuccess)
         {
             _totalItems = response.TotalCount;
             _currentPage = response.CurrentPage;
@@ -199,8 +199,8 @@ public partial class DocumentStore
         DialogResult result = await dialog.Result;
         if (!result.Canceled)
         {
-            IResult<int> response = await DocumentManager.DeleteAsync(id);
-            if (response.Succeeded)
+            Result<int> response = await DocumentManager.DeleteAsync(id);
+            if (response.IsSuccess)
             {
                 OnSearch("");
                 SnackBar.Success(response.Messages[0]);

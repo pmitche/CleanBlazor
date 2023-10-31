@@ -22,8 +22,8 @@ public partial class Security
 
     private async Task ChangePasswordAsync()
     {
-        IResult response = await AccountManager.ChangePasswordAsync(_passwordModel);
-        if (response.Succeeded)
+        Result response = await AccountManager.ChangePasswordAsync(_passwordModel);
+        if (response.IsSuccess)
         {
             SnackBar.Success(Localizer["Password Changed!"]);
             _passwordModel.Password = string.Empty;

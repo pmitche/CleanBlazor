@@ -39,18 +39,18 @@ internal sealed class DeleteBrandCommandHandler : ICommandHandler<DeleteBrandCom
         var isBrandUsed = await _productRepository.IsBrandUsedAsync(command.Id, cancellationToken);
         if (isBrandUsed)
         {
-            return await Result<int>.FailAsync(_localizer["Deletion Not Allowed"]);
+            return Result.Fail<int>(_localizer["Deletion Not Allowed"]);
         }
 
         var brand = await _brandRepository.GetByIdAsync(command.Id, cancellationToken);
         if (brand == null)
         {
-            return await Result<int>.FailAsync(_localizer["Brand Not Found!"]);
+            return Result.Fail<int>(_localizer["Brand Not Found!"]);
         }
 
         _brandRepository.Remove(brand);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
         _cache.Remove(ApplicationConstants.Cache.GetAllBrandsCacheKey);
-        return await Result<int>.SuccessAsync(brand.Id, _localizer["Brand Deleted"]);
+        return Result.Ok(brand.Id, _localizer["Brand Deleted"]);
     }
 }

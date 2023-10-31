@@ -12,51 +12,51 @@ public class UserManager : IUserManager
 
     public UserManager(HttpClient httpClient) => _httpClient = httpClient;
 
-    public async Task<IResult<List<UserResponse>>> GetAllAsync()
+    public async Task<Result<List<UserResponse>>> GetAllAsync()
     {
         HttpResponseMessage response = await _httpClient.GetAsync(UsersEndpoints.GetAll);
         return await response.ToResult<List<UserResponse>>();
     }
 
-    public async Task<IResult<UserResponse>> GetAsync(string userId)
+    public async Task<Result<UserResponse>> GetAsync(string userId)
     {
         HttpResponseMessage response = await _httpClient.GetAsync(UsersEndpoints.GetById(userId));
         return await response.ToResult<UserResponse>();
     }
 
-    public async Task<IResult> RegisterUserAsync(RegisterRequest request)
+    public async Task<Result> RegisterUserAsync(RegisterRequest request)
     {
         HttpResponseMessage response = await _httpClient.PostAsJsonAsync(UsersEndpoints.Register, request);
         return await response.ToResult();
     }
 
-    public async Task<IResult> ToggleUserStatusAsync(ToggleUserStatusRequest request)
+    public async Task<Result> ToggleUserStatusAsync(ToggleUserStatusRequest request)
     {
         HttpResponseMessage response =
             await _httpClient.PostAsJsonAsync(UsersEndpoints.ToggleUserStatus(request.UserId), request);
         return await response.ToResult();
     }
 
-    public async Task<IResult<UserRolesResponse>> GetRolesAsync(string userId)
+    public async Task<Result<UserRolesResponse>> GetRolesAsync(string userId)
     {
         HttpResponseMessage response = await _httpClient.GetAsync(UsersEndpoints.GetUserRolesById(userId));
         return await response.ToResult<UserRolesResponse>();
     }
 
-    public async Task<IResult> UpdateRolesAsync(UpdateUserRolesRequest request)
+    public async Task<Result> UpdateRolesAsync(UpdateUserRolesRequest request)
     {
         HttpResponseMessage response =
             await _httpClient.PutAsJsonAsync(UsersEndpoints.GetUserRolesById(request.UserId), request);
         return await response.ToResult<UserRolesResponse>();
     }
 
-    public async Task<IResult> ForgotPasswordAsync(ForgotPasswordRequest request)
+    public async Task<Result> ForgotPasswordAsync(ForgotPasswordRequest request)
     {
         HttpResponseMessage response = await _httpClient.PostAsJsonAsync(UsersEndpoints.ForgotPassword, request);
         return await response.ToResult();
     }
 
-    public async Task<IResult> ResetPasswordAsync(ResetPasswordRequest request)
+    public async Task<Result> ResetPasswordAsync(ResetPasswordRequest request)
     {
         HttpResponseMessage response = await _httpClient.PostAsJsonAsync(UsersEndpoints.ResetPassword, request);
         return await response.ToResult();

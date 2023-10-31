@@ -58,8 +58,8 @@ public partial class Roles
 
     private async Task GetRolesAsync()
     {
-        IResult<List<RoleResponse>> response = await RoleManager.GetRolesAsync();
-        if (response.Succeeded)
+        Result<List<RoleResponse>> response = await RoleManager.GetRolesAsync();
+        if (response.IsSuccess)
         {
             _roleList = response.Data.ToList();
         }
@@ -85,8 +85,8 @@ public partial class Roles
         DialogResult result = await dialog.Result;
         if (!result.Canceled)
         {
-            IResult<string> response = await RoleManager.DeleteAsync(id);
-            if (response.Succeeded)
+            Result<string> response = await RoleManager.DeleteAsync(id);
+            if (response.IsSuccess)
             {
                 await Reset();
                 await HubConnection.SendAsync(ApplicationConstants.SignalR.SendUpdateDashboard);

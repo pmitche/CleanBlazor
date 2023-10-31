@@ -5,9 +5,9 @@ namespace BlazorHero.CleanArchitecture.Application.Abstractions.Infrastructure.S
 
 public interface IAuditService
 {
-    Task<IResult<IEnumerable<AuditResponse>>> GetCurrentUserTrailsAsync(string userId);
+    Task<Result<IEnumerable<AuditResponse>>> GetCurrentUserTrailsAsync(string userId);
 
-    Task<IResult<string>> ExportToExcelAsync(
+    Task<Result<string>> ExportToExcelAsync(
         string userId,
         string searchString = "",
         bool searchInOldValues = false,

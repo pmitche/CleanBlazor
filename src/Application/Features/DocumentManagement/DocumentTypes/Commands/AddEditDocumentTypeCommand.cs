@@ -42,7 +42,7 @@ internal sealed class AddEditDocumentTypeCommandHandler : ICommandHandler<AddEdi
         if (await _documentTypeRepository.Entities.Where(p => p.Id != command.Id)
                 .AnyAsync(p => p.Name == command.Name, cancellationToken))
         {
-            return await Result<int>.FailAsync(_localizer["Document type with this name already exists."]);
+            return Result.Fail<int>(_localizer["Document type with this name already exists."]);
         }
 
         if (command.Id == 0)
@@ -51,14 +51,14 @@ internal sealed class AddEditDocumentTypeCommandHandler : ICommandHandler<AddEdi
             _documentTypeRepository.Add(documentType);
             await _unitOfWork.SaveChangesAsync(cancellationToken);
             _cache.Remove(ApplicationConstants.Cache.GetAllDocumentTypesCacheKey);
-            return await Result<int>.SuccessAsync(documentType.Id, _localizer["Document Type Saved"]);
+            return Result.Ok(documentType.Id, _localizer["Document Type Saved"]);
         }
         else
         {
             var documentType = await _documentTypeRepository.GetByIdAsync(command.Id, cancellationToken);
             if (documentType == null)
             {
-                return await Result<int>.FailAsync(_localizer["Document Type Not Found!"]);
+                return Result.Fail<int>(_localizer["Document Type Not Found!"]);
             }
 
             documentType.Name = command.Name ?? documentType.Name;
@@ -66,7 +66,7 @@ internal sealed class AddEditDocumentTypeCommandHandler : ICommandHandler<AddEdi
             _documentTypeRepository.Update(documentType);
             await _unitOfWork.SaveChangesAsync(cancellationToken);
             _cache.Remove(ApplicationConstants.Cache.GetAllDocumentTypesCacheKey);
-            return await Result<int>.SuccessAsync(documentType.Id, _localizer["Document Type Updated"]);
+            return Result.Ok(documentType.Id, _localizer["Document Type Updated"]);
         }
     }
 }

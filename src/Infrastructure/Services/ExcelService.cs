@@ -76,7 +76,7 @@ public class ExcelService : IExcelService
         return Convert.ToBase64String(byteArray);
     }
 
-    public async Task<IResult<IEnumerable<TEntity>>> ImportAsync<TEntity>(
+    public async Task<Result<IEnumerable<TEntity>>> ImportAsync<TEntity>(
         Stream data,
         Dictionary<string, Func<DataRow, TEntity, object>> mappers,
         string sheetName = "Sheet1")
@@ -89,8 +89,8 @@ public class ExcelService : IExcelService
         ExcelWorksheet ws = p.Workbook.Worksheets[sheetName];
         if (ws == null)
         {
-            return await Result<IEnumerable<TEntity>>.FailAsync(
-                string.Format(_localizer["Sheet with name {0} does not exist!"], sheetName));
+            return Result.Fail<IEnumerable<TEntity>>(string.Format(_localizer["Sheet with name {0} does not exist!"],
+                sheetName));
         }
 
         var dt = new DataTable();
@@ -109,7 +109,7 @@ public class ExcelService : IExcelService
 
         if (errors.Any())
         {
-            return await Result<IEnumerable<TEntity>>.FailAsync(errors);
+            return Result.Fail<IEnumerable<TEntity>>(errors);
         }
 
         for (var rowNum = startRow; rowNum <= ws.Dimension.End.Row; rowNum++)
@@ -129,10 +129,10 @@ public class ExcelService : IExcelService
             }
             catch (Exception e)
             {
-                return await Result<IEnumerable<TEntity>>.FailAsync(_localizer[e.Message]);
+                return Result.Fail<IEnumerable<TEntity>>(_localizer[e.Message]);
             }
         }
 
-        return await Result<IEnumerable<TEntity>>.SuccessAsync(result, _localizer["Import Success"]);
+        return Result.Ok<IEnumerable<TEntity>>(result, _localizer["Import Success"]);
     }
 }

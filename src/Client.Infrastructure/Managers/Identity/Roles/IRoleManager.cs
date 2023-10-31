@@ -5,13 +5,13 @@ namespace BlazorHero.CleanArchitecture.Client.Infrastructure.Managers.Identity.R
 
 public interface IRoleManager : IManager
 {
-    Task<IResult<List<RoleResponse>>> GetRolesAsync();
+    Task<Result<List<RoleResponse>>> GetRolesAsync();
 
-    Task<IResult<string>> SaveAsync(RoleRequest role);
+    Task<Result<string>> SaveAsync(RoleRequest role);
 
-    Task<IResult<string>> DeleteAsync(string id);
+    Task<Result<string>> DeleteAsync(string id);
 
-    Task<IResult<PermissionResponse>> GetPermissionsAsync(string roleId);
+    Task<Result<PermissionResponse>> GetPermissionsAsync(string roleId);
 
-    Task<IResult<string>> UpdatePermissionsAsync(PermissionRequest request);
+    Task<Result<string>> UpdatePermissionsAsync(PermissionRequest request);
 }

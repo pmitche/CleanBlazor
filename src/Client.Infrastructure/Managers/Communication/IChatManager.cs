@@ -6,9 +6,9 @@ namespace BlazorHero.CleanArchitecture.Client.Infrastructure.Managers.Communicat
 
 public interface IChatManager : IManager
 {
-    Task<IResult<IEnumerable<ChatUserResponse>>> GetChatUsersAsync();
+    Task<Result<IEnumerable<ChatUserResponse>>> GetChatUsersAsync();
 
-    Task<IResult> SaveMessageAsync(ChatMessage<IChatUser> chatMessage);
+    Task<Result> SaveMessageAsync(ChatMessage<IChatUser> chatMessage);
 
-    Task<IResult<IEnumerable<ChatMessageResponse>>> GetChatHistoryAsync(string chatId);
+    Task<Result<IEnumerable<ChatMessageResponse>>> GetChatHistoryAsync(string chatId);
 }

@@ -35,9 +35,9 @@ internal sealed class GetChatHistoryQueryHandler : IQueryHandler<GetChatHistoryQ
         CancellationToken cancellationToken)
     {
         var response = await _userService.GetAsync(_currentUserService.UserId);
-        if (!response.Succeeded)
+        if (!response.IsSuccess)
         {
-            return await Result<IEnumerable<ChatMessageResponse>>.FailAsync(_localizer["User Not Found!"]);
+            return Result.Fail<IEnumerable<ChatMessageResponse>>(_localizer["User Not Found!"]);
         }
 
         List<ChatMessageResponse> chatMessages = await _chatMessageRepository.Entities
@@ -57,6 +57,6 @@ internal sealed class GetChatHistoryQueryHandler : IQueryHandler<GetChatHistoryQ
                 FromUserImageUrl = x.FromUser.ProfilePictureDataUrl
             }).ToListAsync(cancellationToken);
 
-        return await Result<IEnumerable<ChatMessageResponse>>.SuccessAsync(chatMessages);
+        return chatMessages;
     }
 }

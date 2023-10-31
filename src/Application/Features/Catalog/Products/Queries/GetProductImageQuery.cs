@@ -25,6 +25,6 @@ internal sealed class GetProductImageQueryHandler : IQueryHandler<GetProductImag
             .Select(a => a.ImageDataUrl)
             .FirstOrDefaultAsync(cancellationToken);
 
-        return await Result<string>.SuccessAsync(data: data);
+        return data;
     }
 }

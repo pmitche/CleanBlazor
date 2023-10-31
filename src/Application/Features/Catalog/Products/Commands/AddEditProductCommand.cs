@@ -52,7 +52,7 @@ internal sealed class AddEditProductCommandHandler : ICommandHandler<AddEditProd
         if (await _productRepository.Entities.Where(p => p.Id != command.Id)
                 .AnyAsync(p => p.Barcode == command.Barcode, cancellationToken))
         {
-            return await Result<int>.FailAsync(_localizer["Barcode already exists."]);
+            return Result.Fail<int>(_localizer["Barcode already exists."]);
         }
 
         UploadRequest uploadRequest = command.UploadRequest;
@@ -71,14 +71,14 @@ internal sealed class AddEditProductCommandHandler : ICommandHandler<AddEditProd
 
             _productRepository.Add(product);
             await _unitOfWork.SaveChangesAsync(cancellationToken);
-            return await Result<int>.SuccessAsync(product.Id, _localizer["Product Saved"]);
+            return Result.Ok(product.Id, _localizer["Product Saved"]);
         }
         else
         {
             var product = await _productRepository.GetByIdAsync(command.Id, cancellationToken);
             if (product == null)
             {
-                return await Result<int>.FailAsync(_localizer["Product Not Found!"]);
+                return Result.Fail<int>(_localizer["Product Not Found!"]);
             }
 
             product.Name = command.Name ?? product.Name;
@@ -92,7 +92,7 @@ internal sealed class AddEditProductCommandHandler : ICommandHandler<AddEditProd
             product.BrandId = command.BrandId == 0 ? product.BrandId : command.BrandId;
             _productRepository.Update(product);
             await _unitOfWork.SaveChangesAsync(cancellationToken);
-            return await Result<int>.SuccessAsync(product.Id, _localizer["Product Updated"]);
+            return Result.Ok(product.Id, _localizer["Product Updated"]);
         }
     }
 }

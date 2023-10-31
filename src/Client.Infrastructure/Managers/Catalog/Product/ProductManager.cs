@@ -12,13 +12,13 @@ public class ProductManager : IProductManager
 
     public ProductManager(HttpClient httpClient) => _httpClient = httpClient;
 
-    public async Task<IResult<int>> DeleteAsync(int id)
+    public async Task<Result<int>> DeleteAsync(int id)
     {
         HttpResponseMessage response = await _httpClient.DeleteAsync(ProductsEndpoints.DeleteById(id));
         return await response.ToResult<int>();
     }
 
-    public async Task<IResult<string>> ExportToExcelAsync(string searchString = "")
+    public async Task<Result<string>> ExportToExcelAsync(string searchString = "")
     {
         HttpResponseMessage response = await _httpClient.GetAsync(string.IsNullOrWhiteSpace(searchString)
             ? ProductsEndpoints.Export
@@ -26,7 +26,7 @@ public class ProductManager : IProductManager
         return await response.ToResult<string>();
     }
 
-    public async Task<IResult<string>> GetProductImageAsync(int id)
+    public async Task<Result<string>> GetProductImageAsync(int id)
     {
         HttpResponseMessage response = await _httpClient.GetAsync(ProductsEndpoints.GetProductImage(id));
         return await response.ToResult<string>();
@@ -41,7 +41,7 @@ public class ProductManager : IProductManager
         return await response.ToPaginatedResult<GetAllPagedProductsResponse>();
     }
 
-    public async Task<IResult<int>> SaveAsync(AddEditProductRequest request)
+    public async Task<Result<int>> SaveAsync(AddEditProductRequest request)
     {
         HttpResponseMessage response = await _httpClient.PostAsJsonAsync(ProductsEndpoints.Save, request);
         return await response.ToResult<int>();

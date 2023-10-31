@@ -24,8 +24,8 @@ public partial class AddEditBrandModal
 
     private async Task SaveAsync()
     {
-        IResult<int> response = await BrandManager.SaveAsync(AddEditBrandRequestModel);
-        if (response.Succeeded)
+        Result<int> response = await BrandManager.SaveAsync(AddEditBrandRequestModel);
+        if (response.IsSuccess)
         {
             SnackBar.Success(response.Messages[0]);
             MudDialog.Close();

@@ -94,6 +94,6 @@ internal sealed class GetDashboardDataQueryHandler : IQueryHandler<GetDashboardD
             Name = _localizer["Document Types"], Data = documentTypesFigure
         });
 
-        return await Result<DashboardDataResponse>.SuccessAsync(response);
+        return response;
     }
 }

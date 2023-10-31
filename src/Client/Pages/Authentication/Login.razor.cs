@@ -29,8 +29,8 @@ public partial class Login
 
     private async Task SubmitAsync()
     {
-        IResult result = await AuthenticationManager.Login(_tokenModel);
-        if (!result.Succeeded)
+        Result result = await AuthenticationManager.Login(_tokenModel);
+        if (result.IsFailure)
         {
             SnackBar.Error(result.Messages);
         }

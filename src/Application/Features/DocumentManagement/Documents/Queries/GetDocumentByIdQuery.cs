@@ -28,6 +28,6 @@ internal sealed class GetDocumentByIdQueryHandler : IQueryHandler<GetDocumentByI
     {
         Document document = await _documentRepository.GetByIdAsync(query.Id, cancellationToken);
         var mappedDocument = _mapper.Map<GetDocumentByIdResponse>(document);
-        return await Result<GetDocumentByIdResponse>.SuccessAsync(mappedDocument);
+        return mappedDocument;
     }
 }

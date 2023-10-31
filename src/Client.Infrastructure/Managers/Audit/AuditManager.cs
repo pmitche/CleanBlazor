@@ -11,14 +11,14 @@ public class AuditManager : IAuditManager
 
     public AuditManager(HttpClient httpClient) => _httpClient = httpClient;
 
-    public async Task<IResult<IEnumerable<AuditResponse>>> GetCurrentUserTrailsAsync()
+    public async Task<Result<IEnumerable<AuditResponse>>> GetCurrentUserTrailsAsync()
     {
         HttpResponseMessage response = await _httpClient.GetAsync(AuditEndpoints.GetCurrentUserTrails);
-        IResult<IEnumerable<AuditResponse>> data = await response.ToResult<IEnumerable<AuditResponse>>();
+        Result<IEnumerable<AuditResponse>> data = await response.ToResult<IEnumerable<AuditResponse>>();
         return data;
     }
 
-    public async Task<IResult<string>> DownloadFileAsync(
+    public async Task<Result<string>> DownloadFileAsync(
         string searchString = "",
         bool searchInOldValues = false,
         bool searchInNewValues = false)

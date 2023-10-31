@@ -1,69 +1,59 @@
-﻿namespace BlazorHero.CleanArchitecture.Shared.Wrapper;
+﻿using System.Text.Json.Serialization;
 
-public class Result : IResult
+namespace BlazorHero.CleanArchitecture.Shared.Wrapper;
+
+public class Result
 {
-    public List<string> Messages { get; set; } = new();
+    /// <summary>
+    /// Parameterless constructor is required for deserialization.
+    /// </summary>
+    public Result() {}
+    protected Result(bool isSuccess, IEnumerable<string> errorMessages)
+    {
+        var messages = (errorMessages ?? Array.Empty<string>()).ToList().AsReadOnly();
 
-    public bool Succeeded { get; set; }
+        IsSuccess = isSuccess;
+        Messages = messages;
+    }
+    protected Result(bool isSuccess, string message) : this(isSuccess, new []{ message }) {}
+    protected Result(bool isSuccess) : this(isSuccess, Array.Empty<string>()) {}
 
-    public static IResult Fail() => new Result { Succeeded = false };
+    [JsonInclude]
+    public bool IsSuccess { get; private set; }
 
-    public static IResult Fail(string message) =>
-        new Result { Succeeded = false, Messages = new List<string> { message } };
+    public bool IsFailure => !IsSuccess;
 
-    public static IResult Fail(List<string> messages) => new Result { Succeeded = false, Messages = messages };
+    [JsonInclude]
+    public IReadOnlyList<string> Messages { get; private set; }
 
-    public static Task<IResult> FailAsync() => Task.FromResult(Fail());
+    public static Result Ok() => new(true);
+    public static Result<T> Ok<T>(T data) => new(data, true);
+    public static Result Ok(string message) => new(true, message);
+    public static Result<T> Ok<T>(T data, string message) => new(data, true, message);
 
-    public static Task<IResult> FailAsync(string message) => Task.FromResult(Fail(message));
-
-    public static Task<IResult> FailAsync(List<string> messages) => Task.FromResult(Fail(messages));
-
-    public static IResult Success() => new Result { Succeeded = true };
-
-    public static IResult Success(string message) =>
-        new Result { Succeeded = true, Messages = new List<string> { message } };
-
-    public static Task<IResult> SuccessAsync() => Task.FromResult(Success());
-
-    public static Task<IResult> SuccessAsync(string message) => Task.FromResult(Success(message));
+    public static Result Fail() => new(false);
+    public static Result<T> Fail<T>() => new (default, false);
+    public static Result Fail(string message) => new(false, message);
+    public static Result<T> Fail<T>(string message) => new(default, false, message);
+    public static Result Fail(IEnumerable<string> messages) => new(false, messages);
+    public static Result<T> Fail<T>(IEnumerable<string> messages) => new(default, false, messages);
 }
 
-public class Result<T> : Result, IResult<T>
+public class Result<T> : Result
 {
-    public T Data { get; set; }
+    /// <summary>
+    /// Parameterless constructor is required for deserialization.
+    /// </summary>
+    public Result() {}
+    protected internal Result(T data, bool isSuccess, IEnumerable<string> errorMessages) : base(isSuccess, errorMessages)
+    {
+        Data = data;
+    }
+    protected internal Result(T data, bool isSuccess, string message) : this(data, isSuccess, new []{ message }) {}
+    protected internal Result(T data, bool isSuccess) : this(data, isSuccess, Array.Empty<string>()) {}
 
-    public static new Result<T> Fail() => new() { Succeeded = false };
+    public static implicit operator Result<T>(T data) => Ok(data);
 
-    public static new Result<T> Fail(string message) =>
-        new() { Succeeded = false, Messages = new List<string> { message } };
-
-    public static new Result<T> Fail(List<string> messages) => new() { Succeeded = false, Messages = messages };
-
-    public static new Task<Result<T>> FailAsync() => Task.FromResult(Fail());
-
-    public static new Task<Result<T>> FailAsync(string message) => Task.FromResult(Fail(message));
-
-    public static new Task<Result<T>> FailAsync(List<string> messages) => Task.FromResult(Fail(messages));
-
-    public static new Result<T> Success() => new() { Succeeded = true };
-
-    public static new Result<T> Success(string message) =>
-        new() { Succeeded = true, Messages = new List<string> { message } };
-
-    public static Result<T> Success(T data) => new() { Succeeded = true, Data = data };
-
-    public static Result<T> Success(T data, string message) =>
-        new() { Succeeded = true, Data = data, Messages = new List<string> { message } };
-
-    public static Result<T> Success(T data, List<string> messages) =>
-        new() { Succeeded = true, Data = data, Messages = messages };
-
-    public static new Task<Result<T>> SuccessAsync() => Task.FromResult(Success());
-
-    public static new Task<Result<T>> SuccessAsync(string message) => Task.FromResult(Success(message));
-
-    public static Task<Result<T>> SuccessAsync(T data) => Task.FromResult(Success(data));
-
-    public static Task<Result<T>> SuccessAsync(T data, string message) => Task.FromResult(Success(data, message));
+    [JsonInclude]
+    public T Data { get; private set; }
 }

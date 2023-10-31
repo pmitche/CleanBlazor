@@ -46,6 +46,6 @@ internal sealed class ExportBrandsQueryHandler : IQueryHandler<ExportBrandsQuery
             },
             _localizer["Brands"]);
 
-        return await Result<string>.SuccessAsync(data: data);
+        return data;
     }
 }

@@ -31,11 +31,11 @@ internal sealed class DeleteProductCommandHandler : ICommandHandler<DeleteProduc
         var product = await _productRepository.GetByIdAsync(command.Id, cancellationToken);
         if (product == null)
         {
-            return await Result<int>.FailAsync(_localizer["Product Not Found!"]);
+            return Result.Fail<int>(_localizer["Product Not Found!"]);
         }
 
         _productRepository.Remove(product);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
-        return await Result<int>.SuccessAsync(product.Id, _localizer["Product Deleted"]);
+        return Result.Ok(product.Id, _localizer["Product Deleted"]);
     }
 }

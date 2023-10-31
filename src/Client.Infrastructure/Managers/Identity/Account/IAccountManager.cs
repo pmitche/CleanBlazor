@@ -5,11 +5,11 @@ namespace BlazorHero.CleanArchitecture.Client.Infrastructure.Managers.Identity.A
 
 public interface IAccountManager : IManager
 {
-    Task<IResult> ChangePasswordAsync(ChangePasswordRequest model);
+    Task<Result> ChangePasswordAsync(ChangePasswordRequest model);
 
-    Task<IResult> UpdateProfileAsync(UpdateProfileRequest model);
+    Task<Result> UpdateProfileAsync(UpdateProfileRequest model);
 
-    Task<IResult<string>> GetProfilePictureAsync(string userId);
+    Task<Result<string>> GetProfilePictureAsync(string userId);
 
-    Task<IResult<string>> UpdateProfilePictureAsync(UpdateProfilePictureRequest request, string userId);
+    Task<Result<string>> UpdateProfilePictureAsync(UpdateProfilePictureRequest request, string userId);
 }

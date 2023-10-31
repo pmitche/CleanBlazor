@@ -12,7 +12,6 @@ namespace BlazorHero.CleanArchitecture.Infrastructure.Services.Identity;
 
 public class RoleClaimService : IRoleClaimService
 {
-    private readonly ICurrentUserService _currentUserService;
     private readonly BlazorHeroContext _db;
     private readonly IStringLocalizer<RoleClaimService> _localizer;
     private readonly IMapper _mapper;
@@ -20,12 +19,10 @@ public class RoleClaimService : IRoleClaimService
     public RoleClaimService(
         IStringLocalizer<RoleClaimService> localizer,
         IMapper mapper,
-        ICurrentUserService currentUserService,
         BlazorHeroContext db)
     {
         _localizer = localizer;
         _mapper = mapper;
-        _currentUserService = currentUserService;
         _db = db;
     }
 
@@ -33,7 +30,7 @@ public class RoleClaimService : IRoleClaimService
     {
         List<BlazorHeroRoleClaim> roleClaims = await _db.RoleClaims.ToListAsync();
         var roleClaimsResponse = _mapper.Map<List<RoleClaimResponse>>(roleClaims);
-        return await Result<List<RoleClaimResponse>>.SuccessAsync(roleClaimsResponse);
+        return roleClaimsResponse;
     }
 
     public async Task<int> GetCountAsync()
@@ -47,7 +44,7 @@ public class RoleClaimService : IRoleClaimService
         BlazorHeroRoleClaim roleClaim = await _db.RoleClaims
             .SingleOrDefaultAsync(x => x.Id == id);
         var roleClaimResponse = _mapper.Map<RoleClaimResponse>(roleClaim);
-        return await Result<RoleClaimResponse>.SuccessAsync(roleClaimResponse);
+        return roleClaimResponse;
     }
 
     public async Task<Result<List<RoleClaimResponse>>> GetAllByRoleIdAsync(string roleId)
@@ -57,14 +54,14 @@ public class RoleClaimService : IRoleClaimService
             .Where(x => x.RoleId == roleId)
             .ToListAsync();
         var roleClaimsResponse = _mapper.Map<List<RoleClaimResponse>>(roleClaims);
-        return await Result<List<RoleClaimResponse>>.SuccessAsync(roleClaimsResponse);
+        return roleClaimsResponse;
     }
 
     public async Task<Result<string>> SaveAsync(RoleClaimRequest request)
     {
         if (string.IsNullOrWhiteSpace(request.RoleId))
         {
-            return await Result<string>.FailAsync(_localizer["Role is required."]);
+            return Result.Fail<string>(_localizer["Role is required."]);
         }
 
         if (request.Id == 0)
@@ -75,14 +72,13 @@ public class RoleClaimService : IRoleClaimService
                         x.RoleId == request.RoleId && x.ClaimType == request.Type && x.ClaimValue == request.Value);
             if (existingRoleClaim != null)
             {
-                return await Result<string>.FailAsync(_localizer["Similar Role Claim already exists."]);
+                return Result.Fail<string>(_localizer["Similar Role Claim already exists."]);
             }
 
             var roleClaim = _mapper.Map<BlazorHeroRoleClaim>(request);
             await _db.RoleClaims.AddAsync(roleClaim);
             await _db.SaveChangesAsync();
-            return await Result<string>.SuccessAsync(
-                string.Format(_localizer["Role Claim {0} created."], request.Value));
+            return Result.Ok<string>(string.Format(_localizer["Role Claim {0} created."], request.Value));
         }
         else
         {
@@ -92,7 +88,7 @@ public class RoleClaimService : IRoleClaimService
                     .SingleOrDefaultAsync(x => x.Id == request.Id);
             if (existingRoleClaim == null)
             {
-                return await Result<string>.SuccessAsync(_localizer["Role Claim does not exist."]);
+                return Result.Fail<string>(_localizer["Role Claim does not exist."]);
             }
 
             existingRoleClaim.ClaimType = request.Type;
@@ -102,7 +98,7 @@ public class RoleClaimService : IRoleClaimService
             existingRoleClaim.RoleId = request.RoleId;
             _db.RoleClaims.Update(existingRoleClaim);
             await _db.SaveChangesAsync();
-            return await Result<string>.SuccessAsync(string.Format(_localizer["Role Claim {0} for Role {1} updated."],
+            return Result.Ok<string>(string.Format(_localizer["Role Claim {0} for Role {1} updated."],
                 request.Value,
                 existingRoleClaim.Role.Name));
         }
@@ -115,12 +111,12 @@ public class RoleClaimService : IRoleClaimService
             .FirstOrDefaultAsync(x => x.Id == id);
         if (existingRoleClaim == null)
         {
-            return await Result<string>.FailAsync(_localizer["Role Claim does not exist."]);
+            return Result.Fail<string>(_localizer["Role Claim does not exist."]);
         }
 
         _db.RoleClaims.Remove(existingRoleClaim);
         await _db.SaveChangesAsync();
-        return await Result<string>.SuccessAsync(string.Format(_localizer["Role Claim {0} for {1} Role deleted."],
+        return Result.Ok<string>(string.Format(_localizer["Role Claim {0} for {1} Role deleted."],
             existingRoleClaim.ClaimValue,
             existingRoleClaim.Role.Name));
     }

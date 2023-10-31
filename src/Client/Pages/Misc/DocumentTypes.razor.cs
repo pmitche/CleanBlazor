@@ -61,8 +61,8 @@ public partial class DocumentTypes
 
     private async Task GetDocumentTypesAsync()
     {
-        IResult<List<GetAllDocumentTypesResponse>> response = await DocumentTypeManager.GetAllAsync();
-        if (response.Succeeded)
+        Result<List<GetAllDocumentTypesResponse>> response = await DocumentTypeManager.GetAllAsync();
+        if (response.IsSuccess)
         {
             _documentTypeList = response.Data.ToList();
         }
@@ -88,8 +88,8 @@ public partial class DocumentTypes
         DialogResult result = await dialog.Result;
         if (!result.Canceled)
         {
-            IResult<int> response = await DocumentTypeManager.DeleteAsync(id);
-            if (response.Succeeded)
+            Result<int> response = await DocumentTypeManager.DeleteAsync(id);
+            if (response.IsSuccess)
             {
                 await Reset();
                 await HubConnection.SendAsync(ApplicationConstants.SignalR.SendUpdateDashboard);
@@ -105,8 +105,8 @@ public partial class DocumentTypes
 
     private async Task ExportToExcel()
     {
-        IResult<string> response = await DocumentTypeManager.ExportToExcelAsync(_searchString);
-        if (response.Succeeded)
+        Result<string> response = await DocumentTypeManager.ExportToExcelAsync(_searchString);
+        if (response.IsSuccess)
         {
             await JsRuntime.InvokeVoidAsync("Download",
                 new

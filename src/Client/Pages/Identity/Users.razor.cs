@@ -43,8 +43,8 @@ public partial class Users
 
     private async Task GetUsersAsync()
     {
-        IResult<List<UserResponse>> response = await UserManager.GetAllAsync();
-        if (response.Succeeded)
+        Result<List<UserResponse>> response = await UserManager.GetAllAsync();
+        if (response.IsSuccess)
         {
             _userList = response.Data.ToList();
         }

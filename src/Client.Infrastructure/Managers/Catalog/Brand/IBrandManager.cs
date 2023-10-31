@@ -6,13 +6,13 @@ namespace BlazorHero.CleanArchitecture.Client.Infrastructure.Managers.Catalog.Br
 
 public interface IBrandManager : IManager
 {
-    Task<IResult<List<GetAllBrandsResponse>>> GetAllAsync();
+    Task<Result<List<GetAllBrandsResponse>>> GetAllAsync();
 
-    Task<IResult<int>> SaveAsync(AddEditBrandRequest request);
+    Task<Result<int>> SaveAsync(AddEditBrandRequest request);
 
-    Task<IResult<int>> DeleteAsync(int id);
+    Task<Result<int>> DeleteAsync(int id);
 
-    Task<IResult<string>> ExportToExcelAsync(string searchString = "");
+    Task<Result<string>> ExportToExcelAsync(string searchString = "");
 
-    Task<IResult<int>> ImportAsync(UploadRequest request);
+    Task<Result<int>> ImportAsync(UploadRequest request);
 }

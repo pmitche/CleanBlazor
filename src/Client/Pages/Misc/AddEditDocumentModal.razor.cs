@@ -30,8 +30,8 @@ public partial class AddEditDocumentModal
 
     private async Task SaveAsync()
     {
-        IResult<int> response = await DocumentManager.SaveAsync(AddEditDocumentModel);
-        if (response.Succeeded)
+        Result<int> response = await DocumentManager.SaveAsync(AddEditDocumentModel);
+        if (response.IsSuccess)
         {
             SnackBar.Success(response.Messages[0]);
             MudDialog.Close();
@@ -48,8 +48,8 @@ public partial class AddEditDocumentModal
 
     private async Task LoadDocumentTypesAsync()
     {
-        IResult<List<GetAllDocumentTypesResponse>> data = await DocumentTypeManager.GetAllAsync();
-        if (data.Succeeded)
+        Result<List<GetAllDocumentTypesResponse>> data = await DocumentTypeManager.GetAllAsync();
+        if (data.IsSuccess)
         {
             _documentTypes = data.Data;
         }

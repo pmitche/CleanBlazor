@@ -36,6 +36,6 @@ internal sealed class GetChatUsersQueryHandler : IQueryHandler<GetChatUsersQuery
             .Where(user => user.Id != _currentUserService.UserId && (userIsAdmin || (user.IsActive && user.EmailConfirmed)))
             .ToListAsync(cancellationToken);
         var chatUsers = _mapper.Map<IEnumerable<ChatUserResponse>>(allUsers);
-        return await Result<IEnumerable<ChatUserResponse>>.SuccessAsync(chatUsers);
+        return Result.Ok(chatUsers);
     }
 }

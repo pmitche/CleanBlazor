@@ -35,6 +35,6 @@ internal sealed class GetAllBrandsCachedQueryHandler : IQueryHandler<GetAllBrand
         var brands = await _cache.GetOrAddAsync(ApplicationConstants.Cache.GetAllBrandsCacheKey,
                 () => _brandRepository.GetAllAsync(cancellationToken));
         var mappedBrands = _mapper.Map<List<GetAllBrandsResponse>>(brands);
-        return await Result<List<GetAllBrandsResponse>>.SuccessAsync(mappedBrands);
+        return mappedBrands;
     }
 }

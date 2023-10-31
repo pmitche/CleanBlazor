@@ -11,10 +11,10 @@ public class DashboardManager : IDashboardManager
 
     public DashboardManager(HttpClient httpClient) => _httpClient = httpClient;
 
-    public async Task<IResult<DashboardDataResponse>> GetDataAsync()
+    public async Task<Result<DashboardDataResponse>> GetDataAsync()
     {
         HttpResponseMessage response = await _httpClient.GetAsync(DashboardEndpoints.GetData);
-        IResult<DashboardDataResponse> data = await response.ToResult<DashboardDataResponse>();
+        Result<DashboardDataResponse> data = await response.ToResult<DashboardDataResponse>();
         return data;
     }
 }

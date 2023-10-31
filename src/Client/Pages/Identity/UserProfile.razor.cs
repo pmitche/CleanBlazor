@@ -24,8 +24,8 @@ public partial class UserProfile
     private async Task ToggleUserStatus()
     {
         var request = new ToggleUserStatusRequest { ActivateUser = _active, UserId = Id };
-        IResult result = await UserManager.ToggleUserStatusAsync(request);
-        if (result.Succeeded)
+        Result result = await UserManager.ToggleUserStatusAsync(request);
+        if (result.IsSuccess)
         {
             SnackBar.Success(Localizer["Updated User Status."]);
             NavigationManager.NavigateTo("/identity/users");
@@ -39,8 +39,8 @@ public partial class UserProfile
     protected override async Task OnInitializedAsync()
     {
         var userId = Id;
-        IResult<UserResponse> result = await UserManager.GetAsync(userId);
-        if (result.Succeeded)
+        Result<UserResponse> result = await UserManager.GetAsync(userId);
+        if (result.IsSuccess)
         {
             UserResponse user = result.Data;
             if (user != null)
@@ -50,8 +50,8 @@ public partial class UserProfile
                 _email = user.Email;
                 _phoneNumber = user.PhoneNumber;
                 _active = user.IsActive;
-                IResult<string> data = await AccountManager.GetProfilePictureAsync(userId);
-                if (data.Succeeded)
+                Result<string> data = await AccountManager.GetProfilePictureAsync(userId);
+                if (data.IsSuccess)
                 {
                     ImageDataUrl = data.Data;
                 }

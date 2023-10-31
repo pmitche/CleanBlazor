@@ -12,25 +12,25 @@ public class AccountManager : IAccountManager
 
     public AccountManager(HttpClient httpClient) => _httpClient = httpClient;
 
-    public async Task<IResult> ChangePasswordAsync(ChangePasswordRequest model)
+    public async Task<Result> ChangePasswordAsync(ChangePasswordRequest model)
     {
         HttpResponseMessage response = await _httpClient.PutAsJsonAsync(AccountsEndpoints.ChangePassword, model);
         return await response.ToResult();
     }
 
-    public async Task<IResult> UpdateProfileAsync(UpdateProfileRequest model)
+    public async Task<Result> UpdateProfileAsync(UpdateProfileRequest model)
     {
         HttpResponseMessage response = await _httpClient.PutAsJsonAsync(AccountsEndpoints.UpdateProfile, model);
         return await response.ToResult();
     }
 
-    public async Task<IResult<string>> GetProfilePictureAsync(string userId)
+    public async Task<Result<string>> GetProfilePictureAsync(string userId)
     {
         HttpResponseMessage response = await _httpClient.GetAsync(AccountsEndpoints.GetProfilePicture(userId));
         return await response.ToResult<string>();
     }
 
-    public async Task<IResult<string>> UpdateProfilePictureAsync(UpdateProfilePictureRequest request, string userId)
+    public async Task<Result<string>> UpdateProfilePictureAsync(UpdateProfilePictureRequest request, string userId)
     {
         HttpResponseMessage response =
             await _httpClient.PostAsJsonAsync(AccountsEndpoints.UpdateProfilePicture(userId), request);

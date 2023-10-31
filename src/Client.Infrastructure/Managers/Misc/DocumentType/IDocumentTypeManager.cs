@@ -5,11 +5,11 @@ namespace BlazorHero.CleanArchitecture.Client.Infrastructure.Managers.Misc.Docum
 
 public interface IDocumentTypeManager : IManager
 {
-    Task<IResult<List<GetAllDocumentTypesResponse>>> GetAllAsync();
+    Task<Result<List<GetAllDocumentTypesResponse>>> GetAllAsync();
 
-    Task<IResult<int>> SaveAsync(AddEditDocumentTypeRequest request);
+    Task<Result<int>> SaveAsync(AddEditDocumentTypeRequest request);
 
-    Task<IResult<int>> DeleteAsync(int id);
+    Task<Result<int>> DeleteAsync(int id);
 
-    Task<IResult<string>> ExportToExcelAsync(string searchString = "");
+    Task<Result<string>> ExportToExcelAsync(string searchString = "");
 }

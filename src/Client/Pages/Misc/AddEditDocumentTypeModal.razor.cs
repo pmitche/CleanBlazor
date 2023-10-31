@@ -24,8 +24,8 @@ public partial class AddEditDocumentTypeModal
 
     private async Task SaveAsync()
     {
-        IResult<int> response = await DocumentTypeManager.SaveAsync(AddEditDocumentTypeModel);
-        if (response.Succeeded)
+        Result<int> response = await DocumentTypeManager.SaveAsync(AddEditDocumentTypeModel);
+        if (response.IsSuccess)
         {
             SnackBar.Success(response.Messages[0]);
             MudDialog.Close();

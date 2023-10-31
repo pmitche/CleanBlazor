@@ -12,7 +12,7 @@ public class DocumentManager : IDocumentManager
 
     public DocumentManager(HttpClient httpClient) => _httpClient = httpClient;
 
-    public async Task<IResult<int>> DeleteAsync(int id)
+    public async Task<Result<int>> DeleteAsync(int id)
     {
         HttpResponseMessage response = await _httpClient.DeleteAsync(DocumentsEndpoints.DeleteById(id));
         return await response.ToResult<int>();
@@ -27,13 +27,13 @@ public class DocumentManager : IDocumentManager
         return await response.ToPaginatedResult<GetAllDocumentsResponse>();
     }
 
-    public async Task<IResult<GetDocumentByIdResponse>> GetByIdAsync(int id)
+    public async Task<Result<GetDocumentByIdResponse>> GetByIdAsync(int id)
     {
         HttpResponseMessage response = await _httpClient.GetAsync(DocumentsEndpoints.GetById(id));
         return await response.ToResult<GetDocumentByIdResponse>();
     }
 
-    public async Task<IResult<int>> SaveAsync(AddEditDocumentRequest request)
+    public async Task<Result<int>> SaveAsync(AddEditDocumentRequest request)
     {
         HttpResponseMessage response = await _httpClient.PostAsJsonAsync(DocumentsEndpoints.Save, request);
         return await response.ToResult<int>();

@@ -12,7 +12,7 @@ public class DocumentTypeManager : IDocumentTypeManager
 
     public DocumentTypeManager(HttpClient httpClient) => _httpClient = httpClient;
 
-    public async Task<IResult<string>> ExportToExcelAsync(string searchString = "")
+    public async Task<Result<string>> ExportToExcelAsync(string searchString = "")
     {
         HttpResponseMessage response = await _httpClient.GetAsync(string.IsNullOrWhiteSpace(searchString)
             ? DocumentTypesEndpoints.Export
@@ -20,19 +20,19 @@ public class DocumentTypeManager : IDocumentTypeManager
         return await response.ToResult<string>();
     }
 
-    public async Task<IResult<int>> DeleteAsync(int id)
+    public async Task<Result<int>> DeleteAsync(int id)
     {
         HttpResponseMessage response = await _httpClient.DeleteAsync(DocumentTypesEndpoints.DeleteById(id));
         return await response.ToResult<int>();
     }
 
-    public async Task<IResult<List<GetAllDocumentTypesResponse>>> GetAllAsync()
+    public async Task<Result<List<GetAllDocumentTypesResponse>>> GetAllAsync()
     {
         HttpResponseMessage response = await _httpClient.GetAsync(DocumentTypesEndpoints.GetAll);
         return await response.ToResult<List<GetAllDocumentTypesResponse>>();
     }
 
-    public async Task<IResult<int>> SaveAsync(AddEditDocumentTypeRequest request)
+    public async Task<Result<int>> SaveAsync(AddEditDocumentTypeRequest request)
     {
         HttpResponseMessage response = await _httpClient.PostAsJsonAsync(DocumentTypesEndpoints.Save, request);
         return await response.ToResult<int>();

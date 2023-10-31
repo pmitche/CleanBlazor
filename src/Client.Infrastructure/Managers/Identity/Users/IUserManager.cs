@@ -5,21 +5,21 @@ namespace BlazorHero.CleanArchitecture.Client.Infrastructure.Managers.Identity.U
 
 public interface IUserManager : IManager
 {
-    Task<IResult<List<UserResponse>>> GetAllAsync();
+    Task<Result<List<UserResponse>>> GetAllAsync();
 
-    Task<IResult> ForgotPasswordAsync(ForgotPasswordRequest request);
+    Task<Result> ForgotPasswordAsync(ForgotPasswordRequest request);
 
-    Task<IResult> ResetPasswordAsync(ResetPasswordRequest request);
+    Task<Result> ResetPasswordAsync(ResetPasswordRequest request);
 
-    Task<IResult<UserResponse>> GetAsync(string userId);
+    Task<Result<UserResponse>> GetAsync(string userId);
 
-    Task<IResult<UserRolesResponse>> GetRolesAsync(string userId);
+    Task<Result<UserRolesResponse>> GetRolesAsync(string userId);
 
-    Task<IResult> RegisterUserAsync(RegisterRequest request);
+    Task<Result> RegisterUserAsync(RegisterRequest request);
 
-    Task<IResult> ToggleUserStatusAsync(ToggleUserStatusRequest request);
+    Task<Result> ToggleUserStatusAsync(ToggleUserStatusRequest request);
 
-    Task<IResult> UpdateRolesAsync(UpdateUserRolesRequest request);
+    Task<Result> UpdateRolesAsync(UpdateUserRolesRequest request);
 
     Task<string> ExportToExcelAsync(string searchString = "");
 }

@@ -47,8 +47,8 @@ public partial class Chat
             {
                 Message = CurrentMessage, ToUserId = CId, CreatedDate = DateTime.Now
             };
-            IResult response = await ChatManager.SaveMessageAsync(chatMessage);
-            if (response.Succeeded)
+            Result response = await ChatManager.SaveMessageAsync(chatMessage);
+            if (response.IsSuccess)
             {
                 AuthenticationState state = await StateProvider.GetAuthenticationStateAsync();
                 ClaimsPrincipal user = state.User;
@@ -171,8 +171,8 @@ public partial class Chat
     private async Task LoadUserChat(string userId)
     {
         _open = false;
-        IResult<UserResponse> response = await UserManager.GetAsync(userId);
-        if (response.Succeeded)
+        Result<UserResponse> response = await UserManager.GetAsync(userId);
+        if (response.IsSuccess)
         {
             UserResponse contact = response.Data;
             CId = contact.Id;
@@ -182,8 +182,8 @@ public partial class Chat
             NavigationManager.NavigateTo($"chat/{CId}");
             //Load messages from db here
             _messages = new List<ChatMessageResponse>();
-            IResult<IEnumerable<ChatMessageResponse>> chatHistoryResponse = await ChatManager.GetChatHistoryAsync(CId);
-            if (chatHistoryResponse.Succeeded)
+            Result<IEnumerable<ChatMessageResponse>> chatHistoryResponse = await ChatManager.GetChatHistoryAsync(CId);
+            if (chatHistoryResponse.IsSuccess)
             {
                 _messages = chatHistoryResponse.Data.ToList();
             }
@@ -201,8 +201,8 @@ public partial class Chat
     private async Task GetUsersAsync()
     {
         //add get chat history from chat controller / manager
-        IResult<IEnumerable<ChatUserResponse>> response = await ChatManager.GetChatUsersAsync();
-        if (response.Succeeded)
+        Result<IEnumerable<ChatUserResponse>> response = await ChatManager.GetChatUsersAsync();
+        if (response.IsSuccess)
         {
             UserList = response.Data.ToList();
         }

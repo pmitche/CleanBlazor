@@ -59,8 +59,8 @@ public partial class RolePermissions
     {
         _mapper = new MapperConfiguration(c => { c.AddProfile<RoleProfile>(); }).CreateMapper();
         var roleId = Id;
-        IResult<PermissionResponse> result = await RoleManager.GetPermissionsAsync(roleId);
-        if (result.Succeeded)
+        Result<PermissionResponse> result = await RoleManager.GetPermissionsAsync(roleId);
+        if (result.IsSuccess)
         {
             _model = result.Data;
             GroupedRoleClaims.Add(Localizer["All Permissions"], _model.RoleClaims);
@@ -92,8 +92,8 @@ public partial class RolePermissions
     private async Task SaveAsync()
     {
         PermissionRequest request = _mapper.Map<PermissionResponse, PermissionRequest>(_model);
-        IResult<string> result = await RoleManager.UpdatePermissionsAsync(request);
-        if (result.Succeeded)
+        Result<string> result = await RoleManager.UpdatePermissionsAsync(request);
+        if (result.IsSuccess)
         {
             SnackBar.Success(result.Messages[0]);
             await HubConnection.SendAsync(ApplicationConstants.SignalR.SendRegenerateTokens);

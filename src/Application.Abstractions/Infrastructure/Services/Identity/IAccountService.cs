@@ -5,11 +5,11 @@ namespace BlazorHero.CleanArchitecture.Application.Abstractions.Infrastructure.S
 
 public interface IAccountService
 {
-    Task<IResult> UpdateProfileAsync(UpdateProfileRequest model, string userId);
+    Task<Result> UpdateProfileAsync(UpdateProfileRequest model, string userId);
 
-    Task<IResult> ChangePasswordAsync(ChangePasswordRequest model, string userId);
+    Task<Result> ChangePasswordAsync(ChangePasswordRequest model, string userId);
 
-    Task<IResult<string>> GetProfilePictureAsync(string userId);
+    Task<Result<string>> GetProfilePictureAsync(string userId);
 
-    Task<IResult<string>> UpdateProfilePictureAsync(UpdateProfilePictureRequest request, string userId);
+    Task<Result<string>> UpdateProfilePictureAsync(UpdateProfilePictureRequest request, string userId);
 }

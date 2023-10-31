@@ -28,12 +28,12 @@ public class AccountService : IAccountService
         _localizer = localizer;
     }
 
-    public async Task<IResult> ChangePasswordAsync(ChangePasswordRequest model, string userId)
+    public async Task<Result> ChangePasswordAsync(ChangePasswordRequest model, string userId)
     {
         BlazorHeroUser user = await _userManager.FindByIdAsync(userId);
         if (user == null)
         {
-            return await Result.FailAsync(_localizer["User Not Found."]);
+            return Result.Fail(_localizer["User Not Found."]);
         }
 
         IdentityResult identityResult = await _userManager.ChangePasswordAsync(
@@ -41,10 +41,10 @@ public class AccountService : IAccountService
             model.Password,
             model.NewPassword);
         List<string> errors = identityResult.Errors.Select(e => _localizer[e.Description].ToString()).ToList();
-        return identityResult.Succeeded ? await Result.SuccessAsync() : await Result.FailAsync(errors);
+        return identityResult.Succeeded ? Result.Ok() : Result.Fail(errors);
     }
 
-    public async Task<IResult> UpdateProfileAsync(UpdateProfileRequest model, string userId)
+    public async Task<Result> UpdateProfileAsync(UpdateProfileRequest model, string userId)
     {
         if (!string.IsNullOrWhiteSpace(model.PhoneNumber))
         {
@@ -52,7 +52,7 @@ public class AccountService : IAccountService
                 await _userManager.Users.FirstOrDefaultAsync(x => x.PhoneNumber == model.PhoneNumber);
             if (userWithSamePhoneNumber != null)
             {
-                return await Result.FailAsync(string.Format(_localizer["Phone number {0} is already used."],
+                return Result.Fail(string.Format(_localizer["Phone number {0} is already used."],
                     model.PhoneNumber));
             }
         }
@@ -60,13 +60,13 @@ public class AccountService : IAccountService
         BlazorHeroUser userWithSameEmail = await _userManager.FindByEmailAsync(model.Email);
         if (userWithSameEmail != null && userWithSameEmail.Id != userId)
         {
-            return await Result.FailAsync(string.Format(_localizer["Email {0} is already used."], model.Email));
+            return Result.Fail(string.Format(_localizer["Email {0} is already used."], model.Email));
         }
 
         BlazorHeroUser user = await _userManager.FindByIdAsync(userId);
         if (user == null)
         {
-            return await Result.FailAsync(_localizer["User Not Found."]);
+            return Result.Fail(_localizer["User Not Found."]);
         }
 
         user.FirstName = model.FirstName;
@@ -81,26 +81,26 @@ public class AccountService : IAccountService
         IdentityResult identityResult = await _userManager.UpdateAsync(user);
         List<string> errors = identityResult.Errors.Select(e => _localizer[e.Description].ToString()).ToList();
         await _signInManager.RefreshSignInAsync(user);
-        return identityResult.Succeeded ? await Result.SuccessAsync() : await Result.FailAsync(errors);
+        return identityResult.Succeeded ? Result.Ok() : Result.Fail(errors);
     }
 
-    public async Task<IResult<string>> GetProfilePictureAsync(string userId)
+    public async Task<Result<string>> GetProfilePictureAsync(string userId)
     {
         BlazorHeroUser user = await _userManager.FindByIdAsync(userId);
         if (user == null)
         {
-            return await Result<string>.FailAsync(_localizer["User Not Found"]);
+            return Result.Fail<string>(_localizer["User Not Found"]);
         }
 
-        return await Result<string>.SuccessAsync(data: user.ProfilePictureDataUrl);
+        return user.ProfilePictureDataUrl;
     }
 
-    public async Task<IResult<string>> UpdateProfilePictureAsync(UpdateProfilePictureRequest request, string userId)
+    public async Task<Result<string>> UpdateProfilePictureAsync(UpdateProfilePictureRequest request, string userId)
     {
         BlazorHeroUser user = await _userManager.FindByIdAsync(userId);
         if (user == null)
         {
-            return await Result<string>.FailAsync(_localizer["User Not Found"]);
+            return Result.Fail<string>(_localizer["User Not Found"]);
         }
 
         var filePath = _uploadService.UploadAsync(request);
@@ -108,7 +108,7 @@ public class AccountService : IAccountService
         IdentityResult identityResult = await _userManager.UpdateAsync(user);
         List<string> errors = identityResult.Errors.Select(e => _localizer[e.Description].ToString()).ToList();
         return identityResult.Succeeded
-            ? await Result<string>.SuccessAsync(data: filePath)
-            : await Result<string>.FailAsync(errors);
+            ? filePath
+            : Result.Fail<string>(errors);
     }
 }

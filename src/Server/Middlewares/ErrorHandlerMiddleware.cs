@@ -21,7 +21,7 @@ public class ErrorHandlerMiddleware
         {
             HttpResponse response = context.Response;
             response.ContentType = "application/json";
-            Result<string> responseModel = await Result<string>.FailAsync(error.Message);
+            var responseModel = Result.Fail(error.Message);
 
             response.StatusCode = error switch
             {

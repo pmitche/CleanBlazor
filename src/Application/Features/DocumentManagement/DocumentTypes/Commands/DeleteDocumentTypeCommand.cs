@@ -39,18 +39,18 @@ internal sealed class DeleteDocumentTypeCommandHandler : ICommandHandler<DeleteD
         var isDocumentTypeUsed = await _documentRepository.IsDocumentTypeUsedAsync(command.Id);
         if (isDocumentTypeUsed)
         {
-            return await Result<int>.FailAsync(_localizer["Deletion Not Allowed"]);
+            return Result.Fail<int>(_localizer["Deletion Not Allowed"]);
         }
 
         var documentType = await _documentTypeRepository.GetByIdAsync(command.Id, cancellationToken);
         if (documentType == null)
         {
-            return await Result<int>.FailAsync(_localizer["Document Type Not Found!"]);
+            return Result.Fail<int>(_localizer["Document Type Not Found!"]);
         }
 
         _documentTypeRepository.Remove(documentType);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
         _cache.Remove(ApplicationConstants.Cache.GetAllDocumentTypesCacheKey);
-        return await Result<int>.SuccessAsync(documentType.Id, _localizer["Document Type Deleted"]);
+        return Result.Ok(documentType.Id, _localizer["Document Type Deleted"]);
     }
 }

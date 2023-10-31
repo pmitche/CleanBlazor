@@ -92,8 +92,8 @@ public partial class AuditTrails
 
     private async Task GetDataAsync()
     {
-        IResult<IEnumerable<AuditResponse>> response = await AuditManager.GetCurrentUserTrailsAsync();
-        if (response.Succeeded)
+        Result<IEnumerable<AuditResponse>> response = await AuditManager.GetCurrentUserTrailsAsync();
+        if (response.IsSuccess)
         {
             Trails = response.Data
                 .Select(x => new RelatedAuditTrail
@@ -129,9 +129,9 @@ public partial class AuditTrails
 
     private async Task ExportToExcelAsync()
     {
-        IResult<string> response =
+        Result<string> response =
             await AuditManager.DownloadFileAsync(_searchString, _searchInOldValues, _searchInNewValues);
-        if (response.Succeeded)
+        if (response.IsSuccess)
         {
             await JsRuntime.InvokeVoidAsync("Download",
                 new

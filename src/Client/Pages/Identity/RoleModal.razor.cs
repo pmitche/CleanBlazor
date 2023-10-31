@@ -33,8 +33,8 @@ public partial class RoleModal
 
     private async Task SaveAsync()
     {
-        IResult<string> response = await RoleManager.SaveAsync(RoleModel);
-        if (response.Succeeded)
+        Result<string> response = await RoleManager.SaveAsync(RoleModel);
+        if (response.IsSuccess)
         {
             SnackBar.Success(response.Messages[0]);
             await HubConnection.SendAsync(ApplicationConstants.SignalR.SendUpdateDashboard);

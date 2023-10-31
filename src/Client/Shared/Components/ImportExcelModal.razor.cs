@@ -18,7 +18,7 @@ public partial class ImportExcelModal
     [CascadingParameter] private MudDialogInstance MudDialog { get; set; }
     [Parameter] public UploadRequest UploadRequest { get; set; } = new();
     [Parameter] public string ModelName { get; set; }
-    [Parameter] public Func<UploadRequest, Task<IResult<int>>> OnSaved { get; set; }
+    [Parameter] public Func<UploadRequest, Task<Result<int>>> OnSaved { get; set; }
     private bool Validated => _fluentValidationValidator.Validate(options => { options.IncludeAllRuleSets(); });
 
     public void Cancel() => MudDialog.Cancel();
@@ -28,8 +28,8 @@ public partial class ImportExcelModal
         if (OnSaved != null)
         {
             _uploading = true;
-            IResult<int> result = await OnSaved.Invoke(UploadRequest);
-            if (result.Succeeded)
+            Result<int> result = await OnSaved.Invoke(UploadRequest);
+            if (result.IsSuccess)
             {
                 SnackBar.Success(result.Messages[0]);
                 MudDialog.Close();

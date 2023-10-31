@@ -42,24 +42,23 @@ public class IdentityService : ITokenService
         BlazorHeroUser user = await _userManager.FindByEmailAsync(model.Email);
         if (user == null)
         {
-            return await Result<TokenResponse>.FailAsync(_localizer["User Not Found."]);
+            return Result.Fail<TokenResponse>(_localizer["User Not Found."]);
         }
 
         if (!user.IsActive)
         {
-            return await Result<TokenResponse>.FailAsync(
-                _localizer["User Not Active. Please contact the administrator."]);
+            return Result.Fail<TokenResponse>(_localizer["User Not Active. Please contact the administrator."]);
         }
 
         if (!user.EmailConfirmed)
         {
-            return await Result<TokenResponse>.FailAsync(_localizer["E-Mail not confirmed."]);
+            return Result.Fail<TokenResponse>(_localizer["E-Mail not confirmed."]);
         }
 
         var passwordValid = await _userManager.CheckPasswordAsync(user, model.Password);
         if (!passwordValid)
         {
-            return await Result<TokenResponse>.FailAsync(_localizer["Invalid Credentials."]);
+            return Result.Fail<TokenResponse>(_localizer["Invalid Credentials."]);
         }
 
         user.RefreshToken = GenerateRefreshToken();
@@ -71,27 +70,32 @@ public class IdentityService : ITokenService
         {
             Token = token, RefreshToken = user.RefreshToken, UserImageUrl = user.ProfilePictureDataUrl
         };
-        return await Result<TokenResponse>.SuccessAsync(response);
+        return response;
     }
 
     public async Task<Result<TokenResponse>> GetRefreshTokenAsync(RefreshTokenRequest model)
     {
         if (model is null)
         {
-            return await Result<TokenResponse>.FailAsync(_localizer["Invalid Client Token."]);
+            return Result.Fail<TokenResponse>(_localizer["Invalid Client Token."]);
         }
 
         ClaimsPrincipal userPrincipal = GetPrincipalFromExpiredToken(model.Token);
         var userEmail = userPrincipal.FindFirstValue(ClaimTypes.Email);
+        if (userEmail == null)
+        {
+            return Result.Fail<TokenResponse>(_localizer["Email Not Found"]);
+        }
+
         BlazorHeroUser user = await _userManager.FindByEmailAsync(userEmail);
         if (user == null)
         {
-            return await Result<TokenResponse>.FailAsync(_localizer["User Not Found."]);
+            return Result.Fail<TokenResponse>(_localizer["User Not Found."]);
         }
 
         if (user.RefreshToken != model.RefreshToken || user.RefreshTokenExpiryTime <= DateTime.Now)
         {
-            return await Result<TokenResponse>.FailAsync(_localizer["Invalid Client Token."]);
+            return Result.Fail<TokenResponse>(_localizer["Invalid Client Token."]);
         }
 
         var token = GenerateEncryptedToken(GetSigningCredentials(), await GetClaimsAsync(user));
@@ -102,7 +106,7 @@ public class IdentityService : ITokenService
         {
             Token = token, RefreshToken = user.RefreshToken, RefreshTokenExpiryTime = user.RefreshTokenExpiryTime
         };
-        return await Result<TokenResponse>.SuccessAsync(response);
+        return response;
     }
 
     private async Task<string> GenerateJwtAsync(BlazorHeroUser user)

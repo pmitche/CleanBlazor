@@ -7,11 +7,11 @@ public interface IProductManager : IManager
 {
     Task<PaginatedResult<GetAllPagedProductsResponse>> GetProductsAsync(GetAllPagedProductsRequest request);
 
-    Task<IResult<string>> GetProductImageAsync(int id);
+    Task<Result<string>> GetProductImageAsync(int id);
 
-    Task<IResult<int>> SaveAsync(AddEditProductRequest request);
+    Task<Result<int>> SaveAsync(AddEditProductRequest request);
 
-    Task<IResult<int>> DeleteAsync(int id);
+    Task<Result<int>> DeleteAsync(int id);
 
-    Task<IResult<string>> ExportToExcelAsync(string searchString = "");
+    Task<Result<string>> ExportToExcelAsync(string searchString = "");
 }

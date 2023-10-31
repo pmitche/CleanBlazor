@@ -47,6 +47,6 @@ internal sealed class ExportProductsQueryHandler : IQueryHandler<ExportProductsQ
             },
             _localizer["Products"]);
 
-        return await Result<string>.SuccessAsync(data: data);
+        return data;
     }
 }

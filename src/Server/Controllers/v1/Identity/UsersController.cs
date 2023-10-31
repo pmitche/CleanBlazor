@@ -37,7 +37,7 @@ public class UsersController : BaseApiController
     [HttpGet("{userId}")]
     public async Task<IActionResult> GetById(string userId)
     {
-        IResult<UserResponse> user = await _userService.GetAsync(userId);
+        Result<UserResponse> user = await _userService.GetAsync(userId);
         return Ok(user);
     }
 
@@ -50,7 +50,7 @@ public class UsersController : BaseApiController
     [HttpGet("{userId}/roles")]
     public async Task<IActionResult> GetRolesAsync(string userId)
     {
-        IResult<UserRolesResponse> userRoles = await _userService.GetRolesAsync(userId);
+        Result<UserRolesResponse> userRoles = await _userService.GetRolesAsync(userId);
         return Ok(userRoles);
     }
 

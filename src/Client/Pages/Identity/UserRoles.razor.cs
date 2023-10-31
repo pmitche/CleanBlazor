@@ -35,15 +35,15 @@ public partial class UserRoles
             .Succeeded;
 
         var userId = Id;
-        IResult<UserResponse> result = await UserManager.GetAsync(userId);
-        if (result.Succeeded)
+        Result<UserResponse> result = await UserManager.GetAsync(userId);
+        if (result.IsSuccess)
         {
             UserResponse user = result.Data;
             if (user != null)
             {
                 Title = $"{user.FirstName} {user.LastName}";
                 Description = string.Format(Localizer["Manage {0} {1}'s Roles"], user.FirstName, user.LastName);
-                IResult<UserRolesResponse> response = await UserManager.GetRolesAsync(user.Id);
+                Result<UserRolesResponse> response = await UserManager.GetRolesAsync(user.Id);
                 UserRolesList = response.Data.UserRoles;
             }
         }
@@ -54,8 +54,8 @@ public partial class UserRoles
     private async Task SaveAsync()
     {
         var request = new UpdateUserRolesRequest { UserId = Id, UserRoles = UserRolesList };
-        IResult result = await UserManager.UpdateRolesAsync(request);
-        if (result.Succeeded)
+        Result result = await UserManager.UpdateRolesAsync(request);
+        if (result.IsSuccess)
         {
             SnackBar.Success(result.Messages[0]);
             NavigationManager.NavigateTo("/identity/users");

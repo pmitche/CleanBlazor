@@ -42,7 +42,7 @@ internal sealed class ImportBrandsCommandHandler : ICommandHandler<ImportBrandsC
     public async Task<Result<int>> Handle(ImportBrandsCommand request, CancellationToken cancellationToken)
     {
         MemoryStream stream = new(request.UploadRequest.Data);
-        IResult<IEnumerable<Brand>> result = await _excelService.ImportAsync(stream,
+        Result<IEnumerable<Brand>> result = await _excelService.ImportAsync(stream,
             new Dictionary<string, Func<DataRow, Brand, object>>
             {
                 { _localizer["Name"], (row, item) => item.Name = row[_localizer["Name"]].ToString() },
@@ -57,9 +57,9 @@ internal sealed class ImportBrandsCommandHandler : ICommandHandler<ImportBrandsC
             },
             _localizer["Brands"]);
 
-        if (!result.Succeeded)
+        if (!result.IsSuccess)
         {
-            return await Result<int>.FailAsync(result.Messages);
+            return Result.Fail<int>(result.Messages);
         }
 
         IEnumerable<Brand> importedBrands = result.Data;
@@ -82,12 +82,12 @@ internal sealed class ImportBrandsCommandHandler : ICommandHandler<ImportBrandsC
 
         if (errorsOccurred)
         {
-            return await Result<int>.FailAsync(errors);
+            return Result.Fail<int>(errors);
         }
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
         _cache.Remove(ApplicationConstants.Cache.GetAllBrandsCacheKey);
-        return await Result<int>.SuccessAsync(result.Data.Count(), result.Messages[0]);
+        return Result.Ok(result.Data.Count(), result.Messages[0]);
     }
 
     private ValidationResult ValidateBrand(Brand brand)

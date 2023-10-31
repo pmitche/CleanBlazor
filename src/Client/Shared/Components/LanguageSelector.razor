@@ -14,7 +14,7 @@
     private async Task ChangeLanguageAsync(string languageCode)
     {
         var result = await ClientPreferenceManager.ChangeLanguageAsync(languageCode);
-        if (result.Succeeded)
+        if (result.IsSuccess)
         {
             SnackBar.Success(result.Messages[0]);
             NavigationManager.NavigateTo(NavigationManager.Uri, true);

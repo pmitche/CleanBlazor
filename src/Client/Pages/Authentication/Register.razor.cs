@@ -18,8 +18,8 @@ public partial class Register
 
     private async Task SubmitAsync()
     {
-        IResult response = await UserManager.RegisterUserAsync(_registerUserModel);
-        if (response.Succeeded)
+        Result response = await UserManager.RegisterUserAsync(_registerUserModel);
+        if (response.IsSuccess)
         {
             SnackBar.Success(response.Messages[0]);
             NavigationManager.NavigateTo("/login");

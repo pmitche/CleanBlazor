@@ -37,12 +37,12 @@ internal sealed class DeleteDocumentCommandHandler : ICommandHandler<DeleteDocum
         Document document = await _documentRepository.GetByIdAsync(command.Id, cancellationToken);
         if (document == null)
         {
-            return await Result<int>.FailAsync(_localizer["Document Not Found!"]);
+            return Result.Fail<int>(_localizer["Document Not Found!"]);
         }
 
         _documentRepository.Remove(document);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
         _cache.Remove(ApplicationConstants.Cache.GetAllBrandsCacheKey);
-        return await Result<int>.SuccessAsync(document.Id, _localizer["Document Deleted"]);
+        return Result.Ok(document.Id, _localizer["Document Deleted"]);
     }
 }

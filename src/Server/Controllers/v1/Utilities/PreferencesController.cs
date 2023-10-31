@@ -1,8 +1,8 @@
 ﻿using BlazorHero.CleanArchitecture.Server.Managers.Preferences;
 using BlazorHero.CleanArchitecture.Shared.Constants.Permission;
+using BlazorHero.CleanArchitecture.Shared.Wrapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using IResult = BlazorHero.CleanArchitecture.Shared.Wrapper.IResult;
 
 namespace BlazorHero.CleanArchitecture.Server.Controllers.v1.Utilities;
 
@@ -22,7 +22,7 @@ public class PreferencesController : BaseApiController
     [HttpPost("changeLanguage")]
     public async Task<IActionResult> ChangeLanguageAsync(string languageCode)
     {
-        IResult result = await _serverPreferenceManager.ChangeLanguageAsync(languageCode);
+        Result result = await _serverPreferenceManager.ChangeLanguageAsync(languageCode);
         return Ok(result);
     }
 }

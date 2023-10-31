@@ -12,25 +12,25 @@ public class RoleClaimManager : IRoleClaimManager
 
     public RoleClaimManager(HttpClient httpClient) => _httpClient = httpClient;
 
-    public async Task<IResult<string>> DeleteAsync(string id)
+    public async Task<Result<string>> DeleteAsync(string id)
     {
         HttpResponseMessage response = await _httpClient.DeleteAsync(RoleClaimsEndpoints.DeleteByRoleId(id));
         return await response.ToResult<string>();
     }
 
-    public async Task<IResult<List<RoleClaimResponse>>> GetRoleClaimsAsync()
+    public async Task<Result<List<RoleClaimResponse>>> GetRoleClaimsAsync()
     {
         HttpResponseMessage response = await _httpClient.GetAsync(RoleClaimsEndpoints.GetAll);
         return await response.ToResult<List<RoleClaimResponse>>();
     }
 
-    public async Task<IResult<List<RoleClaimResponse>>> GetRoleClaimsByRoleIdAsync(string roleId)
+    public async Task<Result<List<RoleClaimResponse>>> GetRoleClaimsByRoleIdAsync(string roleId)
     {
         HttpResponseMessage response = await _httpClient.GetAsync(RoleClaimsEndpoints.GetAllByRoleId(roleId));
         return await response.ToResult<List<RoleClaimResponse>>();
     }
 
-    public async Task<IResult<string>> SaveAsync(RoleClaimRequest role)
+    public async Task<Result<string>> SaveAsync(RoleClaimRequest role)
     {
         HttpResponseMessage response = await _httpClient.PostAsJsonAsync(RoleClaimsEndpoints.Save, role);
         return await response.ToResult<string>();

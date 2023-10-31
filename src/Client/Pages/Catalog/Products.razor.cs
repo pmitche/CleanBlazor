@@ -85,7 +85,7 @@ public partial class Products
             PageSize = pageSize, PageNumber = pageNumber + 1, SearchString = _searchString, OrderBy = orderings
         };
         PaginatedResult<GetAllPagedProductsResponse> response = await ProductManager.GetProductsAsync(request);
-        if (response.Succeeded)
+        if (response.IsSuccess)
         {
             _totalItems = response.TotalCount;
             _currentPage = response.CurrentPage;
@@ -105,8 +105,8 @@ public partial class Products
 
     private async Task ExportToExcel()
     {
-        IResult<string> response = await ProductManager.ExportToExcelAsync(_searchString);
-        if (response.Succeeded)
+        Result<string> response = await ProductManager.ExportToExcelAsync(_searchString);
+        if (response.IsSuccess)
         {
             await JsRuntime.InvokeVoidAsync("Download",
                 new
@@ -177,8 +177,8 @@ public partial class Products
         DialogResult result = await dialog.Result;
         if (!result.Canceled)
         {
-            IResult<int> response = await ProductManager.DeleteAsync(id);
-            if (response.Succeeded)
+            Result<int> response = await ProductManager.DeleteAsync(id);
+            if (response.IsSuccess)
             {
                 OnSearch("");
                 await HubConnection.SendAsync(ApplicationConstants.SignalR.SendUpdateDashboard);

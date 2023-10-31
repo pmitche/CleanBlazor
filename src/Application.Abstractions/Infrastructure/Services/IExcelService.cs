@@ -10,7 +10,7 @@ public interface IExcelService
         Dictionary<string, Func<TData, object>> mappers,
         string sheetName = "Sheet1");
 
-    Task<IResult<IEnumerable<TEntity>>> ImportAsync<TEntity>(
+    Task<Result<IEnumerable<TEntity>>> ImportAsync<TEntity>(
         Stream data,
         Dictionary<string, Func<DataRow, TEntity, object>> mappers,
         string sheetName = "Sheet1");

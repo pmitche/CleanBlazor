@@ -13,8 +13,8 @@ public partial class Forgot
 
     private async Task SubmitAsync()
     {
-        IResult result = await UserManager.ForgotPasswordAsync(_emailModel);
-        if (result.Succeeded)
+        Result result = await UserManager.ForgotPasswordAsync(_emailModel);
+        if (result.IsSuccess)
         {
             SnackBar.Success(Localizer["Done!"]);
             NavigationManager.NavigateTo("/");

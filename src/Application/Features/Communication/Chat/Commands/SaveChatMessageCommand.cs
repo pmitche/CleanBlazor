@@ -8,9 +8,9 @@ using BlazorHero.CleanArchitecture.Shared.Wrapper;
 
 namespace BlazorHero.CleanArchitecture.Application.Features.Communication.Chat.Commands;
 
-public sealed record SaveChatMessageCommand(string ToUserId, string Message) : ICommand<IResult>;
+public sealed record SaveChatMessageCommand(string ToUserId, string Message) : ICommand<Result>;
 
-internal sealed class SaveChatMessageCommandHandler : ICommandHandler<SaveChatMessageCommand, IResult>
+internal sealed class SaveChatMessageCommandHandler : ICommandHandler<SaveChatMessageCommand, Result>
 {
     private readonly ICurrentUserService _currentUserService;
     private readonly IDateTimeService _dateTimeService;
@@ -29,7 +29,7 @@ internal sealed class SaveChatMessageCommandHandler : ICommandHandler<SaveChatMe
         _unitOfWork = unitOfWork;
     }
 
-    public async Task<IResult> Handle(SaveChatMessageCommand request, CancellationToken cancellationToken)
+    public async Task<Result> Handle(SaveChatMessageCommand request, CancellationToken cancellationToken)
     {
         var chatMessage = new ChatMessage<IChatUser>()
         {
@@ -40,6 +40,6 @@ internal sealed class SaveChatMessageCommandHandler : ICommandHandler<SaveChatMe
         };
         _chatMessageRepository.Add(chatMessage);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
-        return await Result.SuccessAsync();
+        return Result.Ok();
     }
 }

@@ -36,6 +36,6 @@ internal sealed class GetAllDocumentTypesQueryHandler
         var documentTypes = await _cache.GetOrAddAsync(ApplicationConstants.Cache.GetAllDocumentTypesCacheKey,
                 () => _documentTypeRepository.GetAllAsync(cancellationToken));
         var mappedDocumentTypes = _mapper.Map<List<GetAllDocumentTypesResponse>>(documentTypes);
-        return await Result<List<GetAllDocumentTypesResponse>>.SuccessAsync(mappedDocumentTypes);
+        return mappedDocumentTypes;
     }
 }

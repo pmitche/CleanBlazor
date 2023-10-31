@@ -48,8 +48,8 @@ public partial class Dashboard
 
     private async Task LoadDataAsync()
     {
-        IResult<DashboardDataResponse> response = await DashboardManager.GetDataAsync();
-        if (response.Succeeded)
+        Result<DashboardDataResponse> response = await DashboardManager.GetDataAsync();
+        if (response.IsSuccess)
         {
             ProductCount = response.Data.ProductCount;
             BrandCount = response.Data.BrandCount;

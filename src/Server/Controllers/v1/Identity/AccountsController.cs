@@ -1,9 +1,9 @@
 ﻿using BlazorHero.CleanArchitecture.Application.Abstractions.Infrastructure.Services;
 using BlazorHero.CleanArchitecture.Application.Abstractions.Infrastructure.Services.Identity;
 using BlazorHero.CleanArchitecture.Contracts.Identity;
+using BlazorHero.CleanArchitecture.Shared.Wrapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using IResult = BlazorHero.CleanArchitecture.Shared.Wrapper.IResult;
 
 namespace BlazorHero.CleanArchitecture.Server.Controllers.v1.Identity;
 
@@ -28,7 +28,7 @@ public class AccountsController : BaseApiController
     [HttpPut("update-profile")]
     public async Task<ActionResult> UpdateProfile(UpdateProfileRequest model)
     {
-        IResult response = await _accountService.UpdateProfileAsync(model, _currentUser.UserId);
+        Result response = await _accountService.UpdateProfileAsync(model, _currentUser.UserId);
         return Ok(response);
     }
 
@@ -40,7 +40,7 @@ public class AccountsController : BaseApiController
     [HttpPut("change-password")]
     public async Task<ActionResult> ChangePassword(ChangePasswordRequest model)
     {
-        IResult response = await _accountService.ChangePasswordAsync(model, _currentUser.UserId);
+        Result response = await _accountService.ChangePasswordAsync(model, _currentUser.UserId);
         return Ok(response);
     }
 

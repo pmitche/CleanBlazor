@@ -55,15 +55,15 @@ public class UserService : IUserService
     {
         List<BlazorHeroUser> users = await _userManager.Users.ToListAsync();
         var result = _mapper.Map<List<UserResponse>>(users);
-        return await Result<List<UserResponse>>.SuccessAsync(result);
+        return result;
     }
 
-    public async Task<IResult> RegisterAsync(RegisterRequest request, string origin)
+    public async Task<Result> RegisterAsync(RegisterRequest request, string origin)
     {
         BlazorHeroUser userWithSameUserName = await _userManager.FindByNameAsync(request.UserName);
         if (userWithSameUserName != null)
         {
-            return await Result.FailAsync(string.Format(_localizer["Username {0} is already taken."],
+            return Result.Fail(string.Format(_localizer["Username {0} is already taken."],
                 request.UserName));
         }
 
@@ -84,7 +84,7 @@ public class UserService : IUserService
                 await _userManager.Users.FirstOrDefaultAsync(x => x.PhoneNumber == request.PhoneNumber);
             if (userWithSamePhoneNumber != null)
             {
-                return await Result.FailAsync(string.Format(_localizer["Phone number {0} is already registered."],
+                return Result.Fail(string.Format(_localizer["Phone number {0} is already registered."],
                     request.PhoneNumber));
             }
         }
@@ -92,20 +92,19 @@ public class UserService : IUserService
         BlazorHeroUser userWithSameEmail = await _userManager.FindByEmailAsync(request.Email);
         if (userWithSameEmail != null)
         {
-            return await Result.FailAsync(string.Format(_localizer["Email {0} is already registered."], request.Email));
+            return Result.Fail(string.Format(_localizer["Email {0} is already registered."], request.Email));
         }
 
         IdentityResult result = await _userManager.CreateAsync(user, request.Password);
         if (!result.Succeeded)
         {
-            return await Result.FailAsync(result.Errors.Select(a => _localizer[a.Description].ToString()).ToList());
+            return Result.Fail(result.Errors.Select(a => _localizer[a.Description].ToString()).ToList());
         }
 
         await _userManager.AddToRoleAsync(user, RoleConstants.BasicRole);
         if (request.AutoConfirmEmail)
         {
-            return await Result<string>.SuccessAsync(user.Id,
-                string.Format(_localizer["User {0} Registered."], user.UserName));
+            return Result.Ok(user.Id, string.Format(_localizer["User {0} Registered."], user.UserName));
         }
 
         var verificationUri = await SendVerificationEmail(user, origin);
@@ -119,35 +118,35 @@ public class UserService : IUserService
             Subject = _localizer["Confirm Registration"]
         };
         BackgroundJob.Enqueue(() => _mailService.SendAsync(mailRequest));
-        return await Result<string>.SuccessAsync(user.Id,
-            string.Format(_localizer["User {0} Registered. Please check your Mailbox to verify!"],
-                user.UserName));
-
+        return Result.Ok(user.Id,
+            string.Format(_localizer["User {0} Registered. Please check your Mailbox to verify!"], user.UserName));
     }
 
-    public async Task<IResult<UserResponse>> GetAsync(string userId)
+    public async Task<Result<UserResponse>> GetAsync(string userId)
     {
         BlazorHeroUser user = await _userManager.Users.Where(u => u.Id == userId).FirstOrDefaultAsync();
         var result = _mapper.Map<UserResponse>(user);
-        return await Result<UserResponse>.SuccessAsync(result);
+        return result;
     }
 
-    public async Task<IResult> ToggleUserStatusAsync(ToggleUserStatusRequest request)
+    public async Task<Result> ToggleUserStatusAsync(ToggleUserStatusRequest request)
     {
         BlazorHeroUser user = await _userManager.Users.FirstOrDefaultAsync(u => u.Id == request.UserId);
+        if (user == null)
+        {
+            return Result.Fail(_localizer["User Not Found."]);
+        }
+
         var isAdmin = await _userManager.IsInRoleAsync(user, RoleConstants.AdministratorRole);
         if (isAdmin)
         {
-            return await Result.FailAsync(_localizer["Administrators Profile's Status cannot be toggled"]);
+            return Result.Fail(_localizer["Administrators Profile's Status cannot be toggled"]);
         }
 
-        if (user != null)
-        {
-            user.IsActive = request.ActivateUser;
-            await _userManager.UpdateAsync(user);
-        }
+        user.IsActive = request.ActivateUser;
+        await _userManager.UpdateAsync(user);
 
-        return await Result.SuccessAsync();
+        return Result.Ok();
     }
 
     public async Task<bool> IsInRoleAsync(string userId, string role)
@@ -155,7 +154,7 @@ public class UserService : IUserService
         var user = await _userManager.FindByIdAsync(userId);
         return user != null && await _userManager.IsInRoleAsync(user, role);
     }
-    public async Task<IResult<UserRolesResponse>> GetRolesAsync(string userId)
+    public async Task<Result<UserRolesResponse>> GetRolesAsync(string userId)
     {
         var viewModel = new List<UserRoleModel>();
         BlazorHeroUser user = await _userManager.FindByIdAsync(userId);
@@ -177,21 +176,31 @@ public class UserService : IUserService
         }
 
         var result = new UserRolesResponse { UserRoles = viewModel };
-        return await Result<UserRolesResponse>.SuccessAsync(result);
+        return result;
     }
 
-    public async Task<IResult> UpdateRolesAsync(UpdateUserRolesRequest request)
+    public async Task<Result> UpdateRolesAsync(UpdateUserRolesRequest request)
     {
         BlazorHeroUser user = await _userManager.FindByIdAsync(request.UserId);
+        if (user == null)
+        {
+            return Result.Fail(_localizer["User Not Found."]);
+        }
+
         if (user.Email == "mukesh@blazorhero.com")
         {
-            return await Result.FailAsync(_localizer["Not Allowed."]);
+            return Result.Fail(_localizer["Not Allowed."]);
         }
 
         IList<string> roles = await _userManager.GetRolesAsync(user);
         List<UserRoleModel> selectedRoles = request.UserRoles.Where(x => x.Selected).ToList();
 
         BlazorHeroUser currentUser = await _userManager.FindByIdAsync(_currentUserService.UserId);
+        if (currentUser == null)
+        {
+            return Result.Fail(_localizer["User Not Found."]);
+        }
+
         if (!await _userManager.IsInRoleAsync(currentUser, RoleConstants.AdministratorRole))
         {
             var tryToAddAdministratorRole = selectedRoles
@@ -200,24 +209,29 @@ public class UserService : IUserService
             if ((tryToAddAdministratorRole && !userHasAdministratorRole) ||
                 (!tryToAddAdministratorRole && userHasAdministratorRole))
             {
-                return await Result.FailAsync(
+                return Result.Fail(
                     _localizer["Not Allowed to add or delete Administrator Role if you have not this role."]);
             }
         }
 
         await _userManager.RemoveFromRolesAsync(user, roles);
         await _userManager.AddToRolesAsync(user, selectedRoles.Select(y => y.RoleName));
-        return await Result.SuccessAsync(_localizer["Roles Updated"]);
+        return Result.Ok(_localizer["Roles Updated"]);
     }
 
-    public async Task<IResult<string>> ConfirmEmailAsync(string userId, string code)
+    public async Task<Result<string>> ConfirmEmailAsync(string userId, string code)
     {
-        BlazorHeroUser user = await _userManager.FindByIdAsync(userId);
         code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(code));
+        BlazorHeroUser user = await _userManager.FindByIdAsync(userId);
+        if (user == null)
+        {
+            return Result.Fail<string>(_localizer["An Error has occurred!"]);
+        }
+
         IdentityResult result = await _userManager.ConfirmEmailAsync(user, code);
         if (result.Succeeded)
         {
-            return await Result<string>.SuccessAsync(user.Id,
+            return Result.Ok(user.Id,
                 string.Format(
                     _localizer[
                         "Account Confirmed for {0}. You can now use the /api/identity/token endpoint to generate JWT."],
@@ -227,13 +241,13 @@ public class UserService : IUserService
         throw new ApiException(string.Format(_localizer["An error occurred while confirming {0}"], user.Email));
     }
 
-    public async Task<IResult> ForgotPasswordAsync(ForgotPasswordRequest request, string origin)
+    public async Task<Result> ForgotPasswordAsync(ForgotPasswordRequest request, string origin)
     {
         BlazorHeroUser user = await _userManager.FindByEmailAsync(request.Email);
         if (user == null || !await _userManager.IsEmailConfirmedAsync(user))
         {
             // Don't reveal that the user does not exist or is not confirmed
-            return await Result.FailAsync(_localizer["An Error has occurred!"]);
+            return Result.Fail(_localizer["An Error has occurred!"]);
         }
 
         // For more information on how to enable account confirmation and password reset please
@@ -251,25 +265,25 @@ public class UserService : IUserService
             To = request.Email
         };
         BackgroundJob.Enqueue(() => _mailService.SendAsync(mailRequest));
-        return await Result.SuccessAsync(_localizer["Password Reset Mail has been sent to your authorized Email."]);
+        return Result.Ok(_localizer["Password Reset Mail has been sent to your authorized Email."]);
     }
 
-    public async Task<IResult> ResetPasswordAsync(ResetPasswordRequest request)
+    public async Task<Result> ResetPasswordAsync(ResetPasswordRequest request)
     {
         BlazorHeroUser user = await _userManager.FindByEmailAsync(request.Email);
         if (user == null)
         {
             // Don't reveal that the user does not exist
-            return await Result.FailAsync(_localizer["An Error has occured!"]);
+            return Result.Fail(_localizer["An Error has occured!"]);
         }
 
         IdentityResult result = await _userManager.ResetPasswordAsync(user, request.Token, request.Password);
-        if (result.Succeeded)
+        if (!result.Succeeded)
         {
-            return await Result.SuccessAsync(_localizer["Password Reset Successful!"]);
+            return Result.Fail(_localizer["An Error has occured!"]);
         }
 
-        return await Result.FailAsync(_localizer["An Error has occured!"]);
+        return Result.Ok(_localizer["Password Reset Successful!"]);
     }
 
     public async Task<int> GetCountAsync()

@@ -25,6 +25,6 @@ internal sealed class GetProductByIdQueryHandler : IQueryHandler<GetBrandByIdQue
     {
         var brand = await _brandRepository.GetByIdAsync(query.Id, cancellationToken);
         var mappedBrand = _mapper.Map<GetBrandByIdResponse>(brand);
-        return await Result<GetBrandByIdResponse>.SuccessAsync(mappedBrand);
+        return mappedBrand;
     }
 }

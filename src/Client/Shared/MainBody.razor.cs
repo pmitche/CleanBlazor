@@ -106,15 +106,15 @@ public partial class MainBody
             {
                 if (CurrentUserId != userId)
                 {
-                    IResult<List<RoleResponse>> rolesResponse = await RoleManager.GetRolesAsync();
-                    if (rolesResponse.Succeeded)
+                    Result<List<RoleResponse>> rolesResponse = await RoleManager.GetRolesAsync();
+                    if (rolesResponse.IsSuccess)
                     {
                         RoleResponse role = rolesResponse.Data.FirstOrDefault(x => x.Id == roleId);
                         if (role != null)
                         {
-                            IResult<UserRolesResponse> currentUserRolesResponse =
+                            Result<UserRolesResponse> currentUserRolesResponse =
                                 await UserManager.GetRolesAsync(CurrentUserId);
-                            if (currentUserRolesResponse.Succeeded &&
+                            if (currentUserRolesResponse.IsSuccess &&
                                 currentUserRolesResponse.Data.UserRoles.Any(x => x.RoleName == role.Name))
                             {
                                 SnackBar.Error(
@@ -170,14 +170,14 @@ public partial class MainBody
 
                 SecondName = user.GetLastName();
                 Email = user.GetEmail();
-                IResult<string> imageResponse = await AccountManager.GetProfilePictureAsync(CurrentUserId);
-                if (imageResponse.Succeeded)
+                Result<string> imageResponse = await AccountManager.GetProfilePictureAsync(CurrentUserId);
+                if (imageResponse.IsSuccess)
                 {
                     ImageDataUrl = imageResponse.Data;
                 }
 
-                IResult<UserResponse> currentUserResult = await UserManager.GetAsync(CurrentUserId);
-                if (!currentUserResult.Succeeded || currentUserResult.Data == null)
+                Result<UserResponse> currentUserResult = await UserManager.GetAsync(CurrentUserId);
+                if (!currentUserResult.IsSuccess || currentUserResult.Data == null)
                 {
                     SnackBar.Error(
                         Localizer["You are logged out because the user with your Token has been deleted."]);

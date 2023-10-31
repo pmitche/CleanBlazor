@@ -39,13 +39,13 @@ public class AuthenticationManager : IAuthenticationManager
         return state.User;
     }
 
-    public async Task<IResult> Login(TokenRequest model)
+    public async Task<Result> Login(TokenRequest model)
     {
         HttpResponseMessage response = await _httpClient.PostAsJsonAsync(TokenEndpoints.Get, model);
-        IResult<TokenResponse> result = await response.ToResult<TokenResponse>();
-        if (!result.Succeeded)
+        Result<TokenResponse> result = await response.ToResult<TokenResponse>();
+        if (result.IsFailure)
         {
-            return await Result.FailAsync(result.Messages);
+            return Result.Fail(result.Messages);
         }
 
         var token = result.Data.Token;
@@ -62,17 +62,17 @@ public class AuthenticationManager : IAuthenticationManager
 
         _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-        return await Result.SuccessAsync();
+        return Result.Ok();
     }
 
-    public async Task<IResult> Logout()
+    public async Task<Result> Logout()
     {
         await _localStorage.RemoveItemAsync(StorageConstants.Local.AuthToken);
         await _localStorage.RemoveItemAsync(StorageConstants.Local.RefreshToken);
         await _localStorage.RemoveItemAsync(StorageConstants.Local.UserImageUrl);
         ((BlazorHeroStateProvider)_authenticationStateProvider).MarkUserAsLoggedOut();
         _httpClient.DefaultRequestHeaders.Authorization = null;
-        return await Result.SuccessAsync();
+        return Result.Ok();
     }
 
     public async Task<string> RefreshToken()
@@ -83,9 +83,9 @@ public class AuthenticationManager : IAuthenticationManager
         HttpResponseMessage response = await _httpClient.PostAsJsonAsync(TokenEndpoints.Refresh,
             new RefreshTokenRequest { Token = token, RefreshToken = refreshToken });
 
-        IResult<TokenResponse> result = await response.ToResult<TokenResponse>();
+        Result<TokenResponse> result = await response.ToResult<TokenResponse>();
 
-        if (!result.Succeeded)
+        if (result.IsFailure)
         {
             throw new AuthenticationException(_localizer["Something went wrong during the refresh token action"]);
         }

@@ -45,6 +45,6 @@ internal sealed class ExportDocumentTypesQueryHandler : IQueryHandler<ExportDocu
             },
             _localizer["Document Types"]);
 
-        return await Result<string>.SuccessAsync(data: data);
+        return data;
     }
 }

@@ -65,8 +65,8 @@ public partial class Brands
 
     private async Task GetBrandsAsync()
     {
-        IResult<List<GetAllBrandsResponse>> response = await BrandManager.GetAllAsync();
-        if (response.Succeeded)
+        Result<List<GetAllBrandsResponse>> response = await BrandManager.GetAllAsync();
+        if (response.IsSuccess)
         {
             _brandList = response.Data.ToList();
         }
@@ -91,8 +91,8 @@ public partial class Brands
         DialogResult result = await dialog.Result;
         if (!result.Canceled)
         {
-            IResult<int> response = await BrandManager.DeleteAsync(id);
-            if (response.Succeeded)
+            Result<int> response = await BrandManager.DeleteAsync(id);
+            if (response.IsSuccess)
             {
                 await Reset();
                 await HubConnection.SendAsync(ApplicationConstants.SignalR.SendUpdateDashboard);
@@ -108,8 +108,8 @@ public partial class Brands
 
     private async Task ExportToExcel()
     {
-        IResult<string> response = await BrandManager.ExportToExcelAsync(_searchString);
-        if (response.Succeeded)
+        Result<string> response = await BrandManager.ExportToExcelAsync(_searchString);
+        if (response.IsSuccess)
         {
             await JsRuntime.InvokeVoidAsync("Download",
                 new
@@ -159,11 +159,7 @@ public partial class Brands
         }
     }
 
-    private async Task<IResult<int>> ImportExcel(UploadRequest uploadFile)
-    {
-        IResult<int> result = await BrandManager.ImportAsync(uploadFile);
-        return result;
-    }
+    private async Task<Result<int>> ImportExcel(UploadRequest uploadFile) => await BrandManager.ImportAsync(uploadFile);
 
     private async Task InvokeImportModal()
     {
@@ -171,7 +167,7 @@ public partial class Brands
         {
             { nameof(ImportExcelModal.ModelName), Localizer["Brands"].ToString() }
         };
-        Func<UploadRequest, Task<IResult<int>>> importExcel = ImportExcel;
+        Func<UploadRequest, Task<Result<int>>> importExcel = ImportExcel;
         parameters.Add(nameof(ImportExcelModal.OnSaved), importExcel);
         var options = new DialogOptions
         {

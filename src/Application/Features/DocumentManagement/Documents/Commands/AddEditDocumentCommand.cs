@@ -63,14 +63,14 @@ internal sealed class AddEditDocumentCommandHandler : ICommandHandler<AddEditDoc
 
             _documentRepository.Add(doc);
             await _unitOfWork.SaveChangesAsync(cancellationToken);
-            return await Result<int>.SuccessAsync(doc.Id, _localizer["Document Saved"]);
+            return Result.Ok(doc.Id, _localizer["Document Saved"]);
         }
         else
         {
             var doc = await _documentRepository.GetByIdAsync(command.Id, cancellationToken);
             if (doc == null)
             {
-                return await Result<int>.FailAsync(_localizer["Document Not Found!"]);
+                return Result.Fail<int>(_localizer["Document Not Found!"]);
             }
 
             doc.Title = command.Title ?? doc.Title;
@@ -84,7 +84,7 @@ internal sealed class AddEditDocumentCommandHandler : ICommandHandler<AddEditDoc
             doc.DocumentTypeId = command.DocumentTypeId == 0 ? doc.DocumentTypeId : command.DocumentTypeId;
             _documentRepository.Update(doc);
             await _unitOfWork.SaveChangesAsync(cancellationToken);
-            return await Result<int>.SuccessAsync(doc.Id, _localizer["Document Updated"]);
+            return Result.Ok(doc.Id, _localizer["Document Updated"]);
         }
     }
 }

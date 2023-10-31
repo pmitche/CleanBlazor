@@ -5,5 +5,5 @@ namespace BlazorHero.CleanArchitecture.Client.Infrastructure.Managers.Dashboard;
 
 public interface IDashboardManager : IManager
 {
-    Task<IResult<DashboardDataResponse>> GetDataAsync();
+    Task<Result<DashboardDataResponse>> GetDataAsync();
 }

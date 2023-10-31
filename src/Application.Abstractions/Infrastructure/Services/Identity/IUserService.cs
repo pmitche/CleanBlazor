@@ -10,22 +10,22 @@ public interface IUserService
 
     Task<int> GetCountAsync();
 
-    Task<IResult<UserResponse>> GetAsync(string userId);
+    Task<Result<UserResponse>> GetAsync(string userId);
 
-    Task<IResult> RegisterAsync(RegisterRequest request, string origin);
+    Task<Result> RegisterAsync(RegisterRequest request, string origin);
 
-    Task<IResult> ToggleUserStatusAsync(ToggleUserStatusRequest request);
+    Task<Result> ToggleUserStatusAsync(ToggleUserStatusRequest request);
 
     Task<bool> IsInRoleAsync(string userId, string role);
-    Task<IResult<UserRolesResponse>> GetRolesAsync(string userId);
+    Task<Result<UserRolesResponse>> GetRolesAsync(string userId);
 
-    Task<IResult> UpdateRolesAsync(UpdateUserRolesRequest request);
+    Task<Result> UpdateRolesAsync(UpdateUserRolesRequest request);
 
-    Task<IResult<string>> ConfirmEmailAsync(string userId, string code);
+    Task<Result<string>> ConfirmEmailAsync(string userId, string code);
 
-    Task<IResult> ForgotPasswordAsync(ForgotPasswordRequest request, string origin);
+    Task<Result> ForgotPasswordAsync(ForgotPasswordRequest request, string origin);
 
-    Task<IResult> ResetPasswordAsync(ResetPasswordRequest request);
+    Task<Result> ResetPasswordAsync(ResetPasswordRequest request);
 
     Task<string> ExportToExcelAsync(string searchString = "");
 }

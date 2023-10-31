@@ -13,24 +13,24 @@ public class ChatManager : IChatManager
 
     public ChatManager(HttpClient httpClient) => _httpClient = httpClient;
 
-    public async Task<IResult<IEnumerable<ChatMessageResponse>>> GetChatHistoryAsync(string chatId)
+    public async Task<Result<IEnumerable<ChatMessageResponse>>> GetChatHistoryAsync(string chatId)
     {
         HttpResponseMessage response = await _httpClient.GetAsync(ChatEndpoint.GetChatHistory(chatId));
-        IResult<IEnumerable<ChatMessageResponse>> data = await response.ToResult<IEnumerable<ChatMessageResponse>>();
+        Result<IEnumerable<ChatMessageResponse>> data = await response.ToResult<IEnumerable<ChatMessageResponse>>();
         return data;
     }
 
-    public async Task<IResult<IEnumerable<ChatUserResponse>>> GetChatUsersAsync()
+    public async Task<Result<IEnumerable<ChatUserResponse>>> GetChatUsersAsync()
     {
         HttpResponseMessage response = await _httpClient.GetAsync(ChatEndpoint.GetAvailableUsers);
-        IResult<IEnumerable<ChatUserResponse>> data = await response.ToResult<IEnumerable<ChatUserResponse>>();
+        Result<IEnumerable<ChatUserResponse>> data = await response.ToResult<IEnumerable<ChatUserResponse>>();
         return data;
     }
 
-    public async Task<IResult> SaveMessageAsync(ChatMessage<IChatUser> chatMessage)
+    public async Task<Result> SaveMessageAsync(ChatMessage<IChatUser> chatMessage)
     {
         HttpResponseMessage response = await _httpClient.PostAsJsonAsync(ChatEndpoint.SaveMessage, chatMessage);
-        IResult data = await response.ToResult();
+        Result data = await response.ToResult();
         return data;
     }
 }

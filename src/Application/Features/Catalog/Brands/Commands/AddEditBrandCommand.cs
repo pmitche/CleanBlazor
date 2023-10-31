@@ -44,14 +44,14 @@ internal sealed class AddEditBrandCommandHandler : ICommandHandler<AddEditBrandC
             _brandRepository.Add(brand);
             await _unitOfWork.SaveChangesAsync(cancellationToken);
             _cache.Remove(ApplicationConstants.Cache.GetAllBrandsCacheKey);
-            return await Result<int>.SuccessAsync(brand.Id, _localizer["Brand Saved"]);
+            return Result.Ok(brand.Id, _localizer["Brand Saved"]);
         }
         else
         {
             var brand = await _brandRepository.GetByIdAsync(command.Id, cancellationToken);
             if (brand == null)
             {
-                return await Result<int>.FailAsync(_localizer["Brand Not Found!"]);
+                return Result.Fail<int>(_localizer["Brand Not Found!"]);
             }
 
             brand.Name = command.Name ?? brand.Name;
@@ -61,7 +61,7 @@ internal sealed class AddEditBrandCommandHandler : ICommandHandler<AddEditBrandC
             _brandRepository.Update(brand);
             await _unitOfWork.SaveChangesAsync(cancellationToken);
             _cache.Remove(ApplicationConstants.Cache.GetAllBrandsCacheKey);
-            return await Result<int>.SuccessAsync(brand.Id, _localizer["Brand Updated"]);
+            return Result.Ok(brand.Id, _localizer["Brand Updated"]);
         }
     }
 }

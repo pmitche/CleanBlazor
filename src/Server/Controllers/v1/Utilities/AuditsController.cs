@@ -41,7 +41,7 @@ public class AuditsController : BaseApiController
         bool searchInOldValues = false,
         bool searchInNewValues = false)
     {
-        IResult<string> data = await _auditService.ExportToExcelAsync(_currentUserService.UserId,
+        Result<string> data = await _auditService.ExportToExcelAsync(_currentUserService.UserId,
             searchString,
             searchInOldValues,
             searchInNewValues);

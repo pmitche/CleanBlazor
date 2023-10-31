@@ -7,9 +7,9 @@ public interface IDocumentManager : IManager
 {
     Task<PaginatedResult<GetAllDocumentsResponse>> GetAllAsync(GetAllPagedDocumentsRequest request);
 
-    Task<IResult<GetDocumentByIdResponse>> GetByIdAsync(int id);
+    Task<Result<GetDocumentByIdResponse>> GetByIdAsync(int id);
 
-    Task<IResult<int>> SaveAsync(AddEditDocumentRequest request);
+    Task<Result<int>> SaveAsync(AddEditDocumentRequest request);
 
-    Task<IResult<int>> DeleteAsync(int id);
+    Task<Result<int>> DeleteAsync(int id);
 }

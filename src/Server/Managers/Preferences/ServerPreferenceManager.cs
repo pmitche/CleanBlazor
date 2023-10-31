@@ -4,7 +4,6 @@ using BlazorHero.CleanArchitecture.Shared.Constants.Storage;
 using BlazorHero.CleanArchitecture.Shared.Settings;
 using BlazorHero.CleanArchitecture.Shared.Wrapper;
 using Microsoft.Extensions.Localization;
-using IResult = BlazorHero.CleanArchitecture.Shared.Wrapper.IResult;
 
 namespace BlazorHero.CleanArchitecture.Server.Managers.Preferences;
 
@@ -21,23 +20,16 @@ public class ServerPreferenceManager : IServerPreferenceManager
         _localizer = localizer;
     }
 
-    public async Task<IResult> ChangeLanguageAsync(string languageCode)
+    public async Task<Result> ChangeLanguageAsync(string languageCode)
     {
         if (await GetPreference() is not ServerPreference preference)
         {
-            return new Result
-            {
-                Succeeded = false, Messages = new List<string> { _localizer["Failed to get server preferences"] }
-            };
+            return Result.Fail(_localizer["Failed to get server preferences"]);
         }
 
         preference.LanguageCode = languageCode;
         await SetPreference(preference);
-        return new Result
-        {
-            Succeeded = true, Messages = new List<string> { _localizer["Server Language has been changed"] }
-        };
-
+        return Result.Ok(_localizer["Server Language has been changed"]);
     }
 
     public async Task<IPreference> GetPreference() =>

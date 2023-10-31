@@ -13,7 +13,7 @@ public class BrandManager : IBrandManager
 
     public BrandManager(HttpClient httpClient) => _httpClient = httpClient;
 
-    public async Task<IResult<string>> ExportToExcelAsync(string searchString = "")
+    public async Task<Result<string>> ExportToExcelAsync(string searchString = "")
     {
         HttpResponseMessage response = await _httpClient.GetAsync(string.IsNullOrWhiteSpace(searchString)
             ? BrandsEndpoints.Export
@@ -21,25 +21,25 @@ public class BrandManager : IBrandManager
         return await response.ToResult<string>();
     }
 
-    public async Task<IResult<int>> DeleteAsync(int id)
+    public async Task<Result<int>> DeleteAsync(int id)
     {
         HttpResponseMessage response = await _httpClient.DeleteAsync(BrandsEndpoints.DeleteById(id));
         return await response.ToResult<int>();
     }
 
-    public async Task<IResult<List<GetAllBrandsResponse>>> GetAllAsync()
+    public async Task<Result<List<GetAllBrandsResponse>>> GetAllAsync()
     {
         HttpResponseMessage response = await _httpClient.GetAsync(BrandsEndpoints.GetAll);
         return await response.ToResult<List<GetAllBrandsResponse>>();
     }
 
-    public async Task<IResult<int>> SaveAsync(AddEditBrandRequest request)
+    public async Task<Result<int>> SaveAsync(AddEditBrandRequest request)
     {
         HttpResponseMessage response = await _httpClient.PostAsJsonAsync(BrandsEndpoints.Save, request);
         return await response.ToResult<int>();
     }
 
-    public async Task<IResult<int>> ImportAsync(UploadRequest request)
+    public async Task<Result<int>> ImportAsync(UploadRequest request)
     {
         HttpResponseMessage response = await _httpClient.PostAsJsonAsync(BrandsEndpoints.Import, request);
         return await response.ToResult<int>();

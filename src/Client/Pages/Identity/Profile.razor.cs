@@ -29,8 +29,8 @@ public partial class Profile
 
     private async Task UpdateProfileAsync()
     {
-        IResult response = await AccountManager.UpdateProfileAsync(_profileModel);
-        if (response.Succeeded)
+        Result response = await AccountManager.UpdateProfileAsync(_profileModel);
+        if (response.IsSuccess)
         {
             await AuthenticationManager.Logout();
             SnackBar.Success(Localizer["Your Profile has been updated. Please Login to Continue."]);
@@ -53,8 +53,8 @@ public partial class Profile
         _profileModel.LastName = user.GetLastName();
         _profileModel.PhoneNumber = user.GetPhoneNumber();
         UserId = user.GetUserId();
-        IResult<string> data = await AccountManager.GetProfilePictureAsync(UserId);
-        if (data.Succeeded)
+        Result<string> data = await AccountManager.GetProfilePictureAsync(UserId);
+        if (data.IsSuccess)
         {
             ImageDataUrl = data.Data;
         }
@@ -80,8 +80,8 @@ public partial class Profile
             {
                 Data = buffer, FileName = fileName, Extension = extension, UploadType = UploadType.ProfilePicture
             };
-            IResult<string> result = await AccountManager.UpdateProfilePictureAsync(request, UserId);
-            if (result.Succeeded)
+            Result<string> result = await AccountManager.UpdateProfilePictureAsync(request, UserId);
+            if (result.IsSuccess)
             {
                 await LocalStorage.SetItemAsync(StorageConstants.Local.UserImageUrl, result.Data);
                 SnackBar.Success(Localizer["Profile picture added."]);
@@ -116,8 +116,8 @@ public partial class Profile
             {
                 Data = null, FileName = string.Empty, UploadType = UploadType.ProfilePicture
             };
-            IResult<string> data = await AccountManager.UpdateProfilePictureAsync(request, UserId);
-            if (data.Succeeded)
+            Result<string> data = await AccountManager.UpdateProfilePictureAsync(request, UserId);
+            if (data.IsSuccess)
             {
                 await LocalStorage.RemoveItemAsync(StorageConstants.Local.UserImageUrl);
                 ImageDataUrl = string.Empty;

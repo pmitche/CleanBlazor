@@ -33,8 +33,8 @@ public partial class Reset
     {
         if (!string.IsNullOrEmpty(_resetPasswordModel.Token))
         {
-            IResult result = await UserManager.ResetPasswordAsync(_resetPasswordModel);
-            if (result.Succeeded)
+            Result result = await UserManager.ResetPasswordAsync(_resetPasswordModel);
+            if (result.IsSuccess)
             {
                 SnackBar.Success(result.Messages[0]);
                 NavigationManager.NavigateTo("/");
