@@ -1,8 +1,10 @@
-﻿using System.Security.Claims;
+﻿using System.Net.Http.Json;
+using System.Security.Claims;
 using AutoMapper;
 using BlazorHero.CleanArchitecture.Client.Extensions;
-using BlazorHero.CleanArchitecture.Client.Infrastructure.Managers.Identity.Roles;
+using BlazorHero.CleanArchitecture.Client.Infrastructure.Extensions;
 using BlazorHero.CleanArchitecture.Client.Infrastructure.Mappings;
+using BlazorHero.CleanArchitecture.Client.Infrastructure.Routes;
 using BlazorHero.CleanArchitecture.Contracts.Identity;
 using BlazorHero.CleanArchitecture.Shared.Constants.Application;
 using BlazorHero.CleanArchitecture.Shared.Constants.Permission;
@@ -30,7 +32,6 @@ public partial class RolePermissions
     private string _searchString = "";
     private RoleClaimResponse _selectedItem = new();
     private bool _striped = true;
-    [Inject] private IRoleManager RoleManager { get; set; }
 
     [CascadingParameter] private HubConnection HubConnection { get; set; }
     [Parameter] public string Id { get; set; }
@@ -59,7 +60,8 @@ public partial class RolePermissions
     {
         _mapper = new MapperConfiguration(c => { c.AddProfile<RoleProfile>(); }).CreateMapper();
         var roleId = Id;
-        Result<PermissionResponse> result = await RoleManager.GetPermissionsAsync(roleId);
+        var result = await HttpClient.GetFromJsonAsync<Result<PermissionResponse>>(
+            RolesEndpoints.GetPermissionsById(roleId));
         if (result.IsSuccess)
         {
             _model = result.Data;
@@ -92,20 +94,17 @@ public partial class RolePermissions
     private async Task SaveAsync()
     {
         PermissionRequest request = _mapper.Map<PermissionResponse, PermissionRequest>(_model);
-        Result<string> result = await RoleManager.UpdatePermissionsAsync(request);
-        if (result.IsSuccess)
+        var result = await HttpClient.PutAsJsonAsync<PermissionRequest, Result<string>>(
+            RolesEndpoints.UpdatePermissionsId(request.RoleId), request);
+        await result.HandleWithSnackBarAsync(SnackBar, async messages =>
         {
-            SnackBar.Success(result.Messages[0]);
+            SnackBar.Success(messages[0]);
             await HubConnection.SendAsync(ApplicationConstants.SignalR.SendRegenerateTokens);
             await HubConnection.SendAsync(ApplicationConstants.SignalR.OnChangeRolePermissions,
                 _currentUser.GetUserId(),
                 request.RoleId);
             NavigationManager.NavigateTo("/identity/roles");
-        }
-        else
-        {
-            SnackBar.Error(result.Messages);
-        }
+        });
     }
 
     private bool Search(RoleClaimResponse roleClaims)

@@ -1,5 +1,8 @@
-﻿using System.Security.Claims;
+﻿using System.Net.Http.Json;
+using System.Security.Claims;
 using BlazorHero.CleanArchitecture.Client.Extensions;
+using BlazorHero.CleanArchitecture.Client.Infrastructure.Extensions;
+using BlazorHero.CleanArchitecture.Client.Infrastructure.Routes;
 using BlazorHero.CleanArchitecture.Contracts.Identity;
 using BlazorHero.CleanArchitecture.Shared.Constants.Permission;
 using BlazorHero.CleanArchitecture.Shared.Models.Identity;
@@ -35,7 +38,7 @@ public partial class UserRoles
             .Succeeded;
 
         var userId = Id;
-        Result<UserResponse> result = await UserManager.GetAsync(userId);
+        var result = await HttpClient.GetFromJsonAsync<Result<UserResponse>>(UsersEndpoints.GetById(userId));
         if (result.IsSuccess)
         {
             UserResponse user = result.Data;
@@ -43,8 +46,9 @@ public partial class UserRoles
             {
                 Title = $"{user.FirstName} {user.LastName}";
                 Description = string.Format(Localizer["Manage {0} {1}'s Roles"], user.FirstName, user.LastName);
-                Result<UserRolesResponse> response = await UserManager.GetRolesAsync(user.Id);
-                UserRolesList = response.Data.UserRoles;
+                var rolesResult = await HttpClient.GetFromJsonAsync<Result<UserRolesResponse>>(
+                        UsersEndpoints.GetUserRolesById(user.Id));
+                UserRolesList = rolesResult.Data.UserRoles;
             }
         }
 
@@ -54,16 +58,13 @@ public partial class UserRoles
     private async Task SaveAsync()
     {
         var request = new UpdateUserRolesRequest { UserId = Id, UserRoles = UserRolesList };
-        Result result = await UserManager.UpdateRolesAsync(request);
-        if (result.IsSuccess)
+        var result = await HttpClient.PutAsJsonAsync<UpdateUserRolesRequest, Result>(
+            UsersEndpoints.GetUserRolesById(request.UserId), request);
+        result.HandleWithSnackBar(SnackBar, messages =>
         {
-            SnackBar.Success(result.Messages[0]);
+            SnackBar.Success(messages[0]);
             NavigationManager.NavigateTo("/identity/users");
-        }
-        else
-        {
-            SnackBar.Error(result.Messages);
-        }
+        });
     }
 
     private bool Search(UserRoleModel userRole)

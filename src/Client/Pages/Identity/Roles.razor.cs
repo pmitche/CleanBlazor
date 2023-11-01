@@ -1,6 +1,7 @@
-﻿using System.Security.Claims;
+﻿using System.Net.Http.Json;
+using System.Security.Claims;
 using BlazorHero.CleanArchitecture.Client.Extensions;
-using BlazorHero.CleanArchitecture.Client.Infrastructure.Managers.Identity.Roles;
+using BlazorHero.CleanArchitecture.Client.Infrastructure.Routes;
 using BlazorHero.CleanArchitecture.Client.Shared.Dialogs;
 using BlazorHero.CleanArchitecture.Contracts.Identity;
 using BlazorHero.CleanArchitecture.Shared.Constants.Application;
@@ -30,7 +31,6 @@ public partial class Roles
     private List<RoleResponse> _roleList = new();
     private string _searchString = "";
     private bool _striped = true;
-    [Inject] private IRoleManager RoleManager { get; set; }
 
     [CascadingParameter] private HubConnection HubConnection { get; set; }
 
@@ -58,15 +58,11 @@ public partial class Roles
 
     private async Task GetRolesAsync()
     {
-        Result<List<RoleResponse>> response = await RoleManager.GetRolesAsync();
-        if (response.IsSuccess)
+        var result = await HttpClient.GetFromJsonAsync<Result<List<RoleResponse>>>(RolesEndpoints.GetAll);
+        result.HandleWithSnackBar(SnackBar, (_, roles) =>
         {
-            _roleList = response.Data.ToList();
-        }
-        else
-        {
-            SnackBar.Error(response.Messages);
-        }
+            _roleList = roles.ToList();
+        });
     }
 
     private async Task Delete(string id)
@@ -82,21 +78,16 @@ public partial class Roles
         };
         IDialogReference dialog =
             await DialogService.ShowAsync<DeleteConfirmation>(Localizer["Delete"], parameters, options);
-        DialogResult result = await dialog.Result;
-        if (!result.Canceled)
+        DialogResult dialogResult = await dialog.Result;
+        if (!dialogResult.Canceled)
         {
-            Result<string> response = await RoleManager.DeleteAsync(id);
-            if (response.IsSuccess)
+            var result = await HttpClient.DeleteFromJsonAsync<Result<string>>(RolesEndpoints.DeleteById(id));
+            await Reset();
+            await result.HandleWithSnackBarAsync(SnackBar, async messages =>
             {
-                await Reset();
                 await HubConnection.SendAsync(ApplicationConstants.SignalR.SendUpdateDashboard);
-                SnackBar.Success(response.Messages[0]);
-            }
-            else
-            {
-                await Reset();
-                SnackBar.Error(response.Messages);
-            }
+                SnackBar.Success(messages[0]);
+            });
         }
     }
 

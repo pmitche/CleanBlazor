@@ -1,5 +1,7 @@
-﻿using System.Security.Claims;
+﻿using System.Net.Http.Json;
+using System.Security.Claims;
 using BlazorHero.CleanArchitecture.Client.Extensions;
+using BlazorHero.CleanArchitecture.Client.Infrastructure.Routes;
 using BlazorHero.CleanArchitecture.Contracts.Identity;
 using BlazorHero.CleanArchitecture.Shared.Constants.Application;
 using BlazorHero.CleanArchitecture.Shared.Constants.Permission;
@@ -43,15 +45,8 @@ public partial class Users
 
     private async Task GetUsersAsync()
     {
-        Result<List<UserResponse>> response = await UserManager.GetAllAsync();
-        if (response.IsSuccess)
-        {
-            _userList = response.Data.ToList();
-        }
-        else
-        {
-            SnackBar.Error(response.Messages);
-        }
+        var result = await HttpClient.GetFromJsonAsync<Result<List<UserResponse>>>(UsersEndpoints.GetAll);
+        result.HandleWithSnackBar(SnackBar, (_, users) => _userList = users.ToList());
     }
 
     private bool Search(UserResponse user)
@@ -91,7 +86,10 @@ public partial class Users
 
     private async Task ExportToExcel()
     {
-        var base64 = await UserManager.ExportToExcelAsync(_searchString);
+        var endpoint = string.IsNullOrWhiteSpace(_searchString)
+            ? UsersEndpoints.Export
+            : UsersEndpoints.ExportFiltered(_searchString);
+        var base64 = await HttpClient.GetStringAsync(endpoint);
         await JsRuntime.InvokeVoidAsync("Download",
             new
             {

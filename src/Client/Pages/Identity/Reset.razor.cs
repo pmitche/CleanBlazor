@@ -1,6 +1,9 @@
-﻿using System.Text;
+﻿using System.Net.Http.Json;
+using System.Text;
 using Blazored.FluentValidation;
 using BlazorHero.CleanArchitecture.Client.Extensions;
+using BlazorHero.CleanArchitecture.Client.Infrastructure.Extensions;
+using BlazorHero.CleanArchitecture.Client.Infrastructure.Routes;
 using BlazorHero.CleanArchitecture.Contracts.Identity;
 using BlazorHero.CleanArchitecture.Shared.Wrapper;
 using Microsoft.AspNetCore.WebUtilities;
@@ -33,16 +36,13 @@ public partial class Reset
     {
         if (!string.IsNullOrEmpty(_resetPasswordModel.Token))
         {
-            Result result = await UserManager.ResetPasswordAsync(_resetPasswordModel);
-            if (result.IsSuccess)
+            var result = await HttpClient.PostAsJsonAsync<ResetPasswordRequest, Result>(
+                UsersEndpoints.ResetPassword, _resetPasswordModel);
+            result.HandleWithSnackBar(SnackBar, messages =>
             {
-                SnackBar.Success(result.Messages[0]);
+                SnackBar.Success(messages[0]);
                 NavigationManager.NavigateTo("/");
-            }
-            else
-            {
-                SnackBar.Error(result.Messages);
-            }
+            });
         }
         else
         {

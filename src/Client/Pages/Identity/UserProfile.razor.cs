@@ -1,4 +1,7 @@
-﻿using BlazorHero.CleanArchitecture.Client.Extensions;
+﻿using System.Net.Http.Json;
+using BlazorHero.CleanArchitecture.Client.Extensions;
+using BlazorHero.CleanArchitecture.Client.Infrastructure.Extensions;
+using BlazorHero.CleanArchitecture.Client.Infrastructure.Routes;
 using BlazorHero.CleanArchitecture.Contracts.Identity;
 using BlazorHero.CleanArchitecture.Shared.Wrapper;
 using Microsoft.AspNetCore.Components;
@@ -24,22 +27,19 @@ public partial class UserProfile
     private async Task ToggleUserStatus()
     {
         var request = new ToggleUserStatusRequest { ActivateUser = _active, UserId = Id };
-        Result result = await UserManager.ToggleUserStatusAsync(request);
-        if (result.IsSuccess)
+        var result = await HttpClient.PostAsJsonAsync<ToggleUserStatusRequest, Result>(
+            UsersEndpoints.ToggleUserStatus(request.UserId), request);
+        result.HandleWithSnackBar(SnackBar, _ =>
         {
             SnackBar.Success(Localizer["Updated User Status."]);
             NavigationManager.NavigateTo("/identity/users");
-        }
-        else
-        {
-            SnackBar.Error(result.Messages);
-        }
+        });
     }
 
     protected override async Task OnInitializedAsync()
     {
         var userId = Id;
-        Result<UserResponse> result = await UserManager.GetAsync(userId);
+        var result = await HttpClient.GetFromJsonAsync<Result<UserResponse>>(UsersEndpoints.GetById(userId));
         if (result.IsSuccess)
         {
             UserResponse user = result.Data;
@@ -50,10 +50,11 @@ public partial class UserProfile
                 _email = user.Email;
                 _phoneNumber = user.PhoneNumber;
                 _active = user.IsActive;
-                Result<string> data = await AccountManager.GetProfilePictureAsync(userId);
-                if (data.IsSuccess)
+                var profilePictureResult = await HttpClient.GetFromJsonAsync<Result<string>>(
+                    AccountsEndpoints.GetProfilePicture(userId));
+                if (profilePictureResult.IsSuccess)
                 {
-                    ImageDataUrl = data.Data;
+                    ImageDataUrl = profilePictureResult.Data;
                 }
             }
 

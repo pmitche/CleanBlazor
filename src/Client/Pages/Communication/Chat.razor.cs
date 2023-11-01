@@ -1,6 +1,8 @@
-﻿using System.Security.Claims;
+﻿using System.Net.Http.Json;
+using System.Security.Claims;
 using BlazorHero.CleanArchitecture.Client.Extensions;
-using BlazorHero.CleanArchitecture.Client.Infrastructure.Managers.Communication;
+using BlazorHero.CleanArchitecture.Client.Infrastructure.Extensions;
+using BlazorHero.CleanArchitecture.Client.Infrastructure.Routes;
 using BlazorHero.CleanArchitecture.Contracts.Chat;
 using BlazorHero.CleanArchitecture.Contracts.Identity;
 using BlazorHero.CleanArchitecture.Domain.Entities.Communication;
@@ -23,7 +25,6 @@ public partial class Chat
     private bool _open;
 
     public List<ChatUserResponse> UserList = new();
-    [Inject] private IChatManager ChatManager { get; set; }
 
     [CascadingParameter] private HubConnection HubConnection { get; set; }
     [Parameter] public string CurrentMessage { get; set; }
@@ -47,8 +48,10 @@ public partial class Chat
             {
                 Message = CurrentMessage, ToUserId = CId, CreatedDate = DateTime.Now
             };
-            Result response = await ChatManager.SaveMessageAsync(chatMessage);
-            if (response.IsSuccess)
+
+            var result = await HttpClient.PostAsJsonAsync<ChatMessage<IChatUser>, Result>(
+                ChatEndpoint.SaveMessage, chatMessage);
+            await result.HandleWithSnackBarAsync(SnackBar, async _ =>
             {
                 AuthenticationState state = await StateProvider.GetAuthenticationStateAsync();
                 ClaimsPrincipal user = state.User;
@@ -57,11 +60,7 @@ public partial class Chat
                 var userName = $"{user.GetFirstName()} {user.GetLastName()}";
                 await HubConnection.SendAsync(ApplicationConstants.SignalR.SendMessage, chatMessage, userName);
                 CurrentMessage = string.Empty;
-            }
-            else
-            {
-                SnackBar.Error(response.Messages);
-            }
+            });
         }
     }
 
@@ -171,45 +170,43 @@ public partial class Chat
     private async Task LoadUserChat(string userId)
     {
         _open = false;
-        Result<UserResponse> response = await UserManager.GetAsync(userId);
-        if (response.IsSuccess)
+        var result = await HttpClient.GetFromJsonAsync<Result<UserResponse>>(UsersEndpoints.GetById(userId));
+        await result.HandleWithSnackBarAsync(SnackBar, async (_, user) =>
         {
-            UserResponse contact = response.Data;
-            CId = contact.Id;
-            CFullName = $"{contact.FirstName} {contact.LastName}";
-            CUserName = contact.UserName;
-            CImageUrl = contact.ProfilePictureDataUrl;
-            NavigationManager.NavigateTo($"chat/{CId}");
-            //Load messages from db here
-            _messages = new List<ChatMessageResponse>();
-            Result<IEnumerable<ChatMessageResponse>> chatHistoryResponse = await ChatManager.GetChatHistoryAsync(CId);
-            if (chatHistoryResponse.IsSuccess)
-            {
-                _messages = chatHistoryResponse.Data.ToList();
-            }
-            else
-            {
-                SnackBar.Error(response.Messages);
-            }
-        }
-        else
+            InitializeChat(user);
+            await LoadChatMessagesAsync(user.Id);
+        });
+    }
+
+    private void InitializeChat(UserResponse contact)
+    {
+        CId = contact.Id;
+        CFullName = $"{contact.FirstName} {contact.LastName}";
+        CUserName = contact.UserName;
+        CImageUrl = contact.ProfilePictureDataUrl;
+        NavigationManager.NavigateTo($"chat/{CId}");
+    }
+
+    private async Task LoadChatMessagesAsync(string userId)
+    {
+        _messages.Clear();
+        var result = await HttpClient.GetFromJsonAsync<Result<IEnumerable<ChatMessageResponse>>>(
+            ChatEndpoint.GetChatHistory(userId));
+        result.HandleWithSnackBar(SnackBar, (_, chatMessages) =>
         {
-            SnackBar.Error(response.Messages);
-        }
+            _messages = chatMessages.ToList();
+        });
     }
 
     private async Task GetUsersAsync()
     {
         //add get chat history from chat controller / manager
-        Result<IEnumerable<ChatUserResponse>> response = await ChatManager.GetChatUsersAsync();
-        if (response.IsSuccess)
+        var result = await HttpClient
+            .GetFromJsonAsync<Result<IEnumerable<ChatUserResponse>>>(ChatEndpoint.GetAvailableUsers);
+        result.HandleWithSnackBar(SnackBar, (_, chatUsers) =>
         {
-            UserList = response.Data.ToList();
-        }
-        else
-        {
-            SnackBar.Error(response.Messages);
-        }
+            UserList = chatUsers.ToList();
+        });
     }
 
     private void OpenDrawer(Anchor anchor)

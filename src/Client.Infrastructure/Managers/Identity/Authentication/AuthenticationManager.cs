@@ -1,5 +1,4 @@
 ﻿using System.Net.Http.Headers;
-using System.Net.Http.Json;
 using System.Security.Authentication;
 using System.Security.Claims;
 using Blazored.LocalStorage;
@@ -41,8 +40,7 @@ public class AuthenticationManager : IAuthenticationManager
 
     public async Task<Result> Login(TokenRequest model)
     {
-        HttpResponseMessage response = await _httpClient.PostAsJsonAsync(TokenEndpoints.Get, model);
-        Result<TokenResponse> result = await response.ToResult<TokenResponse>();
+        var result = await _httpClient.PostAsJsonAsync<TokenRequest, Result<TokenResponse>>(TokenEndpoints.Get, model);
         if (result.IsFailure)
         {
             return Result.Fail(result.Messages);
@@ -80,10 +78,9 @@ public class AuthenticationManager : IAuthenticationManager
         var token = await _localStorage.GetItemAsync<string>(StorageConstants.Local.AuthToken);
         var refreshToken = await _localStorage.GetItemAsync<string>(StorageConstants.Local.RefreshToken);
 
-        HttpResponseMessage response = await _httpClient.PostAsJsonAsync(TokenEndpoints.Refresh,
-            new RefreshTokenRequest { Token = token, RefreshToken = refreshToken });
-
-        Result<TokenResponse> result = await response.ToResult<TokenResponse>();
+        var request = new RefreshTokenRequest { Token = token, RefreshToken = refreshToken };
+        var result = await _httpClient.PostAsJsonAsync<RefreshTokenRequest, Result<TokenResponse>>(
+            TokenEndpoints.Refresh, request);
 
         if (result.IsFailure)
         {

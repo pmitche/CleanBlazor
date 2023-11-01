@@ -1,5 +1,8 @@
-﻿using Blazored.FluentValidation;
+﻿using System.Net.Http.Json;
+using Blazored.FluentValidation;
 using BlazorHero.CleanArchitecture.Client.Extensions;
+using BlazorHero.CleanArchitecture.Client.Infrastructure.Extensions;
+using BlazorHero.CleanArchitecture.Client.Infrastructure.Routes;
 using BlazorHero.CleanArchitecture.Contracts.Identity;
 using BlazorHero.CleanArchitecture.Shared.Wrapper;
 using MudBlazor;
@@ -16,19 +19,16 @@ public partial class Register
     private RegisterRequest _registerUserModel = new();
     private bool Validated => _fluentValidationValidator.Validate(options => { options.IncludeAllRuleSets(); });
 
-    private async Task SubmitAsync()
-    {
-        Result response = await UserManager.RegisterUserAsync(_registerUserModel);
-        if (response.IsSuccess)
+    private async Task SubmitAsync() {
+        var result = await HttpClient.PostAsJsonAsync<RegisterRequest, Result>(
+            UsersEndpoints.Register, _registerUserModel);
+
+        result.HandleWithSnackBar(SnackBar, messages =>
         {
-            SnackBar.Success(response.Messages[0]);
+            SnackBar.Success(messages[0]);
             NavigationManager.NavigateTo("/login");
             _registerUserModel = new RegisterRequest();
-        }
-        else
-        {
-            SnackBar.Error(response.Messages);
-        }
+        });
     }
 
     private void TogglePasswordVisibility()

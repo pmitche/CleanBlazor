@@ -1,6 +1,7 @@
-﻿using System.Security.Claims;
+﻿using System.Net.Http.Json;
+using System.Security.Claims;
 using BlazorHero.CleanArchitecture.Client.Extensions;
-using BlazorHero.CleanArchitecture.Client.Infrastructure.Managers.Catalog.Product;
+using BlazorHero.CleanArchitecture.Client.Infrastructure.Routes;
 using BlazorHero.CleanArchitecture.Client.Shared.Dialogs;
 using BlazorHero.CleanArchitecture.Contracts.Catalog.Products;
 using BlazorHero.CleanArchitecture.Shared.Constants.Application;
@@ -33,7 +34,6 @@ public partial class Products
     private bool _striped = true;
     private MudTable<GetAllPagedProductsResponse> _table;
     private int _totalItems;
-    [Inject] private IProductManager ProductManager { get; set; }
 
     [CascadingParameter] private HubConnection HubConnection { get; set; }
 
@@ -84,17 +84,18 @@ public partial class Products
         {
             PageSize = pageSize, PageNumber = pageNumber + 1, SearchString = _searchString, OrderBy = orderings
         };
-        PaginatedResult<GetAllPagedProductsResponse> response = await ProductManager.GetProductsAsync(request);
-        if (response.IsSuccess)
+        var endpoint = ProductsEndpoints.GetAllPaged(
+            request.PageNumber,
+            request.PageSize,
+            request.SearchString,
+            request.OrderBy);
+        var result = await HttpClient.GetFromJsonAsync<PaginatedResult<GetAllPagedProductsResponse>>(endpoint);
+        result.HandleWithSnackBar(SnackBar, _ =>
         {
-            _totalItems = response.TotalCount;
-            _currentPage = response.CurrentPage;
-            _pagedData = response.Data;
-        }
-        else
-        {
-            SnackBar.Error(response.Messages);
-        }
+            _totalItems = result.TotalCount;
+            _currentPage = result.CurrentPage;
+            _pagedData = result.Data;
+        });
     }
 
     private void OnSearch(string text)
@@ -105,24 +106,23 @@ public partial class Products
 
     private async Task ExportToExcel()
     {
-        Result<string> response = await ProductManager.ExportToExcelAsync(_searchString);
-        if (response.IsSuccess)
+        var endpoint = string.IsNullOrWhiteSpace(_searchString)
+            ? ProductsEndpoints.Export
+            : ProductsEndpoints.ExportFiltered(_searchString);
+        var result = await HttpClient.GetFromJsonAsync<Result<string>>(endpoint);
+        await result.HandleWithSnackBarAsync(SnackBar, async (_, base64Data) =>
         {
             await JsRuntime.InvokeVoidAsync("Download",
                 new
                 {
-                    ByteArray = response.Data,
+                    ByteArray = base64Data,
                     FileName = $"{nameof(Products).ToLower()}_{DateTime.Now:ddMMyyyyHHmmss}.xlsx",
                     MimeType = ApplicationConstants.MimeTypes.OpenXml
                 });
             SnackBar.Success(string.IsNullOrWhiteSpace(_searchString)
-                    ? Localizer["Products exported"]
-                    : Localizer["Filtered Products exported"]);
-        }
-        else
-        {
-            SnackBar.Error(response.Messages);
-        }
+                ? Localizer["Products exported"]
+                : Localizer["Filtered Products exported"]);
+        });
     }
 
     private async Task InvokeModal(int id = 0)
@@ -174,21 +174,16 @@ public partial class Products
         };
         IDialogReference dialog =
             await DialogService.ShowAsync<DeleteConfirmation>(Localizer["Delete"], parameters, options);
-        DialogResult result = await dialog.Result;
-        if (!result.Canceled)
+        DialogResult dialogResult = await dialog.Result;
+        if (!dialogResult.Canceled)
         {
-            Result<int> response = await ProductManager.DeleteAsync(id);
-            if (response.IsSuccess)
+            var result = await HttpClient.DeleteFromJsonAsync<Result<int>>(ProductsEndpoints.DeleteById(id));
+            OnSearch("");
+            await result.HandleWithSnackBarAsync(SnackBar, async (messages, _) =>
             {
-                OnSearch("");
                 await HubConnection.SendAsync(ApplicationConstants.SignalR.SendUpdateDashboard);
-                SnackBar.Success(response.Messages[0]);
-            }
-            else
-            {
-                OnSearch("");
-                SnackBar.Error(response.Messages);
-            }
+                SnackBar.Success(messages[0]);
+            });
         }
     }
 }

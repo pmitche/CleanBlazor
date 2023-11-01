@@ -1,5 +1,8 @@
-﻿using Blazored.FluentValidation;
+﻿using System.Net.Http.Json;
+using Blazored.FluentValidation;
 using BlazorHero.CleanArchitecture.Client.Extensions;
+using BlazorHero.CleanArchitecture.Client.Infrastructure.Extensions;
+using BlazorHero.CleanArchitecture.Client.Infrastructure.Routes;
 using BlazorHero.CleanArchitecture.Contracts.Identity;
 using BlazorHero.CleanArchitecture.Shared.Wrapper;
 using MudBlazor;
@@ -22,18 +25,15 @@ public partial class Security
 
     private async Task ChangePasswordAsync()
     {
-        Result response = await AccountManager.ChangePasswordAsync(_passwordModel);
-        if (response.IsSuccess)
+        var result = await HttpClient.PutAsJsonAsync<ChangePasswordRequest, Result>(
+            AccountsEndpoints.ChangePassword, _passwordModel);
+        result.HandleWithSnackBar(SnackBar, _ =>
         {
             SnackBar.Success(Localizer["Password Changed!"]);
             _passwordModel.Password = string.Empty;
             _passwordModel.NewPassword = string.Empty;
             _passwordModel.ConfirmNewPassword = string.Empty;
-        }
-        else
-        {
-            SnackBar.Error(response.Messages);
-        }
+        });
     }
 
     private void TogglePasswordVisibility(bool newPassword)

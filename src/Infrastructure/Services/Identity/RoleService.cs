@@ -281,7 +281,7 @@ public class RoleService : IRoleService
                     claim.Id = addedClaim.Id;
                     claim.RoleId = addedClaim.RoleId;
                     Result<string> saveResult = await _roleClaimService.SaveAsync(claim);
-                    if (!saveResult.IsSuccess)
+                    if (saveResult.IsFailure)
                     {
                         errors.AddRange(saveResult.Messages);
                     }

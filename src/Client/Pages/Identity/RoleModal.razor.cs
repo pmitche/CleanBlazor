@@ -1,6 +1,7 @@
 ﻿using Blazored.FluentValidation;
 using BlazorHero.CleanArchitecture.Client.Extensions;
-using BlazorHero.CleanArchitecture.Client.Infrastructure.Managers.Identity.Roles;
+using BlazorHero.CleanArchitecture.Client.Infrastructure.Extensions;
+using BlazorHero.CleanArchitecture.Client.Infrastructure.Routes;
 using BlazorHero.CleanArchitecture.Contracts.Identity;
 using BlazorHero.CleanArchitecture.Shared.Constants.Application;
 using BlazorHero.CleanArchitecture.Shared.Wrapper;
@@ -13,7 +14,6 @@ namespace BlazorHero.CleanArchitecture.Client.Pages.Identity;
 public partial class RoleModal
 {
     private FluentValidationValidator _fluentValidationValidator;
-    [Inject] private IRoleManager RoleManager { get; set; }
 
     [Parameter] public RoleRequest RoleModel { get; set; } = new();
     [CascadingParameter] private MudDialogInstance MudDialog { get; set; }
@@ -33,16 +33,12 @@ public partial class RoleModal
 
     private async Task SaveAsync()
     {
-        Result<string> response = await RoleManager.SaveAsync(RoleModel);
-        if (response.IsSuccess)
+        var result = await HttpClient.PostAsJsonAsync<RoleRequest, Result<string>>(RolesEndpoints.Save, RoleModel);
+        await result.HandleWithSnackBarAsync(SnackBar, async messages =>
         {
-            SnackBar.Success(response.Messages[0]);
+            SnackBar.Success(messages[0]);
             await HubConnection.SendAsync(ApplicationConstants.SignalR.SendUpdateDashboard);
             MudDialog.Close();
-        }
-        else
-        {
-            SnackBar.Error(response.Messages);
-        }
+        });
     }
 }

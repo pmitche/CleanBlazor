@@ -56,7 +56,7 @@ public class HttpInterceptorManager : IHttpInterceptorManager
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, ex.Message);
+                _logger.LogError(ex, "An error occured while attempting to refresh token");
                 _snackBar.Add(_localizer["You are Logged Out."], Severity.Error);
                 await _authenticationManager.Logout();
                 _navigationManager.NavigateTo("/");

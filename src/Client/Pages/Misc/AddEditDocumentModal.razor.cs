@@ -1,7 +1,8 @@
-﻿using Blazored.FluentValidation;
+﻿using System.Net.Http.Json;
+using Blazored.FluentValidation;
 using BlazorHero.CleanArchitecture.Client.Extensions;
-using BlazorHero.CleanArchitecture.Client.Infrastructure.Managers.Misc.Document;
-using BlazorHero.CleanArchitecture.Client.Infrastructure.Managers.Misc.DocumentType;
+using BlazorHero.CleanArchitecture.Client.Infrastructure.Extensions;
+using BlazorHero.CleanArchitecture.Client.Infrastructure.Routes;
 using BlazorHero.CleanArchitecture.Contracts;
 using BlazorHero.CleanArchitecture.Contracts.Documents;
 using BlazorHero.CleanArchitecture.Shared.Enums;
@@ -19,8 +20,6 @@ public partial class AddEditDocumentModal
     private IBrowserFile _file;
 
     private FluentValidationValidator _fluentValidationValidator;
-    [Inject] private IDocumentManager DocumentManager { get; set; }
-    [Inject] private IDocumentTypeManager DocumentTypeManager { get; set; }
 
     [Parameter] public AddEditDocumentRequest AddEditDocumentModel { get; set; } = new();
     [CascadingParameter] private MudDialogInstance MudDialog { get; set; }
@@ -30,16 +29,13 @@ public partial class AddEditDocumentModal
 
     private async Task SaveAsync()
     {
-        Result<int> response = await DocumentManager.SaveAsync(AddEditDocumentModel);
-        if (response.IsSuccess)
+        var result = await HttpClient.PostAsJsonAsync<AddEditDocumentRequest, Result<int>>(
+            DocumentsEndpoints.Save, AddEditDocumentModel);
+        result.HandleWithSnackBar(SnackBar, messages =>
         {
-            SnackBar.Success(response.Messages[0]);
+            SnackBar.Success(messages[0]);
             MudDialog.Close();
-        }
-        else
-        {
-            SnackBar.Error(response.Messages);
-        }
+        });
     }
 
     protected override async Task OnInitializedAsync() => await LoadDataAsync();
@@ -48,10 +44,11 @@ public partial class AddEditDocumentModal
 
     private async Task LoadDocumentTypesAsync()
     {
-        Result<List<GetAllDocumentTypesResponse>> data = await DocumentTypeManager.GetAllAsync();
-        if (data.IsSuccess)
+        var result =
+            await HttpClient.GetFromJsonAsync<Result<List<GetAllDocumentTypesResponse>>>(DocumentTypesEndpoints.GetAll);
+        if (result.IsSuccess)
         {
-            _documentTypes = data.Data;
+            _documentTypes = result.Data;
         }
     }
 

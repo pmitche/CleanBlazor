@@ -1,7 +1,8 @@
-﻿using Blazored.FluentValidation;
+﻿using System.Net.Http.Json;
+using Blazored.FluentValidation;
 using BlazorHero.CleanArchitecture.Client.Extensions;
-using BlazorHero.CleanArchitecture.Client.Infrastructure.Managers.Catalog.Brand;
-using BlazorHero.CleanArchitecture.Client.Infrastructure.Managers.Catalog.Product;
+using BlazorHero.CleanArchitecture.Client.Infrastructure.Extensions;
+using BlazorHero.CleanArchitecture.Client.Infrastructure.Routes;
 using BlazorHero.CleanArchitecture.Contracts;
 using BlazorHero.CleanArchitecture.Contracts.Catalog.Brands;
 using BlazorHero.CleanArchitecture.Contracts.Catalog.Products;
@@ -22,8 +23,6 @@ public partial class AddEditProductModal
     private IBrowserFile _file;
 
     private FluentValidationValidator _fluentValidationValidator;
-    [Inject] private IProductManager ProductManager { get; set; }
-    [Inject] private IBrandManager BrandManager { get; set; }
 
     [Parameter] public AddEditProductRequest AddEditProductModel { get; set; } = new();
     [CascadingParameter] private HubConnection HubConnection { get; set; }
@@ -34,17 +33,14 @@ public partial class AddEditProductModal
 
     private async Task SaveAsync()
     {
-        Result<int> response = await ProductManager.SaveAsync(AddEditProductModel);
-        if (response.IsSuccess)
+        var result = await HttpClient.PostAsJsonAsync<AddEditProductRequest, Result<int>>(
+            ProductsEndpoints.Save, AddEditProductModel);
+        await result.HandleWithSnackBarAsync(SnackBar, async messages =>
         {
-            SnackBar.Success(response.Messages[0]);
+            SnackBar.Success(messages[0]);
             await HubConnection.SendAsync(ApplicationConstants.SignalR.SendUpdateDashboard);
             MudDialog.Close();
-        }
-        else
-        {
-            SnackBar.Error(response.Messages);
-        }
+        });
     }
 
     protected override async Task OnInitializedAsync()
@@ -65,19 +61,20 @@ public partial class AddEditProductModal
 
     private async Task LoadBrandsAsync()
     {
-        Result<List<GetAllBrandsResponse>> data = await BrandManager.GetAllAsync();
-        if (data.IsSuccess)
+        var result = await HttpClient.GetFromJsonAsync<Result<List<GetAllBrandsResponse>>>(BrandsEndpoints.GetAll);
+        if (result.IsSuccess)
         {
-            _brands = data.Data;
+            _brands = result.Data;
         }
     }
 
     private async Task LoadImageAsync()
     {
-        Result<string> data = await ProductManager.GetProductImageAsync(AddEditProductModel.Id);
-        if (data.IsSuccess)
+        var result = await HttpClient.GetFromJsonAsync<Result<string>>(
+                ProductsEndpoints.GetProductImage(AddEditProductModel.Id));
+        if (result.IsSuccess)
         {
-            var imageData = data.Data;
+            var imageData = result.Data;
             if (!string.IsNullOrEmpty(imageData))
             {
                 AddEditProductModel.ImageDataUrl = imageData;

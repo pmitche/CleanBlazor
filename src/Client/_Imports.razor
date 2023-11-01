@@ -15,20 +15,10 @@
 @using Blazored.FluentValidation
 
 @*Client Services*@
-@using BlazorHero.CleanArchitecture.Client.Infrastructure.Managers.Identity.Account
+@using BlazorHero.CleanArchitecture.Client.Infrastructure.Extensions
 @using BlazorHero.CleanArchitecture.Client.Infrastructure.Managers.Identity.Authentication
-@using BlazorHero.CleanArchitecture.Client.Infrastructure.Managers.Identity.Roles
-@using BlazorHero.CleanArchitecture.Client.Infrastructure.Managers.Identity.RoleClaims
-@using BlazorHero.CleanArchitecture.Client.Infrastructure.Managers.Identity.Users
 @using BlazorHero.CleanArchitecture.Client.Infrastructure.Managers.Preferences
 @using BlazorHero.CleanArchitecture.Client.Infrastructure.Managers.Interceptors
-@using BlazorHero.CleanArchitecture.Client.Infrastructure.Managers.Catalog.Product
-@using BlazorHero.CleanArchitecture.Client.Infrastructure.Managers.Catalog.Brand
-@using BlazorHero.CleanArchitecture.Client.Infrastructure.Managers.Dashboard
-@using BlazorHero.CleanArchitecture.Client.Infrastructure.Managers.Communication
-@using BlazorHero.CleanArchitecture.Client.Infrastructure.Managers.Audit
-@using BlazorHero.CleanArchitecture.Client.Infrastructure.Managers.Misc.Document
-@using BlazorHero.CleanArchitecture.Client.Infrastructure.Managers.Misc.DocumentType
 
 @*Shared Libraries*@
 @using BlazorHero.CleanArchitecture.Shared.Constants.Permission
@@ -38,6 +28,7 @@
 @using BlazorHero.CleanArchitecture.Client.Shared
 @using BlazorHero.CleanArchitecture.Client.Shared.Dialogs
 @using BlazorHero.CleanArchitecture.Client.Infrastructure.Configuration
+@using BlazorHero.CleanArchitecture.Client.Extensions
 
 @using BlazorHero.CleanArchitecture.Contracts.Identity
 
@@ -48,7 +39,6 @@
 
 @attribute [Authorize]
 @inject IAuthenticationManager AuthenticationManager
-@inject IAccountManager AccountManager
 @inject NavigationManager NavigationManager
 @inject BlazorHeroStateProvider StateProvider
 @inject IAuthorizationService AuthorizationService
@@ -57,6 +47,5 @@
 @inject HttpClient HttpClient
 @inject IHttpInterceptorManager Interceptor
 @inject ClientPreferenceManager ClientPreferenceManager
-@inject IUserManager UserManager
 @inject ILocalStorageService LocalStorage;
 @inject IJSRuntime JsRuntime;

@@ -35,7 +35,7 @@ internal sealed class GetChatHistoryQueryHandler : IQueryHandler<GetChatHistoryQ
         CancellationToken cancellationToken)
     {
         var response = await _userService.GetAsync(_currentUserService.UserId);
-        if (!response.IsSuccess)
+        if (response.IsFailure)
         {
             return Result.Fail<IEnumerable<ChatMessageResponse>>(_localizer["User Not Found!"]);
         }

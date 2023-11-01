@@ -1,6 +1,8 @@
-﻿using Blazored.FluentValidation;
+﻿using System.Net.Http.Json;
+using Blazored.FluentValidation;
 using BlazorHero.CleanArchitecture.Client.Extensions;
-using BlazorHero.CleanArchitecture.Client.Infrastructure.Managers.Misc.DocumentType;
+using BlazorHero.CleanArchitecture.Client.Infrastructure.Extensions;
+using BlazorHero.CleanArchitecture.Client.Infrastructure.Routes;
 using BlazorHero.CleanArchitecture.Contracts.Documents;
 using BlazorHero.CleanArchitecture.Shared.Constants.Application;
 using BlazorHero.CleanArchitecture.Shared.Wrapper;
@@ -13,7 +15,6 @@ namespace BlazorHero.CleanArchitecture.Client.Pages.Misc;
 public partial class AddEditDocumentTypeModal
 {
     private FluentValidationValidator _fluentValidationValidator;
-    [Inject] private IDocumentTypeManager DocumentTypeManager { get; set; }
 
     [Parameter] public AddEditDocumentTypeRequest AddEditDocumentTypeModel { get; set; } = new();
     [CascadingParameter] private MudDialogInstance MudDialog { get; set; }
@@ -24,16 +25,13 @@ public partial class AddEditDocumentTypeModal
 
     private async Task SaveAsync()
     {
-        Result<int> response = await DocumentTypeManager.SaveAsync(AddEditDocumentTypeModel);
-        if (response.IsSuccess)
+        var result = await HttpClient.PostAsJsonAsync<AddEditDocumentTypeRequest, Result<int>>(
+            DocumentTypesEndpoints.Save, AddEditDocumentTypeModel);
+        result.HandleWithSnackBar(SnackBar, messages =>
         {
-            SnackBar.Success(response.Messages[0]);
+            SnackBar.Success(messages[0]);
             MudDialog.Close();
-        }
-        else
-        {
-            SnackBar.Error(response.Messages);
-        }
+        });
 
         await HubConnection.SendAsync(ApplicationConstants.SignalR.SendUpdateDashboard);
     }

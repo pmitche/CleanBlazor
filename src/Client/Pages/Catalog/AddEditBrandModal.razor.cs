@@ -1,6 +1,7 @@
 ﻿using Blazored.FluentValidation;
 using BlazorHero.CleanArchitecture.Client.Extensions;
-using BlazorHero.CleanArchitecture.Client.Infrastructure.Managers.Catalog.Brand;
+using BlazorHero.CleanArchitecture.Client.Infrastructure.Extensions;
+using BlazorHero.CleanArchitecture.Client.Infrastructure.Routes;
 using BlazorHero.CleanArchitecture.Contracts.Catalog.Brands;
 using BlazorHero.CleanArchitecture.Shared.Constants.Application;
 using BlazorHero.CleanArchitecture.Shared.Wrapper;
@@ -13,7 +14,6 @@ namespace BlazorHero.CleanArchitecture.Client.Pages.Catalog;
 public partial class AddEditBrandModal
 {
     private FluentValidationValidator _fluentValidationValidator;
-    [Inject] private IBrandManager BrandManager { get; set; }
 
     [Parameter] public AddEditBrandRequest AddEditBrandRequestModel { get; set; } = new();
     [CascadingParameter] private MudDialogInstance MudDialog { get; set; }
@@ -24,16 +24,13 @@ public partial class AddEditBrandModal
 
     private async Task SaveAsync()
     {
-        Result<int> response = await BrandManager.SaveAsync(AddEditBrandRequestModel);
-        if (response.IsSuccess)
+        var result = await HttpClient.PostAsJsonAsync<AddEditBrandRequest, Result<int>>(
+            BrandsEndpoints.Save, AddEditBrandRequestModel);
+        result.HandleWithSnackBar(SnackBar, messages =>
         {
-            SnackBar.Success(response.Messages[0]);
+            SnackBar.Success(messages[0]);
             MudDialog.Close();
-        }
-        else
-        {
-            SnackBar.Error(response.Messages);
-        }
+        });
 
         await HubConnection.SendAsync(ApplicationConstants.SignalR.SendUpdateDashboard);
     }

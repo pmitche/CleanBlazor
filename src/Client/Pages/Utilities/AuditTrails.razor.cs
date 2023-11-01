@@ -1,6 +1,7 @@
-﻿using System.Security.Claims;
+﻿using System.Net.Http.Json;
+using System.Security.Claims;
 using BlazorHero.CleanArchitecture.Client.Extensions;
-using BlazorHero.CleanArchitecture.Client.Infrastructure.Managers.Audit;
+using BlazorHero.CleanArchitecture.Client.Infrastructure.Routes;
 using BlazorHero.CleanArchitecture.Contracts.Audit;
 using BlazorHero.CleanArchitecture.Shared.Constants.Application;
 using BlazorHero.CleanArchitecture.Shared.Constants.Permission;
@@ -31,7 +32,6 @@ public partial class AuditTrails
     private RelatedAuditTrail _trail = new();
 
     public List<RelatedAuditTrail> Trails = new();
-    [Inject] private IAuditManager AuditManager { get; set; }
 
     private bool Search(AuditResponse response)
     {
@@ -92,10 +92,11 @@ public partial class AuditTrails
 
     private async Task GetDataAsync()
     {
-        Result<IEnumerable<AuditResponse>> response = await AuditManager.GetCurrentUserTrailsAsync();
-        if (response.IsSuccess)
+        var result =
+            await HttpClient.GetFromJsonAsync<Result<IEnumerable<AuditResponse>>>(AuditEndpoints.GetCurrentUserTrails);
+        result.HandleWithSnackBar(SnackBar, (_, auditTrails) =>
         {
-            Trails = response.Data
+            Trails = auditTrails
                 .Select(x => new RelatedAuditTrail
                 {
                     AffectedColumns = x.AffectedColumns,
@@ -109,11 +110,7 @@ public partial class AuditTrails
                     UserId = x.UserId,
                     LocalTime = DateTime.SpecifyKind(x.DateTime, DateTimeKind.Utc).ToLocalTime()
                 }).ToList();
-        }
-        else
-        {
-            SnackBar.Error(response.Messages);
-        }
+        });
     }
 
     private void ShowBtnPress(int id)
@@ -129,25 +126,23 @@ public partial class AuditTrails
 
     private async Task ExportToExcelAsync()
     {
-        Result<string> response =
-            await AuditManager.DownloadFileAsync(_searchString, _searchInOldValues, _searchInNewValues);
-        if (response.IsSuccess)
+        var endpoint = string.IsNullOrWhiteSpace(_searchString)
+            ? AuditEndpoints.DownloadFile
+            : AuditEndpoints.DownloadFileFiltered(_searchString, _searchInOldValues, _searchInNewValues);
+        var result = await HttpClient.GetFromJsonAsync<Result<string>>(endpoint);
+        await result.HandleWithSnackBarAsync(SnackBar, async (_, base64Data) =>
         {
             await JsRuntime.InvokeVoidAsync("Download",
                 new
                 {
-                    ByteArray = response.Data,
+                    ByteArray = result.Data,
                     FileName = $"{nameof(AuditTrails).ToLower()}_{DateTime.Now:ddMMyyyyHHmmss}.xlsx",
                     MimeType = ApplicationConstants.MimeTypes.OpenXml
                 });
             SnackBar.Success(string.IsNullOrWhiteSpace(_searchString)
-                    ? Localizer["Audit Trails exported"]
-                    : Localizer["Filtered Audit Trails exported"]);
-        }
-        else
-        {
-            SnackBar.Error(response.Messages);
-        }
+                ? Localizer["Audit Trails exported"]
+                : Localizer["Filtered Audit Trails exported"]);
+        });
     }
 
     public class RelatedAuditTrail : AuditResponse

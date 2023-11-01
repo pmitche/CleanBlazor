@@ -1,5 +1,6 @@
-﻿using BlazorHero.CleanArchitecture.Client.Extensions;
-using BlazorHero.CleanArchitecture.Client.Infrastructure.Managers.Dashboard;
+﻿using System.Net.Http.Json;
+using BlazorHero.CleanArchitecture.Client.Extensions;
+using BlazorHero.CleanArchitecture.Client.Infrastructure.Routes;
 using BlazorHero.CleanArchitecture.Contracts.Dashboard;
 using BlazorHero.CleanArchitecture.Shared.Constants.Application;
 using BlazorHero.CleanArchitecture.Shared.Wrapper;
@@ -19,7 +20,6 @@ public partial class Dashboard
     };
 
     private bool _loaded;
-    [Inject] private IDashboardManager DashboardManager { get; set; }
 
     [CascadingParameter] private HubConnection HubConnection { get; set; }
     [Parameter] public int ProductCount { get; set; }
@@ -48,26 +48,21 @@ public partial class Dashboard
 
     private async Task LoadDataAsync()
     {
-        Result<DashboardDataResponse> response = await DashboardManager.GetDataAsync();
-        if (response.IsSuccess)
+        var result = await HttpClient.GetFromJsonAsync<Result<DashboardDataResponse>>(DashboardEndpoints.GetData);
+        result.HandleWithSnackBar(SnackBar, (_, dashboard) =>
         {
-            ProductCount = response.Data.ProductCount;
-            BrandCount = response.Data.BrandCount;
-            DocumentCount = response.Data.DocumentCount;
-            DocumentTypeCount = response.Data.DocumentTypeCount;
-            UserCount = response.Data.UserCount;
-            RoleCount = response.Data.RoleCount;
-            foreach (Application.Features.Dashboards.Queries.GetData.ChartSeries item in
-                     response.Data.DataEnterBarChart)
+            ProductCount = dashboard.ProductCount;
+            BrandCount = dashboard.BrandCount;
+            DocumentCount = dashboard.DocumentCount;
+            DocumentTypeCount = dashboard.DocumentTypeCount;
+            UserCount = dashboard.UserCount;
+            RoleCount = dashboard.RoleCount;
+            foreach (Application.Features.Dashboards.Queries.GetData.ChartSeries item in dashboard.DataEnterBarChart)
             {
                 _dataEnterBarChartSeries
                     .RemoveAll(x => x.Name.Equals(item.Name, StringComparison.OrdinalIgnoreCase));
                 _dataEnterBarChartSeries.Add(new ChartSeries { Name = item.Name, Data = item.Data });
             }
-        }
-        else
-        {
-            SnackBar.Error(response.Messages);
-        }
+        });
     }
 }

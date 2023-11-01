@@ -1,7 +1,8 @@
 ﻿using System.Net.Http.Headers;
+using System.Net.Http.Json;
 using System.Security.Claims;
 using BlazorHero.CleanArchitecture.Client.Extensions;
-using BlazorHero.CleanArchitecture.Client.Infrastructure.Managers.Identity.Roles;
+using BlazorHero.CleanArchitecture.Client.Infrastructure.Routes;
 using BlazorHero.CleanArchitecture.Client.Shared.Dialogs;
 using BlazorHero.CleanArchitecture.Contracts.Identity;
 using BlazorHero.CleanArchitecture.Shared.Constants.Application;
@@ -28,8 +29,6 @@ public partial class MainBody
     [Parameter] public EventCallback<bool> OnRightToLeftToggle { get; set; }
 
     [Inject] private ILogger<MainBody> Logger { get; set; }
-
-    [Inject] private IRoleManager RoleManager { get; set; }
 
     private string CurrentUserId { get; set; }
     private string ImageDataUrl { get; set; }
@@ -106,16 +105,16 @@ public partial class MainBody
             {
                 if (CurrentUserId != userId)
                 {
-                    Result<List<RoleResponse>> rolesResponse = await RoleManager.GetRolesAsync();
-                    if (rolesResponse.IsSuccess)
+                    var rolesResult = await HttpClient.GetFromJsonAsync<Result<List<RoleResponse>>>(RolesEndpoints.GetAll);
+                    if (rolesResult.IsSuccess)
                     {
-                        RoleResponse role = rolesResponse.Data.FirstOrDefault(x => x.Id == roleId);
+                        RoleResponse role = rolesResult.Data.FirstOrDefault(x => x.Id == roleId);
                         if (role != null)
                         {
-                            Result<UserRolesResponse> currentUserRolesResponse =
-                                await UserManager.GetRolesAsync(CurrentUserId);
-                            if (currentUserRolesResponse.IsSuccess &&
-                                currentUserRolesResponse.Data.UserRoles.Any(x => x.RoleName == role.Name))
+                            var userRolesResult = await HttpClient.GetFromJsonAsync<Result<UserRolesResponse>>(
+                                UsersEndpoints.GetUserRolesById(CurrentUserId));
+                            if (userRolesResult.IsSuccess &&
+                                userRolesResult.Data.UserRoles.Any(x => x.RoleName == role.Name))
                             {
                                 SnackBar.Error(
                                     Localizer[
@@ -170,14 +169,16 @@ public partial class MainBody
 
                 SecondName = user.GetLastName();
                 Email = user.GetEmail();
-                Result<string> imageResponse = await AccountManager.GetProfilePictureAsync(CurrentUserId);
-                if (imageResponse.IsSuccess)
+                var profilePictureResult = await HttpClient.GetFromJsonAsync<Result<string>>(
+                    AccountsEndpoints.GetProfilePicture(CurrentUserId));
+                if (profilePictureResult.IsSuccess)
                 {
-                    ImageDataUrl = imageResponse.Data;
+                    ImageDataUrl = profilePictureResult.Data;
                 }
 
-                Result<UserResponse> currentUserResult = await UserManager.GetAsync(CurrentUserId);
-                if (!currentUserResult.IsSuccess || currentUserResult.Data == null)
+                var result =
+                    await HttpClient.GetFromJsonAsync<Result<UserResponse>>(UsersEndpoints.GetById(CurrentUserId));
+                if (result.IsFailure || result.Data == null)
                 {
                     SnackBar.Error(
                         Localizer["You are logged out because the user with your Token has been deleted."]);

@@ -6,6 +6,7 @@ using BlazorHero.CleanArchitecture.Shared.Wrapper;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using MudBlazor;
+using Polly.Caching;
 
 namespace BlazorHero.CleanArchitecture.Client.Shared.Components;
 
@@ -29,15 +30,11 @@ public partial class ImportExcelModal
         {
             _uploading = true;
             Result<int> result = await OnSaved.Invoke(UploadRequest);
-            if (result.IsSuccess)
+            result.HandleWithSnackBar(SnackBar, messages =>
             {
-                SnackBar.Success(result.Messages[0]);
+                SnackBar.Success(messages[0]);
                 MudDialog.Close();
-            }
-            else
-            {
-                SnackBar.Error(result.Messages);
-            }
+            });
 
             _uploading = false;
         }

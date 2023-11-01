@@ -57,7 +57,7 @@ internal sealed class ImportBrandsCommandHandler : ICommandHandler<ImportBrandsC
             },
             _localizer["Brands"]);
 
-        if (!result.IsSuccess)
+        if (result.IsFailure)
         {
             return Result.Fail<int>(result.Messages);
         }

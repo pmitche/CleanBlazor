@@ -1,6 +1,8 @@
-﻿using System.Security.Claims;
+﻿using System.Net.Http.Json;
+using System.Security.Claims;
 using BlazorHero.CleanArchitecture.Client.Extensions;
-using BlazorHero.CleanArchitecture.Client.Infrastructure.Managers.Catalog.Brand;
+using BlazorHero.CleanArchitecture.Client.Infrastructure.Extensions;
+using BlazorHero.CleanArchitecture.Client.Infrastructure.Routes;
 using BlazorHero.CleanArchitecture.Client.Shared.Components;
 using BlazorHero.CleanArchitecture.Client.Shared.Dialogs;
 using BlazorHero.CleanArchitecture.Contracts;
@@ -34,7 +36,6 @@ public partial class Brands
     private bool _loaded;
     private string _searchString = "";
     private bool _striped = true;
-    [Inject] private IBrandManager BrandManager { get; set; }
 
     [CascadingParameter] private HubConnection HubConnection { get; set; }
 
@@ -65,15 +66,11 @@ public partial class Brands
 
     private async Task GetBrandsAsync()
     {
-        Result<List<GetAllBrandsResponse>> response = await BrandManager.GetAllAsync();
-        if (response.IsSuccess)
+        var result = await HttpClient.GetFromJsonAsync<Result<List<GetAllBrandsResponse>>>(BrandsEndpoints.GetAll);
+        result.HandleWithSnackBar(SnackBar, (_, brands) =>
         {
-            _brandList = response.Data.ToList();
-        }
-        else
-        {
-            SnackBar.Error(response.Messages);
-        }
+            _brandList = brands.ToList();
+        });
     }
 
     private async Task Delete(int id)
@@ -88,44 +85,38 @@ public partial class Brands
             CloseButton = true, MaxWidth = MaxWidth.Small, FullWidth = true, DisableBackdropClick = true
         };
         IDialogReference dialog = await DialogService.ShowAsync<DeleteConfirmation>(Localizer["Delete"], parameters, options);
-        DialogResult result = await dialog.Result;
-        if (!result.Canceled)
+        DialogResult dialogResult = await dialog.Result;
+        if (!dialogResult.Canceled)
         {
-            Result<int> response = await BrandManager.DeleteAsync(id);
-            if (response.IsSuccess)
+            var result = await HttpClient.DeleteFromJsonAsync<Result<int>>(BrandsEndpoints.DeleteById(id));
+            await Reset();
+            await result.HandleWithSnackBarAsync(SnackBar, async (messages, _) =>
             {
-                await Reset();
                 await HubConnection.SendAsync(ApplicationConstants.SignalR.SendUpdateDashboard);
-                SnackBar.Success(response.Messages[0]);
-            }
-            else
-            {
-                await Reset();
-                SnackBar.Error(response.Messages);
-            }
+                SnackBar.Success(messages[0]);
+            });
         }
     }
 
     private async Task ExportToExcel()
     {
-        Result<string> response = await BrandManager.ExportToExcelAsync(_searchString);
-        if (response.IsSuccess)
+        var endpoint = string.IsNullOrWhiteSpace(_searchString)
+            ? BrandsEndpoints.Export
+            : BrandsEndpoints.ExportFiltered(_searchString);
+        var result = await HttpClient.GetFromJsonAsync<Result<string>>(endpoint);
+        await result.HandleWithSnackBarAsync(SnackBar, async (_, base64data) =>
         {
             await JsRuntime.InvokeVoidAsync("Download",
                 new
                 {
-                    ByteArray = response.Data,
+                    ByteArray = base64data,
                     FileName = $"{nameof(Brands).ToLower()}_{DateTime.Now:ddMMyyyyHHmmss}.xlsx",
                     MimeType = ApplicationConstants.MimeTypes.OpenXml
                 });
             SnackBar.Success(string.IsNullOrWhiteSpace(_searchString)
-                    ? Localizer["Brands exported"]
-                    : Localizer["Filtered Brands exported"]);
-        }
-        else
-        {
-            SnackBar.Error(response.Messages);
-        }
+                ? Localizer["Brands exported"]
+                : Localizer["Filtered Brands exported"]);
+        });
     }
 
     private async Task InvokeModal(int id = 0)
@@ -159,7 +150,8 @@ public partial class Brands
         }
     }
 
-    private async Task<Result<int>> ImportExcel(UploadRequest uploadFile) => await BrandManager.ImportAsync(uploadFile);
+    private async Task<Result<int>> ImportExcel(UploadRequest uploadFile) =>
+        await HttpClient.PostAsJsonAsync<UploadRequest, Result<int>>(BrandsEndpoints.Import, uploadFile);
 
     private async Task InvokeImportModal()
     {

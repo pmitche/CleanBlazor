@@ -1,5 +1,8 @@
-﻿using Blazored.FluentValidation;
+﻿using System.Net.Http.Json;
+using Blazored.FluentValidation;
 using BlazorHero.CleanArchitecture.Client.Extensions;
+using BlazorHero.CleanArchitecture.Client.Infrastructure.Extensions;
+using BlazorHero.CleanArchitecture.Client.Infrastructure.Routes;
 using BlazorHero.CleanArchitecture.Contracts.Identity;
 using BlazorHero.CleanArchitecture.Shared.Wrapper;
 using Microsoft.AspNetCore.Components;
@@ -22,16 +25,13 @@ public partial class RegisterUserModal
 
     private async Task SubmitAsync()
     {
-        Result response = await UserManager.RegisterUserAsync(_registerUserModel);
-        if (response.IsSuccess)
+        var result = await HttpClient.PostAsJsonAsync<RegisterRequest, Result>(
+            UsersEndpoints.Register, _registerUserModel);
+        result.HandleWithSnackBar(SnackBar, messages =>
         {
-            SnackBar.Success(response.Messages[0]);
+            SnackBar.Success(messages[0]);
             MudDialog.Close();
-        }
-        else
-        {
-            SnackBar.Error(response.Messages);
-        }
+        });
     }
 
     private void TogglePasswordVisibility()

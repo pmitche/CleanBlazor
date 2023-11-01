@@ -1,7 +1,7 @@
-﻿using System.Security.Claims;
-using BlazorHero.CleanArchitecture.Application.Features.DocumentManagement.DocumentTypes.Commands;
+﻿using System.Net.Http.Json;
+using System.Security.Claims;
 using BlazorHero.CleanArchitecture.Client.Extensions;
-using BlazorHero.CleanArchitecture.Client.Infrastructure.Managers.Misc.DocumentType;
+using BlazorHero.CleanArchitecture.Client.Infrastructure.Routes;
 using BlazorHero.CleanArchitecture.Client.Shared.Dialogs;
 using BlazorHero.CleanArchitecture.Contracts.Documents;
 using BlazorHero.CleanArchitecture.Shared.Constants.Application;
@@ -32,7 +32,6 @@ public partial class DocumentTypes
     private bool _loaded;
     private string _searchString = "";
     private bool _striped = true;
-    [Inject] private IDocumentTypeManager DocumentTypeManager { get; set; }
 
     [CascadingParameter] private HubConnection HubConnection { get; set; }
 
@@ -61,15 +60,12 @@ public partial class DocumentTypes
 
     private async Task GetDocumentTypesAsync()
     {
-        Result<List<GetAllDocumentTypesResponse>> response = await DocumentTypeManager.GetAllAsync();
-        if (response.IsSuccess)
+        var result =
+            await HttpClient.GetFromJsonAsync<Result<List<GetAllDocumentTypesResponse>>>(DocumentTypesEndpoints.GetAll);
+        result.HandleWithSnackBar(SnackBar, (_, documentTypes) =>
         {
-            _documentTypeList = response.Data.ToList();
-        }
-        else
-        {
-            SnackBar.Error(response.Messages);
-        }
+            _documentTypeList = documentTypes.ToList();
+        });
     }
 
     private async Task Delete(int id)
@@ -85,44 +81,38 @@ public partial class DocumentTypes
         };
         IDialogReference dialog =
             await DialogService.ShowAsync<DeleteConfirmation>(Localizer["Delete"], parameters, options);
-        DialogResult result = await dialog.Result;
-        if (!result.Canceled)
+        DialogResult dialogResult = await dialog.Result;
+        if (!dialogResult.Canceled)
         {
-            Result<int> response = await DocumentTypeManager.DeleteAsync(id);
-            if (response.IsSuccess)
+            var result = await HttpClient.DeleteFromJsonAsync<Result<int>>(DocumentTypesEndpoints.DeleteById(id));
+            await Reset();
+            await result.HandleWithSnackBarAsync(SnackBar, async messages =>
             {
-                await Reset();
                 await HubConnection.SendAsync(ApplicationConstants.SignalR.SendUpdateDashboard);
-                SnackBar.Success(response.Messages[0]);
-            }
-            else
-            {
-                await Reset();
-                SnackBar.Error(response.Messages);
-            }
+                SnackBar.Success(messages[0]);
+            });
         }
     }
 
     private async Task ExportToExcel()
     {
-        Result<string> response = await DocumentTypeManager.ExportToExcelAsync(_searchString);
-        if (response.IsSuccess)
+        var endpoint = string.IsNullOrWhiteSpace(_searchString)
+            ? DocumentTypesEndpoints.Export
+            : DocumentTypesEndpoints.ExportFiltered(_searchString);
+        var result = await HttpClient.GetFromJsonAsync<Result<string>>(endpoint);
+        await result.HandleWithSnackBarAsync(SnackBar, async (_, base64Data) =>
         {
             await JsRuntime.InvokeVoidAsync("Download",
                 new
                 {
-                    ByteArray = response.Data,
+                    ByteArray = base64Data,
                     FileName = $"{nameof(DocumentTypes).ToLower()}_{DateTime.Now:ddMMyyyyHHmmss}.xlsx",
                     MimeType = ApplicationConstants.MimeTypes.OpenXml
                 });
             SnackBar.Success(string.IsNullOrWhiteSpace(_searchString)
-                    ? Localizer["Document Types exported"]
-                    : Localizer["Filtered Document Types exported"]);
-        }
-        else
-        {
-            SnackBar.Error(response.Messages);
-        }
+                ? Localizer["Document Types exported"]
+                : Localizer["Filtered Document Types exported"]);
+        });
     }
 
     private async Task InvokeModal(int id = 0)

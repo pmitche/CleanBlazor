@@ -1,12 +1,12 @@
-﻿using System.Security.Claims;
+﻿using System.Net.Http.Json;
+using System.Security.Claims;
 using BlazorHero.CleanArchitecture.Client.Extensions;
-using BlazorHero.CleanArchitecture.Client.Infrastructure.Managers.Misc.Document;
+using BlazorHero.CleanArchitecture.Client.Infrastructure.Routes;
 using BlazorHero.CleanArchitecture.Client.Shared.Dialogs;
 using BlazorHero.CleanArchitecture.Contracts.Documents;
 using BlazorHero.CleanArchitecture.Shared.Constants.Permission;
 using BlazorHero.CleanArchitecture.Shared.Wrapper;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using MudBlazor;
 
@@ -30,7 +30,6 @@ public partial class DocumentStore
     private bool _striped = true;
     private MudTable<GetAllDocumentsResponse> _table;
     private int _totalItems;
-    [Inject] private IDocumentManager DocumentManager { get; set; }
     private string CurrentUserId { get; set; }
 
     protected override async Task OnInitializedAsync()
@@ -77,68 +76,48 @@ public partial class DocumentStore
         {
             PageSize = pageSize, PageNumber = pageNumber + 1, SearchString = _searchString
         };
-        PaginatedResult<GetAllDocumentsResponse> response = await DocumentManager.GetAllAsync(request);
-        if (response.IsSuccess)
-        {
-            _totalItems = response.TotalCount;
-            _currentPage = response.CurrentPage;
-            List<GetAllDocumentsResponse> data = response.Data;
-            IEnumerable<GetAllDocumentsResponse> loadedData = data.Where(element =>
+        var result = await HttpClient.GetFromJsonAsync<PaginatedResult<GetAllDocumentsResponse>>(
+            DocumentsEndpoints.GetAllPaged(request.PageNumber, request.PageSize, request.SearchString));
+        result.HandleWithSnackBar(SnackBar,
+            pagedResult =>
             {
-                if (string.IsNullOrWhiteSpace(_searchString))
-                {
-                    return true;
-                }
+                _totalItems = result.TotalCount;
+                _currentPage = result.CurrentPage;
 
-                if (element.Title.Contains(_searchString, StringComparison.OrdinalIgnoreCase))
-                {
-                    return true;
-                }
-
-                if (element.Description.Contains(_searchString, StringComparison.OrdinalIgnoreCase))
-                {
-                    return true;
-                }
-
-                if (element.DocumentType.Contains(_searchString, StringComparison.OrdinalIgnoreCase))
-                {
-                    return true;
-                }
-
-                return false;
+                var filteredDocuments = FilterDocuments(pagedResult.Data);
+                var sortedDocuments = SortDocuments(filteredDocuments, state);
+                _pagedData = sortedDocuments.ToList();
             });
-            switch (state.SortLabel)
-            {
-                case "documentIdField":
-                    loadedData = loadedData.OrderByDirection(state.SortDirection, d => d.Id);
-                    break;
-                case "documentTitleField":
-                    loadedData = loadedData.OrderByDirection(state.SortDirection, d => d.Title);
-                    break;
-                case "documentDescriptionField":
-                    loadedData = loadedData.OrderByDirection(state.SortDirection, d => d.Description);
-                    break;
-                case "documentDocumentTypeField":
-                    loadedData = loadedData.OrderByDirection(state.SortDirection, p => p.DocumentType);
-                    break;
-                case "documentIsPublicField":
-                    loadedData = loadedData.OrderByDirection(state.SortDirection, d => d.IsPublic);
-                    break;
-                case "documentDateCreatedField":
-                    loadedData = loadedData.OrderByDirection(state.SortDirection, d => d.CreatedOn);
-                    break;
-                case "documentOwnerField":
-                    loadedData = loadedData.OrderByDirection(state.SortDirection, d => d.CreatedBy);
-                    break;
-            }
+    }
 
-            data = loadedData.ToList();
-            _pagedData = data;
-        }
-        else
+    private IEnumerable<GetAllDocumentsResponse> FilterDocuments(IEnumerable<GetAllDocumentsResponse> documents)
+    {
+        return documents.Where(document =>
         {
-            SnackBar.Error(response.Messages);
-        }
+            if (string.IsNullOrWhiteSpace(_searchString))
+                return true;
+
+            return document.Title.Contains(_searchString, StringComparison.OrdinalIgnoreCase) ||
+                   document.Description.Contains(_searchString, StringComparison.OrdinalIgnoreCase) ||
+                   document.DocumentType.Contains(_searchString, StringComparison.OrdinalIgnoreCase);
+        });
+    }
+
+    private static IEnumerable<GetAllDocumentsResponse> SortDocuments(
+        IEnumerable<GetAllDocumentsResponse> documents,
+        TableState state)
+    {
+        return state.SortLabel switch
+        {
+            "documentIdField" => documents.OrderByDirection(state.SortDirection, d => d.Id),
+            "documentTitleField" => documents.OrderByDirection(state.SortDirection, d => d.Title),
+            "documentDescriptionField" => documents.OrderByDirection(state.SortDirection, d => d.Description),
+            "documentDocumentTypeField" => documents.OrderByDirection(state.SortDirection, p => p.DocumentType),
+            "documentIsPublicField" => documents.OrderByDirection(state.SortDirection, d => d.IsPublic),
+            "documentDateCreatedField" => documents.OrderByDirection(state.SortDirection, d => d.CreatedOn),
+            "documentOwnerField" => documents.OrderByDirection(state.SortDirection, d => d.CreatedBy),
+            _ => documents
+        };
     }
 
     private void OnSearch(string text)
@@ -196,20 +175,15 @@ public partial class DocumentStore
         };
         IDialogReference dialog =
             await DialogService.ShowAsync<DeleteConfirmation>(Localizer["Delete"], parameters, options);
-        DialogResult result = await dialog.Result;
-        if (!result.Canceled)
+        DialogResult dialogResult = await dialog.Result;
+        if (!dialogResult.Canceled)
         {
-            Result<int> response = await DocumentManager.DeleteAsync(id);
-            if (response.IsSuccess)
+            var result = await HttpClient.DeleteFromJsonAsync<Result<int>>(DocumentsEndpoints.DeleteById(id));
+            OnSearch("");
+            result.HandleWithSnackBar(SnackBar, messages =>
             {
-                OnSearch("");
-                SnackBar.Success(response.Messages[0]);
-            }
-            else
-            {
-                OnSearch("");
-                SnackBar.Error(response.Messages);
-            }
+                SnackBar.Success(messages[0]);
+            });
         }
     }
 }

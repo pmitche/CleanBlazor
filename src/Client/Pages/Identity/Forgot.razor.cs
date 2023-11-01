@@ -1,5 +1,8 @@
-﻿using Blazored.FluentValidation;
+﻿using System.Net.Http.Json;
+using Blazored.FluentValidation;
 using BlazorHero.CleanArchitecture.Client.Extensions;
+using BlazorHero.CleanArchitecture.Client.Infrastructure.Extensions;
+using BlazorHero.CleanArchitecture.Client.Infrastructure.Routes;
 using BlazorHero.CleanArchitecture.Contracts.Identity;
 using BlazorHero.CleanArchitecture.Shared.Wrapper;
 
@@ -13,15 +16,12 @@ public partial class Forgot
 
     private async Task SubmitAsync()
     {
-        Result result = await UserManager.ForgotPasswordAsync(_emailModel);
-        if (result.IsSuccess)
+        var result = await HttpClient.PostAsJsonAsync<ForgotPasswordRequest, Result>(
+            UsersEndpoints.ForgotPassword, _emailModel);
+        result.HandleWithSnackBar(SnackBar, _ =>
         {
             SnackBar.Success(Localizer["Done!"]);
             NavigationManager.NavigateTo("/");
-        }
-        else
-        {
-            SnackBar.Error(result.Messages);
-        }
+        });
     }
 }
