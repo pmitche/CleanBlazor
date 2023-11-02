@@ -31,14 +31,13 @@ public partial class RoleModal
         }
     }
 
-    private async Task SaveAsync()
-    {
-        var result = await HttpClient.PostAsJsonAsync<RoleRequest, Result<string>>(RolesEndpoints.Save, RoleModel);
-        await result.HandleWithSnackBarAsync(SnackBar, async messages =>
-        {
-            SnackBar.Success(messages[0]);
-            await HubConnection.SendAsync(ApplicationConstants.SignalR.SendUpdateDashboard);
-            MudDialog.Close();
-        });
-    }
+    private async Task SaveAsync() =>
+        await HttpClient.PostAsJsonAsync<RoleRequest, Result<string>>(RolesEndpoints.Save, RoleModel)
+            .Match(async (message, _) =>
+                {
+                    SnackBar.Success(message);
+                    await HubConnection.SendAsync(ApplicationConstants.SignalR.SendUpdateDashboard);
+                    MudDialog.Close();
+                },
+                errors => SnackBar.Error(errors));
 }

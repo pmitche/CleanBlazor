@@ -49,18 +49,18 @@ public partial class Chat
                 Message = CurrentMessage, ToUserId = CId, CreatedDate = DateTime.Now
             };
 
-            var result = await HttpClient.PostAsJsonAsync<ChatMessage<IChatUser>, Result>(
-                ChatEndpoint.SaveMessage, chatMessage);
-            await result.HandleWithSnackBarAsync(SnackBar, async _ =>
-            {
-                AuthenticationState state = await StateProvider.GetAuthenticationStateAsync();
-                ClaimsPrincipal user = state.User;
-                CurrentUserId = user.GetUserId();
-                chatMessage.FromUserId = CurrentUserId;
-                var userName = $"{user.GetFirstName()} {user.GetLastName()}";
-                await HubConnection.SendAsync(ApplicationConstants.SignalR.SendMessage, chatMessage, userName);
-                CurrentMessage = string.Empty;
-            });
+            await HttpClient.PostAsJsonAsync<ChatMessage<IChatUser>, Result>(ChatEndpoint.SaveMessage, chatMessage)
+                .Match(async _ =>
+                    {
+                        AuthenticationState state = await StateProvider.GetAuthenticationStateAsync();
+                        ClaimsPrincipal user = state.User;
+                        CurrentUserId = user.GetUserId();
+                        chatMessage.FromUserId = CurrentUserId;
+                        var userName = $"{user.GetFirstName()} {user.GetLastName()}";
+                        await HubConnection.SendAsync(ApplicationConstants.SignalR.SendMessage, chatMessage, userName);
+                        CurrentMessage = string.Empty;
+                    },
+                    errors => SnackBar.Error(errors));
         }
     }
 
@@ -170,12 +170,13 @@ public partial class Chat
     private async Task LoadUserChat(string userId)
     {
         _open = false;
-        var result = await HttpClient.GetFromJsonAsync<Result<UserResponse>>(UsersEndpoints.GetById(userId));
-        await result.HandleWithSnackBarAsync(SnackBar, async (_, user) =>
-        {
-            InitializeChat(user);
-            await LoadChatMessagesAsync(user.Id);
-        });
+        await HttpClient.GetFromJsonAsync<Result<UserResponse>>(UsersEndpoints.GetById(userId))
+            .Match(async (_, user) =>
+                {
+                    InitializeChat(user);
+                    await LoadChatMessagesAsync(user.Id);
+                },
+                errors => SnackBar.Error(errors));
     }
 
     private void InitializeChat(UserResponse contact)
@@ -190,24 +191,15 @@ public partial class Chat
     private async Task LoadChatMessagesAsync(string userId)
     {
         _messages.Clear();
-        var result = await HttpClient.GetFromJsonAsync<Result<IEnumerable<ChatMessageResponse>>>(
-            ChatEndpoint.GetChatHistory(userId));
-        result.HandleWithSnackBar(SnackBar, (_, chatMessages) =>
-        {
-            _messages = chatMessages.ToList();
-        });
+        await HttpClient.GetFromJsonAsync<Result<IEnumerable<ChatMessageResponse>>>(ChatEndpoint.GetChatHistory(userId))
+            .Match((_, chatMessages) => _messages = chatMessages.ToList(),
+                errors => SnackBar.Error(errors));
     }
 
-    private async Task GetUsersAsync()
-    {
-        //add get chat history from chat controller / manager
-        var result = await HttpClient
-            .GetFromJsonAsync<Result<IEnumerable<ChatUserResponse>>>(ChatEndpoint.GetAvailableUsers);
-        result.HandleWithSnackBar(SnackBar, (_, chatUsers) =>
-        {
-            UserList = chatUsers.ToList();
-        });
-    }
+    private async Task GetUsersAsync() =>
+        await HttpClient.GetFromJsonAsync<Result<IEnumerable<ChatUserResponse>>>(ChatEndpoint.GetAvailableUsers)
+            .Match((_, chatUsers) => UserList = chatUsers.ToList(),
+                errors => SnackBar.Error(errors));
 
     private void OpenDrawer(Anchor anchor)
     {

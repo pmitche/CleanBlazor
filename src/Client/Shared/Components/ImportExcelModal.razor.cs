@@ -29,12 +29,14 @@ public partial class ImportExcelModal
         if (OnSaved != null)
         {
             _uploading = true;
-            Result<int> result = await OnSaved.Invoke(UploadRequest);
-            result.HandleWithSnackBar(SnackBar, messages =>
-            {
-                SnackBar.Success(messages[0]);
-                MudDialog.Close();
-            });
+            
+            await OnSaved.Invoke(UploadRequest)
+                .Match((message, _) =>
+                    {
+                        SnackBar.Success(message);
+                        MudDialog.Close();
+                    },
+                    errors => SnackBar.Error(errors));
 
             _uploading = false;
         }

@@ -15,6 +15,7 @@
 @using Blazored.FluentValidation
 
 @*Client Services*@
+@using BlazorHero.CleanArchitecture.Client.Infrastructure.Authentication
 @using BlazorHero.CleanArchitecture.Client.Infrastructure.Extensions
 @using BlazorHero.CleanArchitecture.Client.Infrastructure.Managers.Identity.Authentication
 @using BlazorHero.CleanArchitecture.Client.Infrastructure.Managers.Preferences
@@ -22,20 +23,15 @@
 
 @*Shared Libraries*@
 @using BlazorHero.CleanArchitecture.Shared.Constants.Permission
-@using BlazorHero.CleanArchitecture.Client.Shared.Components
-
-@using BlazorHero.CleanArchitecture.Client
-@using BlazorHero.CleanArchitecture.Client.Shared
-@using BlazorHero.CleanArchitecture.Client.Shared.Dialogs
-@using BlazorHero.CleanArchitecture.Client.Infrastructure.Configuration
-@using BlazorHero.CleanArchitecture.Client.Extensions
-
 @using BlazorHero.CleanArchitecture.Contracts.Identity
 
-@using BlazorHero.CleanArchitecture.Client.Pages.Authentication
-
-@using BlazorHero.CleanArchitecture.Client.Infrastructure.Authentication
+@using BlazorHero.CleanArchitecture.Client
 @using BlazorHero.CleanArchitecture.Client.Extensions
+@using BlazorHero.CleanArchitecture.Client.Infrastructure.Configuration
+@using BlazorHero.CleanArchitecture.Client.Pages.Authentication
+@using BlazorHero.CleanArchitecture.Client.Shared
+@using BlazorHero.CleanArchitecture.Client.Shared.Components
+@using BlazorHero.CleanArchitecture.Client.Shared.Dialogs
 
 @attribute [Authorize]
 @inject IAuthenticationManager AuthenticationManager

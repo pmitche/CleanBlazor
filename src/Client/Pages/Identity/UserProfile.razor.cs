@@ -27,45 +27,44 @@ public partial class UserProfile
     private async Task ToggleUserStatus()
     {
         var request = new ToggleUserStatusRequest { ActivateUser = _active, UserId = Id };
-        var result = await HttpClient.PostAsJsonAsync<ToggleUserStatusRequest, Result>(
-            UsersEndpoints.ToggleUserStatus(request.UserId), request);
-        result.HandleWithSnackBar(SnackBar, _ =>
-        {
-            SnackBar.Success(Localizer["Updated User Status."]);
-            NavigationManager.NavigateTo("/identity/users");
-        });
+        await HttpClient
+            .PostAsJsonAsync<ToggleUserStatusRequest, Result>(UsersEndpoints.ToggleUserStatus(request.UserId), request)
+            .Match(_ =>
+                {
+                    SnackBar.Success(Localizer["Updated User Status."]);
+                    NavigationManager.NavigateTo("/identity/users");
+                },
+                errors => SnackBar.Error(errors));
     }
 
     protected override async Task OnInitializedAsync()
     {
         var userId = Id;
-        var result = await HttpClient.GetFromJsonAsync<Result<UserResponse>>(UsersEndpoints.GetById(userId));
-        if (result.IsSuccess)
-        {
-            UserResponse user = result.Data;
-            if (user != null)
-            {
-                _firstName = user.FirstName;
-                _lastName = user.LastName;
-                _email = user.Email;
-                _phoneNumber = user.PhoneNumber;
-                _active = user.IsActive;
-                var profilePictureResult = await HttpClient.GetFromJsonAsync<Result<string>>(
-                    AccountsEndpoints.GetProfilePicture(userId));
-                if (profilePictureResult.IsSuccess)
-                {
-                    ImageDataUrl = profilePictureResult.Data;
-                }
-            }
-
-            Title = $"{_firstName} {_lastName}'s {Localizer["Profile"]}";
-            Description = _email;
-            if (_firstName.Length > 0)
-            {
-                _firstLetterOfName = _firstName[0];
-            }
-        }
+        await HttpClient.GetFromJsonAsync<Result<UserResponse>>(UsersEndpoints.GetById(userId))
+            .Match(async (_, user) => await InitializeUserAsync(user), _ => { });
 
         _loaded = true;
+    }
+
+    private async Task InitializeUserAsync(UserResponse user)
+    {
+        if (user != null)
+        {
+            _firstName = user.FirstName;
+            _lastName = user.LastName;
+            _email = user.Email;
+            _phoneNumber = user.PhoneNumber;
+            _active = user.IsActive;
+
+            await HttpClient.GetFromJsonAsync<Result<string>>(AccountsEndpoints.GetProfilePicture(user.Id))
+                .Match((_, imageData) => ImageDataUrl = imageData, _ => { });
+        }
+
+        Title = $"{_firstName} {_lastName}'s {Localizer["Profile"]}";
+        Description = _email;
+        if (_firstName.Length > 0)
+        {
+            _firstLetterOfName = _firstName[0];
+        }
     }
 }

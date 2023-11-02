@@ -43,11 +43,10 @@ public partial class Users
         _loaded = true;
     }
 
-    private async Task GetUsersAsync()
-    {
-        var result = await HttpClient.GetFromJsonAsync<Result<List<UserResponse>>>(UsersEndpoints.GetAll);
-        result.HandleWithSnackBar(SnackBar, (_, users) => _userList = users.ToList());
-    }
+    private async Task GetUsersAsync() =>
+        await HttpClient.GetFromJsonAsync<Result<List<UserResponse>>>(UsersEndpoints.GetAll)
+            .Match((_, users) => _userList = users.ToList(),
+                errors => SnackBar.Error(errors));
 
     private bool Search(UserResponse user)
     {

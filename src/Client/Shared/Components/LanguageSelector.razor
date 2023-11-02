@@ -1,5 +1,6 @@
 ﻿@using Microsoft.Extensions.Localization
 @using BlazorHero.CleanArchitecture.Shared.Constants.Localization
+@using BlazorHero.CleanArchitecture.Shared.Wrapper
 @inject IStringLocalizer<LanguageSelector> Localizer
 
 <MudMenu Icon="@Icons.Material.Outlined.Translate" Color="Color.Inherit" Direction="Direction.Bottom" OffsetY="true" Dense="true">
@@ -11,17 +12,11 @@
 
 @code
 {
-    private async Task ChangeLanguageAsync(string languageCode)
-    {
-        var result = await ClientPreferenceManager.ChangeLanguageAsync(languageCode);
-        if (result.IsSuccess)
-        {
-            SnackBar.Success(result.Messages[0]);
-            NavigationManager.NavigateTo(NavigationManager.Uri, true);
-        }
-        else
-        {
-            SnackBar.Error(result.Messages);
-        }
-    }
+    private async Task ChangeLanguageAsync(string languageCode) =>
+        await ClientPreferenceManager.ChangeLanguageAsync(languageCode)
+            .Match(message =>
+            {
+                SnackBar.Success(message);
+                NavigationManager.NavigateTo(NavigationManager.Uri, true);
+            }, errors => SnackBar.Error(errors));
 }

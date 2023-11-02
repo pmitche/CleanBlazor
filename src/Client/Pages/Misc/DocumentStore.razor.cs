@@ -76,18 +76,18 @@ public partial class DocumentStore
         {
             PageSize = pageSize, PageNumber = pageNumber + 1, SearchString = _searchString
         };
-        var result = await HttpClient.GetFromJsonAsync<PaginatedResult<GetAllDocumentsResponse>>(
-            DocumentsEndpoints.GetAllPaged(request.PageNumber, request.PageSize, request.SearchString));
-        result.HandleWithSnackBar(SnackBar,
-            pagedResult =>
-            {
-                _totalItems = result.TotalCount;
-                _currentPage = result.CurrentPage;
+        await HttpClient.GetFromJsonAsync<PaginatedResult<GetAllDocumentsResponse>>(
+            DocumentsEndpoints.GetAllPaged(request.PageNumber, request.PageSize, request.SearchString))
+            .Match((_, result) =>
+                {
+                    _totalItems = result.TotalCount;
+                    _currentPage = result.CurrentPage;
 
-                var filteredDocuments = FilterDocuments(pagedResult.Data);
-                var sortedDocuments = SortDocuments(filteredDocuments, state);
-                _pagedData = sortedDocuments.ToList();
-            });
+                    var filteredDocuments = FilterDocuments(result.Data);
+                    var sortedDocuments = SortDocuments(filteredDocuments, state);
+                    _pagedData = sortedDocuments.ToList();
+                },
+                errors => SnackBar.Error(errors));
     }
 
     private IEnumerable<GetAllDocumentsResponse> FilterDocuments(IEnumerable<GetAllDocumentsResponse> documents)
@@ -178,12 +178,10 @@ public partial class DocumentStore
         DialogResult dialogResult = await dialog.Result;
         if (!dialogResult.Canceled)
         {
-            var result = await HttpClient.DeleteFromJsonAsync<Result<int>>(DocumentsEndpoints.DeleteById(id));
+            await HttpClient.DeleteFromJsonAsync<Result<int>>(DocumentsEndpoints.DeleteById(id))
+                .Match((message, _) => SnackBar.Success(message),
+                    errors => SnackBar.Error(errors));
             OnSearch("");
-            result.HandleWithSnackBar(SnackBar, messages =>
-            {
-                SnackBar.Success(messages[0]);
-            });
         }
     }
 }

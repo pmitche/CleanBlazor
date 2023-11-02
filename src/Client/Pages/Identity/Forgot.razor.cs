@@ -1,5 +1,4 @@
-﻿using System.Net.Http.Json;
-using Blazored.FluentValidation;
+﻿using Blazored.FluentValidation;
 using BlazorHero.CleanArchitecture.Client.Extensions;
 using BlazorHero.CleanArchitecture.Client.Infrastructure.Extensions;
 using BlazorHero.CleanArchitecture.Client.Infrastructure.Routes;
@@ -14,14 +13,12 @@ public partial class Forgot
     private FluentValidationValidator _fluentValidationValidator;
     private bool Validated => _fluentValidationValidator.Validate(options => { options.IncludeAllRuleSets(); });
 
-    private async Task SubmitAsync()
-    {
-        var result = await HttpClient.PostAsJsonAsync<ForgotPasswordRequest, Result>(
-            UsersEndpoints.ForgotPassword, _emailModel);
-        result.HandleWithSnackBar(SnackBar, _ =>
-        {
-            SnackBar.Success(Localizer["Done!"]);
-            NavigationManager.NavigateTo("/");
-        });
-    }
+    private async Task SubmitAsync() =>
+        await HttpClient.PostAsJsonAsync<ForgotPasswordRequest, Result>(UsersEndpoints.ForgotPassword, _emailModel)
+            .Match(_ =>
+                {
+                    SnackBar.Success(Localizer["Done!"]);
+                    NavigationManager.NavigateTo("/");
+                },
+                errors => SnackBar.Error(errors));
 }

@@ -25,15 +25,16 @@ public partial class Security
 
     private async Task ChangePasswordAsync()
     {
-        var result = await HttpClient.PutAsJsonAsync<ChangePasswordRequest, Result>(
-            AccountsEndpoints.ChangePassword, _passwordModel);
-        result.HandleWithSnackBar(SnackBar, _ =>
-        {
-            SnackBar.Success(Localizer["Password Changed!"]);
-            _passwordModel.Password = string.Empty;
-            _passwordModel.NewPassword = string.Empty;
-            _passwordModel.ConfirmNewPassword = string.Empty;
-        });
+        await HttpClient
+            .PutAsJsonAsync<ChangePasswordRequest, Result>(AccountsEndpoints.ChangePassword, _passwordModel)
+            .Match(_ =>
+                {
+                    SnackBar.Success(Localizer["Password Changed!"]);
+                    _passwordModel.Password = string.Empty;
+                    _passwordModel.NewPassword = string.Empty;
+                    _passwordModel.ConfirmNewPassword = string.Empty;
+                },
+                errors => SnackBar.Error(errors));
     }
 
     private void TogglePasswordVisibility(bool newPassword)

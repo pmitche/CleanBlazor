@@ -38,19 +38,19 @@ public partial class UserRoles
             .Succeeded;
 
         var userId = Id;
-        var result = await HttpClient.GetFromJsonAsync<Result<UserResponse>>(UsersEndpoints.GetById(userId));
-        if (result.IsSuccess)
-        {
-            UserResponse user = result.Data;
-            if (user != null)
-            {
-                Title = $"{user.FirstName} {user.LastName}";
-                Description = string.Format(Localizer["Manage {0} {1}'s Roles"], user.FirstName, user.LastName);
-                var rolesResult = await HttpClient.GetFromJsonAsync<Result<UserRolesResponse>>(
-                        UsersEndpoints.GetUserRolesById(user.Id));
-                UserRolesList = rolesResult.Data.UserRoles;
-            }
-        }
+        await HttpClient.GetFromJsonAsync<Result<UserResponse>>(UsersEndpoints.GetById(userId))
+            .Match(async (_, user) =>
+                {
+                    if (user != null)
+                    {
+                        Title = $"{user.FirstName} {user.LastName}";
+                        Description = string.Format(Localizer["Manage {0} {1}'s Roles"], user.FirstName, user.LastName);
+                        var rolesResult = await HttpClient.GetFromJsonAsync<Result<UserRolesResponse>>(
+                            UsersEndpoints.GetUserRolesById(user.Id));
+                        UserRolesList = rolesResult.Data.UserRoles;
+                    }
+                },
+                _ => { });
 
         _loaded = true;
     }
@@ -58,13 +58,14 @@ public partial class UserRoles
     private async Task SaveAsync()
     {
         var request = new UpdateUserRolesRequest { UserId = Id, UserRoles = UserRolesList };
-        var result = await HttpClient.PutAsJsonAsync<UpdateUserRolesRequest, Result>(
-            UsersEndpoints.GetUserRolesById(request.UserId), request);
-        result.HandleWithSnackBar(SnackBar, messages =>
-        {
-            SnackBar.Success(messages[0]);
-            NavigationManager.NavigateTo("/identity/users");
-        });
+        await HttpClient
+            .PutAsJsonAsync<UpdateUserRolesRequest, Result>(UsersEndpoints.GetUserRolesById(request.UserId), request)
+            .Match(message =>
+                {
+                    SnackBar.Success(message);
+                    NavigationManager.NavigateTo("/identity/users");
+                },
+                errors => SnackBar.Error(errors));
     }
 
     private bool Search(UserRoleModel userRole)

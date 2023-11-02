@@ -23,16 +23,14 @@ public partial class RegisterUserModal
 
     private void Cancel() => MudDialog.Cancel();
 
-    private async Task SubmitAsync()
-    {
-        var result = await HttpClient.PostAsJsonAsync<RegisterRequest, Result>(
-            UsersEndpoints.Register, _registerUserModel);
-        result.HandleWithSnackBar(SnackBar, messages =>
-        {
-            SnackBar.Success(messages[0]);
-            MudDialog.Close();
-        });
-    }
+    private async Task SubmitAsync() =>
+        await HttpClient.PostAsJsonAsync<RegisterRequest, Result>(UsersEndpoints.Register, _registerUserModel)
+            .Match(message =>
+                {
+                    SnackBar.Success(message);
+                    MudDialog.Close();
+                },
+                errors => SnackBar.Error(errors));
 
     private void TogglePasswordVisibility()
     {

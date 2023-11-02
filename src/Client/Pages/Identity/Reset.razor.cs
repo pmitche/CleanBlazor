@@ -36,13 +36,14 @@ public partial class Reset
     {
         if (!string.IsNullOrEmpty(_resetPasswordModel.Token))
         {
-            var result = await HttpClient.PostAsJsonAsync<ResetPasswordRequest, Result>(
-                UsersEndpoints.ResetPassword, _resetPasswordModel);
-            result.HandleWithSnackBar(SnackBar, messages =>
-            {
-                SnackBar.Success(messages[0]);
-                NavigationManager.NavigateTo("/");
-            });
+            await HttpClient
+                .PostAsJsonAsync<ResetPasswordRequest, Result>(UsersEndpoints.ResetPassword, _resetPasswordModel)
+                .Match(message =>
+                    {
+                        SnackBar.Success(message);
+                        NavigationManager.NavigateTo("/");
+                    },
+                    errors => SnackBar.Error(errors));
         }
         else
         {

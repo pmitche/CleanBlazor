@@ -30,17 +30,15 @@ public partial class Profile
 
     [Parameter] public string ImageDataUrl { get; set; }
 
-    private async Task UpdateProfileAsync()
-    {
-        var result = await HttpClient.PutAsJsonAsync<UpdateProfileRequest, Result>(
-            AccountsEndpoints.UpdateProfile, _profileModel);
-        await result.HandleWithSnackBarAsync(SnackBar, async _ =>
-        {
-            await AuthenticationManager.Logout();
-            SnackBar.Success(Localizer["Your Profile has been updated. Please Login to Continue."]);
-            NavigationManager.NavigateTo("/");
-        });
-    }
+    private async Task UpdateProfileAsync() =>
+        await HttpClient.PutAsJsonAsync<UpdateProfileRequest, Result>(AccountsEndpoints.UpdateProfile, _profileModel)
+            .Match(async _ =>
+                {
+                    await AuthenticationManager.Logout();
+                    SnackBar.Success(Localizer["Your Profile has been updated. Please Login to Continue."]);
+                    NavigationManager.NavigateTo("/");
+                },
+                errors => SnackBar.Error(errors));
 
     protected override async Task OnInitializedAsync() => await LoadDataAsync();
 
@@ -53,11 +51,8 @@ public partial class Profile
         _profileModel.LastName = user.GetLastName();
         _profileModel.PhoneNumber = user.GetPhoneNumber();
         UserId = user.GetUserId();
-        var result = await HttpClient.GetFromJsonAsync<Result<string>>(AccountsEndpoints.GetProfilePicture(UserId));
-        if (result.IsSuccess)
-        {
-            ImageDataUrl = result.Data;
-        }
+        await HttpClient.GetFromJsonAsync<Result<string>>(AccountsEndpoints.GetProfilePicture(UserId))
+            .Match((_, imageData) => ImageDataUrl = imageData, _ => { });
 
         if (_profileModel.FirstName.Length > 0)
         {
@@ -80,14 +75,15 @@ public partial class Profile
             {
                 Data = buffer, FileName = fileName, Extension = extension, UploadType = UploadType.ProfilePicture
             };
-            var result = await HttpClient.PostAsJsonAsync<UpdateProfilePictureRequest, Result<string>>(
-                AccountsEndpoints.UpdateProfilePicture(UserId), request);
-            await result.HandleWithSnackBarAsync(SnackBar, async (_, base64Image) =>
-            {
-                await LocalStorage.SetItemAsync(StorageConstants.Local.UserImageUrl, base64Image);
-                SnackBar.Success(Localizer["Profile picture added."]);
-                NavigationManager.NavigateTo("/account", true);
-            });
+            await HttpClient.PostAsJsonAsync<UpdateProfilePictureRequest, Result<string>>(
+                    AccountsEndpoints.UpdateProfilePicture(UserId), request)
+                .Match(async (_, base64Image) =>
+                    {
+                        await LocalStorage.SetItemAsync(StorageConstants.Local.UserImageUrl, base64Image);
+                        SnackBar.Success(Localizer["Profile picture added."]);
+                        NavigationManager.NavigateTo("/account", true);
+                    },
+                    errors => SnackBar.Error(errors));
         }
     }
 
@@ -113,15 +109,16 @@ public partial class Profile
             {
                 Data = null, FileName = string.Empty, UploadType = UploadType.ProfilePicture
             };
-            var result = await HttpClient.PostAsJsonAsync<UpdateProfilePictureRequest, Result<string>>(
-                AccountsEndpoints.UpdateProfilePicture(UserId), request);
-            await result.HandleWithSnackBarAsync(SnackBar, async _ =>
-            {
-                await LocalStorage.RemoveItemAsync(StorageConstants.Local.UserImageUrl);
-                ImageDataUrl = string.Empty;
-                SnackBar.Success(Localizer["Profile picture deleted."]);
-                NavigationManager.NavigateTo("/account", true);
-            });
+            await HttpClient.PostAsJsonAsync<UpdateProfilePictureRequest, Result<string>>(
+                AccountsEndpoints.UpdateProfilePicture(UserId), request)
+                .Match(async (_, _) =>
+                    {
+                        await LocalStorage.RemoveItemAsync(StorageConstants.Local.UserImageUrl);
+                        ImageDataUrl = string.Empty;
+                        SnackBar.Success(Localizer["Profile picture deleted."]);
+                        NavigationManager.NavigateTo("/account", true);
+                    },
+                    errors => SnackBar.Error(errors));
         }
     }
 }

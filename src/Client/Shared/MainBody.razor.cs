@@ -169,12 +169,8 @@ public partial class MainBody
 
                 SecondName = user.GetLastName();
                 Email = user.GetEmail();
-                var profilePictureResult = await HttpClient.GetFromJsonAsync<Result<string>>(
-                    AccountsEndpoints.GetProfilePicture(CurrentUserId));
-                if (profilePictureResult.IsSuccess)
-                {
-                    ImageDataUrl = profilePictureResult.Data;
-                }
+                await HttpClient.GetFromJsonAsync<Result<string>>(AccountsEndpoints.GetProfilePicture(CurrentUserId))
+                    .Match((_, imageData) => ImageDataUrl = imageData, _ => { });
 
                 var result =
                     await HttpClient.GetFromJsonAsync<Result<UserResponse>>(UsersEndpoints.GetById(CurrentUserId));

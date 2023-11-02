@@ -24,13 +24,14 @@ public partial class AddEditBrandModal
 
     private async Task SaveAsync()
     {
-        var result = await HttpClient.PostAsJsonAsync<AddEditBrandRequest, Result<int>>(
-            BrandsEndpoints.Save, AddEditBrandRequestModel);
-        result.HandleWithSnackBar(SnackBar, messages =>
-        {
-            SnackBar.Success(messages[0]);
-            MudDialog.Close();
-        });
+        await HttpClient.PostAsJsonAsync<AddEditBrandRequest, Result<int>>(
+                BrandsEndpoints.Save, AddEditBrandRequestModel)
+            .Match((message, _) =>
+                {
+                    SnackBar.Success(message);
+                    MudDialog.Close();
+                },
+                errors => SnackBar.Error(errors));
 
         await HubConnection.SendAsync(ApplicationConstants.SignalR.SendUpdateDashboard);
     }

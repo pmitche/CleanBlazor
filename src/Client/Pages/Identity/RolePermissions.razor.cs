@@ -60,51 +60,54 @@ public partial class RolePermissions
     {
         _mapper = new MapperConfiguration(c => { c.AddProfile<RoleProfile>(); }).CreateMapper();
         var roleId = Id;
-        var result = await HttpClient.GetFromJsonAsync<Result<PermissionResponse>>(
-            RolesEndpoints.GetPermissionsById(roleId));
-        if (result.IsSuccess)
-        {
-            _model = result.Data;
-            GroupedRoleClaims.Add(Localizer["All Permissions"], _model.RoleClaims);
-            foreach (RoleClaimResponse claim in _model.RoleClaims)
-            {
-                if (GroupedRoleClaims.TryGetValue(claim.Group, out List<RoleClaimResponse> roleClaim))
+        await HttpClient.GetFromJsonAsync<Result<PermissionResponse>>(RolesEndpoints.GetPermissionsById(roleId))
+            .Match((_, permissions) => ProcessPermissions(permissions),
+                errors =>
                 {
-                    roleClaim.Add(claim);
-                }
-                else
-                {
-                    GroupedRoleClaims.Add(claim.Group, new List<RoleClaimResponse> { claim });
-                }
-            }
+                    SnackBar.Error(errors);
+                    NavigationManager.NavigateTo("/identity/roles");
+                });
+    }
 
-            if (_model != null)
+    private void ProcessPermissions(PermissionResponse permissions)
+    {
+        _model = permissions;
+        GroupedRoleClaims.Add(Localizer["All Permissions"], _model.RoleClaims);
+        foreach (RoleClaimResponse claim in _model.RoleClaims)
+        {
+            if (GroupedRoleClaims.TryGetValue(claim.Group, out List<RoleClaimResponse> roleClaim))
             {
-                Description = string.Format(Localizer["Manage {0} {1}'s Permissions"], _model.RoleId, _model.RoleName);
+                roleClaim.Add(claim);
+            }
+            else
+            {
+                GroupedRoleClaims.Add(claim.Group, new List<RoleClaimResponse> { claim });
             }
         }
-        else
-        {
-            SnackBar.Error(result.Messages);
 
-            NavigationManager.NavigateTo("/identity/roles");
+        if (_model != null)
+        {
+            Description = string.Format(Localizer["Manage {0} {1}'s Permissions"],
+                _model.RoleId,
+                _model.RoleName);
         }
     }
 
     private async Task SaveAsync()
     {
         PermissionRequest request = _mapper.Map<PermissionResponse, PermissionRequest>(_model);
-        var result = await HttpClient.PutAsJsonAsync<PermissionRequest, Result<string>>(
-            RolesEndpoints.UpdatePermissionsId(request.RoleId), request);
-        await result.HandleWithSnackBarAsync(SnackBar, async messages =>
-        {
-            SnackBar.Success(messages[0]);
-            await HubConnection.SendAsync(ApplicationConstants.SignalR.SendRegenerateTokens);
-            await HubConnection.SendAsync(ApplicationConstants.SignalR.OnChangeRolePermissions,
-                _currentUser.GetUserId(),
-                request.RoleId);
-            NavigationManager.NavigateTo("/identity/roles");
-        });
+        await HttpClient.PutAsJsonAsync<PermissionRequest, Result<string>>(
+                RolesEndpoints.UpdatePermissionsId(request.RoleId), request)
+            .Match(async (message, _) =>
+                {
+                    SnackBar.Success(message);
+                    await HubConnection.SendAsync(ApplicationConstants.SignalR.SendRegenerateTokens);
+                    await HubConnection.SendAsync(ApplicationConstants.SignalR.OnChangeRolePermissions,
+                        _currentUser.GetUserId(),
+                        request.RoleId);
+                    NavigationManager.NavigateTo("/identity/roles");
+                },
+                errors => SnackBar.Error(errors));
     }
 
     private bool Search(RoleClaimResponse roleClaims)

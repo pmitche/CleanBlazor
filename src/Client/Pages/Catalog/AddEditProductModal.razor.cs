@@ -31,17 +31,16 @@ public partial class AddEditProductModal
 
     public void Cancel() => MudDialog.Cancel();
 
-    private async Task SaveAsync()
-    {
-        var result = await HttpClient.PostAsJsonAsync<AddEditProductRequest, Result<int>>(
-            ProductsEndpoints.Save, AddEditProductModel);
-        await result.HandleWithSnackBarAsync(SnackBar, async messages =>
-        {
-            SnackBar.Success(messages[0]);
-            await HubConnection.SendAsync(ApplicationConstants.SignalR.SendUpdateDashboard);
-            MudDialog.Close();
-        });
-    }
+    private async Task SaveAsync() =>
+        await HttpClient
+            .PostAsJsonAsync<AddEditProductRequest, Result<int>>(ProductsEndpoints.Save, AddEditProductModel)
+            .Match(async (message, _) =>
+                {
+                    SnackBar.Success(message);
+                    await HubConnection.SendAsync(ApplicationConstants.SignalR.SendUpdateDashboard);
+                    MudDialog.Close();
+                },
+                errors => SnackBar.Error(errors));
 
     protected override async Task OnInitializedAsync()
     {
@@ -59,28 +58,19 @@ public partial class AddEditProductModal
         await LoadBrandsAsync();
     }
 
-    private async Task LoadBrandsAsync()
-    {
-        var result = await HttpClient.GetFromJsonAsync<Result<List<GetAllBrandsResponse>>>(BrandsEndpoints.GetAll);
-        if (result.IsSuccess)
-        {
-            _brands = result.Data;
-        }
-    }
+    private async Task LoadBrandsAsync() =>
+        await HttpClient.GetFromJsonAsync<Result<List<GetAllBrandsResponse>>>(BrandsEndpoints.GetAll)
+            .Match((_, brands) => _brands = brands, _ => { });
 
-    private async Task LoadImageAsync()
-    {
-        var result = await HttpClient.GetFromJsonAsync<Result<string>>(
-                ProductsEndpoints.GetProductImage(AddEditProductModel.Id));
-        if (result.IsSuccess)
-        {
-            var imageData = result.Data;
-            if (!string.IsNullOrEmpty(imageData))
-            {
-                AddEditProductModel.ImageDataUrl = imageData;
-            }
-        }
-    }
+    private async Task LoadImageAsync() =>
+        await HttpClient.GetFromJsonAsync<Result<string>>(ProductsEndpoints.GetProductImage(AddEditProductModel.Id))
+                .Match((_, imageData) =>
+                {
+                    if (!string.IsNullOrEmpty(imageData))
+                    {
+                        AddEditProductModel.ImageDataUrl = imageData;
+                    }
+                }, _ => { });
 
     private void DeleteAsync()
     {

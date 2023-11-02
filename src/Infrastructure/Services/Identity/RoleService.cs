@@ -99,7 +99,7 @@ public class RoleService : IRoleService
             else
             {
                 model.RoleClaims = new List<RoleClaimResponse>();
-                return Result.Fail<PermissionResponse>(roleClaimsResult.Messages);
+                return Result.Fail<PermissionResponse>(roleClaimsResult.ErrorMessages);
             }
         }
 
@@ -266,33 +266,28 @@ public class RoleService : IRoleService
         }
     }
 
-    private async Task UpdateRoleClaims(PermissionRequest request, BlazorHeroRole role, List<string> errors)
-    {
-        Result<List<RoleClaimResponse>> addedClaimsResult = await _roleClaimService.GetAllByRoleIdAsync(role.Id);
-        if (addedClaimsResult.IsSuccess)
-        {
-            List<RoleClaimRequest> selectedClaims = request.RoleClaims.Where(a => a.Selected).ToList();
-            foreach (RoleClaimRequest claim in selectedClaims)
-            {
-                RoleClaimResponse addedClaim =
-                    addedClaimsResult.Data.SingleOrDefault(x => x.Type == claim.Type && x.Value == claim.Value);
-                if (addedClaim != null)
+    private async Task UpdateRoleClaims(PermissionRequest request, BlazorHeroRole role, List<string> errors) =>
+        await _roleClaimService.GetAllByRoleIdAsync(role.Id)
+            .Match(async (_, roleClaims) =>
                 {
-                    claim.Id = addedClaim.Id;
-                    claim.RoleId = addedClaim.RoleId;
-                    Result<string> saveResult = await _roleClaimService.SaveAsync(claim);
-                    if (saveResult.IsFailure)
+                    List<RoleClaimRequest> selectedClaims = request.RoleClaims.Where(a => a.Selected).ToList();
+                    foreach (RoleClaimRequest claim in selectedClaims)
                     {
-                        errors.AddRange(saveResult.Messages);
+                        RoleClaimResponse addedClaim =
+                            roleClaims.SingleOrDefault(x => x.Type == claim.Type && x.Value == claim.Value);
+                        if (addedClaim != null)
+                        {
+                            claim.Id = addedClaim.Id;
+                            claim.RoleId = addedClaim.RoleId;
+                            Result<string> saveResult = await _roleClaimService.SaveAsync(claim);
+                            if (saveResult.IsFailure)
+                            {
+                                errors.AddRange(saveResult.ErrorMessages);
+                            }
+                        }
                     }
-                }
-            }
-        }
-        else
-        {
-            errors.AddRange(addedClaimsResult.Messages);
-        }
-    }
+                },
+                errorMessages => errors.AddRange(errorMessages));
 
     private static List<RoleClaimResponse> GetAllPermissions()
     {

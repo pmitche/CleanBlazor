@@ -56,14 +56,10 @@ public partial class Roles
         }
     }
 
-    private async Task GetRolesAsync()
-    {
-        var result = await HttpClient.GetFromJsonAsync<Result<List<RoleResponse>>>(RolesEndpoints.GetAll);
-        result.HandleWithSnackBar(SnackBar, (_, roles) =>
-        {
-            _roleList = roles.ToList();
-        });
-    }
+    private async Task GetRolesAsync() =>
+        await HttpClient.GetFromJsonAsync<Result<List<RoleResponse>>>(RolesEndpoints.GetAll)
+            .Match((_, roles) => _roleList = roles.ToList(),
+                errors => SnackBar.Error(errors));
 
     private async Task Delete(string id)
     {
@@ -81,13 +77,15 @@ public partial class Roles
         DialogResult dialogResult = await dialog.Result;
         if (!dialogResult.Canceled)
         {
-            var result = await HttpClient.DeleteFromJsonAsync<Result<string>>(RolesEndpoints.DeleteById(id));
+            await HttpClient.DeleteFromJsonAsync<Result<string>>(RolesEndpoints.DeleteById(id))
+                .Match(async (message, _) =>
+                    {
+                        await HubConnection.SendAsync(ApplicationConstants.SignalR.SendUpdateDashboard);
+                        SnackBar.Success(message);
+                    },
+                    errors => SnackBar.Error(errors));
+            
             await Reset();
-            await result.HandleWithSnackBarAsync(SnackBar, async messages =>
-            {
-                await HubConnection.SendAsync(ApplicationConstants.SignalR.SendUpdateDashboard);
-                SnackBar.Success(messages[0]);
-            });
         }
     }
 

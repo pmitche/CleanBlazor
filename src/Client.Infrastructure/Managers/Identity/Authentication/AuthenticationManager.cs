@@ -43,7 +43,7 @@ public class AuthenticationManager : IAuthenticationManager
         var result = await _httpClient.PostAsJsonAsync<TokenRequest, Result<TokenResponse>>(TokenEndpoints.Get, model);
         if (result.IsFailure)
         {
-            return Result.Fail(result.Messages);
+            return Result.Fail(result.ErrorMessages);
         }
 
         var token = result.Data.Token;

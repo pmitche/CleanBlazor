@@ -59,7 +59,7 @@ internal sealed class ImportBrandsCommandHandler : ICommandHandler<ImportBrandsC
 
         if (result.IsFailure)
         {
-            return Result.Fail<int>(result.Messages);
+            return Result.Fail<int>(result.ErrorMessages);
         }
 
         IEnumerable<Brand> importedBrands = result.Data;
@@ -87,7 +87,7 @@ internal sealed class ImportBrandsCommandHandler : ICommandHandler<ImportBrandsC
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
         _cache.Remove(ApplicationConstants.Cache.GetAllBrandsCacheKey);
-        return Result.Ok(result.Data.Count(), result.Messages[0]);
+        return Result.Ok(result.Data.Count(), result.SuccessMessage);
     }
 
     private ValidationResult ValidateBrand(Brand brand)

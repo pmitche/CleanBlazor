@@ -27,14 +27,8 @@ public partial class Login
         }
     }
 
-    private async Task SubmitAsync()
-    {
-        Result result = await AuthenticationManager.Login(_tokenModel);
-        if (result.IsFailure)
-        {
-            SnackBar.Error(result.Messages);
-        }
-    }
+    private async Task SubmitAsync() => await AuthenticationManager.Login(_tokenModel)
+        .Match(_ => { }, errors => SnackBar.Error(errors));
 
     private void TogglePasswordVisibility()
     {

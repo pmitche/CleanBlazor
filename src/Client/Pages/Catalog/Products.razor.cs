@@ -89,13 +89,14 @@ public partial class Products
             request.PageSize,
             request.SearchString,
             request.OrderBy);
-        var result = await HttpClient.GetFromJsonAsync<PaginatedResult<GetAllPagedProductsResponse>>(endpoint);
-        result.HandleWithSnackBar(SnackBar, _ =>
-        {
-            _totalItems = result.TotalCount;
-            _currentPage = result.CurrentPage;
-            _pagedData = result.Data;
-        });
+        await HttpClient.GetFromJsonAsync<PaginatedResult<GetAllPagedProductsResponse>>(endpoint)
+            .Match((_, result) =>
+                {
+                    _totalItems = result.TotalCount;
+                    _currentPage = result.CurrentPage;
+                    _pagedData = result.Data;
+                },
+                errors => SnackBar.Error(errors));
     }
 
     private void OnSearch(string text)
@@ -109,20 +110,21 @@ public partial class Products
         var endpoint = string.IsNullOrWhiteSpace(_searchString)
             ? ProductsEndpoints.Export
             : ProductsEndpoints.ExportFiltered(_searchString);
-        var result = await HttpClient.GetFromJsonAsync<Result<string>>(endpoint);
-        await result.HandleWithSnackBarAsync(SnackBar, async (_, base64Data) =>
-        {
-            await JsRuntime.InvokeVoidAsync("Download",
-                new
+        await HttpClient.GetFromJsonAsync<Result<string>>(endpoint)
+            .Match(async (_, base64Data) =>
                 {
-                    ByteArray = base64Data,
-                    FileName = $"{nameof(Products).ToLower()}_{DateTime.Now:ddMMyyyyHHmmss}.xlsx",
-                    MimeType = ApplicationConstants.MimeTypes.OpenXml
-                });
-            SnackBar.Success(string.IsNullOrWhiteSpace(_searchString)
-                ? Localizer["Products exported"]
-                : Localizer["Filtered Products exported"]);
-        });
+                    await JsRuntime.InvokeVoidAsync("Download",
+                        new
+                        {
+                            ByteArray = base64Data,
+                            FileName = $"{nameof(Products).ToLower()}_{DateTime.Now:ddMMyyyyHHmmss}.xlsx",
+                            MimeType = ApplicationConstants.MimeTypes.OpenXml
+                        });
+                    SnackBar.Success(string.IsNullOrWhiteSpace(_searchString)
+                        ? Localizer["Products exported"]
+                        : Localizer["Filtered Products exported"]);
+                },
+                errors => SnackBar.Error(errors));
     }
 
     private async Task InvokeModal(int id = 0)
@@ -177,13 +179,14 @@ public partial class Products
         DialogResult dialogResult = await dialog.Result;
         if (!dialogResult.Canceled)
         {
-            var result = await HttpClient.DeleteFromJsonAsync<Result<int>>(ProductsEndpoints.DeleteById(id));
+            await HttpClient.DeleteFromJsonAsync<Result<int>>(ProductsEndpoints.DeleteById(id))
+                .Match(async (message, _) =>
+                    {
+                        await HubConnection.SendAsync(ApplicationConstants.SignalR.SendUpdateDashboard);
+                        SnackBar.Success(message);
+                    },
+                    errors => SnackBar.Error(errors));
             OnSearch("");
-            await result.HandleWithSnackBarAsync(SnackBar, async (messages, _) =>
-            {
-                await HubConnection.SendAsync(ApplicationConstants.SignalR.SendUpdateDashboard);
-                SnackBar.Success(messages[0]);
-            });
         }
     }
 }

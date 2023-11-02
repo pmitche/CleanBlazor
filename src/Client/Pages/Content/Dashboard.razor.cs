@@ -46,23 +46,22 @@ public partial class Dashboard
         }
     }
 
-    private async Task LoadDataAsync()
-    {
-        var result = await HttpClient.GetFromJsonAsync<Result<DashboardDataResponse>>(DashboardEndpoints.GetData);
-        result.HandleWithSnackBar(SnackBar, (_, dashboard) =>
-        {
-            ProductCount = dashboard.ProductCount;
-            BrandCount = dashboard.BrandCount;
-            DocumentCount = dashboard.DocumentCount;
-            DocumentTypeCount = dashboard.DocumentTypeCount;
-            UserCount = dashboard.UserCount;
-            RoleCount = dashboard.RoleCount;
-            foreach (Application.Features.Dashboards.Queries.GetData.ChartSeries item in dashboard.DataEnterBarChart)
-            {
-                _dataEnterBarChartSeries
-                    .RemoveAll(x => x.Name.Equals(item.Name, StringComparison.OrdinalIgnoreCase));
-                _dataEnterBarChartSeries.Add(new ChartSeries { Name = item.Name, Data = item.Data });
-            }
-        });
-    }
+    private async Task LoadDataAsync() =>
+        await HttpClient.GetFromJsonAsync<Result<DashboardDataResponse>>(DashboardEndpoints.GetData)
+            .Match((_, dashboard) =>
+                {
+                    ProductCount = dashboard.ProductCount;
+                    BrandCount = dashboard.BrandCount;
+                    DocumentCount = dashboard.DocumentCount;
+                    DocumentTypeCount = dashboard.DocumentTypeCount;
+                    UserCount = dashboard.UserCount;
+                    RoleCount = dashboard.RoleCount;
+                    foreach (Application.Features.Dashboards.Queries.GetData.ChartSeries item in dashboard.DataEnterBarChart)
+                    {
+                        _dataEnterBarChartSeries
+                            .RemoveAll(x => x.Name.Equals(item.Name, StringComparison.OrdinalIgnoreCase));
+                        _dataEnterBarChartSeries.Add(new ChartSeries { Name = item.Name, Data = item.Data });
+                    }
+                },
+                errors => SnackBar.Error(errors));
 }

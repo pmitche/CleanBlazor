@@ -58,15 +58,10 @@ public partial class DocumentTypes
         }
     }
 
-    private async Task GetDocumentTypesAsync()
-    {
-        var result =
-            await HttpClient.GetFromJsonAsync<Result<List<GetAllDocumentTypesResponse>>>(DocumentTypesEndpoints.GetAll);
-        result.HandleWithSnackBar(SnackBar, (_, documentTypes) =>
-        {
-            _documentTypeList = documentTypes.ToList();
-        });
-    }
+    private async Task GetDocumentTypesAsync() =>
+        await HttpClient.GetFromJsonAsync<Result<List<GetAllDocumentTypesResponse>>>(DocumentTypesEndpoints.GetAll)
+            .Match((_, documentTypes) => _documentTypeList = documentTypes.ToList(),
+                errors => SnackBar.Error(errors));
 
     private async Task Delete(int id)
     {
@@ -84,13 +79,15 @@ public partial class DocumentTypes
         DialogResult dialogResult = await dialog.Result;
         if (!dialogResult.Canceled)
         {
-            var result = await HttpClient.DeleteFromJsonAsync<Result<int>>(DocumentTypesEndpoints.DeleteById(id));
+            await HttpClient.DeleteFromJsonAsync<Result<int>>(DocumentTypesEndpoints.DeleteById(id))
+                .Match(async (message, _) =>
+                    {
+                        await HubConnection.SendAsync(ApplicationConstants.SignalR.SendUpdateDashboard);
+                        SnackBar.Success(message);
+                    },
+                    errors => SnackBar.Error(errors));
+
             await Reset();
-            await result.HandleWithSnackBarAsync(SnackBar, async messages =>
-            {
-                await HubConnection.SendAsync(ApplicationConstants.SignalR.SendUpdateDashboard);
-                SnackBar.Success(messages[0]);
-            });
         }
     }
 
@@ -99,20 +96,21 @@ public partial class DocumentTypes
         var endpoint = string.IsNullOrWhiteSpace(_searchString)
             ? DocumentTypesEndpoints.Export
             : DocumentTypesEndpoints.ExportFiltered(_searchString);
-        var result = await HttpClient.GetFromJsonAsync<Result<string>>(endpoint);
-        await result.HandleWithSnackBarAsync(SnackBar, async (_, base64Data) =>
-        {
-            await JsRuntime.InvokeVoidAsync("Download",
-                new
+        await HttpClient.GetFromJsonAsync<Result<string>>(endpoint)
+            .Match(async (_, base64Data) =>
                 {
-                    ByteArray = base64Data,
-                    FileName = $"{nameof(DocumentTypes).ToLower()}_{DateTime.Now:ddMMyyyyHHmmss}.xlsx",
-                    MimeType = ApplicationConstants.MimeTypes.OpenXml
-                });
-            SnackBar.Success(string.IsNullOrWhiteSpace(_searchString)
-                ? Localizer["Document Types exported"]
-                : Localizer["Filtered Document Types exported"]);
-        });
+                    await JsRuntime.InvokeVoidAsync("Download",
+                        new
+                        {
+                            ByteArray = base64Data,
+                            FileName = $"{nameof(DocumentTypes).ToLower()}_{DateTime.Now:ddMMyyyyHHmmss}.xlsx",
+                            MimeType = ApplicationConstants.MimeTypes.OpenXml
+                        });
+                    SnackBar.Success(string.IsNullOrWhiteSpace(_searchString)
+                        ? Localizer["Document Types exported"]
+                        : Localizer["Filtered Document Types exported"]);
+                },
+                errors => SnackBar.Error(errors));
     }
 
     private async Task InvokeModal(int id = 0)

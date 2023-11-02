@@ -1,5 +1,4 @@
-﻿using System.Net.Http.Json;
-using Blazored.FluentValidation;
+﻿using Blazored.FluentValidation;
 using BlazorHero.CleanArchitecture.Client.Extensions;
 using BlazorHero.CleanArchitecture.Client.Infrastructure.Extensions;
 using BlazorHero.CleanArchitecture.Client.Infrastructure.Routes;
@@ -25,13 +24,14 @@ public partial class AddEditDocumentTypeModal
 
     private async Task SaveAsync()
     {
-        var result = await HttpClient.PostAsJsonAsync<AddEditDocumentTypeRequest, Result<int>>(
-            DocumentTypesEndpoints.Save, AddEditDocumentTypeModel);
-        result.HandleWithSnackBar(SnackBar, messages =>
-        {
-            SnackBar.Success(messages[0]);
-            MudDialog.Close();
-        });
+        await HttpClient.PostAsJsonAsync<AddEditDocumentTypeRequest, Result<int>>(
+            DocumentTypesEndpoints.Save, AddEditDocumentTypeModel)
+            .Match((message, _) =>
+                {
+                    SnackBar.Success(message);
+                    MudDialog.Close();
+                },
+                errors => SnackBar.Error(errors));
 
         await HubConnection.SendAsync(ApplicationConstants.SignalR.SendUpdateDashboard);
     }

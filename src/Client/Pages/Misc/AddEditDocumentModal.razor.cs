@@ -27,30 +27,23 @@ public partial class AddEditDocumentModal
 
     public void Cancel() => MudDialog.Cancel();
 
-    private async Task SaveAsync()
-    {
-        var result = await HttpClient.PostAsJsonAsync<AddEditDocumentRequest, Result<int>>(
-            DocumentsEndpoints.Save, AddEditDocumentModel);
-        result.HandleWithSnackBar(SnackBar, messages =>
-        {
-            SnackBar.Success(messages[0]);
-            MudDialog.Close();
-        });
-    }
+    private async Task SaveAsync() =>
+        await HttpClient
+            .PostAsJsonAsync<AddEditDocumentRequest, Result<int>>(DocumentsEndpoints.Save, AddEditDocumentModel)
+            .Match((message, _) =>
+                {
+                    SnackBar.Success(message);
+                    MudDialog.Close();
+                },
+                errors => SnackBar.Error(errors));
 
     protected override async Task OnInitializedAsync() => await LoadDataAsync();
 
     private async Task LoadDataAsync() => await LoadDocumentTypesAsync();
 
-    private async Task LoadDocumentTypesAsync()
-    {
-        var result =
-            await HttpClient.GetFromJsonAsync<Result<List<GetAllDocumentTypesResponse>>>(DocumentTypesEndpoints.GetAll);
-        if (result.IsSuccess)
-        {
-            _documentTypes = result.Data;
-        }
-    }
+    private async Task LoadDocumentTypesAsync() =>
+        await HttpClient.GetFromJsonAsync<Result<List<GetAllDocumentTypesResponse>>>(DocumentTypesEndpoints.GetAll)
+            .Match((_, documentTypes) => _documentTypes = documentTypes, _ => { });
 
     private async Task UploadFiles(InputFileChangeEventArgs e)
     {

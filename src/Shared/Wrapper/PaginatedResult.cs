@@ -13,10 +13,11 @@ public class PaginatedResult<T> : Result
     private PaginatedResult(
         bool isSuccess,
         List<T> data = default,
-        IEnumerable<string> messages = null,
+        string successMessage = null,
+        IEnumerable<string> errorMessages = null,
         int count = 0,
         int page = 1,
-        int pageSize = 10) : base(isSuccess, messages)
+        int pageSize = 10) : base(isSuccess, successMessage, errorMessages)
     {
         Data = data;
         CurrentPage = page;
@@ -45,5 +46,5 @@ public class PaginatedResult<T> : Result
     public bool HasNextPage => CurrentPage < TotalPages;
 
     public static PaginatedResult<T> Ok(List<T> data, int count, int page, int pageSize) =>
-        new(true, data, null, count, page, pageSize);
+        new(true, data, null, null, count, page, pageSize);
 }
