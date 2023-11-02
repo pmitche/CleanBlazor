@@ -122,7 +122,7 @@
       PublicKeyToken=b77a5c561934e089
     </value>
   </resheader>
-  <data name="BlazorHero Jobs" xml:space="preserve">
-    <value>BlazorHero Jobs</value>
+  <data name="Hangfire Jobs" xml:space="preserve">
+    <value>Hangfire Jobs</value>
   </data>
 </root>

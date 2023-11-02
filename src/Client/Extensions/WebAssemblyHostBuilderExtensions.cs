@@ -11,7 +11,7 @@ namespace BlazorHero.CleanArchitecture.Client.Extensions;
 
 public static class WebAssemblyHostBuilderExtensions
 {
-    private const string ClientName = "BlazorHero.API";
+    private const string ClientName = "BlazorHero.CleanArchitecture.API";
 
     public static WebAssemblyHostBuilder AddRootComponents(this WebAssemblyHostBuilder builder)
     {
