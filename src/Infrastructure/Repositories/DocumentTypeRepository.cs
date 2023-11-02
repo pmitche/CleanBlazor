@@ -6,7 +6,7 @@ namespace BlazorHero.CleanArchitecture.Infrastructure.Repositories;
 
 internal sealed class DocumentTypeRepository : GenericRepository<DocumentType, int>, IDocumentTypeRepository
 {
-    public DocumentTypeRepository(BlazorHeroContext dbContext) : base(dbContext)
+    public DocumentTypeRepository(ApplicationDbContext dbContext) : base(dbContext)
     {
     }
 }

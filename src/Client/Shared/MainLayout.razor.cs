@@ -16,7 +16,7 @@ public partial class MainLayout
 
     protected override async Task OnInitializedAsync()
     {
-        _currentTheme = BlazorHeroTheme.DefaultTheme;
+        _currentTheme = ApplicationTheme.DefaultTheme;
         _currentTheme = await ClientPreferenceManager.GetCurrentThemeAsync();
         _rightToLeft = await ClientPreferenceManager.IsRtl();
     }
@@ -25,7 +25,7 @@ public partial class MainLayout
     {
         var isDarkMode = await ClientPreferenceManager.ToggleDarkModeAsync();
         _currentTheme = isDarkMode
-            ? BlazorHeroTheme.DefaultTheme
-            : BlazorHeroTheme.DarkTheme;
+            ? ApplicationTheme.DefaultTheme
+            : ApplicationTheme.DarkTheme;
     }
 }

@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BlazorHero.CleanArchitecture.Infrastructure.Migrations
 {
-    [DbContext(typeof(BlazorHeroContext))]
+    [DbContext(typeof(ApplicationDbContext))]
     [Migration("20210613102039_AddDocumentTypeAndExtendedAttribute")]
     partial class AddDocumentTypeAndExtendedAttribute
     {

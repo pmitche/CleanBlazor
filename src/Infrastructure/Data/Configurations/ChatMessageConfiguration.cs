@@ -5,9 +5,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace BlazorHero.CleanArchitecture.Infrastructure.Data.Configurations;
 
-public class ChatMessageConfiguration : IEntityTypeConfiguration<ChatMessage<BlazorHeroUser>>
+public class ChatMessageConfiguration : IEntityTypeConfiguration<ChatMessage<ApplicationUser>>
 {
-    public void Configure(EntityTypeBuilder<ChatMessage<BlazorHeroUser>> builder)
+    public void Configure(EntityTypeBuilder<ChatMessage<ApplicationUser>> builder)
     {
         builder.ToTable("ChatMessages");
 

@@ -2,7 +2,7 @@
 
 namespace BlazorHero.CleanArchitecture.Client.Configuration;
 
-public static class BlazorHeroTheme
+public static class ApplicationTheme
 {
     private static readonly Typography s_defaultTypography = new()
     {

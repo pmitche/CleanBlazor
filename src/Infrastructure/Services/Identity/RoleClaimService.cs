@@ -12,14 +12,14 @@ namespace BlazorHero.CleanArchitecture.Infrastructure.Services.Identity;
 
 public class RoleClaimService : IRoleClaimService
 {
-    private readonly BlazorHeroContext _db;
+    private readonly ApplicationDbContext _db;
     private readonly IStringLocalizer<RoleClaimService> _localizer;
     private readonly IMapper _mapper;
 
     public RoleClaimService(
         IStringLocalizer<RoleClaimService> localizer,
         IMapper mapper,
-        BlazorHeroContext db)
+        ApplicationDbContext db)
     {
         _localizer = localizer;
         _mapper = mapper;
@@ -28,7 +28,7 @@ public class RoleClaimService : IRoleClaimService
 
     public async Task<Result<List<RoleClaimResponse>>> GetAllAsync()
     {
-        List<BlazorHeroRoleClaim> roleClaims = await _db.RoleClaims.ToListAsync();
+        List<ApplicationRoleClaim> roleClaims = await _db.RoleClaims.ToListAsync();
         var roleClaimsResponse = _mapper.Map<List<RoleClaimResponse>>(roleClaims);
         return roleClaimsResponse;
     }
@@ -41,7 +41,7 @@ public class RoleClaimService : IRoleClaimService
 
     public async Task<Result<RoleClaimResponse>> GetByIdAsync(int id)
     {
-        BlazorHeroRoleClaim roleClaim = await _db.RoleClaims
+        ApplicationRoleClaim roleClaim = await _db.RoleClaims
             .SingleOrDefaultAsync(x => x.Id == id);
         var roleClaimResponse = _mapper.Map<RoleClaimResponse>(roleClaim);
         return roleClaimResponse;
@@ -49,7 +49,7 @@ public class RoleClaimService : IRoleClaimService
 
     public async Task<Result<List<RoleClaimResponse>>> GetAllByRoleIdAsync(string roleId)
     {
-        List<BlazorHeroRoleClaim> roleClaims = await _db.RoleClaims
+        List<ApplicationRoleClaim> roleClaims = await _db.RoleClaims
             .Include(x => x.Role)
             .Where(x => x.RoleId == roleId)
             .ToListAsync();
@@ -66,7 +66,7 @@ public class RoleClaimService : IRoleClaimService
 
         if (request.Id == 0)
         {
-            BlazorHeroRoleClaim existingRoleClaim =
+            ApplicationRoleClaim existingRoleClaim =
                 await _db.RoleClaims
                     .SingleOrDefaultAsync(x =>
                         x.RoleId == request.RoleId && x.ClaimType == request.Type && x.ClaimValue == request.Value);
@@ -75,14 +75,14 @@ public class RoleClaimService : IRoleClaimService
                 return Result.Fail<string>(_localizer["Similar Role Claim already exists."]);
             }
 
-            var roleClaim = _mapper.Map<BlazorHeroRoleClaim>(request);
+            var roleClaim = _mapper.Map<ApplicationRoleClaim>(request);
             await _db.RoleClaims.AddAsync(roleClaim);
             await _db.SaveChangesAsync();
             return Result.Ok<string>(string.Format(_localizer["Role Claim {0} created."], request.Value));
         }
         else
         {
-            BlazorHeroRoleClaim existingRoleClaim =
+            ApplicationRoleClaim existingRoleClaim =
                 await _db.RoleClaims
                     .Include(x => x.Role)
                     .SingleOrDefaultAsync(x => x.Id == request.Id);
@@ -106,7 +106,7 @@ public class RoleClaimService : IRoleClaimService
 
     public async Task<Result<string>> DeleteAsync(int id)
     {
-        BlazorHeroRoleClaim existingRoleClaim = await _db.RoleClaims
+        ApplicationRoleClaim existingRoleClaim = await _db.RoleClaims
             .Include(x => x.Role)
             .FirstOrDefaultAsync(x => x.Id == id);
         if (existingRoleClaim == null)

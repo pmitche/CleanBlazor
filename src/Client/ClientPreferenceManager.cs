@@ -49,10 +49,10 @@ public class ClientPreferenceManager
     {
         if (await GetPreference() is not ClientPreference preference)
         {
-            return BlazorHeroTheme.DefaultTheme;
+            return ApplicationTheme.DefaultTheme;
         }
 
-        return preference.IsDarkMode ? BlazorHeroTheme.DarkTheme : BlazorHeroTheme.DefaultTheme;
+        return preference.IsDarkMode ? ApplicationTheme.DarkTheme : ApplicationTheme.DefaultTheme;
     }
 
     public async Task<IPreference> GetPreference() =>

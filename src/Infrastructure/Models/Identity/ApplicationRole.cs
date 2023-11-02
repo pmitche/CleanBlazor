@@ -3,21 +3,17 @@ using Microsoft.AspNetCore.Identity;
 
 namespace BlazorHero.CleanArchitecture.Infrastructure.Models.Identity;
 
-public class BlazorHeroRoleClaim : IdentityRoleClaim<string>, IAuditableEntity
+public class ApplicationRole : IdentityRole, IAuditableEntity
 {
-    public BlazorHeroRoleClaim()
-    {
-    }
+    public ApplicationRole() {}
 
-    public BlazorHeroRoleClaim(string roleClaimDescription = null, string roleClaimGroup = null)
+    public ApplicationRole(string roleName, string roleDescription = null) : base(roleName)
     {
-        Description = roleClaimDescription;
-        Group = roleClaimGroup;
+        Description = roleDescription;
     }
 
     public string Description { get; set; }
-    public string Group { get; set; }
-    public virtual BlazorHeroRole Role { get; set; }
+    public virtual ICollection<ApplicationRoleClaim> RoleClaims { get; set; } = new HashSet<ApplicationRoleClaim>();
     public string CreatedBy { get; }
     public DateTime CreatedOn { get; }
     public string LastModifiedBy { get; }

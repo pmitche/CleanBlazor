@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace BlazorHero.CleanArchitecture.Infrastructure.Models.Identity;
 
-public class BlazorHeroUser : IdentityUser<string>, IUser, IChatUser, IAuditableEntity, ISoftDeletableEntity
+public class ApplicationUser : IdentityUser<string>, IUser, IChatUser, IAuditableEntity, ISoftDeletableEntity
 {
     public string FirstName { get; set; }
     public string LastName { get; set; }
@@ -14,11 +14,11 @@ public class BlazorHeroUser : IdentityUser<string>, IUser, IChatUser, IAuditable
     public string RefreshToken { get; set; }
     public DateTime RefreshTokenExpiryTime { get; set; }
 
-    public virtual ICollection<ChatMessage<BlazorHeroUser>> ChatMessagesFromUsers { get; set; } =
-        new HashSet<ChatMessage<BlazorHeroUser>>();
+    public virtual ICollection<ChatMessage<ApplicationUser>> ChatMessagesFromUsers { get; set; } =
+        new HashSet<ChatMessage<ApplicationUser>>();
 
-    public virtual ICollection<ChatMessage<BlazorHeroUser>> ChatMessagesToUsers { get; set; } =
-        new HashSet<ChatMessage<BlazorHeroUser>>();
+    public virtual ICollection<ChatMessage<ApplicationUser>> ChatMessagesToUsers { get; set; } =
+        new HashSet<ChatMessage<ApplicationUser>>();
     public string CreatedBy { get; }
     public DateTime CreatedOn { get; }
     public string LastModifiedBy { get; }

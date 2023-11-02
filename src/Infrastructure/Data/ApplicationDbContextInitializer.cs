@@ -17,26 +17,26 @@ public static class InitializerExtensions
     public static async Task InitializeDatabaseAsync(this IApplicationBuilder app)
     {
         using var scope = app.ApplicationServices.CreateScope();
-        var initialiser = scope.ServiceProvider.GetRequiredService<BlazorHeroContextInitializer>();
+        var initialiser = scope.ServiceProvider.GetRequiredService<ApplicationDbContextInitializer>();
         await initialiser.InitializeAsync();
         await initialiser.SeedAsync();
     }
 }
 
-public class BlazorHeroContextInitializer
+public class ApplicationDbContextInitializer
 {
-    private readonly BlazorHeroContext _context;
-    private readonly IStringLocalizer<BlazorHeroContextInitializer> _localizer;
-    private readonly ILogger<BlazorHeroContextInitializer> _logger;
-    private readonly RoleManager<BlazorHeroRole> _roleManager;
-    private readonly UserManager<BlazorHeroUser> _userManager;
+    private readonly ApplicationDbContext _context;
+    private readonly IStringLocalizer<ApplicationDbContextInitializer> _localizer;
+    private readonly ILogger<ApplicationDbContextInitializer> _logger;
+    private readonly RoleManager<ApplicationRole> _roleManager;
+    private readonly UserManager<ApplicationUser> _userManager;
 
-    public BlazorHeroContextInitializer(
-        UserManager<BlazorHeroUser> userManager,
-        RoleManager<BlazorHeroRole> roleManager,
-        BlazorHeroContext context,
-        ILogger<BlazorHeroContextInitializer> logger,
-        IStringLocalizer<BlazorHeroContextInitializer> localizer)
+    public ApplicationDbContextInitializer(
+        UserManager<ApplicationUser> userManager,
+        RoleManager<ApplicationRole> roleManager,
+        ApplicationDbContext context,
+        ILogger<ApplicationDbContextInitializer> logger,
+        IStringLocalizer<ApplicationDbContextInitializer> localizer)
     {
         _userManager = userManager;
         _roleManager = roleManager;
@@ -81,9 +81,9 @@ public class BlazorHeroContextInitializer
     private async Task SeedAdministratorAsync()
     {
         //Check if Role Exists
-        var adminRole = new BlazorHeroRole(RoleConstants.AdministratorRole,
+        var adminRole = new ApplicationRole(RoleConstants.AdministratorRole,
             _localizer["Administrator role with full permissions"]);
-        BlazorHeroRole adminRoleInDb = await _roleManager.FindByNameAsync(RoleConstants.AdministratorRole);
+        ApplicationRole adminRoleInDb = await _roleManager.FindByNameAsync(RoleConstants.AdministratorRole);
         if (adminRoleInDb == null)
         {
             await _roleManager.CreateAsync(adminRole);
@@ -92,7 +92,7 @@ public class BlazorHeroContextInitializer
         }
 
         //Check if User Exists
-        var superUser = new BlazorHeroUser
+        var superUser = new ApplicationUser
         {
             FirstName = "Mukesh",
             LastName = "Murugan",
@@ -102,7 +102,7 @@ public class BlazorHeroContextInitializer
             PhoneNumberConfirmed = true,
             IsActive = true
         };
-        BlazorHeroUser superUserInDb = await _userManager.FindByEmailAsync(superUser.Email);
+        ApplicationUser superUserInDb = await _userManager.FindByEmailAsync(superUser.Email);
         if (superUserInDb == null)
         {
             await _userManager.CreateAsync(superUser, UserConstants.DefaultPassword);
@@ -130,8 +130,8 @@ public class BlazorHeroContextInitializer
     {
         //Check if Role Exists
         var basicRole =
-            new BlazorHeroRole(RoleConstants.BasicRole, _localizer["Basic role with default permissions"]);
-        BlazorHeroRole basicRoleInDb = await _roleManager.FindByNameAsync(RoleConstants.BasicRole);
+            new ApplicationRole(RoleConstants.BasicRole, _localizer["Basic role with default permissions"]);
+        ApplicationRole basicRoleInDb = await _roleManager.FindByNameAsync(RoleConstants.BasicRole);
         if (basicRoleInDb == null)
         {
             await _roleManager.CreateAsync(basicRole);
@@ -139,7 +139,7 @@ public class BlazorHeroContextInitializer
         }
 
         //Check if User Exists
-        var basicUser = new BlazorHeroUser
+        var basicUser = new ApplicationUser
         {
             FirstName = "John",
             LastName = "Doe",
@@ -149,7 +149,7 @@ public class BlazorHeroContextInitializer
             PhoneNumberConfirmed = true,
             IsActive = true
         };
-        BlazorHeroUser basicUserInDb = await _userManager.FindByEmailAsync(basicUser.Email);
+        ApplicationUser basicUserInDb = await _userManager.FindByEmailAsync(basicUser.Email);
         if (basicUserInDb == null)
         {
             await _userManager.CreateAsync(basicUser, UserConstants.DefaultPassword);

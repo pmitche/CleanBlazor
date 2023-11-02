@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BlazorHero.CleanArchitecture.Infrastructure.Migrations
 {
-    [DbContext(typeof(BlazorHeroContext))]
+    [DbContext(typeof(ApplicationDbContext))]
     [Migration("20210526094834_AddBlazorHeroRole")]
     partial class AddBlazorHeroRole
     {

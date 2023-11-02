@@ -56,7 +56,7 @@ public class Program
 
         try
         {
-            var context = services.GetRequiredService<BlazorHeroContext>();
+            var context = services.GetRequiredService<ApplicationDbContext>();
 
             if (context.Database.IsSqlServer())
             {

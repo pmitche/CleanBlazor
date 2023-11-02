@@ -8,14 +8,14 @@ public class RoleClaimProfile : Profile
 {
     public RoleClaimProfile()
     {
-        CreateMap<RoleClaimResponse, BlazorHeroRoleClaim>()
-            .ForMember(nameof(BlazorHeroRoleClaim.ClaimType), opt => opt.MapFrom(c => c.Type))
-            .ForMember(nameof(BlazorHeroRoleClaim.ClaimValue), opt => opt.MapFrom(c => c.Value))
+        CreateMap<RoleClaimResponse, ApplicationRoleClaim>()
+            .ForMember(nameof(ApplicationRoleClaim.ClaimType), opt => opt.MapFrom(c => c.Type))
+            .ForMember(nameof(ApplicationRoleClaim.ClaimValue), opt => opt.MapFrom(c => c.Value))
             .ReverseMap();
 
-        CreateMap<RoleClaimRequest, BlazorHeroRoleClaim>()
-            .ForMember(nameof(BlazorHeroRoleClaim.ClaimType), opt => opt.MapFrom(c => c.Type))
-            .ForMember(nameof(BlazorHeroRoleClaim.ClaimValue), opt => opt.MapFrom(c => c.Value))
+        CreateMap<RoleClaimRequest, ApplicationRoleClaim>()
+            .ForMember(nameof(ApplicationRoleClaim.ClaimType), opt => opt.MapFrom(c => c.Type))
+            .ForMember(nameof(ApplicationRoleClaim.ClaimValue), opt => opt.MapFrom(c => c.Value))
             .ReverseMap();
     }
 }

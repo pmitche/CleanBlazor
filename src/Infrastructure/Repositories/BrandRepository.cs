@@ -6,7 +6,7 @@ namespace BlazorHero.CleanArchitecture.Infrastructure.Repositories;
 
 internal sealed class BrandRepository : GenericRepository<Brand, int>, IBrandRepository
 {
-    public BrandRepository(BlazorHeroContext dbContext) : base(dbContext)
+    public BrandRepository(ApplicationDbContext dbContext) : base(dbContext)
     {
     }
 }

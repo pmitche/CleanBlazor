@@ -18,16 +18,16 @@ public class IdentityService : ITokenService
 {
     private readonly AppConfiguration _appConfig;
     private readonly IStringLocalizer<IdentityService> _localizer;
-    private readonly RoleManager<BlazorHeroRole> _roleManager;
-    private readonly SignInManager<BlazorHeroUser> _signInManager;
+    private readonly RoleManager<ApplicationRole> _roleManager;
+    private readonly SignInManager<ApplicationUser> _signInManager;
 
-    private readonly UserManager<BlazorHeroUser> _userManager;
+    private readonly UserManager<ApplicationUser> _userManager;
 
     public IdentityService(
-        UserManager<BlazorHeroUser> userManager,
-        RoleManager<BlazorHeroRole> roleManager,
+        UserManager<ApplicationUser> userManager,
+        RoleManager<ApplicationRole> roleManager,
         IOptions<AppConfiguration> appConfig,
-        SignInManager<BlazorHeroUser> signInManager,
+        SignInManager<ApplicationUser> signInManager,
         IStringLocalizer<IdentityService> localizer)
     {
         _userManager = userManager;
@@ -39,7 +39,7 @@ public class IdentityService : ITokenService
 
     public async Task<Result<TokenResponse>> LoginAsync(TokenRequest model)
     {
-        BlazorHeroUser user = await _userManager.FindByEmailAsync(model.Email);
+        ApplicationUser user = await _userManager.FindByEmailAsync(model.Email);
         if (user == null)
         {
             return Result.Fail<TokenResponse>(_localizer["User Not Found."]);
@@ -87,7 +87,7 @@ public class IdentityService : ITokenService
             return Result.Fail<TokenResponse>(_localizer["Email Not Found"]);
         }
 
-        BlazorHeroUser user = await _userManager.FindByEmailAsync(userEmail);
+        ApplicationUser user = await _userManager.FindByEmailAsync(userEmail);
         if (user == null)
         {
             return Result.Fail<TokenResponse>(_localizer["User Not Found."]);
@@ -109,13 +109,13 @@ public class IdentityService : ITokenService
         return response;
     }
 
-    private async Task<string> GenerateJwtAsync(BlazorHeroUser user)
+    private async Task<string> GenerateJwtAsync(ApplicationUser user)
     {
         var token = GenerateEncryptedToken(GetSigningCredentials(), await GetClaimsAsync(user));
         return token;
     }
 
-    private async Task<IEnumerable<Claim>> GetClaimsAsync(BlazorHeroUser user)
+    private async Task<IEnumerable<Claim>> GetClaimsAsync(ApplicationUser user)
     {
         IList<Claim> userClaims = await _userManager.GetClaimsAsync(user);
         IList<string> roles = await _userManager.GetRolesAsync(user);
@@ -124,7 +124,7 @@ public class IdentityService : ITokenService
         foreach (var role in roles)
         {
             roleClaims.Add(new Claim(ClaimTypes.Role, role));
-            BlazorHeroRole thisRole = await _roleManager.FindByNameAsync(role);
+            ApplicationRole thisRole = await _roleManager.FindByNameAsync(role);
             IList<Claim> allPermissionsForThisRoles = await _roleManager.GetClaimsAsync(thisRole);
             permissionClaims.AddRange(allPermissionsForThisRoles);
         }

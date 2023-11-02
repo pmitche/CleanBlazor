@@ -84,7 +84,7 @@ public class AuditableEntityInterceptor : SaveChangesInterceptor
 
     private void AddAuditTrails(DbContext context)
     {
-        if (context is not BlazorHeroContext applicationDbContext)
+        if (context is not ApplicationDbContext applicationDbContext)
         {
             return;
         }
@@ -177,7 +177,7 @@ public class AuditableEntityInterceptor : SaveChangesInterceptor
 
     private void UpdateAuditTrailEntities(DbContext context)
     {
-        if (context is not BlazorHeroContext applicationDbContext)
+        if (context is not ApplicationDbContext applicationDbContext)
         {
             return;
         }

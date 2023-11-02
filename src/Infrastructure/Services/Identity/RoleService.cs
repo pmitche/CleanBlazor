@@ -20,13 +20,13 @@ public class RoleService : IRoleService
     private readonly IStringLocalizer<RoleService> _localizer;
     private readonly IMapper _mapper;
     private readonly IRoleClaimService _roleClaimService;
-    private readonly RoleManager<BlazorHeroRole> _roleManager;
-    private readonly UserManager<BlazorHeroUser> _userManager;
+    private readonly RoleManager<ApplicationRole> _roleManager;
+    private readonly UserManager<ApplicationUser> _userManager;
 
     public RoleService(
-        RoleManager<BlazorHeroRole> roleManager,
+        RoleManager<ApplicationRole> roleManager,
         IMapper mapper,
-        UserManager<BlazorHeroUser> userManager,
+        UserManager<ApplicationUser> userManager,
         IRoleClaimService roleClaimService,
         IStringLocalizer<RoleService> localizer,
         ICurrentUserService currentUserService)
@@ -41,7 +41,7 @@ public class RoleService : IRoleService
 
     public async Task<Result<string>> DeleteAsync(string id)
     {
-        BlazorHeroRole existingRole = await _roleManager.FindByIdAsync(id);
+        ApplicationRole existingRole = await _roleManager.FindByIdAsync(id);
         if (existingRole == null)
         {
             return Result.Fail<string>(_localizer["Role Not Found."]);
@@ -54,8 +54,8 @@ public class RoleService : IRoleService
         }
 
         var roleIsUsed = false;
-        List<BlazorHeroUser> allUsers = await _userManager.Users.ToListAsync();
-        foreach (BlazorHeroUser user in allUsers)
+        List<ApplicationUser> allUsers = await _userManager.Users.ToListAsync();
+        foreach (ApplicationUser user in allUsers)
         {
             if (await _userManager.IsInRoleAsync(user, existingRole.Name))
             {
@@ -77,7 +77,7 @@ public class RoleService : IRoleService
 
     public async Task<Result<List<RoleResponse>>> GetAllAsync()
     {
-        List<BlazorHeroRole> roles = await _roleManager.Roles.ToListAsync();
+        List<ApplicationRole> roles = await _roleManager.Roles.ToListAsync();
         var rolesResponse = _mapper.Map<List<RoleResponse>>(roles);
         return rolesResponse;
     }
@@ -86,7 +86,7 @@ public class RoleService : IRoleService
     {
         var model = new PermissionResponse();
         List<RoleClaimResponse> allPermissions = GetAllPermissions();
-        BlazorHeroRole role = await _roleManager.FindByIdAsync(roleId);
+        ApplicationRole role = await _roleManager.FindByIdAsync(roleId);
         if (role != null)
         {
             model.RoleId = role.Id;
@@ -109,7 +109,7 @@ public class RoleService : IRoleService
 
     public async Task<Result<RoleResponse>> GetByIdAsync(string id)
     {
-        BlazorHeroRole roles = await _roleManager.Roles.SingleOrDefaultAsync(x => x.Id == id);
+        ApplicationRole roles = await _roleManager.Roles.SingleOrDefaultAsync(x => x.Id == id);
         var rolesResponse = _mapper.Map<RoleResponse>(roles);
         return rolesResponse;
     }
@@ -118,14 +118,14 @@ public class RoleService : IRoleService
     {
         if (string.IsNullOrEmpty(request.Id))
         {
-            BlazorHeroRole existingRole = await _roleManager.FindByNameAsync(request.Name);
+            ApplicationRole existingRole = await _roleManager.FindByNameAsync(request.Name);
             if (existingRole != null)
             {
                 return Result.Fail<string>(_localizer["Similar Role already exists."]);
             }
 
             IdentityResult response =
-                await _roleManager.CreateAsync(new BlazorHeroRole(request.Name, request.Description));
+                await _roleManager.CreateAsync(new ApplicationRole(request.Name, request.Description));
             if (!response.Succeeded)
             {
                 return Result.Fail<string>(response.Errors.Select(e => _localizer[e.Description].ToString())
@@ -136,7 +136,7 @@ public class RoleService : IRoleService
         }
         else
         {
-            BlazorHeroRole existingRole = await _roleManager.FindByIdAsync(request.Id);
+            ApplicationRole existingRole = await _roleManager.FindByIdAsync(request.Id);
             if (existingRole == null)
             {
                 return Result.Fail<string>(_localizer["Role Not Found."]);
@@ -162,7 +162,7 @@ public class RoleService : IRoleService
         try
         {
             var errors = new List<string>();
-            BlazorHeroRole role = await _roleManager.FindByIdAsync(request.RoleId);
+            ApplicationRole role = await _roleManager.FindByIdAsync(request.RoleId);
             if (!IsAllowedRoleModification(role, request, out var disallowedMessage))
             {
                 return Result.Fail<string>(disallowedMessage);
@@ -214,12 +214,12 @@ public class RoleService : IRoleService
         return allPermissions;
     }
 
-    private bool IsAllowedRoleModification(BlazorHeroRole role, PermissionRequest request, out string disallowedMessage)
+    private bool IsAllowedRoleModification(ApplicationRole role, PermissionRequest request, out string disallowedMessage)
     {
         disallowedMessage = string.Empty;
         if (role.Name == RoleConstants.AdministratorRole)
         {
-            BlazorHeroUser currentUser = _userManager.Users.SingleAsync(x => x.Id == _currentUserService.UserId).Result;
+            ApplicationUser currentUser = _userManager.Users.SingleAsync(x => x.Id == _currentUserService.UserId).Result;
             if (_userManager.IsInRoleAsync(currentUser, RoleConstants.AdministratorRole).Result)
             {
                 disallowedMessage = _localizer["Not allowed to modify Permissions for this Role."].ToString();
@@ -244,7 +244,7 @@ public class RoleService : IRoleService
         return false;
     }
 
-    private async Task RemoveExistingClaims(BlazorHeroRole role)
+    private async Task RemoveExistingClaims(ApplicationRole role)
     {
         IList<Claim> claims = await _roleManager.GetClaimsAsync(role);
         foreach (Claim claim in claims)
@@ -253,7 +253,7 @@ public class RoleService : IRoleService
         }
     }
 
-    private async Task AddSelectedClaims(PermissionRequest request, BlazorHeroRole role, List<string> errors)
+    private async Task AddSelectedClaims(PermissionRequest request, ApplicationRole role, List<string> errors)
     {
         List<RoleClaimRequest> selectedClaims = request.RoleClaims.Where(a => a.Selected).ToList();
         foreach (RoleClaimRequest claim in selectedClaims)
@@ -266,7 +266,7 @@ public class RoleService : IRoleService
         }
     }
 
-    private async Task UpdateRoleClaims(PermissionRequest request, BlazorHeroRole role, List<string> errors) =>
+    private async Task UpdateRoleClaims(PermissionRequest request, ApplicationRole role, List<string> errors) =>
         await _roleClaimService.GetAllByRoleIdAsync(role.Id)
             .Match(async (_, roleClaims) =>
                 {

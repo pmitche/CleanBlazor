@@ -7,7 +7,7 @@ namespace BlazorHero.CleanArchitecture.Infrastructure.Repositories;
 
 internal sealed class ProductRepository : GenericRepository<Product, int>, IProductRepository
 {
-    public ProductRepository(BlazorHeroContext dbContext) : base(dbContext)
+    public ProductRepository(ApplicationDbContext dbContext) : base(dbContext)
     {
     }
 

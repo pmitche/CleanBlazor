@@ -40,8 +40,8 @@ public static class WebAssemblyHostBuilderExtensions
             })
             .AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies())
             .AddScoped<ClientPreferenceManager>()
-            .AddScoped<BlazorHeroStateProvider>()
-            .AddScoped<AuthenticationStateProvider, BlazorHeroStateProvider>();
+            .AddScoped<ApplicationStateProvider>()
+            .AddScoped<AuthenticationStateProvider, ApplicationStateProvider>();
 
         return builder;
     }

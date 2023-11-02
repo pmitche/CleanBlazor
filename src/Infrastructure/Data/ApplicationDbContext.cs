@@ -12,14 +12,14 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BlazorHero.CleanArchitecture.Infrastructure.Data;
 
-public class BlazorHeroContext : IdentityDbContext<BlazorHeroUser, BlazorHeroRole, string,
-    IdentityUserClaim<string>, IdentityUserRole<string>, IdentityUserLogin<string>, BlazorHeroRoleClaim,
+public class ApplicationDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, string,
+    IdentityUserClaim<string>, IdentityUserRole<string>, IdentityUserLogin<string>, ApplicationRoleClaim,
     IdentityUserToken<string>>, IUnitOfWork
 {
-    public BlazorHeroContext(DbContextOptions<BlazorHeroContext> options) : base(options) { }
+    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
 
     public DbSet<Audit> AuditTrails { get; set; }
-    public DbSet<ChatMessage<BlazorHeroUser>> ChatMessages { get; set; }
+    public DbSet<ChatMessage<ApplicationUser>> ChatMessages { get; set; }
     public DbSet<Product> Products { get; set; }
     public DbSet<Brand> Brands { get; set; }
     public DbSet<Document> Documents { get; set; }

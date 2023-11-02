@@ -12,13 +12,13 @@ namespace BlazorHero.CleanArchitecture.Infrastructure.Services.Identity;
 public class AccountService : IAccountService
 {
     private readonly IStringLocalizer<AccountService> _localizer;
-    private readonly SignInManager<BlazorHeroUser> _signInManager;
+    private readonly SignInManager<ApplicationUser> _signInManager;
     private readonly IUploadService _uploadService;
-    private readonly UserManager<BlazorHeroUser> _userManager;
+    private readonly UserManager<ApplicationUser> _userManager;
 
     public AccountService(
-        UserManager<BlazorHeroUser> userManager,
-        SignInManager<BlazorHeroUser> signInManager,
+        UserManager<ApplicationUser> userManager,
+        SignInManager<ApplicationUser> signInManager,
         IUploadService uploadService,
         IStringLocalizer<AccountService> localizer)
     {
@@ -30,7 +30,7 @@ public class AccountService : IAccountService
 
     public async Task<Result> ChangePasswordAsync(ChangePasswordRequest model, string userId)
     {
-        BlazorHeroUser user = await _userManager.FindByIdAsync(userId);
+        ApplicationUser user = await _userManager.FindByIdAsync(userId);
         if (user == null)
         {
             return Result.Fail(_localizer["User Not Found."]);
@@ -48,7 +48,7 @@ public class AccountService : IAccountService
     {
         if (!string.IsNullOrWhiteSpace(model.PhoneNumber))
         {
-            BlazorHeroUser userWithSamePhoneNumber =
+            ApplicationUser userWithSamePhoneNumber =
                 await _userManager.Users.FirstOrDefaultAsync(x => x.PhoneNumber == model.PhoneNumber);
             if (userWithSamePhoneNumber != null)
             {
@@ -57,13 +57,13 @@ public class AccountService : IAccountService
             }
         }
 
-        BlazorHeroUser userWithSameEmail = await _userManager.FindByEmailAsync(model.Email);
+        ApplicationUser userWithSameEmail = await _userManager.FindByEmailAsync(model.Email);
         if (userWithSameEmail != null && userWithSameEmail.Id != userId)
         {
             return Result.Fail(string.Format(_localizer["Email {0} is already used."], model.Email));
         }
 
-        BlazorHeroUser user = await _userManager.FindByIdAsync(userId);
+        ApplicationUser user = await _userManager.FindByIdAsync(userId);
         if (user == null)
         {
             return Result.Fail(_localizer["User Not Found."]);
@@ -86,7 +86,7 @@ public class AccountService : IAccountService
 
     public async Task<Result<string>> GetProfilePictureAsync(string userId)
     {
-        BlazorHeroUser user = await _userManager.FindByIdAsync(userId);
+        ApplicationUser user = await _userManager.FindByIdAsync(userId);
         if (user == null)
         {
             return Result.Fail<string>(_localizer["User Not Found"]);
@@ -97,7 +97,7 @@ public class AccountService : IAccountService
 
     public async Task<Result<string>> UpdateProfilePictureAsync(UpdateProfilePictureRequest request, string userId)
     {
-        BlazorHeroUser user = await _userManager.FindByIdAsync(userId);
+        ApplicationUser user = await _userManager.FindByIdAsync(userId);
         if (user == null)
         {
             return Result.Fail<string>(_localizer["User Not Found"]);

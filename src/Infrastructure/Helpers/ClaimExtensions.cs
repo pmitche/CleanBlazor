@@ -53,8 +53,8 @@ public static class ClaimsHelper
     }
 
     public static async Task<IdentityResult> AddPermissionClaim(
-        this RoleManager<BlazorHeroRole> roleManager,
-        BlazorHeroRole role,
+        this RoleManager<ApplicationRole> roleManager,
+        ApplicationRole role,
         string permission)
     {
         IList<Claim> allClaims = await roleManager.GetClaimsAsync(role);

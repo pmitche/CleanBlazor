@@ -9,8 +9,8 @@ public class UserProfile : Profile
 {
     public UserProfile()
     {
-        CreateMap<UserResponse, BlazorHeroUser>().ReverseMap();
-        CreateMap<ChatUserResponse, BlazorHeroUser>().ReverseMap()
+        CreateMap<UserResponse, ApplicationUser>().ReverseMap();
+        CreateMap<ChatUserResponse, ApplicationUser>().ReverseMap()
             .ForMember(dest => dest.EmailAddress, opt => opt.MapFrom(source => source.Email)); //Specific Mapping
     }
 }

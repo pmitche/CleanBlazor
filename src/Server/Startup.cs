@@ -69,7 +69,6 @@ public class Startup
         app.UseHangfireDashboard("/jobs",
             new DashboardOptions
             {
-                DashboardTitle = "BlazorHero Jobs",
                 Authorization = new[] { new HangfireAuthorizationFilter() }
             });
         app.UseEndpoints();

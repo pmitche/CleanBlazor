@@ -60,16 +60,16 @@ public static class DependencyInjection
             .AddScoped<ISaveChangesInterceptor, AuditableEntityInterceptor>()
             .AddScoped<ISaveChangesInterceptor, SoftDeletableEntityInterceptor>()
             .AddScoped<ISaveChangesInterceptor, DispatchDomainEventsInterceptor>()
-            .AddDbContext<BlazorHeroContext>((sp, options) => options
+            .AddDbContext<ApplicationDbContext>((sp, options) => options
                 .AddInterceptors(sp.GetServices<ISaveChangesInterceptor>())
                 .UseSqlServer(configuration.GetConnectionString("DefaultConnection")))
-            .AddScoped<BlazorHeroContextInitializer>()
-            .AddScoped<IUnitOfWork>(serviceProvider => serviceProvider.GetRequiredService<BlazorHeroContext>());
+            .AddScoped<ApplicationDbContextInitializer>()
+            .AddScoped<IUnitOfWork>(serviceProvider => serviceProvider.GetRequiredService<ApplicationDbContext>());
 
     private static IServiceCollection AddIdentity(this IServiceCollection services)
     {
         services
-            .AddIdentity<BlazorHeroUser, BlazorHeroRole>(options =>
+            .AddIdentity<ApplicationUser, ApplicationRole>(options =>
             {
                 options.Password.RequiredLength = 6;
                 options.Password.RequireDigit = false;
@@ -78,7 +78,7 @@ public static class DependencyInjection
                 options.Password.RequireUppercase = false;
                 options.User.RequireUniqueEmail = true;
             })
-            .AddEntityFrameworkStores<BlazorHeroContext>()
+            .AddEntityFrameworkStores<ApplicationDbContext>()
             .AddDefaultTokenProviders();
 
         return services;

@@ -28,13 +28,13 @@ public class UserService : IUserService
     private readonly IStringLocalizer<UserService> _localizer;
     private readonly IMailService _mailService;
     private readonly IMapper _mapper;
-    private readonly RoleManager<BlazorHeroRole> _roleManager;
-    private readonly UserManager<BlazorHeroUser> _userManager;
+    private readonly RoleManager<ApplicationRole> _roleManager;
+    private readonly UserManager<ApplicationUser> _userManager;
 
     public UserService(
-        UserManager<BlazorHeroUser> userManager,
+        UserManager<ApplicationUser> userManager,
         IMapper mapper,
-        RoleManager<BlazorHeroRole> roleManager,
+        RoleManager<ApplicationRole> roleManager,
         IMailService mailService,
         IStringLocalizer<UserService> localizer,
         IExcelService excelService,
@@ -53,21 +53,21 @@ public class UserService : IUserService
 
     public async Task<Result<List<UserResponse>>> GetAllAsync()
     {
-        List<BlazorHeroUser> users = await _userManager.Users.ToListAsync();
+        List<ApplicationUser> users = await _userManager.Users.ToListAsync();
         var result = _mapper.Map<List<UserResponse>>(users);
         return result;
     }
 
     public async Task<Result> RegisterAsync(RegisterRequest request, string origin)
     {
-        BlazorHeroUser userWithSameUserName = await _userManager.FindByNameAsync(request.UserName);
+        ApplicationUser userWithSameUserName = await _userManager.FindByNameAsync(request.UserName);
         if (userWithSameUserName != null)
         {
             return Result.Fail(string.Format(_localizer["Username {0} is already taken."],
                 request.UserName));
         }
 
-        var user = new BlazorHeroUser
+        var user = new ApplicationUser
         {
             Email = request.Email,
             FirstName = request.FirstName,
@@ -80,7 +80,7 @@ public class UserService : IUserService
 
         if (!string.IsNullOrWhiteSpace(request.PhoneNumber))
         {
-            BlazorHeroUser userWithSamePhoneNumber =
+            ApplicationUser userWithSamePhoneNumber =
                 await _userManager.Users.FirstOrDefaultAsync(x => x.PhoneNumber == request.PhoneNumber);
             if (userWithSamePhoneNumber != null)
             {
@@ -89,7 +89,7 @@ public class UserService : IUserService
             }
         }
 
-        BlazorHeroUser userWithSameEmail = await _userManager.FindByEmailAsync(request.Email);
+        ApplicationUser userWithSameEmail = await _userManager.FindByEmailAsync(request.Email);
         if (userWithSameEmail != null)
         {
             return Result.Fail(string.Format(_localizer["Email {0} is already registered."], request.Email));
@@ -124,14 +124,14 @@ public class UserService : IUserService
 
     public async Task<Result<UserResponse>> GetAsync(string userId)
     {
-        BlazorHeroUser user = await _userManager.Users.Where(u => u.Id == userId).FirstOrDefaultAsync();
+        ApplicationUser user = await _userManager.Users.Where(u => u.Id == userId).FirstOrDefaultAsync();
         var result = _mapper.Map<UserResponse>(user);
         return result;
     }
 
     public async Task<Result> ToggleUserStatusAsync(ToggleUserStatusRequest request)
     {
-        BlazorHeroUser user = await _userManager.Users.FirstOrDefaultAsync(u => u.Id == request.UserId);
+        ApplicationUser user = await _userManager.Users.FirstOrDefaultAsync(u => u.Id == request.UserId);
         if (user == null)
         {
             return Result.Fail(_localizer["User Not Found."]);
@@ -157,10 +157,10 @@ public class UserService : IUserService
     public async Task<Result<UserRolesResponse>> GetRolesAsync(string userId)
     {
         var viewModel = new List<UserRoleModel>();
-        BlazorHeroUser user = await _userManager.FindByIdAsync(userId);
-        List<BlazorHeroRole> roles = await _roleManager.Roles.ToListAsync();
+        ApplicationUser user = await _userManager.FindByIdAsync(userId);
+        List<ApplicationRole> roles = await _roleManager.Roles.ToListAsync();
 
-        foreach (BlazorHeroRole role in roles)
+        foreach (ApplicationRole role in roles)
         {
             var userRolesViewModel = new UserRoleModel { RoleName = role.Name, RoleDescription = role.Description };
             if (await _userManager.IsInRoleAsync(user, role.Name))
@@ -181,7 +181,7 @@ public class UserService : IUserService
 
     public async Task<Result> UpdateRolesAsync(UpdateUserRolesRequest request)
     {
-        BlazorHeroUser user = await _userManager.FindByIdAsync(request.UserId);
+        ApplicationUser user = await _userManager.FindByIdAsync(request.UserId);
         if (user == null)
         {
             return Result.Fail(_localizer["User Not Found."]);
@@ -195,7 +195,7 @@ public class UserService : IUserService
         IList<string> roles = await _userManager.GetRolesAsync(user);
         List<UserRoleModel> selectedRoles = request.UserRoles.Where(x => x.Selected).ToList();
 
-        BlazorHeroUser currentUser = await _userManager.FindByIdAsync(_currentUserService.UserId);
+        ApplicationUser currentUser = await _userManager.FindByIdAsync(_currentUserService.UserId);
         if (currentUser == null)
         {
             return Result.Fail(_localizer["User Not Found."]);
@@ -222,7 +222,7 @@ public class UserService : IUserService
     public async Task<Result<string>> ConfirmEmailAsync(string userId, string code)
     {
         code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(code));
-        BlazorHeroUser user = await _userManager.FindByIdAsync(userId);
+        ApplicationUser user = await _userManager.FindByIdAsync(userId);
         if (user == null)
         {
             return Result.Fail<string>(_localizer["An Error has occurred!"]);
@@ -243,7 +243,7 @@ public class UserService : IUserService
 
     public async Task<Result> ForgotPasswordAsync(ForgotPasswordRequest request, string origin)
     {
-        BlazorHeroUser user = await _userManager.FindByEmailAsync(request.Email);
+        ApplicationUser user = await _userManager.FindByEmailAsync(request.Email);
         if (user == null || !await _userManager.IsEmailConfirmedAsync(user))
         {
             // Don't reveal that the user does not exist or is not confirmed
@@ -270,7 +270,7 @@ public class UserService : IUserService
 
     public async Task<Result> ResetPasswordAsync(ResetPasswordRequest request)
     {
-        BlazorHeroUser user = await _userManager.FindByEmailAsync(request.Email);
+        ApplicationUser user = await _userManager.FindByEmailAsync(request.Email);
         if (user == null)
         {
             // Don't reveal that the user does not exist
@@ -295,13 +295,13 @@ public class UserService : IUserService
     public async Task<string> ExportToExcelAsync(string searchString = "")
     {
         var userSpec = new UserFilterSpecification(searchString);
-        List<BlazorHeroUser> users = await _userManager.Users
+        List<ApplicationUser> users = await _userManager.Users
             .Specify(userSpec)
             .OrderByDescending(a => a.CreatedOn)
             .ToListAsync();
         var result = await _excelService.ExportAsync(users,
             sheetName: _localizer["Users"],
-            mappers: new Dictionary<string, Func<BlazorHeroUser, object>>
+            mappers: new Dictionary<string, Func<ApplicationUser, object>>
             {
                 { _localizer["Id"], item => item.Id },
                 { _localizer["FirstName"], item => item.FirstName },
@@ -324,7 +324,7 @@ public class UserService : IUserService
         return result;
     }
 
-    private async Task<string> SendVerificationEmail(BlazorHeroUser user, string origin)
+    private async Task<string> SendVerificationEmail(ApplicationUser user, string origin)
     {
         var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
         code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));

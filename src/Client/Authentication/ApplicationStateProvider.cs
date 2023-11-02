@@ -8,12 +8,12 @@ using Microsoft.AspNetCore.Components.Authorization;
 
 namespace BlazorHero.CleanArchitecture.Client.Authentication;
 
-public class BlazorHeroStateProvider : AuthenticationStateProvider
+public class ApplicationStateProvider : AuthenticationStateProvider
 {
     private readonly HttpClient _httpClient;
     private readonly ILocalStorageService _localStorage;
 
-    public BlazorHeroStateProvider(
+    public ApplicationStateProvider(
         HttpClient httpClient,
         ILocalStorageService localStorage)
     {

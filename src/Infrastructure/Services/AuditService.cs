@@ -14,14 +14,14 @@ namespace BlazorHero.CleanArchitecture.Infrastructure.Services;
 
 public class AuditService : IAuditService
 {
-    private readonly BlazorHeroContext _context;
+    private readonly ApplicationDbContext _context;
     private readonly IExcelService _excelService;
     private readonly IStringLocalizer<AuditService> _localizer;
     private readonly IMapper _mapper;
 
     public AuditService(
         IMapper mapper,
-        BlazorHeroContext context,
+        ApplicationDbContext context,
         IExcelService excelService,
         IStringLocalizer<AuditService> localizer)
     {

@@ -11,18 +11,18 @@ internal sealed class ChatMessageRepository : GenericRepository<ChatMessage<ICha
 {
     private readonly IMapper _mapper;
 
-    public ChatMessageRepository(BlazorHeroContext dbContext, IMapper mapper) : base(dbContext)
+    public ChatMessageRepository(ApplicationDbContext dbContext, IMapper mapper) : base(dbContext)
     {
         _mapper = mapper;
     }
 
-    public override IQueryable<ChatMessage<IChatUser>> Entities => DbContext.Set<ChatMessage<BlazorHeroUser>>()
+    public override IQueryable<ChatMessage<IChatUser>> Entities => DbContext.Set<ChatMessage<ApplicationUser>>()
         .ProjectTo<ChatMessage<IChatUser>>(_mapper.ConfigurationProvider);
 
     public override ChatMessage<IChatUser> Add(ChatMessage<IChatUser> entity)
     {
-        var mapped = _mapper.Map<ChatMessage<BlazorHeroUser>>(entity);
-        var added = DbContext.Set<ChatMessage<BlazorHeroUser>>().Add(mapped).Entity;
+        var mapped = _mapper.Map<ChatMessage<ApplicationUser>>(entity);
+        var added = DbContext.Set<ChatMessage<ApplicationUser>>().Add(mapped).Entity;
         return _mapper.Map<ChatMessage<IChatUser>>(added);
     }
 }

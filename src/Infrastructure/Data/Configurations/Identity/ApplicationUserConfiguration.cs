@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace BlazorHero.CleanArchitecture.Infrastructure.Data.Configurations.Identity;
 
-public class BlazorHeroUserConfiguration : IEntityTypeConfiguration<BlazorHeroUser>
+public class ApplicationUserConfiguration : IEntityTypeConfiguration<ApplicationUser>
 {
-    public void Configure(EntityTypeBuilder<BlazorHeroUser> builder)
+    public void Configure(EntityTypeBuilder<ApplicationUser> builder)
     {
         builder.ToTable("Users", "Identity");
 

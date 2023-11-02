@@ -8,8 +8,8 @@ namespace BlazorHero.CleanArchitecture.Infrastructure.Repositories;
 internal abstract class GenericRepository<TEntity, TId> : IRepository<TEntity, TId>
     where TEntity : class, IEntity<TId>
 {
-    protected GenericRepository(BlazorHeroContext dbContext) => DbContext = dbContext;
-    protected BlazorHeroContext DbContext { get; }
+    protected GenericRepository(ApplicationDbContext dbContext) => DbContext = dbContext;
+    protected ApplicationDbContext DbContext { get; }
 
     public virtual IQueryable<TEntity> Entities => DbContext.Set<TEntity>();
 
