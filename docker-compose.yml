@@ -3,7 +3,6 @@ version: '3.4'
 
 services:
   cleanblazor:
-    #image: ${DOCKER_REGISTRY-}blazorhero
     build:
       context: .
       dockerfile: src/Server/Dockerfile
