@@ -1,12 +1,10 @@
 ﻿using System.Net.Http.Json;
 using System.Security.Claims;
 using Blazored.FluentValidation;
-using BlazorHero.CleanArchitecture.Application.Enums;
 using BlazorHero.CleanArchitecture.Client.Extensions;
-using BlazorHero.CleanArchitecture.Client.Infrastructure.Extensions;
-using BlazorHero.CleanArchitecture.Client.Infrastructure.Routes;
 using BlazorHero.CleanArchitecture.Client.Shared.Dialogs;
 using BlazorHero.CleanArchitecture.Contracts.Identity;
+using BlazorHero.CleanArchitecture.Shared.Constants.Routes;
 using BlazorHero.CleanArchitecture.Shared.Constants.Storage;
 using BlazorHero.CleanArchitecture.Shared.Enums;
 using BlazorHero.CleanArchitecture.Shared.Wrapper;

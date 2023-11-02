@@ -2,10 +2,10 @@
 using System.Net.Http.Json;
 using System.Security.Claims;
 using BlazorHero.CleanArchitecture.Client.Extensions;
-using BlazorHero.CleanArchitecture.Client.Infrastructure.Routes;
 using BlazorHero.CleanArchitecture.Client.Shared.Dialogs;
 using BlazorHero.CleanArchitecture.Contracts.Identity;
 using BlazorHero.CleanArchitecture.Shared.Constants.Application;
+using BlazorHero.CleanArchitecture.Shared.Constants.Routes;
 using BlazorHero.CleanArchitecture.Shared.Wrapper;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
@@ -51,7 +51,6 @@ public partial class MainBody
     protected override async Task OnInitializedAsync()
     {
         _rightToLeft = await ClientPreferenceManager.IsRtl();
-        Interceptor.RegisterEvent();
         _hubConnection = _hubConnection.TryInitialize(NavigationManager, LocalStorage);
         await _hubConnection.StartAsync();
         _hubConnection.On<string, string, string>(ApplicationConstants.SignalR.ReceiveChatNotification,
@@ -84,7 +83,7 @@ public partial class MainBody
             {
                 try
                 {
-                    var token = await AuthenticationManager.TryForceRefreshToken();
+                    var token = await AuthenticationManager.RefreshToken();
                     if (!string.IsNullOrEmpty(token))
                     {
                         SnackBar.Success(Localizer["Refreshed Token."]);

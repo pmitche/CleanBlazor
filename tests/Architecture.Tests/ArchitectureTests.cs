@@ -1,4 +1,3 @@
-using System.Runtime.CompilerServices;
 using BlazorHero.CleanArchitecture.Application.Abstractions.Messaging;
 using BlazorHero.CleanArchitecture.Domain.Abstractions;
 using FluentAssertions;
@@ -10,7 +9,6 @@ using Infrastructure = BlazorHero.CleanArchitecture.Infrastructure;
 using Shared = BlazorHero.CleanArchitecture.Shared;
 using Server = BlazorHero.CleanArchitecture.Server;
 using Client = BlazorHero.CleanArchitecture.Client;
-using ClientInfrastructure = BlazorHero.CleanArchitecture.Client.Infrastructure;
 
 namespace Architecture.Tests;
 
@@ -23,7 +21,6 @@ public class ArchitectureTests
     private const string InfrastructureNamespace = $"{NamespacePrefix}.Infrastucture";
     private const string ServerNamespace = $"{NamespacePrefix}.Server";
     private const string ClientNamespace = $"{NamespacePrefix}.Client";
-    private const string ClientInfrastructureNamespace = $"{NamespacePrefix}.Client.Infrastructure";
 
     [Fact]
     public void Domain_Should_Not_HaveDependencyOnOtherProjects()
@@ -37,8 +34,7 @@ public class ArchitectureTests
             ApplicationAbstractionsNamespace,
             InfrastructureNamespace,
             ServerNamespace,
-            ClientNamespace,
-            ClientInfrastructureNamespace
+            ClientNamespace
         };
 
         // Act
@@ -65,8 +61,7 @@ public class ArchitectureTests
             ApplicationAbstractionsNamespace,
             InfrastructureNamespace,
             ServerNamespace,
-            ClientNamespace,
-            ClientInfrastructureNamespace
+            ClientNamespace
         };
 
         // Act
@@ -90,8 +85,7 @@ public class ArchitectureTests
         {
             InfrastructureNamespace,
             ServerNamespace,
-            ClientNamespace,
-            ClientInfrastructureNamespace
+            ClientNamespace
         };
 
         // Act
@@ -114,8 +108,7 @@ public class ArchitectureTests
         var otherProjects = new[]
         {
             ServerNamespace,
-            ClientNamespace,
-            ClientInfrastructureNamespace
+            ClientNamespace
         };
 
         // Act
@@ -134,31 +127,6 @@ public class ArchitectureTests
     {
         // Arrange
         var assembly = typeof(Client.AssemblyReference).Assembly;
-
-        var otherProjects = new[]
-        {
-            ApplicationNamespace,
-            ApplicationAbstractionsNamespace,
-            InfrastructureNamespace,
-            ServerNamespace
-        };
-
-        // Act
-        var result = Types
-            .InAssembly(assembly)
-            .Should()
-            .NotHaveDependencyOnAny(otherProjects)
-            .GetResult();
-
-        // Assert
-        result.IsSuccessful.Should().BeTrue($"{GetFailingTypes(result)}");
-    }
-
-    [Fact]
-    public void ClientInfrastructure_Should_Not_HaveDependencyOnOtherProjects()
-    {
-        // Arrange
-        var assembly = typeof(ClientInfrastructure.AssemblyReference).Assembly;
 
         var otherProjects = new[]
         {

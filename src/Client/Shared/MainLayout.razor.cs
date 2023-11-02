@@ -1,14 +1,12 @@
-﻿using BlazorHero.CleanArchitecture.Client.Infrastructure.Configuration;
+﻿using BlazorHero.CleanArchitecture.Client.Configuration;
 using MudBlazor;
 
 namespace BlazorHero.CleanArchitecture.Client.Shared;
 
-public partial class MainLayout : IDisposable
+public partial class MainLayout
 {
     private MudTheme _currentTheme;
     private bool _rightToLeft;
-
-    public void Dispose() => Interceptor.DisposeEvent();
 
     private async Task RightToLeftToggle(bool value)
     {
@@ -21,7 +19,6 @@ public partial class MainLayout : IDisposable
         _currentTheme = BlazorHeroTheme.DefaultTheme;
         _currentTheme = await ClientPreferenceManager.GetCurrentThemeAsync();
         _rightToLeft = await ClientPreferenceManager.IsRtl();
-        Interceptor.RegisterEvent();
     }
 
     private async Task DarkMode()

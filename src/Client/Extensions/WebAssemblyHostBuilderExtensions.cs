@@ -1,15 +1,11 @@
 ﻿using System.Globalization;
 using Blazored.LocalStorage;
-using BlazorHero.CleanArchitecture.Client.Infrastructure.Authentication;
-using BlazorHero.CleanArchitecture.Client.Infrastructure.Managers;
-using BlazorHero.CleanArchitecture.Client.Infrastructure.Managers.Preferences;
+using BlazorHero.CleanArchitecture.Client.Authentication;
 using BlazorHero.CleanArchitecture.Shared.Constants.Permission;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using MudBlazor;
 using MudBlazor.Services;
-using Toolbelt.Blazor.Extensions.DependencyInjection;
 
 namespace BlazorHero.CleanArchitecture.Client.Extensions;
 
@@ -27,9 +23,12 @@ public static class WebAssemblyHostBuilderExtensions
     public static WebAssemblyHostBuilder AddClientServices(this WebAssemblyHostBuilder builder)
     {
         builder
+            .AddAuth()
+            .AddHttp();
+
+        builder
             .Services
             .AddLocalization(options => { options.ResourcesPath = Path.Combine("Configuration", "Resources"); })
-            .AddAuthorizationCore(RegisterPermissionClaims)
             .AddBlazoredLocalStorage()
             .AddMudServices(configuration =>
             {
@@ -42,12 +41,30 @@ public static class WebAssemblyHostBuilderExtensions
             .AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies())
             .AddScoped<ClientPreferenceManager>()
             .AddScoped<BlazorHeroStateProvider>()
-            .AddScoped<AuthenticationStateProvider, BlazorHeroStateProvider>()
-            .AddManagers()
+            .AddScoped<AuthenticationStateProvider, BlazorHeroStateProvider>();
+
+        return builder;
+    }
+
+    private static WebAssemblyHostBuilder AddAuth(this WebAssemblyHostBuilder builder)
+    {
+        builder.Services
+            .AddTransient<RefreshTokenDelegatingHandler>()
             .AddTransient<AuthenticationHeaderHandler>()
-            .AddScoped(sp => sp
-                .GetRequiredService<IHttpClientFactory>()
-                .CreateClient(ClientName).EnableIntercept(sp))
+            .AddTransient<AuthenticationManager>()
+            .AddAuthorizationCore(options =>
+            {
+                Permissions.GetRegisteredPermissions().ForEach(permission => options.AddPolicy(permission,
+                    policy => policy.RequireClaim(ApplicationClaimTypes.Permission, permission)));
+            });
+
+        return builder;
+    }
+
+    private static WebAssemblyHostBuilder AddHttp(this WebAssemblyHostBuilder builder)
+    {
+        builder.Services
+            .AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>().CreateClient(ClientName))
             .AddHttpClient(ClientName,
                 client =>
                 {
@@ -56,31 +73,9 @@ public static class WebAssemblyHostBuilderExtensions
                         ?.TwoLetterISOLanguageName);
                     client.BaseAddress = new Uri(builder.HostEnvironment.BaseAddress);
                 })
+            .AddHttpMessageHandler<RefreshTokenDelegatingHandler>()
             .AddHttpMessageHandler<AuthenticationHeaderHandler>();
-        builder.Services.AddHttpClientInterceptor();
+
         return builder;
     }
-
-    private static IServiceCollection AddManagers(this IServiceCollection services)
-    {
-        Type managers = typeof(IManager);
-
-        var types = managers
-            .Assembly
-            .GetExportedTypes()
-            .Where(t => t.IsClass && !t.IsAbstract)
-            .Select(t => new { Service = t.GetInterface($"I{t.Name}"), Implementation = t })
-            .Where(t => t.Service != null);
-
-        foreach (var type in types.Where(type => managers.IsAssignableFrom(type.Service)))
-        {
-            services.AddTransient(type.Service, type.Implementation);
-        }
-
-        return services;
-    }
-
-    private static void RegisterPermissionClaims(AuthorizationOptions options) =>
-        Permissions.GetRegisteredPermissions().ForEach(permission => options.AddPolicy(permission,
-            policy => policy.RequireClaim(ApplicationClaimTypes.Permission, permission)));
 }
