@@ -1,7 +1,7 @@
-﻿using BlazorHero.CleanArchitecture.Application.Specifications.Base;
-using BlazorHero.CleanArchitecture.Infrastructure.Models.Identity;
+using CleanBlazor.Application.Specifications.Base;
+using CleanBlazor.Infrastructure.Models.Identity;
 
-namespace BlazorHero.CleanArchitecture.Infrastructure.Specifications;
+namespace CleanBlazor.Infrastructure.Specifications;
 
 public class UserFilterSpecification : BaseSpecification<ApplicationUser>
 {

@@ -1,7 +1,7 @@
-﻿using BlazorHero.CleanArchitecture.Application.Specifications.Base;
-using BlazorHero.CleanArchitecture.Domain.Entities.Catalog;
+using CleanBlazor.Application.Specifications.Base;
+using CleanBlazor.Domain.Entities.Catalog;
 
-namespace BlazorHero.CleanArchitecture.Application.Specifications.Catalog;
+namespace CleanBlazor.Application.Specifications.Catalog;
 
 public class ProductFilterSpecification : BaseSpecification<Product>
 {

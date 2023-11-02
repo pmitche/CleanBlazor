@@ -1,6 +1,6 @@
 using System.Reflection;
 
-namespace BlazorHero.CleanArchitecture.Application;
+namespace CleanBlazor.Application;
 
 public static class AssemblyReference
 {

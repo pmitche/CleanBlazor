@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Localization;
 using MudBlazor;
 
-namespace BlazorHero.CleanArchitecture.Client.Authentication;
+namespace CleanBlazor.Client.Authentication;
 
 public class RefreshTokenDelegatingHandler : DelegatingHandler
 {

@@ -1,6 +1,6 @@
-﻿using BlazorHero.CleanArchitecture.Shared.Models.Identity;
+using CleanBlazor.Shared.Models.Identity;
 
-namespace BlazorHero.CleanArchitecture.Contracts.Identity;
+namespace CleanBlazor.Contracts.Identity;
 
 public class UpdateUserRolesRequest
 {

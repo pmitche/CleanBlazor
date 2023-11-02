@@ -1,14 +1,14 @@
-﻿using Blazored.FluentValidation;
-using BlazorHero.CleanArchitecture.Client.Extensions;
-using BlazorHero.CleanArchitecture.Contracts;
-using BlazorHero.CleanArchitecture.Shared.Enums;
-using BlazorHero.CleanArchitecture.Shared.Wrapper;
+using Blazored.FluentValidation;
+using CleanBlazor.Client.Extensions;
+using CleanBlazor.Contracts;
+using CleanBlazor.Shared.Enums;
+using CleanBlazor.Shared.Wrapper;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using MudBlazor;
 using Polly.Caching;
 
-namespace BlazorHero.CleanArchitecture.Client.Shared.Components;
+namespace CleanBlazor.Client.Shared.Components;
 
 public partial class ImportExcelModal
 {

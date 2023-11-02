@@ -1,7 +1,7 @@
-using BlazorHero.CleanArchitecture.Application.Abstractions.Persistence;
+using CleanBlazor.Application.Abstractions.Persistence;
 using Microsoft.EntityFrameworkCore.Storage;
 
-namespace BlazorHero.CleanArchitecture.Infrastructure.Data;
+namespace CleanBlazor.Infrastructure.Data;
 
 internal sealed class EfTransaction : ITransaction
 {

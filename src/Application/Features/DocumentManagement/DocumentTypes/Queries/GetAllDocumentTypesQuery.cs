@@ -1,13 +1,13 @@
-﻿using System.Diagnostics.CodeAnalysis;
+using System.Diagnostics.CodeAnalysis;
 using AutoMapper;
-using BlazorHero.CleanArchitecture.Application.Abstractions.Messaging;
-using BlazorHero.CleanArchitecture.Contracts.Documents;
-using BlazorHero.CleanArchitecture.Domain.Repositories;
-using BlazorHero.CleanArchitecture.Shared.Constants.Application;
-using BlazorHero.CleanArchitecture.Shared.Wrapper;
+using CleanBlazor.Application.Abstractions.Messaging;
+using CleanBlazor.Contracts.Documents;
+using CleanBlazor.Domain.Repositories;
+using CleanBlazor.Shared.Constants.Application;
+using CleanBlazor.Shared.Wrapper;
 using LazyCache;
 
-namespace BlazorHero.CleanArchitecture.Application.Features.DocumentManagement.DocumentTypes.Queries;
+namespace CleanBlazor.Application.Features.DocumentManagement.DocumentTypes.Queries;
 
 [ExcludeFromCodeCoverage]
 public sealed record GetAllDocumentTypesQuery : IQuery<Result<List<GetAllDocumentTypesResponse>>>;

@@ -1,7 +1,7 @@
-﻿using BlazorHero.CleanArchitecture.Application.Abstractions.Infrastructure.Services;
-using BlazorHero.CleanArchitecture.Application.Abstractions.Infrastructure.Services.Storage.Provider;
+using CleanBlazor.Application.Abstractions.Infrastructure.Services;
+using CleanBlazor.Application.Abstractions.Infrastructure.Services.Storage.Provider;
 
-namespace BlazorHero.CleanArchitecture.Infrastructure.Services.Storage.Provider;
+namespace CleanBlazor.Infrastructure.Services.Storage.Provider;
 
 internal class ServerStorageProvider : IStorageProvider
 {

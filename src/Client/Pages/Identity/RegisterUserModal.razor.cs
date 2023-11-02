@@ -1,13 +1,13 @@
-﻿using System.Net.Http.Json;
+using System.Net.Http.Json;
 using Blazored.FluentValidation;
-using BlazorHero.CleanArchitecture.Client.Extensions;
-using BlazorHero.CleanArchitecture.Contracts.Identity;
-using BlazorHero.CleanArchitecture.Shared.Constants.Routes;
-using BlazorHero.CleanArchitecture.Shared.Wrapper;
+using CleanBlazor.Client.Extensions;
+using CleanBlazor.Contracts.Identity;
+using CleanBlazor.Shared.Constants.Routes;
+using CleanBlazor.Shared.Wrapper;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 
-namespace BlazorHero.CleanArchitecture.Client.Pages.Identity;
+namespace CleanBlazor.Client.Pages.Identity;
 
 public partial class RegisterUserModal
 {

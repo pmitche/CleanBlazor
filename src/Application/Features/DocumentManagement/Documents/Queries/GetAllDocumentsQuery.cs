@@ -1,15 +1,15 @@
-﻿using System.Diagnostics.CodeAnalysis;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq.Expressions;
-using BlazorHero.CleanArchitecture.Application.Abstractions.Infrastructure.Services;
-using BlazorHero.CleanArchitecture.Application.Abstractions.Messaging;
-using BlazorHero.CleanArchitecture.Application.Extensions;
-using BlazorHero.CleanArchitecture.Application.Specifications.Misc;
-using BlazorHero.CleanArchitecture.Contracts.Documents;
-using BlazorHero.CleanArchitecture.Domain.Entities.Misc;
-using BlazorHero.CleanArchitecture.Domain.Repositories;
-using BlazorHero.CleanArchitecture.Shared.Wrapper;
+using CleanBlazor.Application.Abstractions.Infrastructure.Services;
+using CleanBlazor.Application.Abstractions.Messaging;
+using CleanBlazor.Application.Extensions;
+using CleanBlazor.Application.Specifications.Misc;
+using CleanBlazor.Contracts.Documents;
+using CleanBlazor.Domain.Entities.Misc;
+using CleanBlazor.Domain.Repositories;
+using CleanBlazor.Shared.Wrapper;
 
-namespace BlazorHero.CleanArchitecture.Application.Features.DocumentManagement.Documents.Queries;
+namespace CleanBlazor.Application.Features.DocumentManagement.Documents.Queries;
 
 [ExcludeFromCodeCoverage]
 public sealed record GetAllDocumentsQuery(int PageNumber, int PageSize, string SearchString)

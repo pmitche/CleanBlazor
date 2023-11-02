@@ -1,15 +1,15 @@
-﻿using System.Diagnostics.CodeAnalysis;
+using System.Diagnostics.CodeAnalysis;
 using AutoMapper;
-using BlazorHero.CleanArchitecture.Application.Abstractions.Infrastructure.Services;
-using BlazorHero.CleanArchitecture.Application.Abstractions.Messaging;
-using BlazorHero.CleanArchitecture.Application.Abstractions.Persistence;
-using BlazorHero.CleanArchitecture.Contracts;
-using BlazorHero.CleanArchitecture.Domain.Entities.Misc;
-using BlazorHero.CleanArchitecture.Domain.Repositories;
-using BlazorHero.CleanArchitecture.Shared.Wrapper;
+using CleanBlazor.Application.Abstractions.Infrastructure.Services;
+using CleanBlazor.Application.Abstractions.Messaging;
+using CleanBlazor.Application.Abstractions.Persistence;
+using CleanBlazor.Contracts;
+using CleanBlazor.Domain.Entities.Misc;
+using CleanBlazor.Domain.Repositories;
+using CleanBlazor.Shared.Wrapper;
 using Microsoft.Extensions.Localization;
 
-namespace BlazorHero.CleanArchitecture.Application.Features.DocumentManagement.Documents.Commands;
+namespace CleanBlazor.Application.Features.DocumentManagement.Documents.Commands;
 
 [ExcludeFromCodeCoverage]
 public sealed record AddEditDocumentCommand : ICommand<Result<int>>

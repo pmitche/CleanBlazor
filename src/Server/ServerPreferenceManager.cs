@@ -1,11 +1,11 @@
-﻿using BlazorHero.CleanArchitecture.Application.Abstractions.Infrastructure.Services.Storage;
-using BlazorHero.CleanArchitecture.Server.Configuration;
-using BlazorHero.CleanArchitecture.Shared.Constants.Storage;
-using BlazorHero.CleanArchitecture.Shared.Settings;
-using BlazorHero.CleanArchitecture.Shared.Wrapper;
+using CleanBlazor.Application.Abstractions.Infrastructure.Services.Storage;
+using CleanBlazor.Server.Configuration;
+using CleanBlazor.Shared.Constants.Storage;
+using CleanBlazor.Shared.Settings;
+using CleanBlazor.Shared.Wrapper;
 using Microsoft.Extensions.Localization;
 
-namespace BlazorHero.CleanArchitecture.Server;
+namespace CleanBlazor.Server;
 
 public class ServerPreferenceManager
 {

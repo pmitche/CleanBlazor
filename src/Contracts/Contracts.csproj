@@ -1,8 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <RootNamespace>BlazorHero.CleanArchitecture.Contracts</RootNamespace>
-    <AssemblyName>BlazorHero.CleanArchitecture.Contracts</AssemblyName>
+    <RootNamespace>CleanBlazor.Contracts</RootNamespace>
+    <AssemblyName>CleanBlazor.Contracts</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>

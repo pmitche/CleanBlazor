@@ -1,8 +1,8 @@
-using BlazorHero.CleanArchitecture.Application.Abstractions.Messaging;
-using BlazorHero.CleanArchitecture.Application.Abstractions.Persistence;
+using CleanBlazor.Application.Abstractions.Messaging;
+using CleanBlazor.Application.Abstractions.Persistence;
 using MediatR;
 
-namespace BlazorHero.CleanArchitecture.Application.Behaviors;
+namespace CleanBlazor.Application.Behaviors;
 
 /// <summary>
 /// Represents the transaction behaviour middleware.

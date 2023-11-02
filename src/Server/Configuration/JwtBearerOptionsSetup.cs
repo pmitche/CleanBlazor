@@ -1,10 +1,10 @@
 using System.Net;
 using System.Security.Claims;
 using System.Text;
-using BlazorHero.CleanArchitecture.Application.Configuration;
-using BlazorHero.CleanArchitecture.Server.Localization;
-using BlazorHero.CleanArchitecture.Shared.Constants.Application;
-using BlazorHero.CleanArchitecture.Shared.Wrapper;
+using CleanBlazor.Application.Configuration;
+using CleanBlazor.Server.Localization;
+using CleanBlazor.Shared.Constants.Application;
+using CleanBlazor.Shared.Wrapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
@@ -12,7 +12,7 @@ using Microsoft.Extensions.Primitives;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 
-namespace BlazorHero.CleanArchitecture.Server.Configuration;
+namespace CleanBlazor.Server.Configuration;
 
 internal class JwtBearerOptionsSetup : IConfigureNamedOptions<JwtBearerOptions>
 {

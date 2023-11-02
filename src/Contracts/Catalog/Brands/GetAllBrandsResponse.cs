@@ -1,4 +1,4 @@
-﻿namespace BlazorHero.CleanArchitecture.Contracts.Catalog.Brands;
+namespace CleanBlazor.Contracts.Catalog.Brands;
 
 public class GetAllBrandsResponse
 {

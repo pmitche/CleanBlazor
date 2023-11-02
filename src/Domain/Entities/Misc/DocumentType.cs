@@ -1,7 +1,7 @@
-﻿using BlazorHero.CleanArchitecture.Domain.Abstractions;
-using BlazorHero.CleanArchitecture.Domain.Primitives;
+using CleanBlazor.Domain.Abstractions;
+using CleanBlazor.Domain.Primitives;
 
-namespace BlazorHero.CleanArchitecture.Domain.Entities.Misc;
+namespace CleanBlazor.Domain.Entities.Misc;
 
 public class DocumentType : AggregateRoot<int>, IAuditableEntity
 {

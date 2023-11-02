@@ -1,12 +1,12 @@
-﻿using BlazorHero.CleanArchitecture.Application.Features.DocumentManagement.DocumentTypes.Commands;
-using BlazorHero.CleanArchitecture.Application.Features.DocumentManagement.DocumentTypes.Queries;
-using BlazorHero.CleanArchitecture.Contracts.Documents;
-using BlazorHero.CleanArchitecture.Shared.Constants.Permission;
-using BlazorHero.CleanArchitecture.Shared.Wrapper;
+using CleanBlazor.Application.Features.DocumentManagement.DocumentTypes.Commands;
+using CleanBlazor.Application.Features.DocumentManagement.DocumentTypes.Queries;
+using CleanBlazor.Contracts.Documents;
+using CleanBlazor.Shared.Constants.Permission;
+using CleanBlazor.Shared.Wrapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace BlazorHero.CleanArchitecture.Server.Controllers.v1.DocumentManagement;
+namespace CleanBlazor.Server.Controllers.v1.DocumentManagement;
 
 public class DocumentTypesController : BaseApiController
 {

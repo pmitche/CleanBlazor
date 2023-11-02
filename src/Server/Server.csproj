@@ -1,11 +1,11 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <RootNamespace>BlazorHero.CleanArchitecture.Server</RootNamespace>
-    <AssemblyName>BlazorHero.CleanArchitecture.Server</AssemblyName>
+    <RootNamespace>CleanBlazor.Server</RootNamespace>
+    <AssemblyName>CleanBlazor.Server</AssemblyName>
   </PropertyGroup>
   <PropertyGroup>
-    <DocumentationFile>BlazorHero.CleanArchitecture.Server.xml</DocumentationFile>
+    <DocumentationFile>CleanBlazor.Server.xml</DocumentationFile>
     <NoWarn>1701;1702;1591</NoWarn>
     <UserSecretsId>aa8b7360-671b-4ab2-99b0-7df28629ef3d</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>

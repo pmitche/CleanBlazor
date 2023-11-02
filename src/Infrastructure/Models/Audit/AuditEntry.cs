@@ -1,8 +1,8 @@
-﻿using BlazorHero.CleanArchitecture.Application.Enums;
+using CleanBlazor.Application.Enums;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Newtonsoft.Json;
 
-namespace BlazorHero.CleanArchitecture.Infrastructure.Models.Audit;
+namespace CleanBlazor.Infrastructure.Models.Audit;
 
 public class AuditEntry
 {

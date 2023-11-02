@@ -1,18 +1,18 @@
-﻿using System.Security.Claims;
+using System.Security.Claims;
 using AutoMapper;
-using BlazorHero.CleanArchitecture.Application.Abstractions.Infrastructure.Services;
-using BlazorHero.CleanArchitecture.Application.Abstractions.Infrastructure.Services.Identity;
-using BlazorHero.CleanArchitecture.Contracts.Identity;
-using BlazorHero.CleanArchitecture.Infrastructure.Helpers;
-using BlazorHero.CleanArchitecture.Infrastructure.Models.Identity;
-using BlazorHero.CleanArchitecture.Shared.Constants.Permission;
-using BlazorHero.CleanArchitecture.Shared.Constants.Role;
-using BlazorHero.CleanArchitecture.Shared.Wrapper;
+using CleanBlazor.Application.Abstractions.Infrastructure.Services;
+using CleanBlazor.Application.Abstractions.Infrastructure.Services.Identity;
+using CleanBlazor.Contracts.Identity;
+using CleanBlazor.Infrastructure.Helpers;
+using CleanBlazor.Infrastructure.Models.Identity;
+using CleanBlazor.Shared.Constants.Permission;
+using CleanBlazor.Shared.Constants.Role;
+using CleanBlazor.Shared.Wrapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 
-namespace BlazorHero.CleanArchitecture.Infrastructure.Services.Identity;
+namespace CleanBlazor.Infrastructure.Services.Identity;
 
 public class RoleService : IRoleService
 {

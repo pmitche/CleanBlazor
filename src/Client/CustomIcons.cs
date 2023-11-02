@@ -1,6 +1,6 @@
-﻿using System.Diagnostics.CodeAnalysis;
+using System.Diagnostics.CodeAnalysis;
 
-namespace BlazorHero.CleanArchitecture.Client;
+namespace CleanBlazor.Client;
 
 [ExcludeFromCodeCoverage]
 public static class CustomIcons

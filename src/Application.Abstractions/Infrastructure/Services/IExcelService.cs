@@ -1,7 +1,7 @@
-﻿using System.Data;
-using BlazorHero.CleanArchitecture.Shared.Wrapper;
+using System.Data;
+using CleanBlazor.Shared.Wrapper;
 
-namespace BlazorHero.CleanArchitecture.Application.Abstractions.Infrastructure.Services;
+namespace CleanBlazor.Application.Abstractions.Infrastructure.Services;
 
 public interface IExcelService
 {

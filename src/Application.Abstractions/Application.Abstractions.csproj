@@ -1,8 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <RootNamespace>BlazorHero.CleanArchitecture.Application.Abstractions</RootNamespace>
-    <AssemblyName>BlazorHero.CleanArchitecture.Application.Abstractions</AssemblyName>
+    <RootNamespace>CleanBlazor.Application.Abstractions</RootNamespace>
+    <AssemblyName>CleanBlazor.Application.Abstractions</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>

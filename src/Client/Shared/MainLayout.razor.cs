@@ -1,7 +1,7 @@
-﻿using BlazorHero.CleanArchitecture.Client.Configuration;
+using CleanBlazor.Client.Configuration;
 using MudBlazor;
 
-namespace BlazorHero.CleanArchitecture.Client.Shared;
+namespace CleanBlazor.Client.Shared;
 
 public partial class MainLayout
 {

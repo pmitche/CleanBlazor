@@ -1,15 +1,15 @@
-﻿using System.Diagnostics.CodeAnalysis;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq.Dynamic.Core;
 using System.Linq.Expressions;
-using BlazorHero.CleanArchitecture.Application.Abstractions.Messaging;
-using BlazorHero.CleanArchitecture.Application.Extensions;
-using BlazorHero.CleanArchitecture.Application.Specifications.Catalog;
-using BlazorHero.CleanArchitecture.Contracts.Catalog.Products;
-using BlazorHero.CleanArchitecture.Domain.Entities.Catalog;
-using BlazorHero.CleanArchitecture.Domain.Repositories;
-using BlazorHero.CleanArchitecture.Shared.Wrapper;
+using CleanBlazor.Application.Abstractions.Messaging;
+using CleanBlazor.Application.Extensions;
+using CleanBlazor.Application.Specifications.Catalog;
+using CleanBlazor.Contracts.Catalog.Products;
+using CleanBlazor.Domain.Entities.Catalog;
+using CleanBlazor.Domain.Repositories;
+using CleanBlazor.Shared.Wrapper;
 
-namespace BlazorHero.CleanArchitecture.Application.Features.Catalog.Products.Queries;
+namespace CleanBlazor.Application.Features.Catalog.Products.Queries;
 
 [ExcludeFromCodeCoverage]
 public sealed record GetAllProductsQuery(int PageNumber, int PageSize, string SearchString, string OrderByInput)

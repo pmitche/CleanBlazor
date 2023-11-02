@@ -1,8 +1,8 @@
-﻿using System.Text.Json;
-using BlazorHero.CleanArchitecture.Application.Abstractions.Serialization;
-using BlazorHero.CleanArchitecture.Application.Serialization.JsonConverters;
+using System.Text.Json;
+using CleanBlazor.Application.Abstractions.Serialization;
+using CleanBlazor.Application.Serialization.JsonConverters;
 
-namespace BlazorHero.CleanArchitecture.Application.Serialization;
+namespace CleanBlazor.Application.Serialization;
 
 public class SystemTextJsonSerializer : IJsonSerializer
 {

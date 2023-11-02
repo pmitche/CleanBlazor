@@ -1,6 +1,6 @@
-using BlazorHero.CleanArchitecture.Domain.Abstractions;
+using CleanBlazor.Domain.Abstractions;
 
-namespace BlazorHero.CleanArchitecture.Domain.Primitives;
+namespace CleanBlazor.Domain.Primitives;
 
 public abstract class Entity<TId> : IEquatable<Entity<TId>>, IEntity<TId>
 {

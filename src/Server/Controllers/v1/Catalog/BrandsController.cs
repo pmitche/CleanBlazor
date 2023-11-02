@@ -1,13 +1,13 @@
-﻿using BlazorHero.CleanArchitecture.Application.Features.Catalog.Brands.Commands;
-using BlazorHero.CleanArchitecture.Application.Features.Catalog.Brands.Queries;
-using BlazorHero.CleanArchitecture.Contracts;
-using BlazorHero.CleanArchitecture.Contracts.Catalog.Brands;
-using BlazorHero.CleanArchitecture.Shared.Constants.Permission;
-using BlazorHero.CleanArchitecture.Shared.Wrapper;
+using CleanBlazor.Application.Features.Catalog.Brands.Commands;
+using CleanBlazor.Application.Features.Catalog.Brands.Queries;
+using CleanBlazor.Contracts;
+using CleanBlazor.Contracts.Catalog.Brands;
+using CleanBlazor.Shared.Constants.Permission;
+using CleanBlazor.Shared.Wrapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace BlazorHero.CleanArchitecture.Server.Controllers.v1.Catalog;
+namespace CleanBlazor.Server.Controllers.v1.Catalog;
 
 public class BrandsController : BaseApiController
 {

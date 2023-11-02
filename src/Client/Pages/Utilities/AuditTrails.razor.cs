@@ -1,17 +1,17 @@
-﻿using System.Net.Http.Json;
+using System.Net.Http.Json;
 using System.Security.Claims;
-using BlazorHero.CleanArchitecture.Client.Extensions;
-using BlazorHero.CleanArchitecture.Contracts.Audit;
-using BlazorHero.CleanArchitecture.Shared.Constants.Application;
-using BlazorHero.CleanArchitecture.Shared.Constants.Permission;
-using BlazorHero.CleanArchitecture.Shared.Constants.Routes;
-using BlazorHero.CleanArchitecture.Shared.Wrapper;
+using CleanBlazor.Client.Extensions;
+using CleanBlazor.Contracts.Audit;
+using CleanBlazor.Shared.Constants.Application;
+using CleanBlazor.Shared.Constants.Permission;
+using CleanBlazor.Shared.Constants.Routes;
+using CleanBlazor.Shared.Wrapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using MudBlazor;
 
-namespace BlazorHero.CleanArchitecture.Client.Pages.Utilities;
+namespace CleanBlazor.Client.Pages.Utilities;
 
 public partial class AuditTrails
 {

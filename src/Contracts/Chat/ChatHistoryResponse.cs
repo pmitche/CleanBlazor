@@ -1,4 +1,4 @@
-﻿namespace BlazorHero.CleanArchitecture.Contracts.Chat;
+namespace CleanBlazor.Contracts.Chat;
 
 public class ChatMessageResponse
 {

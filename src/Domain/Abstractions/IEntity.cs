@@ -1,4 +1,4 @@
-﻿namespace BlazorHero.CleanArchitecture.Domain.Abstractions;
+namespace CleanBlazor.Domain.Abstractions;
 
 public interface IEntity<out TId> : IEntity
 {

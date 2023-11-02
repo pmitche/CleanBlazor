@@ -1,8 +1,8 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <RootNamespace>BlazorHero.CleanArchitecture.Infrastructure</RootNamespace>
-    <AssemblyName>BlazorHero.CleanArchitecture.Infrastructure</AssemblyName>
+    <RootNamespace>CleanBlazor.Infrastructure</RootNamespace>
+    <AssemblyName>CleanBlazor.Infrastructure</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>

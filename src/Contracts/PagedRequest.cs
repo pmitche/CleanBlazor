@@ -1,4 +1,4 @@
-﻿namespace BlazorHero.CleanArchitecture.Contracts;
+namespace CleanBlazor.Contracts;
 
 public abstract class PagedRequest
 {

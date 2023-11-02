@@ -1,4 +1,4 @@
-﻿namespace BlazorHero.CleanArchitecture.Contracts.Documents;
+namespace CleanBlazor.Contracts.Documents;
 
 public class GetAllDocumentsResponse
 {

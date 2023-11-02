@@ -1,4 +1,4 @@
-﻿namespace BlazorHero.CleanArchitecture.Contracts.Identity;
+namespace CleanBlazor.Contracts.Identity;
 
 public class UpdateProfileRequest
 {

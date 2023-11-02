@@ -1,13 +1,13 @@
-﻿using System.Net.Http.Json;
+using System.Net.Http.Json;
 using System.Security.Claims;
-using BlazorHero.CleanArchitecture.Client.Extensions;
-using BlazorHero.CleanArchitecture.Contracts.Chat;
-using BlazorHero.CleanArchitecture.Contracts.Identity;
-using BlazorHero.CleanArchitecture.Domain.Entities.Communication;
-using BlazorHero.CleanArchitecture.Shared.Constants.Application;
-using BlazorHero.CleanArchitecture.Shared.Constants.Routes;
-using BlazorHero.CleanArchitecture.Shared.Constants.Storage;
-using BlazorHero.CleanArchitecture.Shared.Wrapper;
+using CleanBlazor.Client.Extensions;
+using CleanBlazor.Contracts.Chat;
+using CleanBlazor.Contracts.Identity;
+using CleanBlazor.Domain.Entities.Communication;
+using CleanBlazor.Shared.Constants.Application;
+using CleanBlazor.Shared.Constants.Routes;
+using CleanBlazor.Shared.Constants.Storage;
+using CleanBlazor.Shared.Wrapper;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Web;
@@ -15,7 +15,7 @@ using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.JSInterop;
 using MudBlazor;
 
-namespace BlazorHero.CleanArchitecture.Client.Pages.Communication;
+namespace CleanBlazor.Client.Pages.Communication;
 
 public partial class Chat
 {

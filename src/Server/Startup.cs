@@ -1,17 +1,17 @@
-using BlazorHero.CleanArchitecture.Application;
-using BlazorHero.CleanArchitecture.Contracts;
-using BlazorHero.CleanArchitecture.Infrastructure;
-using BlazorHero.CleanArchitecture.Infrastructure.Data;
-using BlazorHero.CleanArchitecture.Server.Extensions;
-using BlazorHero.CleanArchitecture.Server.Filters;
-using BlazorHero.CleanArchitecture.Server.Middlewares;
+using CleanBlazor.Application;
+using CleanBlazor.Contracts;
+using CleanBlazor.Infrastructure;
+using CleanBlazor.Infrastructure.Data;
+using CleanBlazor.Server.Extensions;
+using CleanBlazor.Server.Filters;
+using CleanBlazor.Server.Middlewares;
 using Hangfire;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.FileProviders;
 using Serilog;
 using SharpGrip.FluentValidation.AutoValidation.Mvc.Extensions;
 
-namespace BlazorHero.CleanArchitecture.Server;
+namespace CleanBlazor.Server;
 
 public class Startup
 {

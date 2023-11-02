@@ -1,9 +1,9 @@
-﻿using BlazorHero.CleanArchitecture.Application.Abstractions.Infrastructure.Services.Identity;
-using BlazorHero.CleanArchitecture.Domain.Abstractions;
-using BlazorHero.CleanArchitecture.Domain.Entities.Communication;
+using CleanBlazor.Application.Abstractions.Infrastructure.Services.Identity;
+using CleanBlazor.Domain.Abstractions;
+using CleanBlazor.Domain.Entities.Communication;
 using Microsoft.AspNetCore.Identity;
 
-namespace BlazorHero.CleanArchitecture.Infrastructure.Models.Identity;
+namespace CleanBlazor.Infrastructure.Models.Identity;
 
 public class ApplicationUser : IdentityUser<string>, IUser, IChatUser, IAuditableEntity, ISoftDeletableEntity
 {

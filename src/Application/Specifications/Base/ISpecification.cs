@@ -1,7 +1,7 @@
-﻿using System.Linq.Expressions;
-using BlazorHero.CleanArchitecture.Domain.Abstractions;
+using System.Linq.Expressions;
+using CleanBlazor.Domain.Abstractions;
 
-namespace BlazorHero.CleanArchitecture.Application.Specifications.Base;
+namespace CleanBlazor.Application.Specifications.Base;
 
 public interface ISpecification<T> where T : class, IEntity
 {

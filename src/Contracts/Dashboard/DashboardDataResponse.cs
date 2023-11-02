@@ -1,6 +1,6 @@
-﻿using BlazorHero.CleanArchitecture.Application.Features.Dashboards.Queries.GetData;
+using CleanBlazor.Application.Features.Dashboards.Queries.GetData;
 
-namespace BlazorHero.CleanArchitecture.Contracts.Dashboard
+namespace CleanBlazor.Contracts.Dashboard
 {
     public class DashboardDataResponse
     {
@@ -15,7 +15,7 @@ namespace BlazorHero.CleanArchitecture.Contracts.Dashboard
     }
 }
 
-namespace BlazorHero.CleanArchitecture.Application.Features.Dashboards.Queries.GetData
+namespace CleanBlazor.Application.Features.Dashboards.Queries.GetData
 {
     public class ChartSeries
     {

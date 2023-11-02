@@ -1,6 +1,6 @@
-﻿using System.Globalization;
+using System.Globalization;
 
-namespace BlazorHero.CleanArchitecture.Application.Exceptions;
+namespace CleanBlazor.Application.Exceptions;
 
 public class ApiException : Exception
 {

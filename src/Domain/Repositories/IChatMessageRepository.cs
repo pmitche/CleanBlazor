@@ -1,6 +1,6 @@
-using BlazorHero.CleanArchitecture.Domain.Entities.Communication;
+using CleanBlazor.Domain.Entities.Communication;
 
-namespace BlazorHero.CleanArchitecture.Domain.Repositories;
+namespace CleanBlazor.Domain.Repositories;
 
 public interface IChatMessageRepository : IRepository<ChatMessage<IChatUser>, long>
 {

@@ -1,14 +1,14 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using BlazorHero.CleanArchitecture.Application.Abstractions.Infrastructure.Services.Identity;
-using BlazorHero.CleanArchitecture.Application.Abstractions.Messaging;
-using BlazorHero.CleanArchitecture.Application.Features.Dashboards.Queries.GetData;
-using BlazorHero.CleanArchitecture.Contracts.Dashboard;
-using BlazorHero.CleanArchitecture.Domain.Repositories;
-using BlazorHero.CleanArchitecture.Shared.Wrapper;
+using System.Diagnostics.CodeAnalysis;
+using CleanBlazor.Application.Abstractions.Infrastructure.Services.Identity;
+using CleanBlazor.Application.Abstractions.Messaging;
+using CleanBlazor.Application.Features.Dashboards.Queries.GetData;
+using CleanBlazor.Contracts.Dashboard;
+using CleanBlazor.Domain.Repositories;
+using CleanBlazor.Shared.Wrapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 
-namespace BlazorHero.CleanArchitecture.Application.Features.Dashboards.Queries;
+namespace CleanBlazor.Application.Features.Dashboards.Queries;
 
 [ExcludeFromCodeCoverage]
 public sealed record GetDashboardDataQuery : IQuery<Result<DashboardDataResponse>>;

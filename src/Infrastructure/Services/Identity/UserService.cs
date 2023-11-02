@@ -1,25 +1,25 @@
-﻿using System.Globalization;
+using System.Globalization;
 using System.Text;
 using System.Text.Encodings.Web;
 using AutoMapper;
-using BlazorHero.CleanArchitecture.Application.Abstractions.Infrastructure.Services;
-using BlazorHero.CleanArchitecture.Application.Abstractions.Infrastructure.Services.Identity;
-using BlazorHero.CleanArchitecture.Application.Exceptions;
-using BlazorHero.CleanArchitecture.Application.Extensions;
-using BlazorHero.CleanArchitecture.Contracts.Identity;
-using BlazorHero.CleanArchitecture.Contracts.Mail;
-using BlazorHero.CleanArchitecture.Infrastructure.Models.Identity;
-using BlazorHero.CleanArchitecture.Infrastructure.Specifications;
-using BlazorHero.CleanArchitecture.Shared.Constants.Role;
-using BlazorHero.CleanArchitecture.Shared.Models.Identity;
-using BlazorHero.CleanArchitecture.Shared.Wrapper;
+using CleanBlazor.Application.Abstractions.Infrastructure.Services;
+using CleanBlazor.Application.Abstractions.Infrastructure.Services.Identity;
+using CleanBlazor.Application.Exceptions;
+using CleanBlazor.Application.Extensions;
+using CleanBlazor.Contracts.Identity;
+using CleanBlazor.Contracts.Mail;
+using CleanBlazor.Infrastructure.Models.Identity;
+using CleanBlazor.Infrastructure.Specifications;
+using CleanBlazor.Shared.Constants.Role;
+using CleanBlazor.Shared.Models.Identity;
+using CleanBlazor.Shared.Wrapper;
 using Hangfire;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 
-namespace BlazorHero.CleanArchitecture.Infrastructure.Services.Identity;
+namespace CleanBlazor.Infrastructure.Services.Identity;
 
 public class UserService : IUserService
 {

@@ -1,7 +1,7 @@
-﻿using System.Globalization;
+using System.Globalization;
 using Microsoft.Extensions.Primitives;
 
-namespace BlazorHero.CleanArchitecture.Server.Middlewares;
+namespace CleanBlazor.Server.Middlewares;
 
 public class RequestCultureMiddleware
 {

@@ -1,15 +1,15 @@
-﻿using System.Globalization;
-using BlazorHero.CleanArchitecture.Application.Abstractions.Persistence;
-using BlazorHero.CleanArchitecture.Application.Configuration;
-using BlazorHero.CleanArchitecture.Server.Configuration;
-using BlazorHero.CleanArchitecture.Server.Hubs;
-using BlazorHero.CleanArchitecture.Server.Middlewares;
-using BlazorHero.CleanArchitecture.Shared.Constants.Application;
-using BlazorHero.CleanArchitecture.Shared.Constants.Localization;
+using System.Globalization;
+using CleanBlazor.Application.Abstractions.Persistence;
+using CleanBlazor.Application.Configuration;
+using CleanBlazor.Server.Configuration;
+using CleanBlazor.Server.Hubs;
+using CleanBlazor.Server.Middlewares;
+using CleanBlazor.Shared.Constants.Application;
+using CleanBlazor.Shared.Constants.Localization;
 using Microsoft.AspNetCore.Localization;
 using Serilog;
 
-namespace BlazorHero.CleanArchitecture.Server.Extensions;
+namespace CleanBlazor.Server.Extensions;
 
 internal static class ApplicationBuilderExtensions
 {

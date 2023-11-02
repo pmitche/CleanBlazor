@@ -1,6 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 
-namespace BlazorHero.CleanArchitecture.Contracts.Identity;
+namespace CleanBlazor.Contracts.Identity;
 
 public class RoleResponse
 {

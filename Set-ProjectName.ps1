@@ -1,5 +1,5 @@
 # Prompt the user for the old prefix with a default value
-$defaultOldPrefix = "BlazorHero.CleanArchitecture"
+$defaultOldPrefix = "CleanBlazor"
 $userInputOldPrefix = Read-Host "Enter the old project name (default: '$defaultOldPrefix')"
 $oldPrefix = if ($userInputOldPrefix) { $userInputOldPrefix } else { $defaultOldPrefix }
 

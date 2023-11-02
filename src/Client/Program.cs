@@ -1,10 +1,10 @@
 using System.Globalization;
-using BlazorHero.CleanArchitecture.Client.Configuration;
-using BlazorHero.CleanArchitecture.Client.Extensions;
-using BlazorHero.CleanArchitecture.Shared.Constants.Localization;
+using CleanBlazor.Client.Configuration;
+using CleanBlazor.Client.Extensions;
+using CleanBlazor.Shared.Constants.Localization;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 
-namespace BlazorHero.CleanArchitecture.Client;
+namespace CleanBlazor.Client;
 
 public static class Program
 {

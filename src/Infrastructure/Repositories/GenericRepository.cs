@@ -1,9 +1,9 @@
-using BlazorHero.CleanArchitecture.Domain.Abstractions;
-using BlazorHero.CleanArchitecture.Domain.Repositories;
-using BlazorHero.CleanArchitecture.Infrastructure.Data;
+using CleanBlazor.Domain.Abstractions;
+using CleanBlazor.Domain.Repositories;
+using CleanBlazor.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
-namespace BlazorHero.CleanArchitecture.Infrastructure.Repositories;
+namespace CleanBlazor.Infrastructure.Repositories;
 
 internal abstract class GenericRepository<TEntity, TId> : IRepository<TEntity, TId>
     where TEntity : class, IEntity<TId>

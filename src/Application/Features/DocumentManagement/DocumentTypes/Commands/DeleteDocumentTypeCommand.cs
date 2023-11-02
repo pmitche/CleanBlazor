@@ -1,13 +1,13 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using BlazorHero.CleanArchitecture.Application.Abstractions.Messaging;
-using BlazorHero.CleanArchitecture.Application.Abstractions.Persistence;
-using BlazorHero.CleanArchitecture.Domain.Repositories;
-using BlazorHero.CleanArchitecture.Shared.Constants.Application;
-using BlazorHero.CleanArchitecture.Shared.Wrapper;
+using System.Diagnostics.CodeAnalysis;
+using CleanBlazor.Application.Abstractions.Messaging;
+using CleanBlazor.Application.Abstractions.Persistence;
+using CleanBlazor.Domain.Repositories;
+using CleanBlazor.Shared.Constants.Application;
+using CleanBlazor.Shared.Wrapper;
 using LazyCache;
 using Microsoft.Extensions.Localization;
 
-namespace BlazorHero.CleanArchitecture.Application.Features.DocumentManagement.DocumentTypes.Commands;
+namespace CleanBlazor.Application.Features.DocumentManagement.DocumentTypes.Commands;
 
 [ExcludeFromCodeCoverage]
 public sealed record DeleteDocumentTypeCommand(int Id) : ICommand<Result<int>>;

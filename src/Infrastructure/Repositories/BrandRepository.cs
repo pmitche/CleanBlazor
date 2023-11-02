@@ -1,8 +1,8 @@
-﻿using BlazorHero.CleanArchitecture.Domain.Entities.Catalog;
-using BlazorHero.CleanArchitecture.Domain.Repositories;
-using BlazorHero.CleanArchitecture.Infrastructure.Data;
+using CleanBlazor.Domain.Entities.Catalog;
+using CleanBlazor.Domain.Repositories;
+using CleanBlazor.Infrastructure.Data;
 
-namespace BlazorHero.CleanArchitecture.Infrastructure.Repositories;
+namespace CleanBlazor.Infrastructure.Repositories;
 
 internal sealed class BrandRepository : GenericRepository<Brand, int>, IBrandRepository
 {

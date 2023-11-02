@@ -1,8 +1,8 @@
 using AutoMapper;
-using BlazorHero.CleanArchitecture.Application.Abstractions.Infrastructure.Services.Identity;
-using BlazorHero.CleanArchitecture.Contracts.Chat;
+using CleanBlazor.Application.Abstractions.Infrastructure.Services.Identity;
+using CleanBlazor.Contracts.Chat;
 
-namespace BlazorHero.CleanArchitecture.Application.Configuration.Mappings;
+namespace CleanBlazor.Application.Configuration.Mappings;
 
 public class ChatProfile : Profile
 {

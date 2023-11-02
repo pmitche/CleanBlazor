@@ -2,7 +2,7 @@ using System.Reflection;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace BlazorHero.CleanArchitecture.Contracts;
+namespace CleanBlazor.Contracts;
 
 public static class DependencyInjection
 {

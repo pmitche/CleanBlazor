@@ -1,4 +1,4 @@
-﻿namespace BlazorHero.CleanArchitecture.Shared.Constants.Permission;
+namespace CleanBlazor.Shared.Constants.Permission;
 
 public static class ApplicationClaimTypes
 {

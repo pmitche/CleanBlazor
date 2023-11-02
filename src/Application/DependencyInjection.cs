@@ -1,13 +1,13 @@
 using System.Reflection;
-using BlazorHero.CleanArchitecture.Application.Abstractions.Serialization;
-using BlazorHero.CleanArchitecture.Application.Behaviors;
-using BlazorHero.CleanArchitecture.Application.Configuration;
-using BlazorHero.CleanArchitecture.Application.Serialization;
+using CleanBlazor.Application.Abstractions.Serialization;
+using CleanBlazor.Application.Behaviors;
+using CleanBlazor.Application.Configuration;
+using CleanBlazor.Application.Serialization;
 using MediatR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace BlazorHero.CleanArchitecture.Application;
+namespace CleanBlazor.Application;
 
 public static class DependencyInjection
 {

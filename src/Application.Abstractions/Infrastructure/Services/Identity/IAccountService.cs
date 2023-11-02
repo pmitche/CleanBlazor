@@ -1,7 +1,7 @@
-﻿using BlazorHero.CleanArchitecture.Contracts.Identity;
-using BlazorHero.CleanArchitecture.Shared.Wrapper;
+using CleanBlazor.Contracts.Identity;
+using CleanBlazor.Shared.Wrapper;
 
-namespace BlazorHero.CleanArchitecture.Application.Abstractions.Infrastructure.Services.Identity;
+namespace CleanBlazor.Application.Abstractions.Infrastructure.Services.Identity;
 
 public interface IAccountService
 {

@@ -1,4 +1,4 @@
-﻿namespace BlazorHero.CleanArchitecture.Server.Localization;
+namespace CleanBlazor.Server.Localization;
 
 internal class ServerCommonResources
 {

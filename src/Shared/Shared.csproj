@@ -1,8 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <RootNamespace>BlazorHero.CleanArchitecture.Shared</RootNamespace>
-    <AssemblyName>BlazorHero.CleanArchitecture.Shared</AssemblyName>
+    <RootNamespace>CleanBlazor.Shared</RootNamespace>
+    <AssemblyName>CleanBlazor.Shared</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>

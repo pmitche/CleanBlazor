@@ -1,6 +1,6 @@
-﻿using MudBlazor;
+using MudBlazor;
 
-namespace BlazorHero.CleanArchitecture.Client.Configuration;
+namespace CleanBlazor.Client.Configuration;
 
 public static class ApplicationTheme
 {

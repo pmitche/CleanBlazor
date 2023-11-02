@@ -1,15 +1,15 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using BlazorHero.CleanArchitecture.Application.Abstractions.Infrastructure.Services;
-using BlazorHero.CleanArchitecture.Application.Abstractions.Messaging;
-using BlazorHero.CleanArchitecture.Application.Extensions;
-using BlazorHero.CleanArchitecture.Application.Specifications.Catalog;
-using BlazorHero.CleanArchitecture.Domain.Entities.Catalog;
-using BlazorHero.CleanArchitecture.Domain.Repositories;
-using BlazorHero.CleanArchitecture.Shared.Wrapper;
+using System.Diagnostics.CodeAnalysis;
+using CleanBlazor.Application.Abstractions.Infrastructure.Services;
+using CleanBlazor.Application.Abstractions.Messaging;
+using CleanBlazor.Application.Extensions;
+using CleanBlazor.Application.Specifications.Catalog;
+using CleanBlazor.Domain.Entities.Catalog;
+using CleanBlazor.Domain.Repositories;
+using CleanBlazor.Shared.Wrapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 
-namespace BlazorHero.CleanArchitecture.Application.Features.Catalog.Brands.Queries;
+namespace CleanBlazor.Application.Features.Catalog.Brands.Queries;
 
 [ExcludeFromCodeCoverage]
 public sealed record ExportBrandsQuery(string SearchString = "") : IQuery<Result<string>>;

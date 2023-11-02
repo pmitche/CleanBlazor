@@ -1,8 +1,8 @@
-﻿using BlazorHero.CleanArchitecture.Infrastructure.Helpers;
-using BlazorHero.CleanArchitecture.Infrastructure.Models.Identity;
-using BlazorHero.CleanArchitecture.Shared.Constants.Permission;
-using BlazorHero.CleanArchitecture.Shared.Constants.Role;
-using BlazorHero.CleanArchitecture.Shared.Constants.User;
+using CleanBlazor.Infrastructure.Helpers;
+using CleanBlazor.Infrastructure.Models.Identity;
+using CleanBlazor.Shared.Constants.Permission;
+using CleanBlazor.Shared.Constants.Role;
+using CleanBlazor.Shared.Constants.User;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -10,7 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 
-namespace BlazorHero.CleanArchitecture.Infrastructure.Data;
+namespace CleanBlazor.Infrastructure.Data;
 
 public static class InitializerExtensions
 {

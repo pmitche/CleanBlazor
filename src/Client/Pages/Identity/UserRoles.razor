@@ -1,6 +1,6 @@
-﻿@page "/identity/user-roles/{Id}"
+@page "/identity/user-roles/{Id}"
 @using Microsoft.Extensions.Localization
-@using BlazorHero.CleanArchitecture.Shared.Models.Identity
+@using CleanBlazor.Shared.Models.Identity
 @attribute [Authorize(Policy = Permissions.Roles.View)]
 @inject IStringLocalizer<UserRoles> Localizer
 

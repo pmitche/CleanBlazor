@@ -7,7 +7,7 @@ services:
       context: .
       dockerfile: src/Server/Dockerfile
     environment:
-      - "ConnectionStrings__DefaultConnection=Server=localhost,1433;Database=BlazorHero.CleanArchitecture;User=sa;Password=Your_password123;TrustServerCertificate=True;"
+      - "ConnectionStrings__DefaultConnection=Server=localhost,1433;Database=CleanBlazor;User=sa;Password=Your_password123;TrustServerCertificate=True;"
       - "ASPNETCORE_Kestrel__Certificates__Default__Password=securePassword123"
       - "ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx"
     volumes:

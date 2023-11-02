@@ -1,8 +1,8 @@
-﻿using System.Net.Http.Headers;
+using System.Net.Http.Headers;
 using Blazored.LocalStorage;
-using BlazorHero.CleanArchitecture.Shared.Constants.Storage;
+using CleanBlazor.Shared.Constants.Storage;
 
-namespace BlazorHero.CleanArchitecture.Client.Authentication;
+namespace CleanBlazor.Client.Authentication;
 
 public class AuthenticationHeaderHandler : DelegatingHandler
 {

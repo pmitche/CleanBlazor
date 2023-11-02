@@ -1,6 +1,6 @@
-﻿using System.Text.Json.Serialization;
+using System.Text.Json.Serialization;
 
-namespace BlazorHero.CleanArchitecture.Shared.Wrapper;
+namespace CleanBlazor.Shared.Wrapper;
 
 public class Result
 {

@@ -1,19 +1,19 @@
-﻿using System.Net.Http.Headers;
+using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Security.Claims;
-using BlazorHero.CleanArchitecture.Client.Extensions;
-using BlazorHero.CleanArchitecture.Client.Shared.Dialogs;
-using BlazorHero.CleanArchitecture.Contracts.Identity;
-using BlazorHero.CleanArchitecture.Shared.Constants.Application;
-using BlazorHero.CleanArchitecture.Shared.Constants.Routes;
-using BlazorHero.CleanArchitecture.Shared.Wrapper;
+using CleanBlazor.Client.Extensions;
+using CleanBlazor.Client.Shared.Dialogs;
+using CleanBlazor.Contracts.Identity;
+using CleanBlazor.Shared.Constants.Application;
+using CleanBlazor.Shared.Constants.Routes;
+using CleanBlazor.Shared.Wrapper;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.JSInterop;
 using MudBlazor;
 
-namespace BlazorHero.CleanArchitecture.Client.Shared;
+namespace CleanBlazor.Client.Shared;
 
 public partial class MainBody
 {

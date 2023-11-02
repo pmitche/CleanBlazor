@@ -1,13 +1,13 @@
-using BlazorHero.CleanArchitecture.Application.Abstractions.Common;
-using BlazorHero.CleanArchitecture.Application.Abstractions.Infrastructure.Services;
-using BlazorHero.CleanArchitecture.Application.Enums;
-using BlazorHero.CleanArchitecture.Domain.Abstractions;
-using BlazorHero.CleanArchitecture.Infrastructure.Models.Audit;
+using CleanBlazor.Application.Abstractions.Common;
+using CleanBlazor.Application.Abstractions.Infrastructure.Services;
+using CleanBlazor.Application.Enums;
+using CleanBlazor.Domain.Abstractions;
+using CleanBlazor.Infrastructure.Models.Audit;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 
-namespace BlazorHero.CleanArchitecture.Infrastructure.Data.Interceptors;
+namespace CleanBlazor.Infrastructure.Data.Interceptors;
 
 public class AuditableEntityInterceptor : SaveChangesInterceptor
 {

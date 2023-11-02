@@ -1,9 +1,9 @@
-﻿using BlazorHero.CleanArchitecture.Application.Abstractions.Infrastructure.Services.Identity;
-using BlazorHero.CleanArchitecture.Contracts.Identity;
-using BlazorHero.CleanArchitecture.Shared.Wrapper;
+using CleanBlazor.Application.Abstractions.Infrastructure.Services.Identity;
+using CleanBlazor.Contracts.Identity;
+using CleanBlazor.Shared.Wrapper;
 using Microsoft.AspNetCore.Mvc;
 
-namespace BlazorHero.CleanArchitecture.Server.Controllers.v1.Identity;
+namespace CleanBlazor.Server.Controllers.v1.Identity;
 
 [Route("api/v1/identity/token")]
 public class TokenController : BaseApiController

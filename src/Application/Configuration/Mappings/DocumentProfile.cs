@@ -1,9 +1,9 @@
-﻿using AutoMapper;
-using BlazorHero.CleanArchitecture.Application.Features.DocumentManagement.Documents.Commands;
-using BlazorHero.CleanArchitecture.Contracts.Documents;
-using BlazorHero.CleanArchitecture.Domain.Entities.Misc;
+using AutoMapper;
+using CleanBlazor.Application.Features.DocumentManagement.Documents.Commands;
+using CleanBlazor.Contracts.Documents;
+using CleanBlazor.Domain.Entities.Misc;
 
-namespace BlazorHero.CleanArchitecture.Application.Configuration.Mappings;
+namespace CleanBlazor.Application.Configuration.Mappings;
 
 public class DocumentProfile : Profile
 {

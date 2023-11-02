@@ -31,4 +31,4 @@ WORKDIR /app
 COPY --from=publish /app/publish .
 WORKDIR /app/Files
 WORKDIR /app
-ENTRYPOINT ["dotnet", "BlazorHero.CleanArchitecture.Server.dll"]
+ENTRYPOINT ["dotnet", "CleanBlazor.Server.dll"]

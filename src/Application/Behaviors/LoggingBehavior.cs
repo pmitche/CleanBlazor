@@ -2,7 +2,7 @@ using System.Diagnostics;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
-namespace BlazorHero.CleanArchitecture.Application.Behaviors;
+namespace CleanBlazor.Application.Behaviors;
 
 internal sealed class LoggingBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
 {

@@ -1,7 +1,7 @@
-﻿using BlazorHero.CleanArchitecture.Domain.Abstractions;
+using CleanBlazor.Domain.Abstractions;
 using Microsoft.AspNetCore.Identity;
 
-namespace BlazorHero.CleanArchitecture.Infrastructure.Models.Identity;
+namespace CleanBlazor.Infrastructure.Models.Identity;
 
 public class ApplicationRole : IdentityRole, IAuditableEntity
 {

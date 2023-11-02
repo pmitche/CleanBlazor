@@ -1,7 +1,7 @@
-﻿using AutoMapper;
-using BlazorHero.CleanArchitecture.Contracts.Identity;
+using AutoMapper;
+using CleanBlazor.Contracts.Identity;
 
-namespace BlazorHero.CleanArchitecture.Client.Configuration.Mappings;
+namespace CleanBlazor.Client.Configuration.Mappings;
 
 public class RoleProfile : Profile
 {

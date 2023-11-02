@@ -1,11 +1,11 @@
-﻿using Blazored.FluentValidation;
-using BlazorHero.CleanArchitecture.Client.Extensions;
-using BlazorHero.CleanArchitecture.Contracts.Identity;
-using BlazorHero.CleanArchitecture.Shared.Constants.Routes;
-using BlazorHero.CleanArchitecture.Shared.Wrapper;
+using Blazored.FluentValidation;
+using CleanBlazor.Client.Extensions;
+using CleanBlazor.Contracts.Identity;
+using CleanBlazor.Shared.Constants.Routes;
+using CleanBlazor.Shared.Wrapper;
 using MudBlazor;
 
-namespace BlazorHero.CleanArchitecture.Client.Pages.Authentication;
+namespace CleanBlazor.Client.Pages.Authentication;
 
 public partial class Register
 {

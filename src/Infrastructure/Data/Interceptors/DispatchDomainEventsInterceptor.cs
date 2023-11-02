@@ -1,9 +1,9 @@
-using BlazorHero.CleanArchitecture.Domain.Abstractions;
+using CleanBlazor.Domain.Abstractions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 
-namespace BlazorHero.CleanArchitecture.Infrastructure.Data.Interceptors;
+namespace CleanBlazor.Infrastructure.Data.Interceptors;
 
 public class DispatchDomainEventsInterceptor : SaveChangesInterceptor
 {

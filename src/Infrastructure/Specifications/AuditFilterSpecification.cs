@@ -1,7 +1,7 @@
-﻿using BlazorHero.CleanArchitecture.Application.Specifications.Base;
-using BlazorHero.CleanArchitecture.Infrastructure.Models.Audit;
+using CleanBlazor.Application.Specifications.Base;
+using CleanBlazor.Infrastructure.Models.Audit;
 
-namespace BlazorHero.CleanArchitecture.Infrastructure.Specifications;
+namespace CleanBlazor.Infrastructure.Specifications;
 
 public class AuditFilterSpecification : BaseSpecification<Audit>
 {

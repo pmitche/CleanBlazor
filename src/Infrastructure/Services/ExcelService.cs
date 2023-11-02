@@ -1,12 +1,12 @@
-﻿using System.Data;
+using System.Data;
 using System.Drawing;
-using BlazorHero.CleanArchitecture.Application.Abstractions.Infrastructure.Services;
-using BlazorHero.CleanArchitecture.Shared.Wrapper;
+using CleanBlazor.Application.Abstractions.Infrastructure.Services;
+using CleanBlazor.Shared.Wrapper;
 using Microsoft.Extensions.Localization;
 using OfficeOpenXml;
 using OfficeOpenXml.Style;
 
-namespace BlazorHero.CleanArchitecture.Infrastructure.Services;
+namespace CleanBlazor.Infrastructure.Services;
 
 public class ExcelService : IExcelService
 {
@@ -21,7 +21,7 @@ public class ExcelService : IExcelService
     {
         ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
         using var p = new ExcelPackage();
-        p.Workbook.Properties.Author = "BlazorHero.CleanArchitecture";
+        p.Workbook.Properties.Author = "CleanBlazor";
         p.Workbook.Worksheets.Add(_localizer["Audit Trails"]);
         ExcelWorksheet ws = p.Workbook.Worksheets[0];
         ws.Name = sheetName;

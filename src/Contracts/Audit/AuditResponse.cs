@@ -1,4 +1,4 @@
-﻿namespace BlazorHero.CleanArchitecture.Contracts.Audit;
+namespace CleanBlazor.Contracts.Audit;
 
 public class AuditResponse
 {

@@ -1,6 +1,6 @@
-﻿using MediatR;
+using MediatR;
 
-namespace BlazorHero.CleanArchitecture.Application.Abstractions.Messaging;
+namespace CleanBlazor.Application.Abstractions.Messaging;
 
 /// <summary>
 /// Represents the command interface.

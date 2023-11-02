@@ -1,6 +1,6 @@
-﻿@page "/document-store"
+@page "/document-store"
 @using Microsoft.Extensions.Localization
-@using BlazorHero.CleanArchitecture.Contracts.Documents
+@using CleanBlazor.Contracts.Documents
 @attribute [Authorize(Policy = Permissions.Documents.View)]
 @inject IStringLocalizer<DocumentStore> Localizer
 

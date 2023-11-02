@@ -1,19 +1,19 @@
-﻿using System.Net.Http.Json;
+using System.Net.Http.Json;
 using Blazored.FluentValidation;
-using BlazorHero.CleanArchitecture.Client.Extensions;
-using BlazorHero.CleanArchitecture.Contracts;
-using BlazorHero.CleanArchitecture.Contracts.Catalog.Brands;
-using BlazorHero.CleanArchitecture.Contracts.Catalog.Products;
-using BlazorHero.CleanArchitecture.Shared.Constants.Application;
-using BlazorHero.CleanArchitecture.Shared.Constants.Routes;
-using BlazorHero.CleanArchitecture.Shared.Enums;
-using BlazorHero.CleanArchitecture.Shared.Wrapper;
+using CleanBlazor.Client.Extensions;
+using CleanBlazor.Contracts;
+using CleanBlazor.Contracts.Catalog.Brands;
+using CleanBlazor.Contracts.Catalog.Products;
+using CleanBlazor.Shared.Constants.Application;
+using CleanBlazor.Shared.Constants.Routes;
+using CleanBlazor.Shared.Enums;
+using CleanBlazor.Shared.Wrapper;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.SignalR.Client;
 using MudBlazor;
 
-namespace BlazorHero.CleanArchitecture.Client.Pages.Catalog;
+namespace CleanBlazor.Client.Pages.Catalog;
 
 public partial class AddEditProductModal
 {

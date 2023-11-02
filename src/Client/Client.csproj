@@ -1,9 +1,9 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
+<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
 
   <PropertyGroup>
     <BlazorWebAssemblyLoadAllGlobalizationData>true</BlazorWebAssemblyLoadAllGlobalizationData>
-    <RootNamespace>BlazorHero.CleanArchitecture.Client</RootNamespace>
-    <AssemblyName>BlazorHero.CleanArchitecture.Client</AssemblyName>
+    <RootNamespace>CleanBlazor.Client</RootNamespace>
+    <AssemblyName>CleanBlazor.Client</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>

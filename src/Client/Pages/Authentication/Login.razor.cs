@@ -1,12 +1,12 @@
-﻿using System.Security.Claims;
+using System.Security.Claims;
 using Blazored.FluentValidation;
-using BlazorHero.CleanArchitecture.Client.Extensions;
-using BlazorHero.CleanArchitecture.Contracts.Identity;
-using BlazorHero.CleanArchitecture.Shared.Wrapper;
+using CleanBlazor.Client.Extensions;
+using CleanBlazor.Contracts.Identity;
+using CleanBlazor.Shared.Wrapper;
 using Microsoft.AspNetCore.Components.Authorization;
 using MudBlazor;
 
-namespace BlazorHero.CleanArchitecture.Client.Pages.Authentication;
+namespace CleanBlazor.Client.Pages.Authentication;
 
 public partial class Login
 {

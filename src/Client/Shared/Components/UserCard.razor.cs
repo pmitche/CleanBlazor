@@ -1,10 +1,10 @@
-﻿using System.Security.Claims;
-using BlazorHero.CleanArchitecture.Client.Extensions;
-using BlazorHero.CleanArchitecture.Shared.Constants.Storage;
+using System.Security.Claims;
+using CleanBlazor.Client.Extensions;
+using CleanBlazor.Shared.Constants.Storage;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 
-namespace BlazorHero.CleanArchitecture.Client.Shared.Components;
+namespace CleanBlazor.Client.Shared.Components;
 
 public partial class UserCard
 {

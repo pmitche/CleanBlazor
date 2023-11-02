@@ -1,12 +1,12 @@
-using BlazorHero.CleanArchitecture.Application.Abstractions.Common;
-using BlazorHero.CleanArchitecture.Application.Abstractions.Infrastructure.Services;
-using BlazorHero.CleanArchitecture.Application.Abstractions.Messaging;
-using BlazorHero.CleanArchitecture.Application.Abstractions.Persistence;
-using BlazorHero.CleanArchitecture.Domain.Entities.Communication;
-using BlazorHero.CleanArchitecture.Domain.Repositories;
-using BlazorHero.CleanArchitecture.Shared.Wrapper;
+using CleanBlazor.Application.Abstractions.Common;
+using CleanBlazor.Application.Abstractions.Infrastructure.Services;
+using CleanBlazor.Application.Abstractions.Messaging;
+using CleanBlazor.Application.Abstractions.Persistence;
+using CleanBlazor.Domain.Entities.Communication;
+using CleanBlazor.Domain.Repositories;
+using CleanBlazor.Shared.Wrapper;
 
-namespace BlazorHero.CleanArchitecture.Application.Features.Communication.Chat.Commands;
+namespace CleanBlazor.Application.Features.Communication.Chat.Commands;
 
 public sealed record SaveChatMessageCommand(string ToUserId, string Message) : ICommand<Result>;
 

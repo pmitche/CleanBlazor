@@ -1,4 +1,4 @@
-﻿namespace BlazorHero.CleanArchitecture.Contracts.Catalog.Products;
+namespace CleanBlazor.Contracts.Catalog.Products;
 
 public class GetAllPagedProductsResponse
 {

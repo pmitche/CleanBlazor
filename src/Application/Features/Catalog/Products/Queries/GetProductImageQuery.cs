@@ -1,10 +1,10 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using BlazorHero.CleanArchitecture.Application.Abstractions.Messaging;
-using BlazorHero.CleanArchitecture.Domain.Repositories;
-using BlazorHero.CleanArchitecture.Shared.Wrapper;
+using System.Diagnostics.CodeAnalysis;
+using CleanBlazor.Application.Abstractions.Messaging;
+using CleanBlazor.Domain.Repositories;
+using CleanBlazor.Shared.Wrapper;
 using Microsoft.EntityFrameworkCore;
 
-namespace BlazorHero.CleanArchitecture.Application.Features.Catalog.Products.Queries;
+namespace CleanBlazor.Application.Features.Catalog.Products.Queries;
 
 [ExcludeFromCodeCoverage]
 public sealed record GetProductImageQuery(int Id) : IQuery<Result<string>>;

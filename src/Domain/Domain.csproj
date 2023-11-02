@@ -1,8 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <RootNamespace>BlazorHero.CleanArchitecture.Domain</RootNamespace>
-    <AssemblyName>BlazorHero.CleanArchitecture.Domain</AssemblyName>
+    <RootNamespace>CleanBlazor.Domain</RootNamespace>
+    <AssemblyName>CleanBlazor.Domain</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>

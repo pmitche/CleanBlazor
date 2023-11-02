@@ -1,4 +1,4 @@
-﻿namespace BlazorHero.CleanArchitecture.Application.Abstractions.Infrastructure.Services.Storage;
+namespace CleanBlazor.Application.Abstractions.Infrastructure.Services.Storage;
 
 public interface IServerStorageService
 {

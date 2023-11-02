@@ -1,7 +1,7 @@
-﻿using BlazorHero.CleanArchitecture.Contracts.Audit;
-using BlazorHero.CleanArchitecture.Shared.Wrapper;
+using CleanBlazor.Contracts.Audit;
+using CleanBlazor.Shared.Wrapper;
 
-namespace BlazorHero.CleanArchitecture.Application.Abstractions.Infrastructure.Services;
+namespace CleanBlazor.Application.Abstractions.Infrastructure.Services;
 
 public interface IAuditService
 {

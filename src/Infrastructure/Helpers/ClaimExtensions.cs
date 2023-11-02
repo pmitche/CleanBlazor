@@ -1,12 +1,12 @@
-﻿using System.ComponentModel;
+using System.ComponentModel;
 using System.Reflection;
 using System.Security.Claims;
-using BlazorHero.CleanArchitecture.Contracts.Identity;
-using BlazorHero.CleanArchitecture.Infrastructure.Models.Identity;
-using BlazorHero.CleanArchitecture.Shared.Constants.Permission;
+using CleanBlazor.Contracts.Identity;
+using CleanBlazor.Infrastructure.Models.Identity;
+using CleanBlazor.Shared.Constants.Permission;
 using Microsoft.AspNetCore.Identity;
 
-namespace BlazorHero.CleanArchitecture.Infrastructure.Helpers;
+namespace CleanBlazor.Infrastructure.Helpers;
 
 public static class ClaimsHelper
 {

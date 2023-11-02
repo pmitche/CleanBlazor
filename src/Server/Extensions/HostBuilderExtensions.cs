@@ -1,6 +1,6 @@
-﻿using Serilog;
+using Serilog;
 
-namespace BlazorHero.CleanArchitecture.Server.Extensions;
+namespace CleanBlazor.Server.Extensions;
 
 internal static class HostBuilderExtensions
 {

@@ -1,16 +1,16 @@
-﻿using System.Reflection;
-using BlazorHero.CleanArchitecture.Application.Abstractions.Persistence;
-using BlazorHero.CleanArchitecture.Domain.Entities.Catalog;
-using BlazorHero.CleanArchitecture.Domain.Entities.Communication;
-using BlazorHero.CleanArchitecture.Domain.Entities.Misc;
-using BlazorHero.CleanArchitecture.Infrastructure.Data.Extensions;
-using BlazorHero.CleanArchitecture.Infrastructure.Models.Audit;
-using BlazorHero.CleanArchitecture.Infrastructure.Models.Identity;
+using System.Reflection;
+using CleanBlazor.Application.Abstractions.Persistence;
+using CleanBlazor.Domain.Entities.Catalog;
+using CleanBlazor.Domain.Entities.Communication;
+using CleanBlazor.Domain.Entities.Misc;
+using CleanBlazor.Infrastructure.Data.Extensions;
+using CleanBlazor.Infrastructure.Models.Audit;
+using CleanBlazor.Infrastructure.Models.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace BlazorHero.CleanArchitecture.Infrastructure.Data;
+namespace CleanBlazor.Infrastructure.Data;
 
 public class ApplicationDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, string,
     IdentityUserClaim<string>, IdentityUserRole<string>, IdentityUserLogin<string>, ApplicationRoleClaim,

@@ -2,7 +2,7 @@ using System.Diagnostics.CodeAnalysis;
 using FluentValidation;
 using Microsoft.Extensions.Localization;
 
-namespace BlazorHero.CleanArchitecture.Contracts.Catalog.Products;
+namespace CleanBlazor.Contracts.Catalog.Products;
 
 [ExcludeFromCodeCoverage]
 public sealed class AddEditProductRequest

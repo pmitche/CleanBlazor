@@ -1,9 +1,9 @@
-﻿using BlazorHero.CleanArchitecture.Domain.Entities.Catalog;
-using BlazorHero.CleanArchitecture.Domain.Repositories;
-using BlazorHero.CleanArchitecture.Infrastructure.Data;
+using CleanBlazor.Domain.Entities.Catalog;
+using CleanBlazor.Domain.Repositories;
+using CleanBlazor.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
-namespace BlazorHero.CleanArchitecture.Infrastructure.Repositories;
+namespace CleanBlazor.Infrastructure.Repositories;
 
 internal sealed class ProductRepository : GenericRepository<Product, int>, IProductRepository
 {

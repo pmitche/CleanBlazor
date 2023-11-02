@@ -1,16 +1,16 @@
-﻿using System.Net.Http.Json;
+using System.Net.Http.Json;
 using Blazored.FluentValidation;
-using BlazorHero.CleanArchitecture.Client.Extensions;
-using BlazorHero.CleanArchitecture.Contracts;
-using BlazorHero.CleanArchitecture.Contracts.Documents;
-using BlazorHero.CleanArchitecture.Shared.Constants.Routes;
-using BlazorHero.CleanArchitecture.Shared.Enums;
-using BlazorHero.CleanArchitecture.Shared.Wrapper;
+using CleanBlazor.Client.Extensions;
+using CleanBlazor.Contracts;
+using CleanBlazor.Contracts.Documents;
+using CleanBlazor.Shared.Constants.Routes;
+using CleanBlazor.Shared.Enums;
+using CleanBlazor.Shared.Wrapper;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using MudBlazor;
 
-namespace BlazorHero.CleanArchitecture.Client.Pages.Misc;
+namespace CleanBlazor.Client.Pages.Misc;
 
 public partial class AddEditDocumentModal
 {

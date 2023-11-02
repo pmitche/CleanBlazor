@@ -1,8 +1,8 @@
 using System.Linq.Expressions;
-using BlazorHero.CleanArchitecture.Domain.Abstractions;
+using CleanBlazor.Domain.Abstractions;
 using Microsoft.EntityFrameworkCore;
 
-namespace BlazorHero.CleanArchitecture.Infrastructure.Data.Extensions;
+namespace CleanBlazor.Infrastructure.Data.Extensions;
 
 internal static class ModelBuilderExtensions
 {

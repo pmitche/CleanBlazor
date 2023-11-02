@@ -1,11 +1,11 @@
 using System.Net;
 using System.Reflection;
-using BlazorHero.CleanArchitecture.Application.Abstractions.Infrastructure.Services;
-using BlazorHero.CleanArchitecture.Application.Configuration;
-using BlazorHero.CleanArchitecture.Server.Configuration;
-using BlazorHero.CleanArchitecture.Server.Localization;
-using BlazorHero.CleanArchitecture.Server.Services;
-using BlazorHero.CleanArchitecture.Shared.Constants.Permission;
+using CleanBlazor.Application.Abstractions.Infrastructure.Services;
+using CleanBlazor.Application.Configuration;
+using CleanBlazor.Server.Configuration;
+using CleanBlazor.Server.Localization;
+using CleanBlazor.Server.Services;
+using CleanBlazor.Shared.Constants.Permission;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -13,7 +13,7 @@ using Microsoft.Extensions.Localization;
 using Microsoft.OpenApi.Models;
 using Serilog;
 
-namespace BlazorHero.CleanArchitecture.Server;
+namespace CleanBlazor.Server;
 
 public static class DependencyInjection
 {
@@ -101,7 +101,7 @@ public static class DependencyInjection
                 new OpenApiInfo
                 {
                     Version = "v1",
-                    Title = "BlazorHero.CleanArchitecture",
+                    Title = "CleanBlazor",
                     License = new OpenApiLicense
                     {
                         Name = "MIT License", Url = new Uri("https://opensource.org/licenses/MIT")

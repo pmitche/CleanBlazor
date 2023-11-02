@@ -1,6 +1,6 @@
-﻿using Hangfire.Dashboard;
+using Hangfire.Dashboard;
 
-namespace BlazorHero.CleanArchitecture.Server.Filters;
+namespace CleanBlazor.Server.Filters;
 
 public class HangfireAuthorizationFilter : IDashboardAuthorizationFilter
 {

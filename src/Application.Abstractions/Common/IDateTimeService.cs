@@ -1,4 +1,4 @@
-﻿namespace BlazorHero.CleanArchitecture.Application.Abstractions.Common;
+namespace CleanBlazor.Application.Abstractions.Common;
 
 public interface IDateTimeService
 {

@@ -1,6 +1,6 @@
-﻿using BlazorHero.CleanArchitecture.Domain.Entities.Catalog;
+using CleanBlazor.Domain.Entities.Catalog;
 
-namespace BlazorHero.CleanArchitecture.Domain.Repositories;
+namespace CleanBlazor.Domain.Repositories;
 
 public interface IProductRepository : IRepository<Product, int>
 {

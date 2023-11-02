@@ -1,8 +1,8 @@
-using BlazorHero.CleanArchitecture.Domain.Entities.Catalog;
+using CleanBlazor.Domain.Entities.Catalog;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace BlazorHero.CleanArchitecture.Infrastructure.Data.Configurations;
+namespace CleanBlazor.Infrastructure.Data.Configurations;
 
 public class BrandConfiguration : IEntityTypeConfiguration<Brand>
 {

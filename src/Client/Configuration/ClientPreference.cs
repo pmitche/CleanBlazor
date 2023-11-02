@@ -1,7 +1,7 @@
-﻿using BlazorHero.CleanArchitecture.Shared.Constants.Localization;
-using BlazorHero.CleanArchitecture.Shared.Settings;
+using CleanBlazor.Shared.Constants.Localization;
+using CleanBlazor.Shared.Settings;
 
-namespace BlazorHero.CleanArchitecture.Client.Configuration;
+namespace CleanBlazor.Client.Configuration;
 
 public record ClientPreference : IPreference
 {

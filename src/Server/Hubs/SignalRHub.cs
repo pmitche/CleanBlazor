@@ -1,9 +1,9 @@
-﻿using BlazorHero.CleanArchitecture.Domain.Entities.Communication;
-using BlazorHero.CleanArchitecture.Shared.Constants.Application;
+using CleanBlazor.Domain.Entities.Communication;
+using CleanBlazor.Shared.Constants.Application;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 
-namespace BlazorHero.CleanArchitecture.Server.Hubs;
+namespace CleanBlazor.Server.Hubs;
 
 [Authorize]
 public class SignalRHub : Hub

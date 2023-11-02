@@ -1,15 +1,15 @@
-﻿using System.Diagnostics.CodeAnalysis;
+using System.Diagnostics.CodeAnalysis;
 using AutoMapper;
-using BlazorHero.CleanArchitecture.Application.Abstractions.Messaging;
-using BlazorHero.CleanArchitecture.Application.Abstractions.Persistence;
-using BlazorHero.CleanArchitecture.Domain.Entities.Catalog;
-using BlazorHero.CleanArchitecture.Domain.Repositories;
-using BlazorHero.CleanArchitecture.Shared.Constants.Application;
-using BlazorHero.CleanArchitecture.Shared.Wrapper;
+using CleanBlazor.Application.Abstractions.Messaging;
+using CleanBlazor.Application.Abstractions.Persistence;
+using CleanBlazor.Domain.Entities.Catalog;
+using CleanBlazor.Domain.Repositories;
+using CleanBlazor.Shared.Constants.Application;
+using CleanBlazor.Shared.Wrapper;
 using LazyCache;
 using Microsoft.Extensions.Localization;
 
-namespace BlazorHero.CleanArchitecture.Application.Features.Catalog.Brands.Commands;
+namespace CleanBlazor.Application.Features.Catalog.Brands.Commands;
 
 [ExcludeFromCodeCoverage]
 public sealed record AddEditBrandCommand(int Id, string Name, string Description, decimal Tax) : ICommand<Result<int>>;

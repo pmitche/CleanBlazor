@@ -1,11 +1,11 @@
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
-using BlazorHero.CleanArchitecture.Domain.Entities.Communication;
-using BlazorHero.CleanArchitecture.Domain.Repositories;
-using BlazorHero.CleanArchitecture.Infrastructure.Data;
-using BlazorHero.CleanArchitecture.Infrastructure.Models.Identity;
+using CleanBlazor.Domain.Entities.Communication;
+using CleanBlazor.Domain.Repositories;
+using CleanBlazor.Infrastructure.Data;
+using CleanBlazor.Infrastructure.Models.Identity;
 
-namespace BlazorHero.CleanArchitecture.Infrastructure.Repositories;
+namespace CleanBlazor.Infrastructure.Repositories;
 
 internal sealed class ChatMessageRepository : GenericRepository<ChatMessage<IChatUser>, long>, IChatMessageRepository
 {

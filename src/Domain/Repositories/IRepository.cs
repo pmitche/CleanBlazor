@@ -1,6 +1,6 @@
-﻿using BlazorHero.CleanArchitecture.Domain.Abstractions;
+using CleanBlazor.Domain.Abstractions;
 
-namespace BlazorHero.CleanArchitecture.Domain.Repositories;
+namespace CleanBlazor.Domain.Repositories;
 
 public interface IRepository<T, in TId>
     where T : IEntity<TId>

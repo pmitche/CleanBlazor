@@ -1,4 +1,4 @@
-﻿namespace BlazorHero.CleanArchitecture.Contracts.Mail;
+namespace CleanBlazor.Contracts.Mail;
 
 public class MailRequest
 {

@@ -1,4 +1,4 @@
-﻿namespace BlazorHero.CleanArchitecture.Application.Abstractions.Serialization;
+namespace CleanBlazor.Application.Abstractions.Serialization;
 
 public interface IJsonSerializer
 {

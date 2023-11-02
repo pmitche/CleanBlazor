@@ -1,6 +1,6 @@
 using MediatR;
 
-namespace BlazorHero.CleanArchitecture.Domain.Abstractions;
+namespace CleanBlazor.Domain.Abstractions;
 
 public interface IDomainEvent : INotification
 {

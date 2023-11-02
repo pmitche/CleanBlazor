@@ -1,12 +1,12 @@
-﻿using Blazored.LocalStorage;
-using BlazorHero.CleanArchitecture.Client.Configuration;
-using BlazorHero.CleanArchitecture.Shared.Constants.Storage;
-using BlazorHero.CleanArchitecture.Shared.Settings;
-using BlazorHero.CleanArchitecture.Shared.Wrapper;
+using Blazored.LocalStorage;
+using CleanBlazor.Client.Configuration;
+using CleanBlazor.Shared.Constants.Storage;
+using CleanBlazor.Shared.Settings;
+using CleanBlazor.Shared.Wrapper;
 using Microsoft.Extensions.Localization;
 using MudBlazor;
 
-namespace BlazorHero.CleanArchitecture.Client;
+namespace CleanBlazor.Client;
 
 public class ClientPreferenceManager
 {

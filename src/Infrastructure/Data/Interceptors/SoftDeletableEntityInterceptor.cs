@@ -1,11 +1,11 @@
-using BlazorHero.CleanArchitecture.Application.Abstractions.Common;
-using BlazorHero.CleanArchitecture.Application.Abstractions.Infrastructure.Services;
-using BlazorHero.CleanArchitecture.Domain.Abstractions;
+using CleanBlazor.Application.Abstractions.Common;
+using CleanBlazor.Application.Abstractions.Infrastructure.Services;
+using CleanBlazor.Domain.Abstractions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 
-namespace BlazorHero.CleanArchitecture.Infrastructure.Data.Interceptors;
+namespace CleanBlazor.Infrastructure.Data.Interceptors;
 
 public class SoftDeletableEntityInterceptor : SaveChangesInterceptor
 {

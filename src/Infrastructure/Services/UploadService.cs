@@ -1,8 +1,8 @@
-﻿using BlazorHero.CleanArchitecture.Application.Abstractions.Infrastructure.Services;
-using BlazorHero.CleanArchitecture.Application.Extensions;
-using BlazorHero.CleanArchitecture.Contracts;
+using CleanBlazor.Application.Abstractions.Infrastructure.Services;
+using CleanBlazor.Application.Extensions;
+using CleanBlazor.Contracts;
 
-namespace BlazorHero.CleanArchitecture.Infrastructure.Services;
+namespace CleanBlazor.Infrastructure.Services;
 
 public class UploadService : IUploadService
 {

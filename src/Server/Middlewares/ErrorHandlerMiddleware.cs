@@ -1,9 +1,9 @@
-﻿using System.Net;
+using System.Net;
 using System.Text.Json;
-using BlazorHero.CleanArchitecture.Application.Exceptions;
-using BlazorHero.CleanArchitecture.Shared.Wrapper;
+using CleanBlazor.Application.Exceptions;
+using CleanBlazor.Shared.Wrapper;
 
-namespace BlazorHero.CleanArchitecture.Server.Middlewares;
+namespace CleanBlazor.Server.Middlewares;
 
 public class ErrorHandlerMiddleware
 {

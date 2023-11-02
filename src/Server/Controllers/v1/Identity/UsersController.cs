@@ -1,12 +1,12 @@
-﻿using BlazorHero.CleanArchitecture.Application.Abstractions.Infrastructure.Services.Identity;
-using BlazorHero.CleanArchitecture.Contracts.Identity;
-using BlazorHero.CleanArchitecture.Shared.Constants.Permission;
-using BlazorHero.CleanArchitecture.Shared.Wrapper;
+using CleanBlazor.Application.Abstractions.Infrastructure.Services.Identity;
+using CleanBlazor.Contracts.Identity;
+using CleanBlazor.Shared.Constants.Permission;
+using CleanBlazor.Shared.Wrapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Primitives;
 
-namespace BlazorHero.CleanArchitecture.Server.Controllers.v1.Identity;
+namespace CleanBlazor.Server.Controllers.v1.Identity;
 
 [Authorize]
 [Route("api/v1/identity/users")]

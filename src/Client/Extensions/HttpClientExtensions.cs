@@ -1,7 +1,7 @@
 using System.Net.Http.Json;
 using System.Text.Json;
 
-namespace BlazorHero.CleanArchitecture.Client.Extensions;
+namespace CleanBlazor.Client.Extensions;
 
 public static class HttpClientExtensions
 {

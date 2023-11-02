@@ -1,4 +1,4 @@
-namespace BlazorHero.CleanArchitecture.Shared.Models.Identity;
+namespace CleanBlazor.Shared.Models.Identity;
 
 public class UserRoleModel
 {

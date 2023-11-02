@@ -1,6 +1,6 @@
-﻿using System.Diagnostics.CodeAnalysis;
+using System.Diagnostics.CodeAnalysis;
 
-namespace BlazorHero.CleanArchitecture.Application.Abstractions.Infrastructure.Services.Storage;
+namespace CleanBlazor.Application.Abstractions.Infrastructure.Services.Storage;
 
 [ExcludeFromCodeCoverage]
 public class ChangedEventArgs

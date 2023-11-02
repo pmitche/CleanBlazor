@@ -1,4 +1,4 @@
-namespace BlazorHero.CleanArchitecture.Shared.Constants.Routes;
+namespace CleanBlazor.Shared.Constants.Routes;
 
 public static class AccountsEndpoints
 {

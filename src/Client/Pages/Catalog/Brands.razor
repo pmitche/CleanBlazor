@@ -1,7 +1,7 @@
-﻿@page "/catalog/brands"
+@page "/catalog/brands"
 @using Microsoft.Extensions.Localization
-@using BlazorHero.CleanArchitecture.Contracts.Catalog
-@using BlazorHero.CleanArchitecture.Contracts.Catalog.Brands
+@using CleanBlazor.Contracts.Catalog
+@using CleanBlazor.Contracts.Catalog.Brands
 @attribute [Authorize(Policy = Permissions.Brands.View)]
 @inject IStringLocalizer<Brands> Localizer
 

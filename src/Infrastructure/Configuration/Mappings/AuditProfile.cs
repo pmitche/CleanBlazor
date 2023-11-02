@@ -1,8 +1,8 @@
-﻿using AutoMapper;
-using BlazorHero.CleanArchitecture.Contracts.Audit;
-using BlazorHero.CleanArchitecture.Infrastructure.Models.Audit;
+using AutoMapper;
+using CleanBlazor.Contracts.Audit;
+using CleanBlazor.Infrastructure.Models.Audit;
 
-namespace BlazorHero.CleanArchitecture.Infrastructure.Configuration.Mappings;
+namespace CleanBlazor.Infrastructure.Configuration.Mappings;
 
 public class AuditProfile : Profile
 {

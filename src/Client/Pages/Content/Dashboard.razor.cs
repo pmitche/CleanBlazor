@@ -1,14 +1,14 @@
-﻿using System.Net.Http.Json;
-using BlazorHero.CleanArchitecture.Client.Extensions;
-using BlazorHero.CleanArchitecture.Contracts.Dashboard;
-using BlazorHero.CleanArchitecture.Shared.Constants.Application;
-using BlazorHero.CleanArchitecture.Shared.Constants.Routes;
-using BlazorHero.CleanArchitecture.Shared.Wrapper;
+using System.Net.Http.Json;
+using CleanBlazor.Client.Extensions;
+using CleanBlazor.Contracts.Dashboard;
+using CleanBlazor.Shared.Constants.Application;
+using CleanBlazor.Shared.Constants.Routes;
+using CleanBlazor.Shared.Wrapper;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.SignalR.Client;
 using ChartSeries = MudBlazor.ChartSeries;
 
-namespace BlazorHero.CleanArchitecture.Client.Pages.Content;
+namespace CleanBlazor.Client.Pages.Content;
 
 public partial class Dashboard
 {

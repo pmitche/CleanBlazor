@@ -1,11 +1,11 @@
-﻿using BlazorHero.CleanArchitecture.Application.Features.Dashboards.Queries;
-using BlazorHero.CleanArchitecture.Contracts.Dashboard;
-using BlazorHero.CleanArchitecture.Shared.Constants.Permission;
-using BlazorHero.CleanArchitecture.Shared.Wrapper;
+using CleanBlazor.Application.Features.Dashboards.Queries;
+using CleanBlazor.Contracts.Dashboard;
+using CleanBlazor.Shared.Constants.Permission;
+using CleanBlazor.Shared.Wrapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace BlazorHero.CleanArchitecture.Server.Controllers.v1;
+namespace CleanBlazor.Server.Controllers.v1;
 
 public class DashboardController : BaseApiController
 {

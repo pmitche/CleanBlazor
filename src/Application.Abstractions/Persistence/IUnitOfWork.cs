@@ -1,4 +1,4 @@
-﻿namespace BlazorHero.CleanArchitecture.Application.Abstractions.Persistence;
+namespace CleanBlazor.Application.Abstractions.Persistence;
 
 /// <summary>
 /// Represents the unit of work interface.

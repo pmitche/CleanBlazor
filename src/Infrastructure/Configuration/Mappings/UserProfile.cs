@@ -1,9 +1,9 @@
-﻿using AutoMapper;
-using BlazorHero.CleanArchitecture.Contracts.Chat;
-using BlazorHero.CleanArchitecture.Contracts.Identity;
-using BlazorHero.CleanArchitecture.Infrastructure.Models.Identity;
+using AutoMapper;
+using CleanBlazor.Contracts.Chat;
+using CleanBlazor.Contracts.Identity;
+using CleanBlazor.Infrastructure.Models.Identity;
 
-namespace BlazorHero.CleanArchitecture.Infrastructure.Configuration.Mappings;
+namespace CleanBlazor.Infrastructure.Configuration.Mappings;
 
 public class UserProfile : Profile
 {

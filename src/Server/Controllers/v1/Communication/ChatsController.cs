@@ -1,11 +1,11 @@
-﻿using BlazorHero.CleanArchitecture.Application.Features.Communication.Chat.Commands;
-using BlazorHero.CleanArchitecture.Application.Features.Communication.Chat.Queries;
-using BlazorHero.CleanArchitecture.Domain.Entities.Communication;
-using BlazorHero.CleanArchitecture.Shared.Constants.Permission;
+using CleanBlazor.Application.Features.Communication.Chat.Commands;
+using CleanBlazor.Application.Features.Communication.Chat.Queries;
+using CleanBlazor.Domain.Entities.Communication;
+using CleanBlazor.Shared.Constants.Permission;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace BlazorHero.CleanArchitecture.Server.Controllers.v1.Communication;
+namespace CleanBlazor.Server.Controllers.v1.Communication;
 
 [Authorize(Policy = Permissions.Communication.Chat)]
 public class ChatsController : BaseApiController

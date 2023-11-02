@@ -1,6 +1,6 @@
-﻿using BlazorHero.CleanArchitecture.Contracts.Mail;
+using CleanBlazor.Contracts.Mail;
 
-namespace BlazorHero.CleanArchitecture.Application.Abstractions.Infrastructure.Services;
+namespace CleanBlazor.Application.Abstractions.Infrastructure.Services;
 
 public interface IMailService
 {

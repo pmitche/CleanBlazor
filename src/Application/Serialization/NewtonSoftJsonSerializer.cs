@@ -1,7 +1,7 @@
-﻿using BlazorHero.CleanArchitecture.Application.Abstractions.Serialization;
+using CleanBlazor.Application.Abstractions.Serialization;
 using Newtonsoft.Json;
 
-namespace BlazorHero.CleanArchitecture.Application.Serialization;
+namespace CleanBlazor.Application.Serialization;
 
 public class NewtonSoftJsonSerializer : IJsonSerializer
 {

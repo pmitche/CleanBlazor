@@ -1,4 +1,4 @@
-﻿namespace BlazorHero.CleanArchitecture.Application.Configuration;
+namespace CleanBlazor.Application.Configuration;
 
 public class MailConfiguration
 {

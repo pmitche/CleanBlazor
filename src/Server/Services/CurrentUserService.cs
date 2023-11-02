@@ -1,7 +1,7 @@
-﻿using System.Security.Claims;
-using BlazorHero.CleanArchitecture.Application.Abstractions.Infrastructure.Services;
+using System.Security.Claims;
+using CleanBlazor.Application.Abstractions.Infrastructure.Services;
 
-namespace BlazorHero.CleanArchitecture.Server.Services;
+namespace CleanBlazor.Server.Services;
 
 public class CurrentUserService : ICurrentUserService
 {

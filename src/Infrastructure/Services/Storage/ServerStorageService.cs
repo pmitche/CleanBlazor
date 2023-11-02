@@ -1,9 +1,9 @@
-﻿using System.Text.Json;
-using BlazorHero.CleanArchitecture.Application.Abstractions.Infrastructure.Services.Storage;
-using BlazorHero.CleanArchitecture.Application.Abstractions.Infrastructure.Services.Storage.Provider;
-using BlazorHero.CleanArchitecture.Application.Abstractions.Serialization;
+using System.Text.Json;
+using CleanBlazor.Application.Abstractions.Infrastructure.Services.Storage;
+using CleanBlazor.Application.Abstractions.Infrastructure.Services.Storage.Provider;
+using CleanBlazor.Application.Abstractions.Serialization;
 
-namespace BlazorHero.CleanArchitecture.Infrastructure.Services.Storage;
+namespace CleanBlazor.Infrastructure.Services.Storage;
 
 public class ServerStorageService : IServerStorageService, ISyncServerStorageService
 {

@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace BlazorHero.CleanArchitecture.Client.Models;
+namespace CleanBlazor.Client.Models;
 
 public class AddEditBrandModel
 {

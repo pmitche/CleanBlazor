@@ -1,9 +1,9 @@
-using BlazorHero.CleanArchitecture.Domain.Entities.Communication;
-using BlazorHero.CleanArchitecture.Infrastructure.Models.Identity;
+using CleanBlazor.Domain.Entities.Communication;
+using CleanBlazor.Infrastructure.Models.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace BlazorHero.CleanArchitecture.Infrastructure.Data.Configurations;
+namespace CleanBlazor.Infrastructure.Data.Configurations;
 
 public class ChatMessageConfiguration : IEntityTypeConfiguration<ChatMessage<ApplicationUser>>
 {

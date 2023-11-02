@@ -1,13 +1,13 @@
-﻿using System.Diagnostics.CodeAnalysis;
+using System.Diagnostics.CodeAnalysis;
 using AutoMapper;
-using BlazorHero.CleanArchitecture.Application.Abstractions.Messaging;
-using BlazorHero.CleanArchitecture.Contracts.Catalog.Brands;
-using BlazorHero.CleanArchitecture.Domain.Repositories;
-using BlazorHero.CleanArchitecture.Shared.Constants.Application;
-using BlazorHero.CleanArchitecture.Shared.Wrapper;
+using CleanBlazor.Application.Abstractions.Messaging;
+using CleanBlazor.Contracts.Catalog.Brands;
+using CleanBlazor.Domain.Repositories;
+using CleanBlazor.Shared.Constants.Application;
+using CleanBlazor.Shared.Wrapper;
 using LazyCache;
 
-namespace BlazorHero.CleanArchitecture.Application.Features.Catalog.Brands.Queries;
+namespace CleanBlazor.Application.Features.Catalog.Brands.Queries;
 
 [ExcludeFromCodeCoverage]
 public sealed record GetAllBrandsQuery : IQuery<Result<List<GetAllBrandsResponse>>>;

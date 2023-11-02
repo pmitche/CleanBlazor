@@ -1,6 +1,6 @@
 using MudBlazor;
 
-namespace BlazorHero.CleanArchitecture.Client.Extensions;
+namespace CleanBlazor.Client.Extensions;
 
 public static class SnackBarExtensions
 {

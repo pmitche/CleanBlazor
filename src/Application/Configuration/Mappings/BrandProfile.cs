@@ -1,9 +1,9 @@
-﻿using AutoMapper;
-using BlazorHero.CleanArchitecture.Application.Features.Catalog.Brands.Commands;
-using BlazorHero.CleanArchitecture.Contracts.Catalog.Brands;
-using BlazorHero.CleanArchitecture.Domain.Entities.Catalog;
+using AutoMapper;
+using CleanBlazor.Application.Features.Catalog.Brands.Commands;
+using CleanBlazor.Contracts.Catalog.Brands;
+using CleanBlazor.Domain.Entities.Catalog;
 
-namespace BlazorHero.CleanArchitecture.Application.Configuration.Mappings;
+namespace CleanBlazor.Application.Configuration.Mappings;
 
 public class BrandProfile : Profile
 {

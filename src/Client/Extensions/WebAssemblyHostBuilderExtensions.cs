@@ -1,17 +1,17 @@
-﻿using System.Globalization;
+using System.Globalization;
 using Blazored.LocalStorage;
-using BlazorHero.CleanArchitecture.Client.Authentication;
-using BlazorHero.CleanArchitecture.Shared.Constants.Permission;
+using CleanBlazor.Client.Authentication;
+using CleanBlazor.Shared.Constants.Permission;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using MudBlazor;
 using MudBlazor.Services;
 
-namespace BlazorHero.CleanArchitecture.Client.Extensions;
+namespace CleanBlazor.Client.Extensions;
 
 public static class WebAssemblyHostBuilderExtensions
 {
-    private const string ClientName = "BlazorHero.CleanArchitecture.API";
+    private const string ClientName = "CleanBlazor.API";
 
     public static WebAssemblyHostBuilder AddRootComponents(this WebAssemblyHostBuilder builder)
     {

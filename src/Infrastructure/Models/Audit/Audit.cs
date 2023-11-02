@@ -1,6 +1,6 @@
-﻿using BlazorHero.CleanArchitecture.Domain.Abstractions;
+using CleanBlazor.Domain.Abstractions;
 
-namespace BlazorHero.CleanArchitecture.Infrastructure.Models.Audit;
+namespace CleanBlazor.Infrastructure.Models.Audit;
 
 public class Audit : IEntity<int>
 {

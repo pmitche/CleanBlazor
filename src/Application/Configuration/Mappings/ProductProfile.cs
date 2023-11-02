@@ -1,8 +1,8 @@
-﻿using AutoMapper;
-using BlazorHero.CleanArchitecture.Application.Features.Catalog.Products.Commands;
-using BlazorHero.CleanArchitecture.Domain.Entities.Catalog;
+using AutoMapper;
+using CleanBlazor.Application.Features.Catalog.Products.Commands;
+using CleanBlazor.Domain.Entities.Catalog;
 
-namespace BlazorHero.CleanArchitecture.Application.Configuration.Mappings;
+namespace CleanBlazor.Application.Configuration.Mappings;
 
 public class ProductProfile : Profile
 {

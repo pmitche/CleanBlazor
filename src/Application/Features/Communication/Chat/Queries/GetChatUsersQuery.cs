@@ -1,13 +1,13 @@
 using AutoMapper;
-using BlazorHero.CleanArchitecture.Application.Abstractions.Infrastructure.Services;
-using BlazorHero.CleanArchitecture.Application.Abstractions.Infrastructure.Services.Identity;
-using BlazorHero.CleanArchitecture.Application.Abstractions.Messaging;
-using BlazorHero.CleanArchitecture.Contracts.Chat;
-using BlazorHero.CleanArchitecture.Shared.Constants.Role;
-using BlazorHero.CleanArchitecture.Shared.Wrapper;
+using CleanBlazor.Application.Abstractions.Infrastructure.Services;
+using CleanBlazor.Application.Abstractions.Infrastructure.Services.Identity;
+using CleanBlazor.Application.Abstractions.Messaging;
+using CleanBlazor.Contracts.Chat;
+using CleanBlazor.Shared.Constants.Role;
+using CleanBlazor.Shared.Wrapper;
 using Microsoft.EntityFrameworkCore;
 
-namespace BlazorHero.CleanArchitecture.Application.Features.Communication.Chat.Queries;
+namespace CleanBlazor.Application.Features.Communication.Chat.Queries;
 
 public sealed record GetChatUsersQuery : IQuery<Result<IEnumerable<ChatUserResponse>>>;
 

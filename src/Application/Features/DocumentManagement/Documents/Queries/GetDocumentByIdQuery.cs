@@ -1,12 +1,12 @@
-﻿using System.Diagnostics.CodeAnalysis;
+using System.Diagnostics.CodeAnalysis;
 using AutoMapper;
-using BlazorHero.CleanArchitecture.Application.Abstractions.Messaging;
-using BlazorHero.CleanArchitecture.Contracts.Documents;
-using BlazorHero.CleanArchitecture.Domain.Entities.Misc;
-using BlazorHero.CleanArchitecture.Domain.Repositories;
-using BlazorHero.CleanArchitecture.Shared.Wrapper;
+using CleanBlazor.Application.Abstractions.Messaging;
+using CleanBlazor.Contracts.Documents;
+using CleanBlazor.Domain.Entities.Misc;
+using CleanBlazor.Domain.Repositories;
+using CleanBlazor.Shared.Wrapper;
 
-namespace BlazorHero.CleanArchitecture.Application.Features.DocumentManagement.Documents.Queries;
+namespace CleanBlazor.Application.Features.DocumentManagement.Documents.Queries;
 
 [ExcludeFromCodeCoverage]
 public sealed record GetDocumentByIdQuery(int Id) : IQuery<Result<GetDocumentByIdResponse>>;

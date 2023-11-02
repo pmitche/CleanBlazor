@@ -1,16 +1,16 @@
-﻿using System.Globalization;
+using System.Globalization;
 using AutoMapper;
-using BlazorHero.CleanArchitecture.Application.Abstractions.Infrastructure.Services;
-using BlazorHero.CleanArchitecture.Application.Extensions;
-using BlazorHero.CleanArchitecture.Contracts.Audit;
-using BlazorHero.CleanArchitecture.Infrastructure.Data;
-using BlazorHero.CleanArchitecture.Infrastructure.Models.Audit;
-using BlazorHero.CleanArchitecture.Infrastructure.Specifications;
-using BlazorHero.CleanArchitecture.Shared.Wrapper;
+using CleanBlazor.Application.Abstractions.Infrastructure.Services;
+using CleanBlazor.Application.Extensions;
+using CleanBlazor.Contracts.Audit;
+using CleanBlazor.Infrastructure.Data;
+using CleanBlazor.Infrastructure.Models.Audit;
+using CleanBlazor.Infrastructure.Specifications;
+using CleanBlazor.Shared.Wrapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 
-namespace BlazorHero.CleanArchitecture.Infrastructure.Services;
+namespace CleanBlazor.Infrastructure.Services;
 
 public class AuditService : IAuditService
 {

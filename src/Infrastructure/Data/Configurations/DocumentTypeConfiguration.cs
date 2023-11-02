@@ -1,8 +1,8 @@
-using BlazorHero.CleanArchitecture.Domain.Entities.Misc;
+using CleanBlazor.Domain.Entities.Misc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace BlazorHero.CleanArchitecture.Infrastructure.Data.Configurations;
+namespace CleanBlazor.Infrastructure.Data.Configurations;
 
 public class DocumentTypeConfiguration : IEntityTypeConfiguration<DocumentType>
 {

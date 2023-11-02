@@ -1,9 +1,9 @@
-﻿using BlazorHero.CleanArchitecture.Shared.Constants.Permission;
-using BlazorHero.CleanArchitecture.Shared.Wrapper;
+using CleanBlazor.Shared.Constants.Permission;
+using CleanBlazor.Shared.Wrapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace BlazorHero.CleanArchitecture.Server.Controllers.v1.Utilities;
+namespace CleanBlazor.Server.Controllers.v1.Utilities;
 
 public class PreferencesController : BaseApiController
 {

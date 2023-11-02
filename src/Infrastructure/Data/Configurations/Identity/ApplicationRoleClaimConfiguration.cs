@@ -1,8 +1,8 @@
-using BlazorHero.CleanArchitecture.Infrastructure.Models.Identity;
+using CleanBlazor.Infrastructure.Models.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace BlazorHero.CleanArchitecture.Infrastructure.Data.Configurations.Identity;
+namespace CleanBlazor.Infrastructure.Data.Configurations.Identity;
 
 public class ApplicationRoleClaimConfiguration : IEntityTypeConfiguration<ApplicationRoleClaim>
 {

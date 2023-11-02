@@ -1,20 +1,20 @@
-using BlazorHero.CleanArchitecture.Application.Abstractions.Messaging;
-using BlazorHero.CleanArchitecture.Domain.Abstractions;
+using CleanBlazor.Application.Abstractions.Messaging;
+using CleanBlazor.Domain.Abstractions;
 using FluentAssertions;
 using MediatR;
 using NetArchTest.Rules;
-using Domain = BlazorHero.CleanArchitecture.Domain;
-using Application = BlazorHero.CleanArchitecture.Application;
-using Infrastructure = BlazorHero.CleanArchitecture.Infrastructure;
-using Shared = BlazorHero.CleanArchitecture.Shared;
-using Server = BlazorHero.CleanArchitecture.Server;
-using Client = BlazorHero.CleanArchitecture.Client;
+using Domain = CleanBlazor.Domain;
+using Application = CleanBlazor.Application;
+using Infrastructure = CleanBlazor.Infrastructure;
+using Shared = CleanBlazor.Shared;
+using Server = CleanBlazor.Server;
+using Client = CleanBlazor.Client;
 
 namespace Architecture.Tests;
 
 public class ArchitectureTests
 {
-    private const string NamespacePrefix = "BlazorHero.CleanArchitecture";
+    private const string NamespacePrefix = "CleanBlazor";
     private const string DomainNamespace = $"{NamespacePrefix}.Domain";
     private const string ApplicationNamespace = $"{NamespacePrefix}.Application";
     private const string ApplicationAbstractionsNamespace = $"{NamespacePrefix}.Application.Abstractions";

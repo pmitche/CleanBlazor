@@ -2,7 +2,7 @@ using System.Diagnostics.CodeAnalysis;
 using FluentValidation;
 using Microsoft.Extensions.Localization;
 
-namespace BlazorHero.CleanArchitecture.Contracts.Documents;
+namespace CleanBlazor.Contracts.Documents;
 
 [ExcludeFromCodeCoverage]
 public sealed class AddEditDocumentRequest

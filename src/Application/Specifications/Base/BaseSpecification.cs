@@ -1,8 +1,8 @@
-﻿using System.Linq.Expressions;
-using BlazorHero.CleanArchitecture.Application.Extensions;
-using BlazorHero.CleanArchitecture.Domain.Abstractions;
+using System.Linq.Expressions;
+using CleanBlazor.Application.Extensions;
+using CleanBlazor.Domain.Abstractions;
 
-namespace BlazorHero.CleanArchitecture.Application.Specifications.Base;
+namespace CleanBlazor.Application.Specifications.Base;
 
 public abstract class BaseSpecification<T> : ISpecification<T> where T : class, IEntity
 {

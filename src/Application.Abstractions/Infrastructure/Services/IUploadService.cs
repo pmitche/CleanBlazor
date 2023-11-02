@@ -1,6 +1,6 @@
-﻿using BlazorHero.CleanArchitecture.Contracts;
+using CleanBlazor.Contracts;
 
-namespace BlazorHero.CleanArchitecture.Application.Abstractions.Infrastructure.Services;
+namespace CleanBlazor.Application.Abstractions.Infrastructure.Services;
 
 public interface IUploadService
 {

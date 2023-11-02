@@ -1,4 +1,4 @@
-namespace BlazorHero.CleanArchitecture.Application.Abstractions.Persistence;
+namespace CleanBlazor.Application.Abstractions.Persistence;
 
 public interface ITransaction : IDisposable, IAsyncDisposable
 {

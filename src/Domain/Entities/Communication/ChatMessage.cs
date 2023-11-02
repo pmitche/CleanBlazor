@@ -1,6 +1,6 @@
-﻿using BlazorHero.CleanArchitecture.Domain.Primitives;
+using CleanBlazor.Domain.Primitives;
 
-namespace BlazorHero.CleanArchitecture.Domain.Entities.Communication;
+namespace CleanBlazor.Domain.Entities.Communication;
 
 public class ChatMessage<TUser> : AggregateRoot<long> where TUser : IChatUser
 {

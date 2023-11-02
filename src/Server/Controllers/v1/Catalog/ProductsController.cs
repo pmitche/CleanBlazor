@@ -1,12 +1,12 @@
-﻿using BlazorHero.CleanArchitecture.Application.Features.Catalog.Products.Commands;
-using BlazorHero.CleanArchitecture.Application.Features.Catalog.Products.Queries;
-using BlazorHero.CleanArchitecture.Contracts.Catalog.Products;
-using BlazorHero.CleanArchitecture.Shared.Constants.Permission;
-using BlazorHero.CleanArchitecture.Shared.Wrapper;
+using CleanBlazor.Application.Features.Catalog.Products.Commands;
+using CleanBlazor.Application.Features.Catalog.Products.Queries;
+using CleanBlazor.Contracts.Catalog.Products;
+using CleanBlazor.Shared.Constants.Permission;
+using CleanBlazor.Shared.Wrapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace BlazorHero.CleanArchitecture.Server.Controllers.v1.Catalog;
+namespace CleanBlazor.Server.Controllers.v1.Catalog;
 
 public class ProductsController : BaseApiController
 {

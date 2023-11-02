@@ -1,6 +1,6 @@
-﻿using System.Linq.Expressions;
+using System.Linq.Expressions;
 
-namespace BlazorHero.CleanArchitecture.Application.Extensions;
+namespace CleanBlazor.Application.Extensions;
 
 public static class PredicateBuilder
 {

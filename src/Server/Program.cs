@@ -1,10 +1,10 @@
-﻿using BlazorHero.CleanArchitecture.Infrastructure.Data;
-using BlazorHero.CleanArchitecture.Server.Extensions;
+using CleanBlazor.Infrastructure.Data;
+using CleanBlazor.Server.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 using Serilog.Context;
 
-namespace BlazorHero.CleanArchitecture.Server;
+namespace CleanBlazor.Server;
 
 public class Program
 {

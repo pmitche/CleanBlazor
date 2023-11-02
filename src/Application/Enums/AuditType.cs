@@ -1,4 +1,4 @@
-﻿namespace BlazorHero.CleanArchitecture.Application.Enums;
+namespace CleanBlazor.Application.Enums;
 
 public enum AuditType : byte
 {

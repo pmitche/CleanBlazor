@@ -1,4 +1,4 @@
-namespace BlazorHero.CleanArchitecture.Shared.Wrapper;
+namespace CleanBlazor.Shared.Wrapper;
 
 public static class ResultExtensions
 {

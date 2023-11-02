@@ -1,7 +1,7 @@
-﻿using MediatR;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
-namespace BlazorHero.CleanArchitecture.Server.Controllers;
+namespace CleanBlazor.Server.Controllers;
 
 /// <summary>
 ///     Abstract BaseApi Controller Class

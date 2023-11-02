@@ -1,4 +1,4 @@
-﻿namespace BlazorHero.CleanArchitecture.Domain.Entities.Communication;
+namespace CleanBlazor.Domain.Entities.Communication;
 
 public interface IChatUser
 {

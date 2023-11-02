@@ -1,13 +1,13 @@
-﻿using BlazorHero.CleanArchitecture.Application.Abstractions.Infrastructure.Services;
-using BlazorHero.CleanArchitecture.Application.Configuration;
-using BlazorHero.CleanArchitecture.Contracts.Mail;
+using CleanBlazor.Application.Abstractions.Infrastructure.Services;
+using CleanBlazor.Application.Configuration;
+using CleanBlazor.Contracts.Mail;
 using MailKit.Net.Smtp;
 using MailKit.Security;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using MimeKit;
 
-namespace BlazorHero.CleanArchitecture.Infrastructure.Services.Mail;
+namespace CleanBlazor.Infrastructure.Services.Mail;
 
 public class SmtpMailService : IMailService
 {

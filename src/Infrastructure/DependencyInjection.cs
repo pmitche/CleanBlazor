@@ -1,27 +1,27 @@
 using System.Reflection;
-using BlazorHero.CleanArchitecture.Application.Abstractions.Common;
-using BlazorHero.CleanArchitecture.Application.Abstractions.Infrastructure.Services;
-using BlazorHero.CleanArchitecture.Application.Abstractions.Infrastructure.Services.Identity;
-using BlazorHero.CleanArchitecture.Application.Abstractions.Infrastructure.Services.Storage;
-using BlazorHero.CleanArchitecture.Application.Abstractions.Infrastructure.Services.Storage.Provider;
-using BlazorHero.CleanArchitecture.Application.Abstractions.Persistence;
-using BlazorHero.CleanArchitecture.Domain.Repositories;
-using BlazorHero.CleanArchitecture.Infrastructure.Data;
-using BlazorHero.CleanArchitecture.Infrastructure.Data.Interceptors;
-using BlazorHero.CleanArchitecture.Infrastructure.Models.Identity;
-using BlazorHero.CleanArchitecture.Infrastructure.Repositories;
-using BlazorHero.CleanArchitecture.Infrastructure.Services;
-using BlazorHero.CleanArchitecture.Infrastructure.Services.Identity;
-using BlazorHero.CleanArchitecture.Infrastructure.Services.Mail;
-using BlazorHero.CleanArchitecture.Infrastructure.Services.Storage;
-using BlazorHero.CleanArchitecture.Infrastructure.Services.Storage.Provider;
+using CleanBlazor.Application.Abstractions.Common;
+using CleanBlazor.Application.Abstractions.Infrastructure.Services;
+using CleanBlazor.Application.Abstractions.Infrastructure.Services.Identity;
+using CleanBlazor.Application.Abstractions.Infrastructure.Services.Storage;
+using CleanBlazor.Application.Abstractions.Infrastructure.Services.Storage.Provider;
+using CleanBlazor.Application.Abstractions.Persistence;
+using CleanBlazor.Domain.Repositories;
+using CleanBlazor.Infrastructure.Data;
+using CleanBlazor.Infrastructure.Data.Interceptors;
+using CleanBlazor.Infrastructure.Models.Identity;
+using CleanBlazor.Infrastructure.Repositories;
+using CleanBlazor.Infrastructure.Services;
+using CleanBlazor.Infrastructure.Services.Identity;
+using CleanBlazor.Infrastructure.Services.Mail;
+using CleanBlazor.Infrastructure.Services.Storage;
+using CleanBlazor.Infrastructure.Services.Storage.Provider;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace BlazorHero.CleanArchitecture.Infrastructure;
+namespace CleanBlazor.Infrastructure;
 
 public static class DependencyInjection
 {

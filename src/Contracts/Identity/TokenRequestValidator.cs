@@ -1,7 +1,7 @@
-﻿using FluentValidation;
+using FluentValidation;
 using Microsoft.Extensions.Localization;
 
-namespace BlazorHero.CleanArchitecture.Contracts.Identity;
+namespace CleanBlazor.Contracts.Identity;
 
 public class TokenRequestValidator : AbstractValidator<TokenRequest>
 {

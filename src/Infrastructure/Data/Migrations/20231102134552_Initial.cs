@@ -1,9 +1,9 @@
-﻿using System;
+using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace BlazorHero.CleanArchitecture.Infrastructure.Data.Migrations
+namespace CleanBlazor.Infrastructure.Data.Migrations
 {
     /// <inheritdoc />
     public partial class Initial : Migration

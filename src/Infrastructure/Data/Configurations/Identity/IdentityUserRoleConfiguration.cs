@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace BlazorHero.CleanArchitecture.Infrastructure.Data.Configurations.Identity;
+namespace CleanBlazor.Infrastructure.Data.Configurations.Identity;
 
 public class IdentityUserRoleConfiguration : IEntityTypeConfiguration<IdentityUserRole<string>>
 {
