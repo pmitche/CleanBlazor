@@ -1,4 +1,3 @@
-using System.Net.Http.Json;
 using System.Security.Claims;
 using CleanBlazor.Client.Extensions;
 using CleanBlazor.Client.Shared.Dialogs;
@@ -37,7 +36,7 @@ public partial class DocumentTypes
 
     protected override async Task OnInitializedAsync()
     {
-        _currentUser = await AuthenticationManager.CurrentUser();
+        _currentUser = await StateProvider.GetCurrentUserAsync();
         _canCreateDocumentTypes =
             (await AuthorizationService.AuthorizeAsync(_currentUser, Permissions.DocumentTypes.Create)).Succeeded;
         _canEditDocumentTypes =

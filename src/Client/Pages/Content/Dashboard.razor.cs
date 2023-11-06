@@ -1,4 +1,3 @@
-using System.Net.Http.Json;
 using CleanBlazor.Client.Extensions;
 using CleanBlazor.Contracts.Dashboard;
 using CleanBlazor.Shared.Constants.Application;

@@ -39,7 +39,4 @@ public class SignalRHub : Hub
 
     public async Task UpdateDashboardAsync() =>
         await Clients.All.SendAsync(ApplicationConstants.SignalR.ReceiveUpdateDashboard);
-
-    public async Task RegenerateTokensAsync() =>
-        await Clients.All.SendAsync(ApplicationConstants.SignalR.ReceiveRegenerateTokens);
 }

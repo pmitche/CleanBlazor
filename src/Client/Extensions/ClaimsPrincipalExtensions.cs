@@ -18,4 +18,20 @@ internal static class ClaimsPrincipalExtensions
 
     internal static string GetUserId(this ClaimsPrincipal claimsPrincipal)
         => claimsPrincipal.FindFirstValue(ClaimTypes.NameIdentifier);
+
+    internal static bool IsWithinExpirationThreshold(
+        this ClaimsPrincipal claimsPrincipal,
+        DateTime nowUtc,
+        int thresholdInMinutes = 1)
+        => ExpiresIn(claimsPrincipal, nowUtc).TotalMinutes <= thresholdInMinutes;
+
+    private static TimeSpan ExpiresIn(this ClaimsPrincipal claimsPrincipal, DateTime nowUtc) =>
+        GetExpirationTime(claimsPrincipal) - nowUtc;
+
+    private static DateTimeOffset GetExpirationTime(this ClaimsPrincipal claimsPrincipal)
+    {
+        var exp = claimsPrincipal.FindFirstValue("exp");
+        return DateTimeOffset.FromUnixTimeSeconds(Convert.ToInt64(exp));
+    }
+
 }

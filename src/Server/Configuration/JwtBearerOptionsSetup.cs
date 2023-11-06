@@ -1,29 +1,20 @@
-using System.Net;
 using System.Security.Claims;
 using System.Text;
 using CleanBlazor.Application.Configuration;
-using CleanBlazor.Server.Localization;
 using CleanBlazor.Shared.Constants.Application;
-using CleanBlazor.Shared.Wrapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Primitives;
 using Microsoft.IdentityModel.Tokens;
-using Newtonsoft.Json;
 
 namespace CleanBlazor.Server.Configuration;
 
 internal class JwtBearerOptionsSetup : IConfigureNamedOptions<JwtBearerOptions>
 {
-    private readonly IStringLocalizer<ServerCommonResources> _localizer;
     private readonly IOptions<AppConfiguration> _appConfiguration;
 
-    public JwtBearerOptionsSetup(
-        IStringLocalizer<ServerCommonResources> localizer,
-        IOptions<AppConfiguration> appConfiguration)
+    public JwtBearerOptionsSetup(IOptions<AppConfiguration> appConfiguration)
     {
-        _localizer = localizer;
         _appConfiguration = appConfiguration;
     }
 
@@ -40,7 +31,8 @@ internal class JwtBearerOptionsSetup : IConfigureNamedOptions<JwtBearerOptions>
             ValidateIssuer = false,
             ValidateAudience = false,
             RoleClaimType = ClaimTypes.Role,
-            ClockSkew = TimeSpan.Zero
+            ClockSkew = TimeSpan.Zero,
+            ValidateLifetime = true
         };
 
         options.Events = new JwtBearerEvents
@@ -59,50 +51,6 @@ internal class JwtBearerOptionsSetup : IConfigureNamedOptions<JwtBearerOptions>
                 }
 
                 return Task.CompletedTask;
-            },
-            OnAuthenticationFailed = c =>
-            {
-                if (c.Exception is SecurityTokenExpiredException)
-                {
-                    c.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
-                    c.Response.ContentType = "application/json";
-                    var result = JsonConvert.SerializeObject(Result.Fail(_localizer["The Token is expired."]));
-                    return c.Response.WriteAsync(result);
-                }
-#if DEBUG
-                c.NoResult();
-                c.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                c.Response.ContentType = "text/plain";
-                return c.Response.WriteAsync(c.Exception.ToString());
-#else
-                c.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                c.Response.ContentType = "application/json";
-                var result =
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     JsonConvert.SerializeObject(Result.Fail(localizer["An unhandled error has occurred."]));
-                return c.Response.WriteAsync(result);
-#endif
-            },
-            OnChallenge = context =>
-            {
-                context.HandleResponse();
-                if (context.Response.HasStarted)
-                {
-                    return Task.CompletedTask;
-                }
-
-                context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
-                context.Response.ContentType = "application/json";
-                var result = JsonConvert.SerializeObject(Result.Fail(_localizer["You are not Authorized."]));
-                return context.Response.WriteAsync(result);
-            },
-            OnForbidden = context =>
-            {
-                context.Response.StatusCode = (int)HttpStatusCode.Forbidden;
-                context.Response.ContentType = "application/json";
-                var result =
-                    JsonConvert.SerializeObject(
-                        Result.Fail(_localizer["You are not authorized to access this resource."]));
-                return context.Response.WriteAsync(result);
             }
         };
     }

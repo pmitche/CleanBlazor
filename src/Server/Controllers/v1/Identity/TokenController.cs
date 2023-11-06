@@ -1,11 +1,13 @@
 using CleanBlazor.Application.Abstractions.Infrastructure.Services.Identity;
 using CleanBlazor.Contracts.Identity;
 using CleanBlazor.Shared.Wrapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CleanBlazor.Server.Controllers.v1.Identity;
 
 [Route("api/v1/identity/token")]
+[AllowAnonymous]
 public class TokenController : BaseApiController
 {
     private readonly ITokenService _identityService;

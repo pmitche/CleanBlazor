@@ -20,14 +20,14 @@ public partial class Login
 
     protected override async Task OnInitializedAsync()
     {
-        AuthenticationState state = await StateProvider.GetAuthenticationStateAsync();
-        if (state != new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity())))
+        ClaimsPrincipal user = await StateProvider.GetCurrentUserAsync();
+        if (!user.Identity?.IsAuthenticated == true)
         {
             NavigationManager.NavigateTo("/");
         }
     }
 
-    private async Task SubmitAsync() => await AuthenticationManager.Login(_tokenModel)
+    private async Task SubmitAsync() => await AuthenticationManager.LoginAsync(_tokenModel)
         .Match(_ => { }, errors => SnackBar.Error(errors));
 
     private void TogglePasswordVisibility()

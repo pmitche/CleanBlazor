@@ -1,117 +1,101 @@
-using System.Net.Http.Headers;
 using System.Security.Claims;
 using Blazored.LocalStorage;
 using CleanBlazor.Client.Extensions;
 using CleanBlazor.Contracts.Identity;
+using CleanBlazor.Shared.Constants.Application;
 using CleanBlazor.Shared.Constants.Routes;
 using CleanBlazor.Shared.Constants.Storage;
 using CleanBlazor.Shared.Wrapper;
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
-using Microsoft.Extensions.Localization;
 
 namespace CleanBlazor.Client.Authentication;
 
 public class AuthenticationManager
 {
-    private readonly AuthenticationStateProvider _authenticationStateProvider;
-    private readonly HttpClient _httpClient;
-    private readonly IStringLocalizer<AuthenticationManager> _localizer;
+    private readonly IHttpClientFactory _httpClientFactory;
     private readonly ILocalStorageService _localStorage;
+    private readonly AuthenticationStateProvider _authenticationStateProvider;
+    private readonly NavigationManager _navigationManager;
 
     public AuthenticationManager(
-        HttpClient httpClient,
+        IHttpClientFactory httpClientFactory,
         ILocalStorageService localStorage,
         AuthenticationStateProvider authenticationStateProvider,
-        IStringLocalizer<AuthenticationManager> localizer)
+        NavigationManager navigationManager)
     {
-        _httpClient = httpClient;
+        _httpClientFactory = httpClientFactory;
         _localStorage = localStorage;
         _authenticationStateProvider = authenticationStateProvider;
-        _localizer = localizer;
+        _navigationManager = navigationManager;
     }
 
-    public async Task<ClaimsPrincipal> CurrentUser()
+    public ValueTask<string> GetAccessTokenAsync() =>
+        _localStorage.GetItemAsync<string>(StorageConstants.Local.AuthToken);
+
+    public async Task LogoutAsync()
     {
-        AuthenticationState state = await _authenticationStateProvider.GetAuthenticationStateAsync();
-        return state.User;
+        // TODO: revoke refresh token server-side
+        await _localStorage.RemoveItemAsync(StorageConstants.Local.AuthToken);
+        await _localStorage.RemoveItemAsync(StorageConstants.Local.RefreshToken);
+        await _localStorage.RemoveItemAsync(StorageConstants.Local.UserImageUrl);
+        ((ApplicationStateProvider)_authenticationStateProvider).MarkUserAsLoggedOut();
+        _navigationManager.NavigateTo("/", forceLoad: true);
     }
 
-    public async Task<Result> Login(TokenRequest model)
+    public async Task<Result> LoginAsync(TokenRequest model)
     {
-        var result = await _httpClient.PostAsJsonAsync<TokenRequest, Result<TokenResponse>>(TokenEndpoints.Get, model);
+        var httpClient = _httpClientFactory.CreateClient(ApplicationConstants.HttpClient.ClientName);
+        var result = await httpClient.PostAsJsonAsync<TokenRequest, Result<TokenResponse>>(TokenEndpoints.Get, model);
         if (result.IsFailure)
         {
             return Result.Fail(result.ErrorMessages);
         }
 
-        var token = result.Data.Token;
-        var refreshToken = result.Data.RefreshToken;
-        var userImageUrl = result.Data.UserImageUrl;
-        await _localStorage.SetItemAsync(StorageConstants.Local.AuthToken, token);
-        await _localStorage.SetItemAsync(StorageConstants.Local.RefreshToken, refreshToken);
-        if (!string.IsNullOrEmpty(userImageUrl))
-        {
-            await _localStorage.SetItemAsync(StorageConstants.Local.UserImageUrl, userImageUrl);
-        }
+        await _localStorage.SetItemAsync(StorageConstants.Local.AuthToken, result.Data.Token);
+        await _localStorage.SetItemAsync(StorageConstants.Local.RefreshToken, result.Data.RefreshToken);
+        await _localStorage.SetItemAsync(StorageConstants.Local.UserImageUrl, result.Data.UserImageUrl);
 
         await ((ApplicationStateProvider)_authenticationStateProvider).StateChangedAsync();
-
-        _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
         return Result.Ok();
     }
 
-    public async Task Logout()
+    public async Task<Result<string>> RefreshAsync()
     {
-        await _localStorage.RemoveItemAsync(StorageConstants.Local.AuthToken);
-        await _localStorage.RemoveItemAsync(StorageConstants.Local.RefreshToken);
-        await _localStorage.RemoveItemAsync(StorageConstants.Local.UserImageUrl);
-        ((ApplicationStateProvider)_authenticationStateProvider).MarkUserAsLoggedOut();
-        _httpClient.DefaultRequestHeaders.Authorization = null;
-    }
+        var request = new RefreshTokenRequest
+        {
+            Token = await _localStorage.GetItemAsync<string>(StorageConstants.Local.AuthToken),
+            RefreshToken = await _localStorage.GetItemAsync<string>(StorageConstants.Local.RefreshToken)
+        };
 
-    public async Task<string> RefreshToken()
-    {
-        var token = await _localStorage.GetItemAsync<string>(StorageConstants.Local.AuthToken);
-        var refreshToken = await _localStorage.GetItemAsync<string>(StorageConstants.Local.RefreshToken);
+        if (string.IsNullOrEmpty(request.RefreshToken))
+        {
+            return Result.Fail<string>("No refresh token found. Please log in.");
+        }
 
-        var request = new RefreshTokenRequest { Token = token, RefreshToken = refreshToken };
-        var result = await _httpClient.PostAsJsonAsync<RefreshTokenRequest, Result<TokenResponse>>(
+        ClaimsPrincipal user = await ((ApplicationStateProvider)_authenticationStateProvider).GetCurrentUserAsync();
+        if (!user.IsWithinExpirationThreshold(DateTime.Now))
+        {
+            // Token is still valid, no need to refresh
+            return request.Token;
+        }
+
+        var httpClient = _httpClientFactory.CreateClient(ApplicationConstants.HttpClient.ClientName);
+        var result = await httpClient.PostAsJsonAsync<RefreshTokenRequest, Result<TokenResponse>>(
             TokenEndpoints.Refresh, request);
 
         if (result.IsFailure)
         {
-            throw new HttpRequestException(_localizer["Something went wrong during the refresh token action"]);
+            await LogoutAsync();
+            return Result.Fail<string>(result.ErrorMessages);
         }
 
-        token = result.Data.Token;
-        refreshToken = result.Data.RefreshToken;
-        await _localStorage.SetItemAsync(StorageConstants.Local.AuthToken, token);
-        await _localStorage.SetItemAsync(StorageConstants.Local.RefreshToken, refreshToken);
-        _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-        return token;
-    }
+        await _localStorage.SetItemAsync(StorageConstants.Local.AuthToken, result.Data.Token);
+        await _localStorage.SetItemAsync(StorageConstants.Local.RefreshToken, result.Data.RefreshToken);
 
-    public async Task<string> TryRefreshToken()
-    {
-        //check if token exists
-        var availableToken = await _localStorage.GetItemAsync<string>(StorageConstants.Local.RefreshToken);
-        if (string.IsNullOrEmpty(availableToken))
-        {
-            return string.Empty;
-        }
+        await ((ApplicationStateProvider)_authenticationStateProvider).StateChangedAsync();
 
-        AuthenticationState authState = await _authenticationStateProvider.GetAuthenticationStateAsync();
-        ClaimsPrincipal user = authState.User;
-        var exp = user.FindFirst(c => c.Type.Equals("exp"))?.Value;
-        DateTimeOffset expTime = DateTimeOffset.FromUnixTimeSeconds(Convert.ToInt64(exp));
-        DateTime timeUtc = DateTime.UtcNow;
-        TimeSpan diff = expTime - timeUtc;
-        if (diff.TotalMinutes <= 1)
-        {
-            return await RefreshToken();
-        }
-
-        return string.Empty;
+        return result.Data.Token;
     }
 }

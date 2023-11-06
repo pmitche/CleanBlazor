@@ -1,4 +1,3 @@
-using System.Net.Http.Json;
 using System.Security.Claims;
 using CleanBlazor.Client.Extensions;
 using CleanBlazor.Client.Shared.Dialogs;
@@ -36,7 +35,7 @@ public partial class Roles
 
     protected override async Task OnInitializedAsync()
     {
-        _currentUser = await AuthenticationManager.CurrentUser();
+        _currentUser = await StateProvider.GetCurrentUserAsync();
         _canCreateRoles = (await AuthorizationService.AuthorizeAsync(_currentUser, Permissions.Roles.Create))
             .Succeeded;
         _canEditRoles = (await AuthorizationService.AuthorizeAsync(_currentUser, Permissions.Roles.Edit)).Succeeded;
@@ -84,7 +83,7 @@ public partial class Roles
                         SnackBar.Success(message);
                     },
                     errors => SnackBar.Error(errors));
-            
+
             await Reset();
         }
     }

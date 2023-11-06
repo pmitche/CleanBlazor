@@ -1,4 +1,3 @@
-using System.Net.Http.Json;
 using System.Security.Claims;
 using CleanBlazor.Client.Extensions;
 using CleanBlazor.Contracts.Identity;
@@ -30,7 +29,7 @@ public partial class Users
 
     protected override async Task OnInitializedAsync()
     {
-        _currentUser = await AuthenticationManager.CurrentUser();
+        _currentUser = await StateProvider.GetCurrentUserAsync();
         _canCreateUsers = (await AuthorizationService.AuthorizeAsync(_currentUser, Permissions.Users.Create))
             .Succeeded;
         _canSearchUsers = (await AuthorizationService.AuthorizeAsync(_currentUser, Permissions.Users.Search))

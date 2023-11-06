@@ -19,7 +19,6 @@ public class IdentityService : ITokenService
     private readonly AppConfiguration _appConfig;
     private readonly IStringLocalizer<IdentityService> _localizer;
     private readonly RoleManager<ApplicationRole> _roleManager;
-    private readonly SignInManager<ApplicationUser> _signInManager;
 
     private readonly UserManager<ApplicationUser> _userManager;
 
@@ -27,13 +26,11 @@ public class IdentityService : ITokenService
         UserManager<ApplicationUser> userManager,
         RoleManager<ApplicationRole> roleManager,
         IOptions<AppConfiguration> appConfig,
-        SignInManager<ApplicationUser> signInManager,
         IStringLocalizer<IdentityService> localizer)
     {
         _userManager = userManager;
         _roleManager = roleManager;
         _appConfig = appConfig.Value;
-        _signInManager = signInManager;
         _localizer = localizer;
     }
 
@@ -62,7 +59,7 @@ public class IdentityService : ITokenService
         }
 
         user.RefreshToken = GenerateRefreshToken();
-        user.RefreshTokenExpiryTime = DateTime.Now.AddDays(7);
+        user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(1);
         await _userManager.UpdateAsync(user);
 
         var token = await GenerateJwtAsync(user);
@@ -100,6 +97,7 @@ public class IdentityService : ITokenService
 
         var token = GenerateEncryptedToken(GetSigningCredentials(), await GetClaimsAsync(user));
         user.RefreshToken = GenerateRefreshToken();
+        user.RefreshTokenExpiryTime = DateTime.Now.AddDays(1);
         await _userManager.UpdateAsync(user);
 
         var response = new TokenResponse
@@ -156,7 +154,7 @@ public class IdentityService : ITokenService
     {
         var token = new JwtSecurityToken(
             claims: claims,
-            expires: DateTime.UtcNow.AddDays(2),
+            expires: DateTime.UtcNow.AddHours(1),
             signingCredentials: signingCredentials);
         var tokenHandler = new JwtSecurityTokenHandler();
         var encryptedToken = tokenHandler.WriteToken(token);

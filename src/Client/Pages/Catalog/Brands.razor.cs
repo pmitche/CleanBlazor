@@ -1,4 +1,3 @@
-using System.Net.Http.Json;
 using System.Security.Claims;
 using CleanBlazor.Client.Extensions;
 using CleanBlazor.Client.Shared.Components;
@@ -40,7 +39,7 @@ public partial class Brands
 
     protected override async Task OnInitializedAsync()
     {
-        _currentUser = await AuthenticationManager.CurrentUser();
+        _currentUser = await StateProvider.GetCurrentUserAsync();
         _canCreateBrands = (await AuthorizationService.AuthorizeAsync(_currentUser, Permissions.Brands.Create))
             .Succeeded;
         _canEditBrands = (await AuthorizationService.AuthorizeAsync(_currentUser, Permissions.Brands.Edit)).Succeeded;

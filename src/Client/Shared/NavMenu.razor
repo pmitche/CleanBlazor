@@ -105,7 +105,7 @@
 
     protected override async Task OnParametersSetAsync()
     {
-        _authenticationStateProviderUser = await StateProvider.GetAuthenticationStateProviderUserAsync();
+        _authenticationStateProviderUser = await StateProvider.GetCurrentUserAsync();
         _canViewHangfire = (await AuthorizationService.AuthorizeAsync(_authenticationStateProviderUser, Permissions.Hangfire.View)).Succeeded;
         _canViewDashboards = (await AuthorizationService.AuthorizeAsync(_authenticationStateProviderUser, Permissions.Dashboards.View)).Succeeded;
         _canViewDocuments = (await AuthorizationService.AuthorizeAsync(_authenticationStateProviderUser, Permissions.Documents.View)).Succeeded;

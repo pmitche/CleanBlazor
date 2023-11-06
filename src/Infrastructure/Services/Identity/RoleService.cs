@@ -142,12 +142,6 @@ public class RoleService : IRoleService
                 return Result.Fail<string>(_localizer["Role Not Found."]);
             }
 
-            if (existingRole.Name is RoleConstants.AdministratorRole or RoleConstants.BasicRole)
-            {
-                return Result.Fail<string>(string.Format(_localizer["Not allowed to modify {0} Role."],
-                    existingRole.Name));
-            }
-
             existingRole.Name = request.Name;
             existingRole.NormalizedName = request.Name.ToUpper();
             existingRole.Description = request.Description;

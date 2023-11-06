@@ -1,4 +1,3 @@
-using System.Net.Http.Json;
 using System.Security.Claims;
 using AutoMapper;
 using CleanBlazor.Client.Configuration.Mappings;
@@ -40,7 +39,7 @@ public partial class RolePermissions
 
     protected override async Task OnInitializedAsync()
     {
-        _currentUser = await AuthenticationManager.CurrentUser();
+        _currentUser = await StateProvider.GetCurrentUserAsync();
         _canEditRolePermissions =
             (await AuthorizationService.AuthorizeAsync(_currentUser, Permissions.RoleClaims.Edit)).Succeeded;
         _canSearchRolePermissions =
@@ -100,7 +99,6 @@ public partial class RolePermissions
             .Match(async (message, _) =>
                 {
                     SnackBar.Success(message);
-                    await HubConnection.SendAsync(ApplicationConstants.SignalR.SendRegenerateTokens);
                     await HubConnection.SendAsync(ApplicationConstants.SignalR.OnChangeRolePermissions,
                         _currentUser.GetUserId(),
                         request.RoleId);

@@ -7,8 +7,6 @@ public static class ApplicationConstants
         public const string HubUrl = "/signalRHub";
         public const string SendUpdateDashboard = "UpdateDashboardAsync";
         public const string ReceiveUpdateDashboard = "UpdateDashboard";
-        public const string SendRegenerateTokens = "RegenerateTokensAsync";
-        public const string ReceiveRegenerateTokens = "RegenerateTokens";
         public const string ReceiveChatNotification = "ReceiveChatNotification";
         public const string SendChatNotification = "ChatNotificationAsync";
         public const string ReceiveMessage = "ReceiveMessage";
@@ -34,5 +32,10 @@ public static class ApplicationConstants
     public static class MimeTypes
     {
         public const string OpenXml = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+    }
+
+    public static class HttpClient
+    {
+        public const string ClientName = "CleanBlazor.API";
     }
 }

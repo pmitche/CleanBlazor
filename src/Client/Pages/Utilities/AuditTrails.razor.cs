@@ -1,4 +1,3 @@
-using System.Net.Http.Json;
 using System.Security.Claims;
 using CleanBlazor.Client.Extensions;
 using CleanBlazor.Contracts.Audit;
@@ -7,7 +6,6 @@ using CleanBlazor.Shared.Constants.Permission;
 using CleanBlazor.Shared.Constants.Routes;
 using CleanBlazor.Shared.Wrapper;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using MudBlazor;
 
@@ -80,7 +78,7 @@ public partial class AuditTrails
 
     protected override async Task OnInitializedAsync()
     {
-        _currentUser = await AuthenticationManager.CurrentUser();
+        _currentUser = await StateProvider.GetCurrentUserAsync();
         _canExportAuditTrails =
             (await AuthorizationService.AuthorizeAsync(_currentUser, Permissions.AuditTrails.Export)).Succeeded;
         _canSearchAuditTrails =

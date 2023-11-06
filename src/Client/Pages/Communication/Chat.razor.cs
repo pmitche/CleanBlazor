@@ -1,4 +1,3 @@
-using System.Net.Http.Json;
 using System.Security.Claims;
 using CleanBlazor.Client.Extensions;
 using CleanBlazor.Contracts.Chat;
@@ -9,7 +8,6 @@ using CleanBlazor.Shared.Constants.Routes;
 using CleanBlazor.Shared.Constants.Storage;
 using CleanBlazor.Shared.Wrapper;
 using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.JSInterop;
@@ -51,8 +49,7 @@ public partial class Chat
             await HttpClient.PostAsJsonAsync<ChatMessage<IChatUser>, Result>(ChatEndpoint.SaveMessage, chatMessage)
                 .Match(async _ =>
                     {
-                        AuthenticationState state = await StateProvider.GetAuthenticationStateAsync();
-                        ClaimsPrincipal user = state.User;
+                        ClaimsPrincipal user = await StateProvider.GetCurrentUserAsync();
                         CurrentUserId = user.GetUserId();
                         chatMessage.FromUserId = CurrentUserId;
                         var userName = $"{user.GetFirstName()} {user.GetLastName()}";
@@ -154,8 +151,7 @@ public partial class Chat
                 }
             });
         await GetUsersAsync();
-        AuthenticationState state = await StateProvider.GetAuthenticationStateAsync();
-        ClaimsPrincipal user = state.User;
+        ClaimsPrincipal user = await StateProvider.GetCurrentUserAsync();
         CurrentUserId = user.GetUserId();
         CurrentUserImageUrl = await LocalStorage.GetItemAsync<string>(StorageConstants.Local.UserImageUrl);
         if (!string.IsNullOrEmpty(CId))

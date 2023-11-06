@@ -1,4 +1,3 @@
-using System.Net.Http.Json;
 using System.Security.Claims;
 using CleanBlazor.Client.Extensions;
 using CleanBlazor.Client.Shared.Dialogs;
@@ -7,7 +6,6 @@ using CleanBlazor.Shared.Constants.Permission;
 using CleanBlazor.Shared.Constants.Routes;
 using CleanBlazor.Shared.Wrapper;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Components.Authorization;
 using MudBlazor;
 
 namespace CleanBlazor.Client.Pages.Misc;
@@ -34,7 +32,7 @@ public partial class DocumentStore
 
     protected override async Task OnInitializedAsync()
     {
-        _currentUser = await AuthenticationManager.CurrentUser();
+        _currentUser = await StateProvider.GetCurrentUserAsync();
         _canCreateDocuments = (await AuthorizationService.AuthorizeAsync(_currentUser, Permissions.Documents.Create))
             .Succeeded;
         _canEditDocuments = (await AuthorizationService.AuthorizeAsync(_currentUser, Permissions.Documents.Edit))
@@ -46,8 +44,7 @@ public partial class DocumentStore
 
         _loaded = true;
 
-        AuthenticationState state = await StateProvider.GetAuthenticationStateAsync();
-        ClaimsPrincipal user = state.User;
+        ClaimsPrincipal user = await StateProvider.GetCurrentUserAsync();
         if (user == null)
         {
             return;

@@ -1,4 +1,3 @@
-using System.Net.Http.Json;
 using System.Security.Claims;
 using Blazored.FluentValidation;
 using CleanBlazor.Client.Extensions;
@@ -32,9 +31,8 @@ public partial class Profile
         await HttpClient.PutAsJsonAsync<UpdateProfileRequest, Result>(AccountsEndpoints.UpdateProfile, _profileModel)
             .Match(async _ =>
                 {
-                    await AuthenticationManager.Logout();
+                    await AuthenticationManager.LogoutAsync();
                     SnackBar.Success(Localizer["Your Profile has been updated. Please Login to Continue."]);
-                    NavigationManager.NavigateTo("/");
                 },
                 errors => SnackBar.Error(errors));
 
@@ -42,8 +40,7 @@ public partial class Profile
 
     private async Task LoadDataAsync()
     {
-        AuthenticationState state = await StateProvider.GetAuthenticationStateAsync();
-        ClaimsPrincipal user = state.User;
+        ClaimsPrincipal user = await StateProvider.GetCurrentUserAsync();
         _profileModel.Email = user.GetEmail();
         _profileModel.FirstName = user.GetFirstName();
         _profileModel.LastName = user.GetLastName();

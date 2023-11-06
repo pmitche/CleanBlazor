@@ -2,14 +2,22 @@ using System.Net;
 using System.Text.Json;
 using CleanBlazor.Application.Exceptions;
 using CleanBlazor.Shared.Wrapper;
+using Microsoft.IdentityModel.Tokens;
 
 namespace CleanBlazor.Server.Middlewares;
 
 public class ErrorHandlerMiddleware
 {
     private readonly RequestDelegate _next;
+    private readonly ILogger<ErrorHandlerMiddleware> _logger;
 
-    public ErrorHandlerMiddleware(RequestDelegate next) => _next = next;
+    public ErrorHandlerMiddleware(
+        RequestDelegate next,
+        ILogger<ErrorHandlerMiddleware> logger)
+    {
+        _next = next;
+        _logger = logger;
+    }
 
     public async Task Invoke(HttpContext context)
     {
@@ -17,25 +25,21 @@ public class ErrorHandlerMiddleware
         {
             await _next(context);
         }
-        catch (Exception error)
+        catch (Exception ex)
         {
-            HttpResponse response = context.Response;
-            response.ContentType = "application/json";
-            var responseModel = Result.Fail(error.Message);
-
-            response.StatusCode = error switch
+            if (!context.Response.HasStarted)
             {
-                ApiException =>
-                    // custom application error
-                    (int)HttpStatusCode.BadRequest,
-                KeyNotFoundException =>
-                    // not found error
-                    (int)HttpStatusCode.NotFound,
-                _ => (int)HttpStatusCode.InternalServerError
-            };
+                context.Response.StatusCode = ex switch
+                {
+                    ApiException => (int)HttpStatusCode.BadRequest,
+                    KeyNotFoundException => (int)HttpStatusCode.NotFound,
+                    SecurityTokenExpiredException => (int)HttpStatusCode.Unauthorized,
+                    _ => (int)HttpStatusCode.InternalServerError
+                };
 
-            var result = JsonSerializer.Serialize(responseModel);
-            await response.WriteAsync(result);
+                await context.Response.WriteAsJsonAsync(Result.Fail(ex.Message));
+                await context.Response.CompleteAsync();
+            }
         }
     }
 }

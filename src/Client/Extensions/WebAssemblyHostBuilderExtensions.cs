@@ -1,6 +1,7 @@
 using System.Globalization;
 using Blazored.LocalStorage;
 using CleanBlazor.Client.Authentication;
+using CleanBlazor.Shared.Constants.Application;
 using CleanBlazor.Shared.Constants.Permission;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
@@ -11,8 +12,6 @@ namespace CleanBlazor.Client.Extensions;
 
 public static class WebAssemblyHostBuilderExtensions
 {
-    private const string ClientName = "CleanBlazor.API";
-
     public static WebAssemblyHostBuilder AddRootComponents(this WebAssemblyHostBuilder builder)
     {
         builder.RootComponents.Add<App>("#app");
@@ -49,8 +48,7 @@ public static class WebAssemblyHostBuilderExtensions
     private static WebAssemblyHostBuilder AddAuth(this WebAssemblyHostBuilder builder)
     {
         builder.Services
-            .AddTransient<RefreshTokenDelegatingHandler>()
-            .AddTransient<AuthenticationHeaderHandler>()
+            .AddTransient<AuthenticationDelegatingHandler>()
             .AddTransient<AuthenticationManager>()
             .AddAuthorizationCore(options =>
             {
@@ -64,8 +62,9 @@ public static class WebAssemblyHostBuilderExtensions
     private static WebAssemblyHostBuilder AddHttp(this WebAssemblyHostBuilder builder)
     {
         builder.Services
-            .AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>().CreateClient(ClientName))
-            .AddHttpClient(ClientName,
+            .AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>()
+                .CreateClient(ApplicationConstants.HttpClient.ClientName))
+            .AddHttpClient(ApplicationConstants.HttpClient.ClientName,
                 client =>
                 {
                     client.DefaultRequestHeaders.AcceptLanguage.Clear();
@@ -73,8 +72,7 @@ public static class WebAssemblyHostBuilderExtensions
                         ?.TwoLetterISOLanguageName);
                     client.BaseAddress = new Uri(builder.HostEnvironment.BaseAddress);
                 })
-            .AddHttpMessageHandler<RefreshTokenDelegatingHandler>()
-            .AddHttpMessageHandler<AuthenticationHeaderHandler>();
+            .AddHttpMessageHandler<AuthenticationDelegatingHandler>();
 
         return builder;
     }

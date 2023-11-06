@@ -10,12 +10,12 @@ FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /
 COPY ["src/Server/Server.csproj", "src/Server/"]
 COPY ["src/Application/Application.csproj", "src/Application/"]
+COPY ["src/Application.Abstractions/Application.Abstractions.csproj", "src/Application.Abstractions/"]
 COPY ["src/Domain/Domain.csproj", "src/Domain/"]
+COPY ["src/Contracts/Contracts.csproj", "src/Contracts/"]
 COPY ["src/Shared/Shared.csproj", "src/Shared/"]
-COPY ["src/Infrastructure.Shared/Infrastructure.Shared.csproj", "src/Infrastructure.Shared/"]
 COPY ["src/Infrastructure/Infrastructure.csproj", "src/Infrastructure/"]
 COPY ["src/Client/Client.csproj", "src/Client/"]
-COPY ["src/Client.Infrastructure/Client.Infrastructure.csproj", "src/Client.Infrastructure/"]
 COPY ["Directory.Build.props", "./"]
 COPY ["Directory.Packages.props", "./"]
 RUN dotnet restore "src/Server/Server.csproj" --disable-parallel

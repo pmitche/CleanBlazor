@@ -1,4 +1,3 @@
-using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Text.Json;
 using Blazored.LocalStorage;
@@ -10,18 +9,18 @@ namespace CleanBlazor.Client.Authentication;
 
 public class ApplicationStateProvider : AuthenticationStateProvider
 {
-    private readonly HttpClient _httpClient;
     private readonly ILocalStorageService _localStorage;
 
-    public ApplicationStateProvider(
-        HttpClient httpClient,
-        ILocalStorageService localStorage)
+    public ApplicationStateProvider(ILocalStorageService localStorage)
     {
-        _httpClient = httpClient;
         _localStorage = localStorage;
     }
 
-    public ClaimsPrincipal AuthenticationStateUser { get; set; }
+    public async Task<ClaimsPrincipal> GetCurrentUserAsync()
+    {
+        AuthenticationState state = await GetAuthenticationStateAsync();
+        return state.User;
+    }
 
     public async Task StateChangedAsync()
     {
@@ -38,13 +37,6 @@ public class ApplicationStateProvider : AuthenticationStateProvider
         NotifyAuthenticationStateChanged(authState);
     }
 
-    public async Task<ClaimsPrincipal> GetAuthenticationStateProviderUserAsync()
-    {
-        AuthenticationState state = await GetAuthenticationStateAsync();
-        ClaimsPrincipal authenticationStateProviderUser = state.User;
-        return authenticationStateProviderUser;
-    }
-
     public override async Task<AuthenticationState> GetAuthenticationStateAsync()
     {
         var savedToken = await _localStorage.GetItemAsync<string>(StorageConstants.Local.AuthToken);
@@ -53,10 +45,8 @@ public class ApplicationStateProvider : AuthenticationStateProvider
             return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity()));
         }
 
-        _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", savedToken);
         var state = new AuthenticationState(
             new ClaimsPrincipal(new ClaimsIdentity(GetClaimsFromJwt(savedToken), "jwt")));
-        AuthenticationStateUser = state.User;
         return state;
     }
 

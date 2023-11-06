@@ -26,8 +26,7 @@ public partial class UserCard
 
     private async Task LoadDataAsync()
     {
-        AuthenticationState state = await StateProvider.GetAuthenticationStateAsync();
-        ClaimsPrincipal user = state.User;
+        ClaimsPrincipal user = await StateProvider.GetCurrentUserAsync();
 
         Email = user.GetEmail().Replace(".com", string.Empty);
         FirstName = user.GetFirstName();

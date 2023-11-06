@@ -1,5 +1,4 @@
 using System.Net.Http.Headers;
-using System.Net.Http.Json;
 using System.Security.Claims;
 using CleanBlazor.Client.Extensions;
 using CleanBlazor.Client.Shared.Dialogs;
@@ -78,27 +77,7 @@ public partial class MainBody
                         };
                     });
             });
-        _hubConnection.On(ApplicationConstants.SignalR.ReceiveRegenerateTokens,
-            async () =>
-            {
-                try
-                {
-                    var token = await AuthenticationManager.RefreshToken();
-                    if (!string.IsNullOrEmpty(token))
-                    {
-                        SnackBar.Success(Localizer["Refreshed Token."]);
-                        HttpClient.DefaultRequestHeaders.Authorization =
-                            new AuthenticationHeaderValue("Bearer", token);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Logger.LogError(ex, ex.Message);
-                    SnackBar.Error(Localizer["You are Logged Out."]);
-                    await AuthenticationManager.Logout();
-                    NavigationManager.NavigateTo("/");
-                }
-            });
+
         _hubConnection.On<string, string>(ApplicationConstants.SignalR.LogoutUsersByRole,
             async (userId, roleId) =>
             {
@@ -115,13 +94,12 @@ public partial class MainBody
                             if (userRolesResult.IsSuccess &&
                                 userRolesResult.Data.UserRoles.Any(x => x.RoleName == role.Name))
                             {
+                                await _hubConnection.SendAsync(ApplicationConstants.SignalR.OnDisconnect,
+                                    CurrentUserId);
+                                await AuthenticationManager.LogoutAsync();
                                 SnackBar.Error(
                                     Localizer[
                                         "You are logged out because the Permissions of one of your Roles have been updated."]);
-                                await _hubConnection.SendAsync(ApplicationConstants.SignalR.OnDisconnect,
-                                    CurrentUserId);
-                                await AuthenticationManager.Logout();
-                                NavigationManager.NavigateTo("/login");
                             }
                         }
                     }
@@ -148,8 +126,7 @@ public partial class MainBody
 
     private async Task LoadDataAsync()
     {
-        AuthenticationState state = await StateProvider.GetAuthenticationStateAsync();
-        ClaimsPrincipal user = state.User;
+        ClaimsPrincipal user = await StateProvider.GetCurrentUserAsync();
         if (user == null)
         {
             return;
@@ -175,15 +152,15 @@ public partial class MainBody
                     await HttpClient.GetFromJsonAsync<Result<UserResponse>>(UsersEndpoints.GetById(CurrentUserId));
                 if (result.IsFailure || result.Data == null)
                 {
-                    SnackBar.Error(
-                        Localizer["You are logged out because the user with your Token has been deleted."]);
                     CurrentUserId = string.Empty;
                     ImageDataUrl = string.Empty;
                     FirstName = string.Empty;
                     SecondName = string.Empty;
                     Email = string.Empty;
                     FirstLetterOfName = char.MinValue;
-                    await AuthenticationManager.Logout();
+                    await AuthenticationManager.LogoutAsync();
+                    SnackBar.Error(
+                        Localizer["You are logged out because the user with your Token has been deleted."]);
                 }
             }
         }
