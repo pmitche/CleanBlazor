@@ -15,7 +15,7 @@ public class ApplicationRole : IdentityRole, IAuditableEntity
     public string Description { get; set; }
     public virtual ICollection<ApplicationRoleClaim> RoleClaims { get; set; } = new HashSet<ApplicationRoleClaim>();
     public string CreatedBy { get; }
-    public DateTime CreatedOn { get; }
+    public DateTimeOffset CreatedOn { get; }
     public string LastModifiedBy { get; }
-    public DateTime? LastModifiedOn { get; }
+    public DateTimeOffset? LastModifiedOn { get; }
 }

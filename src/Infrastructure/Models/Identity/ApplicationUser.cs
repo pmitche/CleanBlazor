@@ -12,7 +12,7 @@ public class ApplicationUser : IdentityUser<string>, IUser, IChatUser, IAuditabl
     public string ProfilePictureDataUrl { get; set; }
     public bool IsActive { get; set; }
     public string RefreshToken { get; set; }
-    public DateTime RefreshTokenExpiryTime { get; set; }
+    public DateTimeOffset RefreshTokenExpiryTime { get; set; }
 
     public virtual ICollection<ChatMessage<ApplicationUser>> ChatMessagesFromUsers { get; set; } =
         new HashSet<ChatMessage<ApplicationUser>>();
@@ -20,11 +20,11 @@ public class ApplicationUser : IdentityUser<string>, IUser, IChatUser, IAuditabl
     public virtual ICollection<ChatMessage<ApplicationUser>> ChatMessagesToUsers { get; set; } =
         new HashSet<ChatMessage<ApplicationUser>>();
     public string CreatedBy { get; }
-    public DateTime CreatedOn { get; }
+    public DateTimeOffset CreatedOn { get; }
     public string LastModifiedBy { get; }
-    public DateTime? LastModifiedOn { get; }
+    public DateTimeOffset? LastModifiedOn { get; }
     public string DeletedBy { get; private set; }
-    public DateTime? DeletedOn { get; private set; }
+    public DateTimeOffset? DeletedOn { get; private set; }
     public bool Deleted { get; private set; }
 
     /// <inheritdoc />

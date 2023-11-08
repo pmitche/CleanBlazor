@@ -314,7 +314,7 @@ public class UserService : IUserService
                 { _localizer["IsActive"], item => item.IsActive },
                 {
                     _localizer["CreatedOn (Local)"],
-                    item => DateTime.SpecifyKind(item.CreatedOn, DateTimeKind.Utc).ToLocalTime()
+                    item => item.CreatedOn.ToLocalTime()
                         .ToString("G", CultureInfo.CurrentCulture)
                 },
                 { _localizer["CreatedOn (UTC)"], item => item.CreatedOn.ToString("G", CultureInfo.CurrentCulture) },

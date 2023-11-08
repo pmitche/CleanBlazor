@@ -1,4 +1,3 @@
-using CleanBlazor.Application.Abstractions.Common;
 using CleanBlazor.Application.Abstractions.Infrastructure.Services;
 using CleanBlazor.Application.Enums;
 using CleanBlazor.Domain.Abstractions;
@@ -12,16 +11,16 @@ namespace CleanBlazor.Infrastructure.Data.Interceptors;
 public class AuditableEntityInterceptor : SaveChangesInterceptor
 {
     private readonly ICurrentUserService _currentUserService;
-    private readonly IDateTimeService _dateTimeService;
+    private readonly TimeProvider _timeProvider;
 
     private readonly List<AuditEntry> _addedAuditEntries = new();
 
     public AuditableEntityInterceptor(
         ICurrentUserService currentUserService,
-        IDateTimeService dateTimeService)
+        TimeProvider timeProvider)
     {
         _currentUserService = currentUserService;
-        _dateTimeService = dateTimeService;
+        _timeProvider = timeProvider;
     }
 
     public override InterceptionResult<int> SavingChanges(DbContextEventData eventData, InterceptionResult<int> result)
@@ -64,7 +63,7 @@ public class AuditableEntityInterceptor : SaveChangesInterceptor
     {
         if (context == null) return;
 
-        var now = _dateTimeService.NowUtc;
+        var now = _timeProvider.GetUtcNow();
 
         foreach (var entry in context.ChangeTracker.Entries<IAuditableEntity>())
         {
@@ -112,9 +111,10 @@ public class AuditableEntityInterceptor : SaveChangesInterceptor
             ProcessAuditEntryProperties(entry, auditEntry);
         }
 
+        var now = _timeProvider.GetUtcNow();
         foreach (AuditEntry auditEntry in _addedAuditEntries.Where(e => !e.HasTemporaryProperties))
         {
-            applicationDbContext.AuditTrails.Add(auditEntry.ToAudit());
+            applicationDbContext.AuditTrails.Add(auditEntry.ToAudit(now));
         }
     }
 
@@ -192,6 +192,7 @@ public class AuditableEntityInterceptor : SaveChangesInterceptor
             return;
         }
 
+        var now = _timeProvider.GetUtcNow();
         foreach (var auditEntry in _addedAuditEntries.Where(x => x.HasTemporaryProperties))
         {
             foreach (PropertyEntry prop in auditEntry.TemporaryProperties)
@@ -206,7 +207,7 @@ public class AuditableEntityInterceptor : SaveChangesInterceptor
                 }
             }
 
-            applicationDbContext.AuditTrails.Add(auditEntry.ToAudit());
+            applicationDbContext.AuditTrails.Add(auditEntry.ToAudit(now));
         }
 
         _addedAuditEntries.Clear();

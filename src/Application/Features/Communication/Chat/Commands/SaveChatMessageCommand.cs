@@ -1,4 +1,3 @@
-using CleanBlazor.Application.Abstractions.Common;
 using CleanBlazor.Application.Abstractions.Infrastructure.Services;
 using CleanBlazor.Application.Abstractions.Messaging;
 using CleanBlazor.Application.Abstractions.Persistence;
@@ -13,29 +12,29 @@ public sealed record SaveChatMessageCommand(string ToUserId, string Message) : I
 internal sealed class SaveChatMessageCommandHandler : ICommandHandler<SaveChatMessageCommand, Result>
 {
     private readonly ICurrentUserService _currentUserService;
-    private readonly IDateTimeService _dateTimeService;
+    private readonly TimeProvider _timeProvider;
     private readonly IChatMessageRepository _chatMessageRepository;
     private readonly IUnitOfWork _unitOfWork;
 
     public SaveChatMessageCommandHandler(
         ICurrentUserService currentUserService,
-        IDateTimeService dateTimeService,
+        TimeProvider timeProvider,
         IChatMessageRepository chatMessageRepository,
         IUnitOfWork unitOfWork)
     {
         _currentUserService = currentUserService;
-        _dateTimeService = dateTimeService;
+        _timeProvider = timeProvider;
         _chatMessageRepository = chatMessageRepository;
         _unitOfWork = unitOfWork;
     }
 
     public async Task<Result> Handle(SaveChatMessageCommand request, CancellationToken cancellationToken)
     {
-        var chatMessage = new ChatMessage<IChatUser>()
+        var chatMessage = new ChatMessage<IChatUser>
         {
             FromUserId = _currentUserService.UserId,
             ToUserId = request.ToUserId,
-            CreatedDate = _dateTimeService.NowUtc,
+            CreatedDate = _timeProvider.GetUtcNow(),
             Message = request.Message
         };
         _chatMessageRepository.Add(chatMessage);

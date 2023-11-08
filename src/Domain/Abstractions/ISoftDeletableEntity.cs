@@ -3,7 +3,7 @@ namespace CleanBlazor.Domain.Abstractions;
 public interface ISoftDeletableEntity
 {
     string DeletedBy { get; }
-    DateTime? DeletedOn { get; }
+    DateTimeOffset? DeletedOn { get; }
     bool Deleted { get; }
 
     /// <summary>

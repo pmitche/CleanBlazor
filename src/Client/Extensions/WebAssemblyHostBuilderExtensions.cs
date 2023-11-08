@@ -38,6 +38,7 @@ public static class WebAssemblyHostBuilderExtensions
                 configuration.SnackbarConfiguration.ShowCloseIcon = false;
             })
             .AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies())
+            .AddSingleton(TimeProvider.System)
             .AddScoped<ClientPreferenceManager>()
             .AddScoped<ApplicationStateProvider>()
             .AddScoped<AuthenticationStateProvider, ApplicationStateProvider>();

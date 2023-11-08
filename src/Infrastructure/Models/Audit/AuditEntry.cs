@@ -19,14 +19,14 @@ public class AuditEntry
     public List<string> ChangedColumns { get; } = new();
     public bool HasTemporaryProperties => TemporaryProperties.Any();
 
-    public Audit ToAudit()
+    public Audit ToAudit(DateTimeOffset nowUtc)
     {
         var audit = new Audit
         {
             UserId = UserId,
             Type = AuditType.ToString(),
             TableName = TableName,
-            DateTime = DateTime.UtcNow,
+            DateTime = nowUtc,
             PrimaryKey = JsonConvert.SerializeObject(KeyValues),
             OldValues = OldValues.Count == 0 ? null : JsonConvert.SerializeObject(OldValues),
             NewValues = NewValues.Count == 0 ? null : JsonConvert.SerializeObject(NewValues),

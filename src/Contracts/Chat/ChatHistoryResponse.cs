@@ -10,5 +10,5 @@ public class ChatMessageResponse
     public string ToUserImageUrl { get; set; }
     public string ToUserFullName { get; set; }
     public string Message { get; set; }
-    public DateTime CreatedDate { get; set; }
+    public DateTimeOffset CreatedDate { get; set; }
 }

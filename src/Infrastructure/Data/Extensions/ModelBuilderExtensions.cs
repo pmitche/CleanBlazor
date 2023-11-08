@@ -12,9 +12,9 @@ internal static class ModelBuilderExtensions
                      .Select(entityType => entityType.ClrType)
                      .Where(clrType => typeof(IAuditableEntity).IsAssignableFrom(clrType)))
         {
-            modelBuilder.Entity(clrType).Property<DateTime>(nameof(IAuditableEntity.CreatedOn)).IsRequired();
+            modelBuilder.Entity(clrType).Property<DateTimeOffset>(nameof(IAuditableEntity.CreatedOn)).IsRequired();
             modelBuilder.Entity(clrType).Property<string>(nameof(IAuditableEntity.CreatedBy));
-            modelBuilder.Entity(clrType).Property<DateTime?>(nameof(IAuditableEntity.LastModifiedOn));
+            modelBuilder.Entity(clrType).Property<DateTimeOffset?>(nameof(IAuditableEntity.LastModifiedOn));
             modelBuilder.Entity(clrType).Property<string>(nameof(IAuditableEntity.LastModifiedBy));
         }
     }
@@ -25,7 +25,7 @@ internal static class ModelBuilderExtensions
                      .Select(entityType => entityType.ClrType)
                      .Where(clrType => typeof(ISoftDeletableEntity).IsAssignableFrom(clrType)))
         {
-            modelBuilder.Entity(clrType).Property<DateTime?>(nameof(ISoftDeletableEntity.DeletedOn));
+            modelBuilder.Entity(clrType).Property<DateTimeOffset?>(nameof(ISoftDeletableEntity.DeletedOn));
             modelBuilder.Entity(clrType).Property<string>(nameof(ISoftDeletableEntity.DeletedBy));
             modelBuilder.Entity(clrType).Property<bool>(nameof(ISoftDeletableEntity.Deleted));
 

@@ -61,7 +61,7 @@ public class AuditService : IAuditService
                 { _localizer["Type"], item => item.Type },
                 {
                     _localizer["Date Time (Local)"],
-                    item => DateTime.SpecifyKind(item.DateTime, DateTimeKind.Utc).ToLocalTime()
+                    item => item.DateTime.ToLocalTime()
                         .ToString("G", CultureInfo.CurrentCulture)
                 },
                 { _localizer["Date Time (UTC)"], item => item.DateTime.ToString("G", CultureInfo.CurrentCulture) },

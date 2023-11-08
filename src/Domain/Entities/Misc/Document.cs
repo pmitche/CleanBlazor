@@ -12,7 +12,7 @@ public class Document : AggregateRoot<int>, IAuditableEntity
     public int DocumentTypeId { get; set; }
     public virtual DocumentType DocumentType { get; set; }
     public string CreatedBy { get; }
-    public DateTime CreatedOn { get; }
+    public DateTimeOffset CreatedOn { get; }
     public string LastModifiedBy { get; }
-    public DateTime? LastModifiedOn { get; }
+    public DateTimeOffset? LastModifiedOn { get; }
 }

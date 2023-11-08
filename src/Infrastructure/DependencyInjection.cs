@@ -1,5 +1,4 @@
 using System.Reflection;
-using CleanBlazor.Application.Abstractions.Common;
 using CleanBlazor.Application.Abstractions.Infrastructure.Services;
 using CleanBlazor.Application.Abstractions.Infrastructure.Services.Identity;
 using CleanBlazor.Application.Abstractions.Infrastructure.Services.Storage;
@@ -40,6 +39,7 @@ public static class DependencyInjection
 
     private static IServiceCollection AddServices(this IServiceCollection services)
     {
+        services.AddSingleton(TimeProvider.System);
         services.AddTransient<IRoleClaimService, RoleClaimService>();
         services.AddTransient<ITokenService, IdentityService>();
         services.AddTransient<IRoleService, RoleService>();
@@ -47,7 +47,6 @@ public static class DependencyInjection
         services.AddTransient<IUserService, UserService>();
         services.AddTransient<IUploadService, UploadService>();
         services.AddTransient<IAuditService, AuditService>();
-        services.AddTransient<IDateTimeService, SystemDateTimeService>();
         services.AddTransient<IMailService, SmtpMailService>();
         services.AddScoped<IExcelService, ExcelService>();
         return services;

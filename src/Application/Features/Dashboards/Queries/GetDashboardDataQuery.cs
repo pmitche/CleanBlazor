@@ -20,6 +20,7 @@ internal sealed class GetDashboardDataQueryHandler : IQueryHandler<GetDashboardD
     private readonly IBrandRepository _brandRepository;
     private readonly IDocumentRepository _documentRepository;
     private readonly IDocumentTypeRepository _documentTypeRepository;
+    private readonly TimeProvider _timeProvider;
     private readonly IRoleService _roleService;
     private readonly IUserService _userService;
 
@@ -30,7 +31,8 @@ internal sealed class GetDashboardDataQueryHandler : IQueryHandler<GetDashboardD
         IProductRepository productRepository,
         IBrandRepository brandRepository,
         IDocumentRepository documentRepository,
-        IDocumentTypeRepository documentTypeRepository)
+        IDocumentTypeRepository documentTypeRepository,
+        TimeProvider timeProvider)
     {
         _userService = userService;
         _roleService = roleService;
@@ -39,6 +41,7 @@ internal sealed class GetDashboardDataQueryHandler : IQueryHandler<GetDashboardD
         _brandRepository = brandRepository;
         _documentRepository = documentRepository;
         _documentTypeRepository = documentTypeRepository;
+        _timeProvider = timeProvider;
     }
 
     public async Task<Result<DashboardDataResponse>> Handle(
@@ -55,22 +58,22 @@ internal sealed class GetDashboardDataQueryHandler : IQueryHandler<GetDashboardD
             RoleCount = await _roleService.GetCountAsync()
         };
 
-        var selectedYear = DateTime.Now.Year;
+        var selectedYear = _timeProvider.GetUtcNow().Year;
         var productsFigure = new double[13];
         var brandsFigure = new double[13];
         var documentsFigure = new double[13];
         var documentTypesFigure = new double[13];
         for (var month = 1; month <= 12; month++)
         {
-            DateTime filterStartDate = new(selectedYear, month, 01, 0, 0, 0, DateTimeKind.Utc);
-            DateTime filterEndDate =
+            DateTimeOffset filterStartDate = new(selectedYear, month, 01, 0, 0, 0, TimeSpan.Zero);
+            DateTimeOffset filterEndDate =
                 new(selectedYear,
                     month,
                     DateTime.DaysInMonth(selectedYear, month),
                     23,
                     59,
                     59,
-                    DateTimeKind.Utc); // Monthly Based
+                    TimeSpan.Zero); // Monthly Based
 
             productsFigure[month - 1] = await _productRepository.Entities
                 .Where(x => x.CreatedOn >= filterStartDate && x.CreatedOn <= filterEndDate)

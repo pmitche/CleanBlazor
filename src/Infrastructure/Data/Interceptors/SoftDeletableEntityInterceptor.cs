@@ -1,4 +1,3 @@
-using CleanBlazor.Application.Abstractions.Common;
 using CleanBlazor.Application.Abstractions.Infrastructure.Services;
 using CleanBlazor.Domain.Abstractions;
 using Microsoft.EntityFrameworkCore;
@@ -10,14 +9,14 @@ namespace CleanBlazor.Infrastructure.Data.Interceptors;
 public class SoftDeletableEntityInterceptor : SaveChangesInterceptor
 {
     private readonly ICurrentUserService _currentUserService;
-    private readonly IDateTimeService _dateTimeService;
+    private readonly TimeProvider _timeProvider;
 
     public SoftDeletableEntityInterceptor(
         ICurrentUserService currentUserService,
-        IDateTimeService dateTimeService)
+        TimeProvider timeProvider)
     {
         _currentUserService = currentUserService;
-        _dateTimeService = dateTimeService;
+        _timeProvider = timeProvider;
     }
 
     public override InterceptionResult<int> SavingChanges(DbContextEventData eventData, InterceptionResult<int> result)
@@ -41,7 +40,7 @@ public class SoftDeletableEntityInterceptor : SaveChangesInterceptor
     {
         if (context == null) return;
 
-        var now = _dateTimeService.NowUtc;
+        var now = _timeProvider.GetUtcNow();
 
         foreach (var entry in context.ChangeTracker.Entries<ISoftDeletableEntity>())
         {

@@ -10,6 +10,7 @@ using CleanBlazor.Shared.Wrapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
 
 namespace CleanBlazor.Infrastructure.Services.Identity;
@@ -18,6 +19,7 @@ public class IdentityService : ITokenService
 {
     private readonly AppConfiguration _appConfig;
     private readonly IStringLocalizer<IdentityService> _localizer;
+    private readonly TimeProvider _timeProvider;
     private readonly RoleManager<ApplicationRole> _roleManager;
 
     private readonly UserManager<ApplicationUser> _userManager;
@@ -26,12 +28,14 @@ public class IdentityService : ITokenService
         UserManager<ApplicationUser> userManager,
         RoleManager<ApplicationRole> roleManager,
         IOptions<AppConfiguration> appConfig,
-        IStringLocalizer<IdentityService> localizer)
+        IStringLocalizer<IdentityService> localizer,
+        TimeProvider timeProvider)
     {
         _userManager = userManager;
         _roleManager = roleManager;
         _appConfig = appConfig.Value;
         _localizer = localizer;
+        _timeProvider = timeProvider;
     }
 
     public async Task<Result<TokenResponse>> LoginAsync(TokenRequest model)
@@ -150,7 +154,7 @@ public class IdentityService : ITokenService
         return Convert.ToBase64String(randomNumber);
     }
 
-    private static string GenerateEncryptedToken(SigningCredentials signingCredentials, IEnumerable<Claim> claims)
+    private string GenerateEncryptedToken(SigningCredentials signingCredentials, IEnumerable<Claim> claims)
     {
         var token = new JwtSecurityToken(
             claims: claims,
@@ -163,17 +167,19 @@ public class IdentityService : ITokenService
 
     private ClaimsPrincipal GetPrincipalFromExpiredToken(string token)
     {
+        var tokenHandler = new JwtSecurityTokenHandler();
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_appConfig.Secret));
         var tokenValidationParameters = new TokenValidationParameters
         {
             ValidateIssuerSigningKey = true,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_appConfig.Secret)),
+            IssuerSigningKey = key,
             ValidateIssuer = false,
             ValidateAudience = false,
             RoleClaimType = ClaimTypes.Role,
             ClockSkew = TimeSpan.Zero,
             ValidateLifetime = false
         };
-        var tokenHandler = new JwtSecurityTokenHandler();
+
         ClaimsPrincipal principal =
             tokenHandler.ValidateToken(token, tokenValidationParameters, out SecurityToken securityToken);
         if (securityToken is not JwtSecurityToken jwtSecurityToken || !jwtSecurityToken.Header.Alg.Equals(

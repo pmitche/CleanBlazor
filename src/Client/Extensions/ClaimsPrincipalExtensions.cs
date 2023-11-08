@@ -21,11 +21,11 @@ internal static class ClaimsPrincipalExtensions
 
     internal static bool IsWithinExpirationThreshold(
         this ClaimsPrincipal claimsPrincipal,
-        DateTime nowUtc,
+        DateTimeOffset nowUtc,
         int thresholdInMinutes = 1)
         => ExpiresIn(claimsPrincipal, nowUtc).TotalMinutes <= thresholdInMinutes;
 
-    private static TimeSpan ExpiresIn(this ClaimsPrincipal claimsPrincipal, DateTime nowUtc) =>
+    private static TimeSpan ExpiresIn(this ClaimsPrincipal claimsPrincipal, DateTimeOffset nowUtc) =>
         GetExpirationTime(claimsPrincipal) - nowUtc;
 
     private static DateTimeOffset GetExpirationTime(this ClaimsPrincipal claimsPrincipal)

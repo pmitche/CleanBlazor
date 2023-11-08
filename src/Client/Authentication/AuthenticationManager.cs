@@ -17,17 +17,20 @@ public class AuthenticationManager
     private readonly ILocalStorageService _localStorage;
     private readonly AuthenticationStateProvider _authenticationStateProvider;
     private readonly NavigationManager _navigationManager;
+    private readonly TimeProvider _timeProvider;
 
     public AuthenticationManager(
         IHttpClientFactory httpClientFactory,
         ILocalStorageService localStorage,
         AuthenticationStateProvider authenticationStateProvider,
-        NavigationManager navigationManager)
+        NavigationManager navigationManager,
+        TimeProvider timeProvider)
     {
         _httpClientFactory = httpClientFactory;
         _localStorage = localStorage;
         _authenticationStateProvider = authenticationStateProvider;
         _navigationManager = navigationManager;
+        _timeProvider = timeProvider;
     }
 
     public ValueTask<string> GetAccessTokenAsync() =>
@@ -75,7 +78,7 @@ public class AuthenticationManager
         }
 
         ClaimsPrincipal user = await ((ApplicationStateProvider)_authenticationStateProvider).GetCurrentUserAsync();
-        if (!user.IsWithinExpirationThreshold(DateTime.Now))
+        if (!user.IsWithinExpirationThreshold(_timeProvider.GetUtcNow()))
         {
             // Token is still valid, no need to refresh
             return request.Token;
